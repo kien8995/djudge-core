@@ -1,6 +1,6 @@
 package remoteFS;
 
-public class SimpleRemoteFS implements RemoteFilesystem
+public class SimpleRemoteFS implements RemoteFS
 {	
 	@Override
 	public boolean readRemoteFile(String localFilename, String remoteFilename)

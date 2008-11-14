@@ -63,17 +63,17 @@ public class Runner
 		if (limits.memoryLimit > 0)
 			cmd.append(" -m " + limits.memoryLimit +  " ");
 		
-		if (files.inputFilename != null)
+		if (files.inputFilename != null && files.inputFilename != "")
 			cmd.append(" -i \"" + files.inputFilename + "\" ");
 
-		if (files.outputFilename != null)
+		if (files.outputFilename != null && files.outputFilename != "")
 			cmd.append(" -o \"" + files.outputFilename + "\" ");
 
-		if (files.errorFilename != null)
+		if (files.errorFilename != null && files.errorFilename != "")
 			cmd.append(" -e \"" + files.errorFilename + "\" ");
 
 		// FIXME
-		cmd = new StringBuffer(".\\tools\\run.exe " + cmd + " \"" + command + "\"");		
+		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");		
 
 		if (false)
 		{
@@ -143,7 +143,7 @@ public class Runner
 						mem = Integer.parseInt(token);			
 					}
 					// Debug info
-					if (false)
+					if (true)
 					{
 						System.out.println(line);
 					}

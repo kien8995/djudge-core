@@ -1,3 +1,5 @@
+// TODO: review this class (old version used)
+
 package runner;
 
 import org.w3c.dom.Document;
@@ -5,8 +7,10 @@ import org.w3c.dom.Element;
 
 import common.XMLSerializable;
 
-public class RunnerResult extends XMLSerializable
+public class RunnerResult extends XMLSerializable implements Comparable<RunnerResult>
 {
+	public static final String XMLRootElement = "RunnerResult"; 
+	
 	public int time;
 	public int memory;
 	public int output;
@@ -25,7 +29,7 @@ public class RunnerResult extends XMLSerializable
 	
 	private void initEmpty()
 	{
-		init(0, -1, -1, -1, RunnerResultEnum.Undefined);
+		init(-1, -1, -1, -1, RunnerResultEnum.Undefined);
 	}
 	
 	public RunnerResult()
@@ -35,7 +39,10 @@ public class RunnerResult extends XMLSerializable
 	
 	public void OK(int retValue, int time, int mem, int output)
 	{
-		init(retValue, time, mem, output, RunnerResultEnum.OK);
+		exitCode = retValue;
+		this.time = time;
+		this.memory = mem;
+		this.output = output;		
 	}
 
 	@Override
@@ -52,6 +59,11 @@ public class RunnerResult extends XMLSerializable
 		return false;
 	}
 
+	@Override
+	public int compareTo(RunnerResult other)
+	{
+		return state.ordinal() - other.state.ordinal();
+	}
 }
 
 /*
