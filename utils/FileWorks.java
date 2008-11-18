@@ -77,9 +77,10 @@ public class FileWorks
 		{
 			File f1 = new File(srFile);
 			File f2 = new File(dtFile);
+			f2.getParentFile().mkdirs();
 			InputStream in = new FileInputStream(f1);
 			OutputStream out = new FileOutputStream(f2);
-			byte[] buf = new byte[1024];
+			byte[] buf = new byte[1024 * 1024];
 			int len;
 			
 			while ((len = in.read(buf)) > 0)

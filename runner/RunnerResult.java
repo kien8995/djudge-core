@@ -17,7 +17,7 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	public int exitCode;
 	
 	public RunnerResultEnum state;
-
+	
 	private void init(int exitCode, int time, int memory, int output, RunnerResultEnum state)
 	{
 		this.exitCode = exitCode;
@@ -37,6 +37,12 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 		initEmpty();
 	}
 	
+	public RunnerResult(Element elem)
+	{
+		initEmpty();
+		readXML(elem);
+	}
+
 	public void OK(int retValue, int time, int mem, int output)
 	{
 		exitCode = retValue;
@@ -65,67 +71,3 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 		return state.ordinal() - other.state.ordinal();
 	}
 }
-
-/*
-package runner;
-
-import java.io.Serializable;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import utils.XmlWorks;
-
-public class RunResult implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	
-	public int exitCode;
-	public int memorySize;
-	public int timeConsumed;
-	public int outputSize;
-	
-	public RunResultEnum state = RunResultEnum.Undefined;
-
-	public RunResult()
-	{
-		exitCode = memorySize = timeConsumed = outputSize = -1;
-		state = RunResultEnum.Undefined;
-	}
-	
-	public void OK(int retVal, int time, int mem, int output)
-	{
-		exitCode = retVal;
-		memorySize = mem;
-		timeConsumed = time;
-		outputSize = output;
-	}
-	
-	public Document getXml()
-	{
-		Document doc = XmlWorks.getDocument();
-		try
-		{
-			Element res = doc.createElement("RunResult");
-			res.setAttribute("result", "" + state);
-			res.setAttribute("time-used", "" + timeConsumed);
-			res.setAttribute("memory-size", "" + memorySize);
-			res.setAttribute("output-size", "" + outputSize);
-			res.setAttribute("exit-code", "" + exitCode);
-			doc.appendChild(res);
-		}
-		catch (Exception exc)
-		{
-			// FIXME
-			System.out.println("!!![RunResult.toXml]: " + exc);
-		}
-		return doc;
-	}
-	
-	public void saveXml(String file)
-	{
-		XmlWorks.saveXmlToFile(getXml(), file);
-	}
-	
-}
-*/

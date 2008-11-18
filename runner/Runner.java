@@ -16,6 +16,10 @@ public class Runner
 	
 	private RunnerFiles files;
 	
+	String saveOutputTo;
+	boolean fRedirect = false;
+	
+	
 	@SuppressWarnings("unused")
 	private RunnerSecurityLimits security = new RunnerSecurityLimits();
 	
@@ -75,16 +79,10 @@ public class Runner
 		// FIXME
 		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");		
 
-		if (false)
-		{
-			System.out.println("***Runner***");
-			System.out.println("Executing " + cmd);
-		}
-		
 		RunnerResult res = new RunnerResult();
 		
 		try
-		{		
+		{
 			Process process = Runtime.getRuntime().exec(cmd.toString());
 			
 			try
@@ -114,33 +112,50 @@ public class Runner
 			}
 			// Parsing runner's output
 			try
-			{			
-				BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream()));				
+			{
+				BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				BufferedWriter file = null;
+				if (fRedirect)
+					file = new BufferedWriter(new FileWriter(new File(saveOutputTo)));
 				String line;
 				
 				while ((line = out.readLine()) != null)
 				{
+					if (fRedirect)
+						file.write(line + "\n");
 					cnt++;
 					// exit code
 					if (cnt == 3 && res.state == RunnerResultEnum.OK)
 					{
-						String token = line.substring(line.lastIndexOf(" ") + 1, line.length());
-						retValue = Integer.parseInt(token);
-						if (retValue != 0)
-							res.state = RunnerResultEnum.NonZeroExitCode;
+						try
+						{
+    						String token = line.substring(line.lastIndexOf(" ") + 1, line.length());
+    						retValue = Integer.parseInt(token);
+    						if (retValue != 0)
+    							res.state = RunnerResultEnum.NonZeroExitCode;
+						}
+						catch (Exception ex){ };
 					}
 					// time
 					if (cnt == 4 && res.state == RunnerResultEnum.OK)
 					{
-						String token = line.substring(line.indexOf(':') + 1, line.lastIndexOf("of") - 1);
-						Double val = Double.parseDouble(token);
-						time = (int)Math.round(val * 1000.0);					
+						try
+						{
+    						String token = line.substring(line.indexOf(':') + 1, line.lastIndexOf("of") - 1);
+    						Double val = Double.parseDouble(token);
+    						time = (int)Math.round(val * 1000.0);
+						}
+						catch (Exception ex){ }
 					}
 					//memory
 					else if (cnt == 6 && res.state == RunnerResultEnum.OK)
 					{
-						String token = line.substring(line.lastIndexOf("  ") + 2, line.lastIndexOf("of") - 1);
-						mem = Integer.parseInt(token);			
+						try
+						{
+							String token = line.substring(line.lastIndexOf("  ") + 2, line.lastIndexOf("of") - 1);
+							mem = Integer.parseInt(token);			
+						}
+						catch (Exception ex){ }
 					}
 					// Debug info
 					if (true)
@@ -149,6 +164,8 @@ public class Runner
 					}
 				}
 				out.close();
+				if (file != null)
+					file.close();
 			}
 			catch (Exception exc)
 			{
@@ -164,5 +181,11 @@ public class Runner
 		}
 		
 		return res;
+	}
+	
+	public void saveOutputTo(String file)
+	{
+		this.saveOutputTo = file;
+		fRedirect = true;
 	}
 }
