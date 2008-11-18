@@ -34,7 +34,7 @@ public class Judge
 
         // local answer & input files
 		String inputFile = tempDir + desc.getInputFilename();		
-		String answerFile = tempDir + desc.getAnswerFilename();
+		String answerFile = tempDir + desc.getFiles().outputFilename;
         
         f = new File(inputFile);
         FileWorks.CopyFile(inputFile, inputGlobalFile);

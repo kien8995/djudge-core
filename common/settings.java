@@ -6,4 +6,9 @@ public class settings
 	{
 		return "D:/Temp/Work/eJudge/DJudge/temp/";
 	}
+
+	public static String getProblemsDir()
+	{
+		return "D:/Temp/Work/eJudge/jTester/problems/";
+	}
 }

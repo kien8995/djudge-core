@@ -9,7 +9,7 @@ import utils.XmlWorks;
 
 import common.XMLSerializable;
 
-public class RunnerLimits extends XMLSerializable
+public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLimits>
 {
 	public final static String XMLRootElement = "RunnerLimits"; 
 	
@@ -36,11 +36,6 @@ public class RunnerLimits extends XMLSerializable
 	{
 		init(-1, -1, -1, new RunnerSecurityLimits());
 	}
-	
-/*	public RunnerLimits(Element elem)
-	{
-		readXML(elem);
-	}*/
 	
 	public RunnerLimits()
 	{
@@ -118,5 +113,17 @@ public class RunnerLimits extends XMLSerializable
         	securityLimits = new RunnerSecurityLimits((Element)securityElement.item(0));
 		
 		return true;
+	}
+
+	@Override
+	public int compareTo(RunnerLimits arg)
+	{
+		int k;
+		k = timeLimit - arg.timeLimit;
+		if (k != 0) return k;
+		k = memoryLimit - arg.memoryLimit;
+		if (k != 0) return k;
+		k = outputLimit - arg.outputLimit;
+		return k;
 	}
 }

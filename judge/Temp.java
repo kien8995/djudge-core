@@ -17,5 +17,8 @@ public class Temp
 		{
 			System.out.println(e.toString());
 		}
+		
+		@SuppressWarnings("unused")
+		ProblemDescription desc = new ProblemDescription("NEERC-2007", "A");
 	}
 }
