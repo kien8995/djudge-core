@@ -9,6 +9,9 @@ public abstract class AbstractDescription extends XMLSerializable
 {
 	GlobalProblemInfo problemInfo;
 	
+	//public abstract void overrideLimits(RunnerLimits newLimits); 
+	public abstract void overrideFiles(RunnerFiles newFiles); 
+	
 	public final RunnerFiles getFiles()
 	{
 		return problemInfo.files;

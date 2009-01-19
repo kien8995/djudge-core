@@ -3,6 +3,8 @@ package judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import common_data_structures.RunnerFiles;
+
 public class GroupDescription extends AbstractDescription
 {
 	int groupNumber;
@@ -51,5 +53,12 @@ public class GroupDescription extends AbstractDescription
 		log("EtalonMask: " + etalonMask);
 		for (int i = 0; i < testsCount; i++)
 			tests[i].print();
+	}
+
+	@Override
+	public void overrideFiles(RunnerFiles newFiles)
+	{
+		for (int i = 0; i < testsCount; i++)
+			tests[i].overrideFiles(newFiles);
 	}
 }

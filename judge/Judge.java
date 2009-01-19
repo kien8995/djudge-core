@@ -14,6 +14,7 @@ import validator.ValidationResult;
 import common.JudgeException;
 import common.JudgeExceptionType;
 import common.settings;
+import common_data_structures.RunnerFiles;
 
 public class Judge
 {
@@ -64,8 +65,8 @@ public class Judge
 		
         try
         {
-        	String input = test.problemInfo.problemRoot + "\\tests\\" + test.judgeInput;
-        	String output = test.problemInfo.problemRoot + "\\tests\\" + test.judgeOutput;
+        	String input = (test.judgeInput != null && test.judgeInput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeInput : "";
+        	String output = (test.judgeOutput != null && test.judgeOutput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeOutput : "";
         	res = judgeTest(id, command, input, output, test, fFullResults);
         }
         catch (Exception exc)
@@ -119,7 +120,12 @@ public class Judge
         		command = new_commad;
         }
     	
-        Runner run = new Runner(desc.getLimits(), desc.getFiles());
+        RunnerFiles files = new RunnerFiles(), old = desc.getFiles();
+        
+        files.inputFilename = "";//FileWorks.ConcatPaths(tempDir, old.inputFilename); 
+        files.outputFilename = FileWorks.ConcatPaths(tempDir, old.outputFilename);
+        
+        Runner run = new Runner(desc.getLimits(), files);
         run.saveOutputTo(tempDir + "runner.out");
     	ValidationResult validationInfo = new ValidationResult("No_validator");
     	RunnerResult runtimeInfo = run.run(command);

@@ -62,7 +62,11 @@ public class Runner
 			cmd.append(" -d \"" + homeDirectory + "\" ");
 		
 		if (limits.timeLimit > 0)
+		{
 			cmd.append(" -t " + limits.timeLimit + "ms ");
+			// Idleness
+			cmd.append(" -y " + (2 * limits.timeLimit) + "ms ");
+		}
 		
 		if (limits.memoryLimit > 0)
 			cmd.append(" -m " + limits.memoryLimit +  " ");
@@ -77,7 +81,9 @@ public class Runner
 			cmd.append(" -e \"" + files.errorFilename + "\" ");
 
 		// FIXME
-		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");		
+		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");
+		
+		System.out.println(cmd);
 
 		RunnerResult res = new RunnerResult();
 		

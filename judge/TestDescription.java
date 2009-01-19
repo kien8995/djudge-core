@@ -3,6 +3,8 @@ package judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import common_data_structures.RunnerFiles;
+
 import utils.PrintfFormat;
 
 public class TestDescription extends AbstractDescription
@@ -69,5 +71,11 @@ public class TestDescription extends AbstractDescription
 		log("Test #" + testNumber);
 		log(judgeInput);
 		log(judgeOutput);
+	}
+
+	@Override
+	public void overrideFiles(RunnerFiles newFiles)
+	{
+		problemInfo.files = newFiles;
 	}
 }

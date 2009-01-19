@@ -103,4 +103,11 @@ public class ProblemDescription extends AbstractDescription
 			groups[i].print();
 		}
 	}
+
+	@Override
+	public void overrideFiles(RunnerFiles newFiles)
+	{
+		for (int i = 0; i < groupsCount; i++)
+			groups[i].overrideFiles(newFiles);
+	}
 }
