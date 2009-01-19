@@ -1,5 +1,3 @@
-// TODO: review this class (old version used)
-
 package runner;
 
 import org.w3c.dom.Document;
@@ -18,28 +16,19 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	
 	public RunnerResultEnum state;
 	
-	private void init(int exitCode, int time, int memory, int output, RunnerResultEnum state)
+	// initialization
 	{
-		this.exitCode = exitCode;
-		this.time = time;
-		this.memory = memory;
-		this.output = output;
-		this.state = state;
-	}
-	
-	private void initEmpty()
-	{
-		init(-1, -1, -1, -1, RunnerResultEnum.Undefined);
+		time = memory = output = exitCode = -1;
+		state = RunnerResultEnum.Undefined;
 	}
 	
 	public RunnerResult()
 	{
-		initEmpty();
+		// nothing
 	}
 	
 	public RunnerResult(Element elem)
 	{
-		initEmpty();
 		readXML(elem);
 	}
 

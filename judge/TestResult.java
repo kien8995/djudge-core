@@ -14,27 +14,21 @@ import validator.ValidationResult;
 public class TestResult extends XMLSerializable
 {
 	RunnerResult runResult;
-	
 	ValidationResult validationResult;
-	
 	int testNumber;
 	final String testNumberAttributeName = "test-num";
 	
-	private void initEmpty()
 	{
-		runResult = new RunnerResult();
-		validationResult = new ValidationResult("<Empry>");
 		testNumber = 0;
 	}
 	
 	public TestResult()
 	{
-		initEmpty();
+		// nothing
 	}
 
 	public TestResult(int testNum)
 	{
-		initEmpty();
 		testNumber = testNum;
 	}
 

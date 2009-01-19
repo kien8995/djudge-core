@@ -1,5 +1,6 @@
 package judge;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import common.settings;
@@ -10,14 +11,10 @@ import utils.StringWorks;
 import utils.XmlWorks;
 import validator.Validator;
 
-public class ProblemDescription 
+public class ProblemDescription extends AbstractDescription 
 {
-	GlobalProblemInfo globalInfo;
-
-	protected int groupsCount;
-	protected GroupDescription[] groups;
-	
-	protected String[] solutions;
+	int groupsCount;
+	GroupDescription[] groups;
 	
 	protected String problemRoot;
 	
@@ -35,43 +32,57 @@ public class ProblemDescription
 	
 	private void ParseOldXML(Element elem)
 	{
-		globalInfo = new GlobalProblemInfo();
+		problemInfo = new GlobalProblemInfo();
 		
-		globalInfo.problemRoot = problemRoot;
+		problemInfo.problemRoot = problemRoot;
 		
 		// Only one group
 		groupsCount = 1;
 		// constant type
-		globalInfo.type = ProblemTypeEnum.ACM;
+		problemInfo.type = ProblemTypeEnum.ACM;
 		// ProblemID
-		globalInfo.problemID = elem.getAttribute("id");
+		problemInfo.problemID = elem.getAttribute("id");
 		
 		// Test-group
 		int testsCount = Integer.parseInt(elem.getAttribute("test-count"));
 		String inputFileMask = elem.getAttribute("input-mask");
 		String outputFileMask = elem.getAttribute("output-mask");		
 		
-		String in = globalInfo.programInputFilename = elem.getAttribute("input-file");
-		String out = globalInfo.programOutputFilename = elem.getAttribute("output-file");
+		String in = problemInfo.programInputFilename = elem.getAttribute("input-file");
+		String out = problemInfo.programOutputFilename = elem.getAttribute("output-file");
 		
-		globalInfo.files = new RunnerFiles(
+		problemInfo.files = new RunnerFiles(
 				in.length() == 0 || in.equalsIgnoreCase("stdin") ? "input.txt" : null,
 				out.length() == 0 || out.equalsIgnoreCase("stdout") ? "output.txt" : null
 				);
 		
 		// Limits
-		globalInfo.limits = new RunnerLimits();
-		globalInfo.limits.outputLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("output-limit"));
-		globalInfo.limits.memoryLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("memory-limit"));
-		globalInfo.limits.timeLimit = StringWorks.StrToTimeLimit(elem.getAttribute("time-limit"));
+		problemInfo.limits = new RunnerLimits();
+		problemInfo.limits.outputLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("output-limit"));
+		problemInfo.limits.memoryLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("memory-limit"));
+		problemInfo.limits.timeLimit = StringWorks.StrToTimeLimit(elem.getAttribute("time-limit"));
 		
 		// Validator
 		String checker = elem.getAttribute("checker");
 		String checkerParam = elem.getAttribute("checker-param");
-		globalInfo.val = new Validator(checker, checkerParam, globalInfo.problemRootDirectory);
+		problemInfo.validator = new Validator(checker, checkerParam, problemInfo.problemRootDirectory);
 		
 		groups = new GroupDescription[1];
-		groups[0] = new GroupDescription(0, testsCount, globalInfo.clone(), inputFileMask, outputFileMask);
+		//groups[0] = new GroupDescription(0, testsCount, problemInfo.clone(), inputFileMask, outputFileMask);
+	}
+
+	@Override
+	public Document getXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean readXML(Element elem)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

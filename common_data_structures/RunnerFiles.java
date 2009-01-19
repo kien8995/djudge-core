@@ -20,16 +20,8 @@ public class RunnerFiles extends XMLSerializable
 	public String errorFilename;
 	private final String errorFilenameAttributeName = "error-filename"; 
 	
-	private void init(String input, String output, String error)
 	{
-		inputFilename = input;
-		outputFilename = output;
-		errorFilename = error;
-	}
-	
-	private void initEmpty()
-	{
-		init("", "", "");
+		inputFilename = outputFilename = errorFilename = "";
 	}
 	
 	public RunnerFiles(Element elem)
@@ -39,7 +31,7 @@ public class RunnerFiles extends XMLSerializable
 	
 	public RunnerFiles()
 	{
-		initEmpty();
+		// nothing
 	}
 	
 	public RunnerFiles(String in, String out, String err)
@@ -60,7 +52,7 @@ public class RunnerFiles extends XMLSerializable
 		outputFilename = out;
 		outputFilename = out;
 	}
-
+	
 	@Override
 	public Document getXML()
 	{
@@ -78,8 +70,6 @@ public class RunnerFiles extends XMLSerializable
 	@Override
 	public boolean readXML(Element elem)
 	{
-		initEmpty();
-		
 		inputFilename = elem.getAttribute(inputFilenameAttributeName);
 		outputFilename = elem.getAttribute(outputFilenameAttributeName);
 		errorFilename = elem.getAttribute(errorFilenameAttributeName);

@@ -13,7 +13,7 @@ public class GlobalProblemInfo implements Cloneable
 	
 	RunnerFiles files;
 	RunnerLimits limits;
-	Validator val;
+	Validator validator;
 	String solutions[];
 	
 	String problemRootDirectory;
@@ -32,7 +32,7 @@ public class GlobalProblemInfo implements Cloneable
 		problemID = contestID = "unknown";
 		files = new RunnerFiles();
 		limits = new RunnerLimits();
-		val = new Validator(ValidatorType.InternalExact);
+		validator = new Validator(ValidatorType.InternalExact);
 		problemRootDirectory = "";
 		solutions = new String[0];
 	}

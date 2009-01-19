@@ -1,27 +1,29 @@
 package judge;
 
-import common_data_structures.RunnerFiles;
-import common_data_structures.RunnerLimits;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-public class GroupDescription
+public class GroupDescription extends AbstractDescription
 {
-	RunnerFiles files;
+	int groupNumber;
 	
-	RunnerLimits limits;
-	
-	public GroupDescription(int i, int testsCount, GlobalProblemInfo clone,
-							String inputFileMask, String outputFileMask)
+	public GroupDescription(int number, ProblemDescription problem)
 	{
-		
+		groupNumber = number;
+		problemInfo = problem.problemInfo.clone();
 	}
 
-	public RunnerFiles getFiles()
+	@Override
+	public Document getXML()
 	{
-		return files;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public RunnerLimits getLimits()
+
+	@Override
+	public boolean readXML(Element elem)
 	{
-		return limits;
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

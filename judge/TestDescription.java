@@ -1,49 +1,23 @@
 package judge;
 
-import validator.Validator;
-import validator.ValidatorType;
-import common_data_structures.RunnerFiles;
-import common_data_structures.RunnerLimits;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-public class TestDescription
+public class TestDescription extends AbstractDescription
 {
-	int testNumber;
-	Validator validator;
-	RunnerFiles files;
-	RunnerLimits limits;
-	GlobalProblemInfo globalInfo;
-
-	private void init(int num, RunnerLimits limits, RunnerFiles files, Validator val)
+	int testNumber = 0;
+	String judgeInput;
+	String judgeOutput;
+	
 	{
-		testNumber = num;
-		this.limits = limits;
-		this.files = files;
-		this.validator = val;
+		testNumber = 0;
+		judgeInput = judgeOutput = "";
 	}
 	
-	private void initEmpty()
+	public TestDescription(int number, GroupDescription group)
 	{
-		init(0, new RunnerLimits(), new RunnerFiles(), new Validator(ValidatorType.InternalExact));
-	}
-	
-	public TestDescription()
-	{
-		initEmpty();
-	}
-	
-	public TestDescription(int num, GroupDescription group)
-	{
-		
-	}
-	
-	public void setFiles(RunnerFiles newFiles)
-	{
-		files = newFiles;
-	}
-	
-	public void setLimits(RunnerLimits newLimits)
-	{
-		limits = newLimits;
+		testNumber = number;
+		problemInfo = group.problemInfo.clone();
 	}
 	
 	public void setTestNumber(int num)
@@ -66,18 +40,17 @@ public class TestDescription
 		return "output.txt";		
 	}
 	
-	public RunnerFiles getFiles()
+	@Override
+	public Document getXML()
 	{
-		return files;
-	}
-	
-	public RunnerLimits getLimits()
-	{
-		return limits;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Validator getValidator()
+	@Override
+	public boolean readXML(Element elem)
 	{
-		return validator;
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
