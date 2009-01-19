@@ -6,11 +6,28 @@ import org.w3c.dom.Element;
 public class GroupDescription extends AbstractDescription
 {
 	int groupNumber;
+	int testsCount;
+	TestDescription[] tests;
+	String inputMask;
+	String etalonMask;
 	
 	public GroupDescription(int number, ProblemDescription problem)
 	{
 		groupNumber = number;
 		problemInfo = problem.problemInfo.clone();
+	}
+
+	public GroupDescription(int number, int testsCount, GlobalProblemInfo problemInfo,
+			String inputFileMask, String outputFileMask)
+	{
+		inputMask = inputFileMask;
+		etalonMask = outputFileMask;
+		this.problemInfo = problemInfo;
+		groupNumber = number;
+		this.testsCount = testsCount;
+		tests = new TestDescription[testsCount];
+		for (int i = 0; i < testsCount; i++)
+			tests[i] = new TestDescription(i, problemInfo, inputFileMask, outputFileMask);
 	}
 
 	@Override
@@ -25,5 +42,14 @@ public class GroupDescription extends AbstractDescription
 	{
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void print()
+	{
+		log("Group #" + groupNumber);
+		log("InputMask: " + inputMask);
+		log("EtalonMask: " + etalonMask);
+		for (int i = 0; i < testsCount; i++)
+			tests[i].print();
 	}
 }

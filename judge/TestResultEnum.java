@@ -1,6 +1,6 @@
 package judge;
 
-public enum TestResultSimpleEnum
+public enum TestResultEnum
 {
 	AC,
 	WA,

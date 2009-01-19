@@ -4,19 +4,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import common.XMLSerializable;
-
 import runner.RunnerResult;
 import utils.XmlWorks;
 import validator.ValidationResult;
 
 
-public class TestResult extends XMLSerializable
+public class TestResult extends AbstractResult
 {
 	RunnerResult runResult;
 	ValidationResult validationResult;
 	int testNumber;
 	final String testNumberAttributeName = "test-num";
+	TestDescription test;
+	String systemMessage;
 	
 	{
 		testNumber = 0;
@@ -30,6 +30,12 @@ public class TestResult extends XMLSerializable
 	public TestResult(int testNum)
 	{
 		testNumber = testNum;
+	}
+
+	public TestResult(TestDescription testDescription)
+	{
+		test = testDescription;
+		testNumber = test.testNumber;
 	}
 
 	public void setRuntimeInfo(RunnerResult runResult)

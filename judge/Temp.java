@@ -1,24 +1,25 @@
 package judge;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+@SuppressWarnings("unused")
 public class Temp
 {
 	public static void main(String arg[])
 	{
 		Judge d = new Judge();
 		
-		String cmd = "D:\\Temp\\Work\\eJudge\\DJudge\\tests\\runner\\Test_Runner_Crash_AccessViolation.exe";
-		//String cmd = "java.exe";
+		String cmd = "D:\\a.exe";
+		ProblemDescription desc = new ProblemDescription("NEERC-1998", "A");
 		
-		try
-		{
-			d.judgeTest("new", cmd, "d:/in", "d:/et", new TestDescription());
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
+		desc.print();
 		
-		@SuppressWarnings("unused")
-		ProblemDescription desc = new ProblemDescription("NEERC-2007", "A");
+		ProblemResult res = Judge.judgeProblem(cmd, desc, true);
+		
+		System.out.println(desc);
+		System.out.println("Fin");
 	}
 }

@@ -1,12 +1,13 @@
 package judge;
 
+import common.Loggable;
 import common_data_structures.RunnerFiles;
 import common_data_structures.RunnerLimits;
 
 import validator.Validator;
 import validator.ValidatorType;
 
-public class GlobalProblemInfo implements Cloneable
+public class GlobalProblemInfo extends Loggable implements Cloneable
 {
 	String problemID;
 	String contestID;
@@ -16,8 +17,6 @@ public class GlobalProblemInfo implements Cloneable
 	Validator validator;
 	String solutions[];
 	
-	String problemRootDirectory;
-	
 	ProblemTypeEnum type;
 	
 	String programInputFilename;
@@ -26,6 +25,15 @@ public class GlobalProblemInfo implements Cloneable
 	
 	boolean fFrozenLimits = false;
 	
+	public void print()
+	{
+		log("*** Problem Info ***");
+		log("ContestID: " + contestID);
+		log("ProblemID: " + problemID);
+		log("Directory: " + problemID);
+	}
+	
+	
 	public GlobalProblemInfo()
 	{
 		type = ProblemTypeEnum.ACM;
@@ -33,7 +41,7 @@ public class GlobalProblemInfo implements Cloneable
 		files = new RunnerFiles();
 		limits = new RunnerLimits();
 		validator = new Validator(ValidatorType.InternalExact);
-		problemRootDirectory = "";
+		problemRoot = "";
 		solutions = new String[0];
 	}
 	

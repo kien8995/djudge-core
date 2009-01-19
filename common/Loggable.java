@@ -4,6 +4,11 @@ package common;
 
 public class Loggable
 {
+	protected void log(String s)
+	{
+		System.out.println(s);
+	}
+	
 	protected void logDebug(String s)
 	{
 		System.out.println("Debug: " + s);

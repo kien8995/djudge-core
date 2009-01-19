@@ -65,10 +65,19 @@ public class ProblemDescription extends AbstractDescription
 		// Validator
 		String checker = elem.getAttribute("checker");
 		String checkerParam = elem.getAttribute("checker-param");
-		problemInfo.validator = new Validator(checker, checkerParam, problemInfo.problemRootDirectory);
+		problemInfo.validator = new Validator(checker, checkerParam, problemInfo.problemRoot);
 		
 		groups = new GroupDescription[1];
-		//groups[0] = new GroupDescription(0, testsCount, problemInfo.clone(), inputFileMask, outputFileMask);
+		groups[0] = new GroupDescription(0, testsCount, problemInfo, inputFileMask, outputFileMask);
+	}
+	
+	public String toString()
+	{
+		StringBuilder res = new StringBuilder();
+		
+		res.append(groupsCount); 
+		
+		return res.toString();
 	}
 
 	@Override
@@ -85,4 +94,13 @@ public class ProblemDescription extends AbstractDescription
 		return false;
 	}
 	
+	public void print()
+	{
+		problemInfo.print();
+		log("Groups: " + groupsCount);
+		for (int i = 0; i < groupsCount; i++)
+		{
+			groups[i].print();
+		}
+	}
 }
