@@ -9,7 +9,7 @@ import utils.PrintfFormat;
 
 public class TestDescription extends AbstractDescription
 {
-	int testNumber = 0;
+	int testNumber;
 	String judgeInput;
 	String judgeOutput;
 	

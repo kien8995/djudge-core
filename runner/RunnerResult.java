@@ -3,6 +3,8 @@ package runner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import utils.XmlWorks;
+
 import common.XMLSerializable;
 
 public class RunnerResult extends XMLSerializable implements Comparable<RunnerResult>
@@ -10,9 +12,16 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	public static final String XMLRootElement = "RunnerResult"; 
 	
 	public int time;
+	final String timeAttributeName = "time";
+	
 	public int memory;
+	final String memoryAttributeName = "memory";
+	
 	public int output;
+	final String outputAttributeName = "output";
+	
 	public int exitCode;
+	final String exitCodeAttributeName = "exit-code";
 	
 	public RunnerResultEnum state;
 	
@@ -43,8 +52,16 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	@Override
 	public Document getXML()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Document doc = XmlWorks.getDocument();
+		Element res = doc.createElement(XMLRootElement);
+		
+		res.setAttribute(timeAttributeName, "" + time);
+		res.setAttribute(memoryAttributeName, "" + memory);
+		res.setAttribute(outputAttributeName, "" + output);
+		res.setAttribute(exitCodeAttributeName, "" + exitCode);
+		
+		doc.appendChild(res);
+		return doc;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package judge;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import common.settings;
 import common_data_structures.RunnerFiles;
@@ -27,8 +28,51 @@ public class ProblemDescription extends AbstractDescription
 	{
 		problemRoot = settings.getProblemsDir() + contestID + "/" + problemID + "/";
 		String problemXML = problemRoot + "problem.xml";
-		ParseOldXML(XmlWorks.getDocument(problemXML).getDocumentElement());
+		parseXML(XmlWorks.getDocument(problemXML).getDocumentElement());
 	}
+	
+	private void parseXML(Element elem)
+	{
+		String version = elem.getAttribute("version");
+		
+		log(version);
+		
+		if (version.startsWith("2.0"))
+		{
+			parseXML20(elem);
+		}
+		else
+		{
+			ParseOldXML(elem);
+		}
+	}
+	
+	private void parseXML20(Element elem)
+	{
+		NodeList list;
+		
+		problemInfo = new GlobalProblemInfo();
+		
+		problemInfo.problemRoot = problemRoot;
+		
+		problemInfo.type = ProblemTypeEnum.IOI;
+		problemInfo.problemID = elem.getAttribute("id");
+
+		list = elem.getElementsByTagName(Validator.XMLRootElement);
+        if (list.getLength() > 0)
+        	problemInfo.validator = new Validator((Element)list.item(0), 2);
+
+		list = elem.getElementsByTagName(RunnerLimits.XMLRootElement);
+        if (list.getLength() > 0)
+        	problemInfo.limits = new RunnerLimits((Element)list.item(0));
+
+        list = elem.getElementsByTagName(GroupDescription.XMLRootElement);
+        groupsCount = list.getLength();
+        groups = new GroupDescription[groupsCount];
+        for (int i = 0; i < groupsCount; i++)
+        	groups[i] = new GroupDescription(i, problemInfo, (Element)list.item(i));
+	}
+	
 	
 	private void ParseOldXML(Element elem)
 	{
