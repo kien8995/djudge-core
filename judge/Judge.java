@@ -38,6 +38,19 @@ public class Judge
 			if (!fFullTesting && t.result != TestResultEnum.AC)
 				break;
 		}
+		res.updateResult();
+		
+		return res;
+	}
+	
+	public static ProblemResult judgeProblemTrial(String command, ProblemDescription problem)
+	{
+		ProblemResult res = new ProblemResult(problem);
+		res.groupCount = 1;
+		res.groupResults = new GroupResult[1];
+
+		res.groupResults[0] = judgeGroup(command, problem.groups[0], true, false);
+		res.updateResult();
 		
 		return res;
 	}
@@ -52,13 +65,14 @@ public class Judge
 			if (!fFullTesting && t.result != TestResultEnum.AC)
 				break;
 		}
+		res.updateResult();
 		
 		return res;
 	}
 	
 	public static TestResult judgeTest(String command, TestDescription test, boolean fFullResults)
 	{
-		TestResult res = new TestResult(test.testNumber);
+		TestResult res = new TestResult(test);
 		
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         String id = dateFormat.format(new Date());
@@ -81,7 +95,7 @@ public class Judge
 	
 	public static TestResult judgeTest(String solutionID, String command, String inputGlobalFile, String etalonGlobalFile, TestDescription desc, boolean fFullResults) throws JudgeException
 	{
-		TestResult res = new TestResult();
+		TestResult res = new TestResult(desc);
 		File f;
 		
 		String globalTempDir = settings.getTempDir();
@@ -122,7 +136,7 @@ public class Judge
     	
         RunnerFiles files = new RunnerFiles(), old = desc.getFiles();
         
-        files.inputFilename = "";//FileWorks.ConcatPaths(tempDir, old.inputFilename); 
+        files.inputFilename = FileWorks.ConcatPaths(tempDir, old.inputFilename); 
         files.outputFilename = FileWorks.ConcatPaths(tempDir, old.outputFilename);
         
         Runner run = new Runner(desc.getLimits(), files);

@@ -5,23 +5,30 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import runner.RunnerResult;
+import runner.RunnerResultEnum;
 import utils.XmlWorks;
 import validator.ValidationResult;
+import validator.ValidationResultEnum;
 
 
 public class TestResult extends AbstractResult
 {
-	RunnerResult runResult;
-	ValidationResult validationResult;
+	public final static String XMLRootElement = "test-result";
+	
+	private RunnerResult runResult;
+	private ValidationResult validationResult;
+	
 	int testNumber;
+	int testScore;
 	final String testNumberAttributeName = "test-num";
-	TestDescription test;
+	
 	String systemMessage;
 	
 	{
 		testNumber = 0;
+		testScore = 1;
 	}
-	
+	/*
 	public TestResult()
 	{
 		// nothing
@@ -31,21 +38,52 @@ public class TestResult extends AbstractResult
 	{
 		testNumber = testNum;
 	}
-
+*/
 	public TestResult(TestDescription testDescription)
 	{
-		test = testDescription;
-		testNumber = test.testNumber;
+		testNumber = testDescription.testNumber;
+	}
+
+	public TestResult(Element elem)
+	{
+		readXML(elem);
+	}
+	
+	private void updateResult()
+	{
+		score = 0;
+		if (runResult != null && runResult.state != RunnerResultEnum.OK)
+		{
+			result = TestResultEnumFactory.getResult(runResult.state);
+		}
+		else if (runResult == null)
+		{
+			result = TestResultEnum.Undefined;
+		}
+		else if (validationResult != null && validationResult.Result != ValidationResultEnum.OK)
+		{
+			result = TestResultEnumFactory.getResult(validationResult.Result); 
+		}
+		else if (validationResult == null)
+		{
+			result = TestResultEnum.Undefined;
+		}
+		else
+		{
+			result = TestResultEnum.AC;
+		}
 	}
 
 	public void setRuntimeInfo(RunnerResult runResult)
 	{
 		this.runResult = runResult;
+		updateResult();
 	}
 
 	public void setValidationInfo(ValidationResult validationResult)
 	{
 		this.validationResult = validationResult;
+		updateResult();
 	}
 	
 	public void setTestNumber(int testNum)
@@ -75,6 +113,8 @@ public class TestResult extends AbstractResult
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(testNumberAttributeName, "" + testNumber);
+		res.setAttribute(scoreAttributeName, "" + score);
+		res.setAttribute(resultAttributeName, "" + result);
 		
 		if (runResult != null)
 			res.appendChild(doc.importNode(runResult.getXML().getFirstChild(), true));

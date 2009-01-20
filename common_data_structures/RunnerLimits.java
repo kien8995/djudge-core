@@ -11,7 +11,7 @@ import common.XMLSerializable;
 
 public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLimits>
 {
-	public final static String XMLRootElement = "RunnerLimits"; 
+	public final static String XMLRootElement = "limits"; 
 	
 	public int timeLimit;
 	private final String timeLimitAttributeName = "time-limit";
@@ -37,9 +37,9 @@ public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLi
 		init(-1, -1, -1, new RunnerSecurityLimits());
 	}
 	
-	public RunnerLimits()
+	public RunnerLimits(Element element)
 	{
-		initEmpty();
+		readXML(element);
 	}
 	
 	public RunnerLimits(int time, int memory, int output)
@@ -52,6 +52,11 @@ public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLi
 		init(time, memory, -1, new RunnerSecurityLimits());
 	}
 	
+	public RunnerLimits()
+	{
+		init(-1, -1, -1, new RunnerSecurityLimits());
+	}
+
 	public void setSecurityLimits(RunnerSecurityLimits securityLimits)
 	{
 		this.securityLimits = securityLimits;
