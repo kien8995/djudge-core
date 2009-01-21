@@ -4,17 +4,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import utils.StringWorks;
 import utils.XmlWorks;
 
 public class GroupResult extends AbstractResult
 {
-	public final static String XMLRootElement = "group-result";
+	public final static String XMLRootElement = "group";
 	
 	TestResult[] testResults;
 	int groupNumber;
+	int groupScore = 0;
 	
 	int testsCount;
-	final String groupNumberAttributeName = "group-num";
+	final String groupNumberAttributeName = "num";
 
 	public GroupResult(GroupDescription group)
 	{
@@ -35,6 +37,10 @@ public class GroupResult extends AbstractResult
 			if (testResults[i].result != TestResultEnum.AC && result == TestResultEnum.AC)
 				result = testResults[i].result;
 		}
+		
+		if (result == TestResultEnum.AC)
+			score += groupScore;
+			
 	}
 
 	public GroupResult(Element elem)
@@ -62,15 +68,9 @@ public class GroupResult extends AbstractResult
 	@Override
 	public boolean readXML(Element elem)
 	{
-		try
-		{
-			groupNumber = Integer.parseInt(elem.getAttribute(groupNumberAttributeName));
-		}
-		catch (Exception ex)
-		{
-			groupNumber = 0;
-		}
-		
+		groupNumber = StringWorks.parseInt(elem.getAttribute(groupNumberAttributeName), 0);
+		score = StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0);
+
 		NodeList tests = elem.getElementsByTagName(TestResult.XMLRootElement);
 		testsCount = tests.getLength();
 		testResults = new TestResult[testsCount];

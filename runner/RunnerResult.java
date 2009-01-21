@@ -9,7 +9,7 @@ import common.XMLSerializable;
 
 public class RunnerResult extends XMLSerializable implements Comparable<RunnerResult>
 {
-	public static final String XMLRootElement = "RunnerResult"; 
+	public static final String XMLRootElement = "runner"; 
 	
 	public int time;
 	final String timeAttributeName = "time";

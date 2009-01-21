@@ -28,8 +28,9 @@ public class Temp
 	{
 		Judge d = new Judge();
 		
-		String cmd = "D:\\B.exe";
-		ProblemDescription desc = new ProblemDescription("uzhnu-united", "sc2008-AA");
+		String cmd = "D:\\A.exe";
+//		ProblemDescription desc = new ProblemDescription("uzhnu-united", "sc2008-AA");
+		ProblemDescription desc = new ProblemDescription("NEERC-1998", "A");
 		
 		desc.print();
 		
