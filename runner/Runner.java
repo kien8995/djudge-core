@@ -122,7 +122,10 @@ public class Runner
 				BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				BufferedWriter file = null;
 				if (fRedirect)
+				{
 					file = new BufferedWriter(new FileWriter(new File(saveOutputTo)));
+					file.write(cmd.toString() + "\n");
+				}
 				String line;
 				
 				while ((line = out.readLine()) != null)

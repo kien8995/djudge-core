@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import common_data_structures.RunnerFiles;
 
 import utils.PrintfFormat;
+import utils.StringWorks;
 
 public class TestDescription extends AbstractDescription
 {
@@ -13,7 +14,10 @@ public class TestDescription extends AbstractDescription
 	
 	int testNumber;
 	String judgeInput;
+	final String judgeInputAttributeName = "input-mask";
+
 	String judgeOutput;
+	final String judgeOutputAttributeName = "output-mask";
 	
 	{
 		testNumber = 0;
@@ -73,15 +77,16 @@ public class TestDescription extends AbstractDescription
 	public boolean readXML(Element elem)
 	{
 		readCommonXML(elem);
-		
+		judgeInput = elem.getAttribute(judgeInputAttributeName);
+		judgeOutput = elem.getAttribute(judgeOutputAttributeName);
 		return true;
 	}
 
 	public void print()
 	{
 		log("Test #" + testNumber);
-		log(judgeInput);
-		log(judgeOutput);
+		log("judge_input: " + judgeInput);
+		log("judge_output: " + judgeOutput);
 	}
 
 	@Override
