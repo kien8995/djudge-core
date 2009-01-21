@@ -19,8 +19,8 @@ public class GlobalProblemInfo extends Loggable implements Cloneable
 	
 	ProblemTypeEnum type;
 	
-	String programInputFilename;
-	String programOutputFilename;
+	public String programInputFilename;
+	public String programOutputFilename;
 	String problemRoot;
 	
 	boolean fFrozenLimits = false;

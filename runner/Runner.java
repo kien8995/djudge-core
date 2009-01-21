@@ -4,6 +4,8 @@ package runner;
 
 import java.io.*;
 
+import utils.FileWorks;
+
 import common_data_structures.RunnerFiles;
 import common_data_structures.RunnerLimits;
 import common_data_structures.RunnerSecurityLimits;
@@ -52,14 +54,18 @@ public class Runner
 	{
 		StringBuffer cmd = new StringBuffer();
 		
+		FileWorks.CopyFile(files.rootDirectory + "invoke.dll", "./tools/invoke.dll");
+		FileWorks.CopyFile(files.rootDirectory + "run.exe", "./tools/run.exe");
+		FileWorks.CopyFile(files.rootDirectory + "crutch.exe", "./tools/crutch.exe");
+		
 		cmd.append(" -Xifce ");
 		
 		//if (limits.fCreateSubprocess)
 		//FIXME - Security bug: allows all runned programs create child processes 
 		cmd.append(" -Xacp ");
 		
-		if (homeDirectory != null)
-			cmd.append(" -d \"" + homeDirectory + "\" ");
+	//	if (files.rootDirectory != null && files.rootDirectory != "")
+		//	cmd.append(" -d \"" + files.rootDirectory.replace('/', '\\') + "\" ");
 		
 		if (limits.timeLimit > 0)
 		{
@@ -81,9 +87,11 @@ public class Runner
 			cmd.append(" -e \"" + files.errorFilename + "\" ");
 
 		// FIXME
-		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");
+		cmd = new StringBuffer("run.exe " + cmd + " \"" + command + "\"");
 		
-		System.out.println(cmd);
+		cmd = new StringBuffer(files.rootDirectory + "crutch.exe " + files.rootDirectory + "  " + cmd);
+		
+		//System.out.println(cmd);
 
 		RunnerResult res = new RunnerResult();
 		

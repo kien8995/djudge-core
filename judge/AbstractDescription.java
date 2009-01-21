@@ -11,7 +11,7 @@ import common_data_structures.RunnerLimits;
 
 public abstract class AbstractDescription extends XMLSerializable
 {
-	GlobalProblemInfo problemInfo;
+	public GlobalProblemInfo problemInfo;
 		
 	int score = 0;
 	final String scoreAttributeName = "score";

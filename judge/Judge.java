@@ -113,9 +113,17 @@ public class Judge
         	throw new JudgeException(JudgeExceptionType.FileNotFound, etalonGlobalFile, "etalon test #" + desc.getTestNumber());
 
         // local answer & input files
-		String inputFile = tempDir + desc.getInputFilename();		
-		String answerFile = tempDir + desc.getFiles().outputFilename;
         
+        desc.getFiles().print();
+        
+		String inputFile = tempDir + (desc.getInputFilename() != null ? desc.getInputFilename() : "input.txt");
+		String answerFile = tempDir + (desc.getAnswerFilename() != null ? desc.getAnswerFilename() : "output.txt");
+        
+    	System.out.println("Input: " + inputFile);
+		
+		
+		//System.out.println(desc.);
+		
         f = new File(inputFile);
         FileWorks.CopyFile(inputFile, inputGlobalFile);
         if (!f.exists())
@@ -131,18 +139,19 @@ public class Judge
         	FileWorks.CopyFile(new_commad, command);
         	f = new File(new_commad);
         	if (f.exists())
-        		command = new_commad;
+        		command = cexename;
         }
     	
-        RunnerFiles files = new RunnerFiles(), old = desc.getFiles();
+        RunnerFiles files = desc.getFiles();
         
-        files.inputFilename = FileWorks.ConcatPaths(tempDir, old.inputFilename); 
-        files.outputFilename = FileWorks.ConcatPaths(tempDir, old.outputFilename);
+        files.rootDirectory = tempDir;
         
         Runner run = new Runner(desc.getLimits(), files);
         run.saveOutputTo(tempDir + "runner.out");
     	ValidationResult validationInfo = new ValidationResult("No_validator");
     	RunnerResult runtimeInfo = run.run(command);
+    	
+    	System.out.println("Answer: " + answerFile);
     		
     	if (runtimeInfo.state == RunnerResultEnum.OK)
     		validationInfo = desc.getValidator().Validate(inputGlobalFile, etalonGlobalFile, answerFile);
