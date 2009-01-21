@@ -60,12 +60,22 @@ public class ProblemDescription extends AbstractDescription
 		
 		readCommonXML(elem);
 
+		String in = problemInfo.programInputFilename = elem.getAttribute("input-file");
+		String out = problemInfo.programOutputFilename = elem.getAttribute("output-file");
+		
+		problemInfo.files = new RunnerFiles(
+				in.length() == 0 || in.equalsIgnoreCase("stdin") ? "input.txt" : null,
+				out.length() == 0 || out.equalsIgnoreCase("stdout") ? "output.txt" : null
+				);
+		
         list = elem.getElementsByTagName(GroupDescription.XMLRootElement);
         groupsCount = list.getLength();
         groups = new GroupDescription[groupsCount];
         for (int i = 0; i < groupsCount; i++)
         	groups[i] = new GroupDescription(i, problemInfo, (Element)list.item(i));
+        
 	}
+	
 	
 	
 	private void ParseOldXML(Element elem)
