@@ -57,14 +57,8 @@ public class ProblemDescription extends AbstractDescription
 		
 		problemInfo.type = ProblemTypeEnum.IOI;
 		problemInfo.problemID = elem.getAttribute("id");
-
-		list = elem.getElementsByTagName(Validator.XMLRootElement);
-        if (list.getLength() > 0)
-        	problemInfo.validator = new Validator((Element)list.item(0), 2);
-
-		list = elem.getElementsByTagName(RunnerLimits.XMLRootElement);
-        if (list.getLength() > 0)
-        	problemInfo.limits = new RunnerLimits((Element)list.item(0));
+		
+		readCommonXML(elem);
 
         list = elem.getElementsByTagName(GroupDescription.XMLRootElement);
         groupsCount = list.getLength();
@@ -115,15 +109,6 @@ public class ProblemDescription extends AbstractDescription
 		groups[0] = new GroupDescription(0, testsCount, problemInfo, inputFileMask, outputFileMask);
 	}
 	
-	public String toString()
-	{
-		StringBuilder res = new StringBuilder();
-		
-		res.append(groupsCount); 
-		
-		return res.toString();
-	}
-
 	@Override
 	public Document getXML()
 	{
@@ -134,8 +119,8 @@ public class ProblemDescription extends AbstractDescription
 	@Override
 	public boolean readXML(Element elem)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		parseXML20(elem);
+		return true;
 	}
 	
 	public void print()

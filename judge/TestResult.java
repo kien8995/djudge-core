@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import runner.RunnerResult;
 import runner.RunnerResultEnum;
+import utils.StringWorks;
 import utils.XmlWorks;
 import validator.ValidationResult;
 import validator.ValidationResultEnum;
@@ -13,35 +14,25 @@ import validator.ValidationResultEnum;
 
 public class TestResult extends AbstractResult
 {
-	public final static String XMLRootElement = "test-result";
+	public final static String XMLRootElement = "test";
 	
 	private RunnerResult runResult;
 	private ValidationResult validationResult;
 	
 	int testNumber;
 	int testScore;
-	final String testNumberAttributeName = "test-num";
+	final String testNumberAttributeName = "num";
 	
 	String systemMessage;
 	
 	{
 		testNumber = 0;
-		testScore = 1;
-	}
-	/*
-	public TestResult()
-	{
-		// nothing
 	}
 
-	public TestResult(int testNum)
-	{
-		testNumber = testNum;
-	}
-*/
 	public TestResult(TestDescription testDescription)
 	{
 		testNumber = testDescription.testNumber;
+		testScore = testDescription.score;
 	}
 
 	public TestResult(Element elem)
@@ -72,6 +63,9 @@ public class TestResult extends AbstractResult
 		{
 			result = TestResultEnum.AC;
 		}
+		
+		if (result == TestResultEnum.AC)
+			score = testScore;
 	}
 
 	public void setRuntimeInfo(RunnerResult runResult)
@@ -113,8 +107,8 @@ public class TestResult extends AbstractResult
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(testNumberAttributeName, "" + testNumber);
-		res.setAttribute(scoreAttributeName, "" + score);
 		res.setAttribute(resultAttributeName, "" + result);
+		res.setAttribute(scoreAttributeName, "" + score);
 		
 		if (runResult != null)
 			res.appendChild(doc.importNode(runResult.getXML().getFirstChild(), true));
@@ -129,14 +123,7 @@ public class TestResult extends AbstractResult
 	@Override
 	public boolean readXML(Element elem)
 	{
-		try
-		{
-			testNumber = Integer.parseInt(elem.getAttribute(testNumberAttributeName));
-		}
-		catch (Exception ex)
-		{
-			testNumber = 0;
-		}
+		testNumber = StringWorks.parseInt(elem.getAttribute(testNumberAttributeName), -1);
 		
 		NodeList runs = elem.getElementsByTagName(RunnerResult.XMLRootElement);
         if (runs.getLength() > 0)

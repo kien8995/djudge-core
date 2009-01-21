@@ -18,6 +18,20 @@ package utils;
 
 public class StringWorks 
 {
+	public static int parseInt(String str, int defaultValue)
+	{
+		int res;
+		try
+		{
+			res = Integer.parseInt(str);
+		}
+		catch (Exception ex)
+		{
+			res = defaultValue;
+		}
+		return res;
+	}
+	
 	public static String ArrayToString(String[] Array)
 	{
 		String res = new String();

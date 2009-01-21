@@ -2,18 +2,19 @@ package judge;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import common_data_structures.RunnerFiles;
 
 public class GroupDescription extends AbstractDescription
 {
 	public final static String XMLRootElement = "group";
+	
 	int groupNumber;
 	int testsCount;
 	TestDescription[] tests;
 	String inputMask;
 	String etalonMask;
-	int score = 1;
 	
 	public GroupDescription(int number, ProblemDescription problem)
 	{
@@ -51,8 +52,15 @@ public class GroupDescription extends AbstractDescription
 	@Override
 	public boolean readXML(Element elem)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		readCommonXML(elem);
+		
+		NodeList list = elem.getElementsByTagName(TestDescription.XMLRootElement);
+        testsCount = list.getLength();
+        tests = new TestDescription[testsCount];
+        for (int i = 0; i < testsCount; i++)
+        	tests[i] = new TestDescription(i, problemInfo, (Element)list.item(i));
+        
+		return true;
 	}
 
 	public void print()

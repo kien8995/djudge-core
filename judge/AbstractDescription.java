@@ -1,5 +1,9 @@
 package judge;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import utils.StringWorks;
 import validator.Validator;
 import common.XMLSerializable;
 import common_data_structures.RunnerFiles;
@@ -8,6 +12,9 @@ import common_data_structures.RunnerLimits;
 public abstract class AbstractDescription extends XMLSerializable
 {
 	GlobalProblemInfo problemInfo;
+		
+	int score = 0;
+	final String scoreAttributeName = "score";
 	
 	//public abstract void overrideLimits(RunnerLimits newLimits); 
 	public abstract void overrideFiles(RunnerFiles newFiles); 
@@ -40,5 +47,20 @@ public abstract class AbstractDescription extends XMLSerializable
 	public final void setValidator(Validator validator)
 	{
 		problemInfo.validator = validator;
+	}
+	
+	protected final void readCommonXML(Element elem)
+	{
+		NodeList list;
+		
+		score = StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0);
+		
+		list = elem.getElementsByTagName(Validator.XMLRootElement);
+        if (list.getLength() > 0)
+        	problemInfo.validator = new Validator((Element)list.item(0), 2);
+
+		list = elem.getElementsByTagName(RunnerLimits.XMLRootElement);
+        if (list.getLength() > 0)
+        	problemInfo.limits = new RunnerLimits((Element)list.item(0));
 	}
 }

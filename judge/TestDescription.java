@@ -9,6 +9,8 @@ import utils.PrintfFormat;
 
 public class TestDescription extends AbstractDescription
 {
+	public final static String XMLRootElement = "test";
+	
 	int testNumber;
 	String judgeInput;
 	String judgeOutput;
@@ -16,6 +18,7 @@ public class TestDescription extends AbstractDescription
 	{
 		testNumber = 0;
 		judgeInput = judgeOutput = "";
+		score = 1;
 	}
 	
 /*	public TestDescription(int number, GroupDescription group)
@@ -30,6 +33,13 @@ public class TestDescription extends AbstractDescription
 		this.problemInfo = problemInfo;
 		judgeInput = new PrintfFormat(inputFileMask).sprintf(number + 1);
 		judgeOutput = new PrintfFormat(outputFileMask).sprintf(number + 1);
+	}
+
+	public TestDescription(int number, GlobalProblemInfo problemInfo, Element item)
+	{
+		testNumber = number;
+		this.problemInfo = problemInfo;
+		readXML(item);
 	}
 
 	public void setTestNumber(int num)
@@ -62,8 +72,9 @@ public class TestDescription extends AbstractDescription
 	@Override
 	public boolean readXML(Element elem)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		readCommonXML(elem);
+		
+		return true;
 	}
 
 	public void print()

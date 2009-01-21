@@ -8,7 +8,7 @@ import utils.XmlWorks;
 
 public class ProblemResult extends AbstractResult
 {
-	public final static String XMLRootElement = "problem-result";
+	public final static String XMLRootElement = "problem";
 
 	GroupResult[] groupResults;
 	int groupCount;
