@@ -6,7 +6,6 @@ import org.w3c.dom.Element;
 import common_data_structures.RunnerFiles;
 
 import utils.PrintfFormat;
-import utils.StringWorks;
 
 public class TestDescription extends AbstractDescription
 {
@@ -58,12 +57,17 @@ public class TestDescription extends AbstractDescription
 	
 	public String getInputFilename()
 	{
-		return "input.txt";
+		return problemInfo.programInputFilename != "" ? problemInfo.programInputFilename : null;
+	}
+	
+	public String getAnswerFilename()
+	{
+		return problemInfo.programOutputFilename != "" ? problemInfo.programOutputFilename : null;
 	}
 	
 	public String getEtalonFilename()
 	{
-		return "output.txt";		
+		return "output.txt";
 	}
 	
 	@Override

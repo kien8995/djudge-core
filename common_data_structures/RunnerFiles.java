@@ -20,8 +20,12 @@ public class RunnerFiles extends XMLSerializable
 	public String errorFilename;
 	private final String errorFilenameAttributeName = "error-filename"; 
 	
+	public String rootDirectory;
+	private final String rootDirectiryAttributeName = "root-directory"; 
+	
 	{
 		inputFilename = outputFilename = errorFilename = "";
+		rootDirectory = "";
 	}
 	
 	public RunnerFiles(Element elem)
@@ -53,6 +57,11 @@ public class RunnerFiles extends XMLSerializable
 		outputFilename = out;
 	}
 	
+	public void print()
+	{
+		log("Root: " + rootDirectory + " Input:" + inputFilename + " Output: " + outputFilename + " Error: " + errorFilename);
+	}
+	
 	@Override
 	public Document getXML()
 	{
@@ -62,6 +71,7 @@ public class RunnerFiles extends XMLSerializable
 		res.setAttribute(inputFilenameAttributeName, inputFilename);
 		res.setAttribute(outputFilenameAttributeName, outputFilename);
 		res.setAttribute(errorFilenameAttributeName, errorFilename);
+		res.setAttribute(rootDirectiryAttributeName, rootDirectory);
 		
 		doc.appendChild(res);
 		return doc;
@@ -73,6 +83,7 @@ public class RunnerFiles extends XMLSerializable
 		inputFilename = elem.getAttribute(inputFilenameAttributeName);
 		outputFilename = elem.getAttribute(outputFilenameAttributeName);
 		errorFilename = elem.getAttribute(errorFilenameAttributeName);
+		rootDirectory = elem.getAttribute(rootDirectiryAttributeName);
 		
 		return true;
 	}
