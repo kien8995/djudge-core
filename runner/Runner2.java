@@ -4,15 +4,12 @@ package runner;
 
 import java.io.*;
 
-import utils.FileWorks;
-
 import common_data_structures.RunnerFiles;
 import common_data_structures.RunnerLimits;
 import common_data_structures.RunnerSecurityLimits;
 
-public class Runner
+public class Runner2
 {
-	@SuppressWarnings("unused")
 	private String homeDirectory;
 	
 	private RunnerLimits limits;
@@ -26,26 +23,26 @@ public class Runner
 	@SuppressWarnings("unused")
 	private RunnerSecurityLimits security = new RunnerSecurityLimits();
 	
-	public Runner(String homeDir, RunnerLimits limits, RunnerFiles files)
+	public Runner2(String homeDir, RunnerLimits limits, RunnerFiles files)
 	{
 		this.homeDirectory = homeDir;
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner(RunnerLimits limits, RunnerFiles files)
+	public Runner2(RunnerLimits limits, RunnerFiles files)
 	{
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner(RunnerLimits limits)
+	public Runner2(RunnerLimits limits)
 	{
 		this.limits = limits;
 		this.files = new RunnerFiles();
 	}	
 	
-	public Runner()
+	public Runner2()
 	{
 		this.files = new RunnerFiles();
 		this.limits = new RunnerLimits();
@@ -55,18 +52,14 @@ public class Runner
 	{
 		StringBuffer cmd = new StringBuffer();
 		
-		FileWorks.CopyFile(files.rootDirectory + "invoke.dll", "./tools/invoke.dll");
-		FileWorks.CopyFile(files.rootDirectory + "run.exe", "./tools/run.exe");
-		FileWorks.CopyFile(files.rootDirectory + "crutch.exe", "./tools/crutch.exe");
-		
 		cmd.append(" -Xifce ");
 		
 		//if (limits.fCreateSubprocess)
 		//FIXME - Security bug: allows all runned programs create child processes 
 		cmd.append(" -Xacp ");
 		
-	//	if (files.rootDirectory != null && files.rootDirectory != "")
-		//	cmd.append(" -d \"" + files.rootDirectory.replace('/', '\\') + "\" ");
+		if (homeDirectory != null)
+			cmd.append(" -d \"" + homeDirectory + "\" ");
 		
 		if (limits.timeLimit > 0)
 		{
@@ -88,11 +81,9 @@ public class Runner
 			cmd.append(" -e \"" + files.errorFilename + "\" ");
 
 		// FIXME
-		cmd = new StringBuffer("run.exe " + cmd + " \"" + command + "\"");
+		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");
 		
-		cmd = new StringBuffer(files.rootDirectory + "crutch.exe " + files.rootDirectory + "  " + cmd);
-		
-		//System.out.println(cmd);
+		System.out.println(cmd);
 
 		RunnerResult res = new RunnerResult();
 		

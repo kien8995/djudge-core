@@ -28,13 +28,13 @@ public class Temp
 	{
 		Judge d = new Judge();
 		
-		String cmd = "D:\\A.exe";
-//		ProblemDescription desc = new ProblemDescription("uzhnu-united", "sc2008-AA");
-		ProblemDescription desc = new ProblemDescription("NEERC-1998", "A");
+		String cmd = "D:\\cc.exe";
+		ProblemDescription desc = new ProblemDescription("uzhnu-united", "sc2008-A-cc");
+		//ProblemDescription desc = new ProblemDescription("NEERC-1998", "A");
 		
 		//desc.print();
 		
-		ProblemResult res = Judge.judgeProblem(cmd, desc, true);
+		ProblemResult res = Judge.judgeProblemTrial(cmd, desc);
 		
 		Document doc = (Document)res.getXML();
 		
