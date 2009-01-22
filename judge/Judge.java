@@ -15,12 +15,37 @@ import common.JudgeException;
 import common.JudgeExceptionType;
 import common.settings;
 import common_data_structures.RunnerFiles;
+import compiler.CompilationInfo;
+import compiler.Compiler;
 
 public class Judge
 {
+	public static ProblemResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
+	{
+		System.out.println("Trial: " + fTrial);
+		ProblemResult res = new ProblemResult(problem);
+		String fname = FileWorks.getFileName(file);
+		FileWorks.CopyFile(settings.getTempDir() + fname, file);
+		CompilationInfo ci = Compiler.Compile(settings.getTempDir() + fname, lang);
+		//Compiler.ShowInfo();
+		if (!ci.isSuccessfull())
+		{
+			System.out.println(ci.getCompilerOutput());
+		}
+		else
+		{
+			System.out.println("Trial: " + fTrial);
+			if (fTrial)
+				res = judgeProblemTrial(ci.getCommand(), problem);
+			else
+				res = judgeProblem(ci.getCommand(), problem);
+		}
+		return res;
+	}
+	
 	public static ProblemResult judgeProblem(String command, ProblemDescription problem)
 	{
-		return judgeProblem(command, problem, false, false);
+		return judgeProblem(command, problem, true, false);
 	}
 	
 	public static ProblemResult judgeProblem(String command, ProblemDescription problem, boolean fFullTesting)
@@ -45,11 +70,12 @@ public class Judge
 	
 	public static ProblemResult judgeProblemTrial(String command, ProblemDescription problem)
 	{
+		System.out.println("Trial: " + true);
 		ProblemResult res = new ProblemResult(problem);
 		res.groupCount = 1;
 		res.groupResults = new GroupResult[1];
 
-		res.groupResults[0] = judgeGroup(command, problem.groups[0], true, false);
+		res.groupResults[0] = judgeGroup(command, problem.groups[0], false, false);
 		res.updateResult();
 		
 		return res;
