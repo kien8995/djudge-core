@@ -42,7 +42,7 @@ public class Temp
 		String languageID = elem.getAttribute("language-id");
 		String sourceCode = elem.getAttribute("source-code");
 		String trial = elem.getAttribute("trial-testing");
-		System.out.println("Trial: '" + trial + "'");
+		System.out.println("Trial: '" + trial + "'" + "  " + ((trial.equals("1")) || (trial.equals("true"))));
 		
 		try
 		{
@@ -63,7 +63,7 @@ public class Temp
 		String file = settings.getArchiveDir() + "submissions/" + FileWorks.getFileName(inputXML);
 		FileWorks.saveToFile(sourceCode, file);
 		ProblemDescription problem = new ProblemDescription(contestID, problemID);
-		ProblemResult res = Judge.judgeSourceFile(file, languageID, problem, (trial == "1") || (trial == "true"));
+		SubmissionResult res = Judge.judgeSourceFile(file, languageID, problem, (trial.equals("1")) || (trial.equals("true")));
 		XmlWorks.saveXmlToFile(res.getXML(), outputXML);
 	}
 	
