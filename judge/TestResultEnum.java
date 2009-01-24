@@ -63,6 +63,7 @@ class TestResultEnumFactory
 public enum TestResultEnum
 {
 	AC,
+	CE,
 	WA,
 	TLE,
 	MLE,

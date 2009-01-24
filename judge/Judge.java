@@ -20,25 +20,26 @@ import compiler.Compiler;
 
 public class Judge
 {
-	public static ProblemResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
+	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
 	{
 		System.out.println("Trial: " + fTrial);
-		ProblemResult res = new ProblemResult(problem);
+		SubmissionResult res = new SubmissionResult(problem);
 		String fname = FileWorks.getFileName(file);
 		FileWorks.CopyFile(settings.getTempDir() + fname, file);
 		CompilationInfo ci = Compiler.Compile(settings.getTempDir() + fname, lang);
-		//Compiler.ShowInfo();
+		res.setCompilationInfo(ci);
 		if (!ci.isSuccessfull())
 		{
 			System.out.println(ci.getCompilerOutput());
+			res.result = TestResultEnum.CE;
 		}
 		else
 		{
 			System.out.println("Trial: " + fTrial);
 			if (fTrial)
-				res = judgeProblemTrial(ci.getCommand(), problem);
+				res.setProblemResult(judgeProblemTrial(ci.getCommand(), problem));
 			else
-				res = judgeProblem(ci.getCommand(), problem);
+				res.setProblemResult(judgeProblem(ci.getCommand(), problem));
 		}
 		return res;
 	}
@@ -176,9 +177,8 @@ public class Judge
         run.saveOutputTo(tempDir + "runner.out");
     	ValidationResult validationInfo = new ValidationResult("No_validator");
     	RunnerResult runtimeInfo = run.run(command);
+		runtimeInfo.output = (int)new File(answerFile).length();
     	
-    	System.out.println("Answer: " + answerFile);
-    		
     	if (runtimeInfo.state == RunnerResultEnum.OK)
     		validationInfo = desc.getValidator().Validate(inputGlobalFile, etalonGlobalFile, answerFile);
     		

@@ -20,8 +20,9 @@ public class TestResult extends AbstractResult
 	private ValidationResult validationResult;
 	
 	int testNumber;
-	int testScore;
 	final String testNumberAttributeName = "num";
+	
+	int testScore;
 	
 	String systemMessage;
 	
