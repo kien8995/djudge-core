@@ -122,6 +122,7 @@ public class Runner
 				case 0: res.state = RunnerResultEnum.OK; break;
 				case -1: res.state = RunnerResultEnum.TimeLimitExceeeded; break;
 				case -2: res.state = RunnerResultEnum.MemoryLimitExceeded; break;
+				case -3: res.state = RunnerResultEnum.TimeLimitExceeeded; break;
 				case -4: res.state = RunnerResultEnum.RuntimeErrorCrash; break;
 				default: res.state = RunnerResultEnum.Other;
 			}
@@ -189,6 +190,10 @@ public class Runner
 			{
 				System.out.println("!!! IOException catched (while parsing runner's stdout): " + exc);
 			}
+			
+			FileWorks.deleteFile(files.rootDirectory + "invoke.dll");
+			FileWorks.deleteFile(files.rootDirectory + "run.exe");
+			FileWorks.deleteFile(files.rootDirectory + "crutch.exe");
 			
 			res.OK(retValue, time, mem, output);
 			
