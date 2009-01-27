@@ -5,6 +5,12 @@ import java.util.ArrayList;
 
 public class FileWorks
 {
+	public static boolean deleteFile(String filename)
+	{
+		File f = new File(filename);
+		return f.delete();
+	}
+	
 	public static String getExtension(String file)
 	{
 		File f = new File(file);
