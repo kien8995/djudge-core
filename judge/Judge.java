@@ -20,6 +20,14 @@ import compiler.Compiler;
 
 public class Judge
 {
+	public static JudgeTaskResult judgeTask(JudgeTaskDescription task)
+	{
+		JudgeTaskResult res = new JudgeTaskResult();
+		res.desc = task;
+		
+		return res;
+	}
+	
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
 	{
 		System.out.println("Trial: " + fTrial);
