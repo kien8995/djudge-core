@@ -25,6 +25,32 @@ public class Judge
 		JudgeTaskResult res = new JudgeTaskResult();
 		res.desc = task;
 		
+		ProblemDescription pd;
+		
+		try
+		{
+			pd = new ProblemDescription(task.tcontest, task.tproblem);
+		}
+		catch (Exception e)
+		{
+			return res;
+		}
+		
+		String filesrc = "d:/" + task.tid;
+		
+		System.out.println(task.tsourcecode);
+		
+		FileWorks.saveToFile(task.tsourcecode, filesrc);
+		
+		try
+		{
+			res.res = judgeSourceFile(filesrc, task.tlanguage, pd, task.fTrial == 0);
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
+		}
+		
 		return res;
 	}
 	

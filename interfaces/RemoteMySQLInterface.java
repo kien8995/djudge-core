@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -61,6 +62,8 @@ class ThreadSubmitter extends Thread implements Submitter
 		try
 		{
 			Statement stmt;
+			ResultSet rs;
+			String req;
 
 			java.sql.Connection con = DriverManager.getConnection(url, "school2009", "school2009");
 			
@@ -68,10 +71,25 @@ class ThreadSubmitter extends Thread implements Submitter
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
-			String req;
+			rs = stmt.executeQuery("SELECT * FROM submissions " +
+					"WHERE id = " + res.desc.tid);
+
+			while(rs.next())
+			{
+				int xml_id = rs.getInt("xml_id");
+
+				String sql = " UPDATE xml_data " +
+						" SET data = ? " +  
+						" WHERE id = " + xml_id;
+
+				PreparedStatement ps = con.prepareStatement(sql);
+				ps.setString(1, res.res.getXML().toString());
+				ps.execute();
+				System.out.println(res.res.getXML());
+			}
 			
 			req = "UPDATE submissions " +
-					"SET score = -1 " +
+					"SET score = -2 " +
 					"WHERE id = " + res.desc.tid;
 			
 			stmt.executeUpdate(req);
