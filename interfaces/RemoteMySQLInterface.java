@@ -53,7 +53,6 @@ class ThreadSubmitter extends Thread implements Submitter
     		
     		System.out.println("Submitter.submittting: " + res.desc.tid);
     		processSubmit(res);
-    		
 		}	
 	}
 	
@@ -83,9 +82,9 @@ class ThreadSubmitter extends Thread implements Submitter
 						" WHERE id = " + xml_id;
 
 				PreparedStatement ps = con.prepareStatement(sql);
-				ps.setString(1, res.res.getXML().toString());
+				ps.setString(1, res.res.getXMLString());
 				ps.execute();
-				System.out.println(res.res.getXML());
+				System.out.println(res.res.getXMLString());
 			}
 			
 			req = "UPDATE submissions " +
