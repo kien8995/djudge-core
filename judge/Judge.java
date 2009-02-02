@@ -24,7 +24,6 @@ public class Judge
 	{
 		JudgeTaskResult res = new JudgeTaskResult();
 		res.desc = task;
-		
 		ProblemDescription pd;
 		
 		try
@@ -33,18 +32,17 @@ public class Judge
 		}
 		catch (Exception e)
 		{
+			e.getStackTrace();
 			return res;
 		}
 		
-		String filesrc = "d:/" + task.tid;
-		
-		System.out.println(task.tsourcecode);
+		String filesrc = "d:/" + task.tid + ".xml";
 		
 		FileWorks.saveToFile(task.tsourcecode, filesrc);
 		
 		try
 		{
-			res.res = judgeSourceFile(filesrc, task.tlanguage, pd, task.fTrial == 0);
+			res.res = judgeSourceFile(filesrc, task.tlanguage, pd, task.fTrial == 1);
 		}
 		catch (Exception e)
 		{
