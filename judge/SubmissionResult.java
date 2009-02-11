@@ -15,17 +15,26 @@ public class SubmissionResult extends AbstractResult
 	
 	private CompilationInfo compilationInfo;
 	
+	public ProblemResult getProblemResult()
+	{
+		return problemResult;
+	}
+	
 	private void updateResult()
 	{
 		if (!compilationInfo.isSuccessfull())
 		{
 			result = TestResultEnum.CE;
 			score = 0;
+			wrongTest = -1;
 		}
 		else
 		{
 			result = problemResult.result;
 			score = problemResult.score;
+			maxMemory = problemResult.maxMemory;
+			maxTime = problemResult.maxTime;
+			wrongTest = problemResult.wrongTest;
 		}
 	}
 	
@@ -55,6 +64,9 @@ public class SubmissionResult extends AbstractResult
 		
 		res.setAttribute(scoreAttributeName, "" + score);
 		res.setAttribute(resultAttributeName, "" + result);
+		res.setAttribute(maxMemoryAttributeName, "" + maxMemory);
+		res.setAttribute(maxTimeAttributeName, "" + maxTime);
+		res.setAttribute(wrongTestAttributeName, "" + wrongTest);
 		
 		res.appendChild(doc.importNode(compilationInfo.getXML().getFirstChild(), true));
 		res.appendChild(doc.importNode(problemResult.getXML().getFirstChild(), true));

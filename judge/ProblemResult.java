@@ -29,7 +29,12 @@ public class ProblemResult extends AbstractResult
 		{
 			score += groupResults[i].score;
 			if (groupResults[i].result != TestResultEnum.AC && result == TestResultEnum.AC)
+			{
 				result = groupResults[i].result;
+				wrongTest = groupResults[i].wrongTest;
+			}
+			maxTime = Math.max(maxTime, groupResults[i].maxTime);
+			maxMemory = Math.max(maxMemory, groupResults[i].maxMemory);			
 		}
 	}
 
@@ -43,6 +48,9 @@ public class ProblemResult extends AbstractResult
 		
 		res.setAttribute(scoreAttributeName, "" + score);
 		res.setAttribute(resultAttributeName, "" + result);
+		res.setAttribute(maxMemoryAttributeName, "" + maxMemory);
+		res.setAttribute(maxTimeAttributeName, "" + maxTime);
+		res.setAttribute(wrongTestAttributeName, "" + wrongTest);
 		
 		for (int i = 0; i < groupCount; i++)
 			res.appendChild(doc.importNode(groupResults[i].getXML().getFirstChild(), true));
