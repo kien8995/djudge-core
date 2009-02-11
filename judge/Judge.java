@@ -36,7 +36,7 @@ public class Judge
 			return res;
 		}
 		
-		String filesrc = "d:/" + task.tid + ".xml";
+		String filesrc = settings.getTempDir() + task.tid + ".xml";
 		
 		FileWorks.saveToFile(task.tsourcecode, filesrc);
 		
@@ -57,8 +57,8 @@ public class Judge
 		System.out.println("Trial: " + fTrial);
 		SubmissionResult res = new SubmissionResult(problem);
 		String fname = FileWorks.getFileName(file);
-		FileWorks.CopyFile(settings.getTempDir() + fname, file);
-		CompilationInfo ci = Compiler.Compile(settings.getTempDir() + fname, lang);
+		FileWorks.CopyFile(settings.getWorkDir() + fname, file);
+		CompilationInfo ci = Compiler.Compile(settings.getWorkDir() + fname, lang);
 		res.setCompilationInfo(ci);
 		if (!ci.isSuccessfull())
 		{
@@ -157,7 +157,7 @@ public class Judge
 		TestResult res = new TestResult(desc);
 		File f;
 		
-		String globalTempDir = settings.getTempDir();
+		String globalTempDir = settings.getWorkDir();
 		String tempDir = globalTempDir + solutionID + "/";
 		
 		FileWorks.CopyFile(tempDir + FileWorks.getFileName(command), command);

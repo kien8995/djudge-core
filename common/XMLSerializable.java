@@ -1,5 +1,3 @@
-/* $Id: XMLSerializable.java, v 1.0 2008/11/14 13:24:00 alt Exp $ */
-
 package common;
 
 import java.io.StringWriter;
@@ -15,9 +13,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.FileWorks;
 import utils.XmlWorks;
 
+/**
+ * @author alt
+ */
 public abstract class XMLSerializable extends Loggable
 {
 	public final static String XMLRootElement = "change-me-in-child-class";
@@ -75,13 +75,15 @@ public abstract class XMLSerializable extends Loggable
 		}
 		catch (TransformerConfigurationException exc)
 		{
-			// FIXME			
+			// FIXME
 			System.out.println("!!![XMLSerializable.saveXmlToFile]: " + exc);
+			exc.printStackTrace();
 		}
 		catch (TransformerException exc)
 		{
 			// FIXME
 			System.out.println("!!![XMLSerializable.saveXmlToFile]: " + exc);
+			exc.printStackTrace();
 		}
 		return res;
 	}

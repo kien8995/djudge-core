@@ -31,11 +31,17 @@ public class GroupResult extends AbstractResult
 	{
 		result = TestResultEnum.AC;
 		score = 0;
+		wrongTest = maxMemory = maxTime = -1;
 		for (int i = 0; i < testsCount; i++)
 		{
 			score += testResults[i].score;
 			if (testResults[i].result != TestResultEnum.AC && result == TestResultEnum.AC)
+			{
 				result = testResults[i].result;
+				wrongTest = i;
+			}
+			maxTime = Math.max(maxTime, testResults[i].maxTime);
+			maxMemory = Math.max(maxMemory, testResults[i].maxMemory);
 		}
 		
 		if (result == TestResultEnum.AC)
@@ -55,8 +61,11 @@ public class GroupResult extends AbstractResult
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(groupNumberAttributeName, "" + groupNumber);
+		res.setAttribute(maxMemoryAttributeName, "" + maxMemory);
+		res.setAttribute(maxTimeAttributeName, "" + maxTime);
 		res.setAttribute(scoreAttributeName, "" + score);
 		res.setAttribute(resultAttributeName, "" + result);
+		res.setAttribute(wrongTestAttributeName, "" + wrongTest);
 		
 		for (int i = 0; i < testsCount; i++)
 			res.appendChild(doc.importNode(testResults[i].getXML().getFirstChild(), true));

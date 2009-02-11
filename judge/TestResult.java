@@ -44,6 +44,7 @@ public class TestResult extends AbstractResult
 	private void updateResult()
 	{
 		score = 0;
+		
 		if (runResult != null && runResult.state != RunnerResultEnum.OK)
 		{
 			result = TestResultEnumFactory.getResult(runResult.state);
@@ -65,8 +66,12 @@ public class TestResult extends AbstractResult
 			result = TestResultEnum.AC;
 		}
 		
+		maxMemory = runResult.memory;
+		maxTime = runResult.time;
 		if (result == TestResultEnum.AC)
+		{
 			score = testScore;
+		}
 	}
 
 	public void setRuntimeInfo(RunnerResult runResult)
@@ -108,6 +113,8 @@ public class TestResult extends AbstractResult
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(testNumberAttributeName, "" + testNumber);
+		res.setAttribute(maxMemoryAttributeName, "" + maxMemory);
+		res.setAttribute(maxTimeAttributeName, "" + maxTime);
 		res.setAttribute(resultAttributeName, "" + result);
 		res.setAttribute(scoreAttributeName, "" + score);
 		

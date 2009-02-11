@@ -2,6 +2,11 @@ package common;
 
 public class settings
 {
+	public static String getWorkDir()
+	{
+		return "D:/Temp/Work/eJudge/DJudge/work/";
+	}
+	
 	public static String getTempDir()
 	{
 		return "D:/Temp/Work/eJudge/DJudge/temp/";
