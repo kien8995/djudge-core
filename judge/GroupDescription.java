@@ -78,4 +78,11 @@ public class GroupDescription extends AbstractDescription
 		for (int i = 0; i < testsCount; i++)
 			tests[i].overrideFiles(newFiles);
 	}
+
+	@Override
+	public void generateOutput(String command)
+	{
+		for (int i = 0; i < testsCount; i++)
+			tests[i].generateOutput(command);
+	}
 }

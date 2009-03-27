@@ -83,33 +83,15 @@ public class Temp
 	
 	public static void main(String arg[])
 	{
-		Judge d = new Judge();
+		ProblemDescription desc = new ProblemDescription("NEERC-2001", "B");
 		
-		String cmd = "D:\\cc.exe";
-		ProblemDescription desc = new ProblemDescription("uzhnu-united", "sc2008-A-cc");
-		//ProblemDescription desc = new ProblemDescription("NEERC-1998", "A");
+		desc.generateOutput("d:/a.exe");
 		
-		//desc.print();
-		
-/*		ProblemResult res = Judge.judgeProblemTrial(cmd, desc);
+/*		ProblemResult res = Judge.judgeSourceFile("d:/B-alt.cpp", "GCC342", desc, false).getProblemResult();
 		
 		Document doc = (Document)res.getXML();
 		
 		XmlWorks.saveXmlToFile(doc, "d:\\1.xml");*/
-		//checkFile("d:/000071.xml", "d:/out.xml");
-		while (true)
-		{
-			checkDirectory(settings.getInputDir(), settings.getOutputDir());
-			try
-			{
-				Thread.sleep(100);
-			}
-			catch (Exception e)
-			{
-			}
-		}
-		
-		//System.out.println();
 	}
 	
 	
