@@ -149,4 +149,11 @@ public class ProblemDescription extends AbstractDescription
 		for (int i = 0; i < groupsCount; i++)
 			groups[i].overrideFiles(newFiles);
 	}
+
+	@Override
+	public void generateOutput(String command)
+	{
+		for (int i = 0; i < groupsCount; i++)
+			groups[i].generateOutput(command);
+	}	
 }

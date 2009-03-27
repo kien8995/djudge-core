@@ -98,4 +98,11 @@ public class TestDescription extends AbstractDescription
 	{
 		problemInfo.files = newFiles;
 	}
+
+	@Override
+	public void generateOutput(String command)
+	{
+		Judge.generateTestAnswer(this, command);
+	}	
+	
 }

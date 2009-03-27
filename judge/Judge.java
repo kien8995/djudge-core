@@ -151,6 +151,80 @@ public class Judge
 		return res;
 	}
 	
+	public static RunnerResult generateTestAnswer(TestDescription desc, String command)
+	{
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+        String id = dateFormat.format(new Date());
+        
+        RunnerResult res = null;
+        
+        try
+        {
+        	res = generateOutput(id, command,
+        			FileWorks.ConcatPaths(desc.problemInfo.problemRoot + "tests", desc.judgeInput), 
+        			FileWorks.ConcatPaths(desc.problemInfo.problemRoot + "tests", desc.judgeOutput), 
+        			desc);
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static RunnerResult generateOutput(String solutionID, String command, String inputFile, String answerFile, TestDescription desc) throws JudgeException
+	{
+		File f;
+		
+		String globalTempDir = settings.getWorkDir();
+		String tempDir = globalTempDir + solutionID + "/";
+		
+		FileWorks.CopyFile(tempDir + FileWorks.getFileName(command), command);
+		
+		System.out.println("Input: " + inputFile);
+        f = new File(inputFile);
+        if (!f.exists())
+        	throw new JudgeException(JudgeExceptionType.FileNotFound, inputFile, "global input test #" + desc.getTestNumber());
+
+        // local answer & input files
+        
+        desc.getFiles().print();
+        
+		String inputFileLocal = tempDir + (desc.getInputFilename() != null ? desc.getInputFilename() : "input.txt");
+		String answerFileLocal = tempDir + (desc.getAnswerFilename() != null ? desc.getAnswerFilename() : "output.txt");
+		
+    	System.out.println("Input: " + inputFileLocal);
+		
+        f = new File(inputFileLocal);
+        FileWorks.CopyFile(inputFileLocal, inputFile);
+        if (!f.exists())
+        	throw new JudgeException(JudgeExceptionType.FileNotCreated, inputFileLocal, "local input test #" + desc.getTestNumber());                
+        
+        // now all files are present, we can running 'command'
+        
+        f = new File(command);
+        if (f.exists())
+        {
+        	String cexename = FileWorks.getFileName(command);
+        	String new_commad = tempDir + cexename;
+        	FileWorks.CopyFile(new_commad, command);
+        	f = new File(new_commad);
+        	if (f.exists())
+        		command = cexename;
+        }
+    	
+        RunnerFiles files = desc.getFiles();
+        files.rootDirectory = tempDir;
+        Runner run = new Runner(desc.getLimits(), files);
+        
+        run.saveOutputTo(tempDir + "runner.out");
+    	RunnerResult res = run.run(command);
+    	
+    	if (res.state == RunnerResultEnum.OK)
+    		FileWorks.CopyFile(answerFile, answerFileLocal);
+    	
+		return res;		
+	}
 	
 	public static TestResult judgeTest(String solutionID, String command, String inputGlobalFile, String etalonGlobalFile, TestDescription desc, boolean fFullResults) throws JudgeException
 	{
@@ -179,9 +253,6 @@ public class Judge
 		String answerFile = tempDir + (desc.getAnswerFilename() != null ? desc.getAnswerFilename() : "output.txt");
         
     	System.out.println("Input: " + inputFile);
-		
-		
-		//System.out.println(desc.);
 		
         f = new File(inputFile);
         FileWorks.CopyFile(inputFile, inputGlobalFile);
