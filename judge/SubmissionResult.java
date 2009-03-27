@@ -15,6 +15,8 @@ public class SubmissionResult extends AbstractResult
 	
 	private CompilationInfo compilationInfo;
 	
+	public String comment;
+	
 	public ProblemResult getProblemResult()
 	{
 		return problemResult;
@@ -81,5 +83,9 @@ public class SubmissionResult extends AbstractResult
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
+	public CompilationInfo getCompilationInfo()
+	{
+		return compilationInfo;
+	}
 }

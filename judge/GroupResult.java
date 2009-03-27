@@ -91,4 +91,19 @@ public class GroupResult extends AbstractResult
 		
 		return true;
 	}
+
+	public int getGroupNumber()
+	{
+		return groupNumber;
+	}
+
+	public int getTestsCount()
+	{
+		return testsCount;
+	}
+
+	public TestResult getTestInfo(int i)
+	{
+		return testResults[i];
+	}
 }
