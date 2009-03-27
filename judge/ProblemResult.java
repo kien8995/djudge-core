@@ -73,4 +73,19 @@ public class ProblemResult extends AbstractResult
 		
 		return true;
 	}
+
+	public int getGroupsCount()
+	{
+		return groupCount;
+	}
+
+	public GroupResult getGroupResult(int i)
+	{
+		return groupResults[i];
+	}
+
+	public TestResultEnum getJudgement()
+	{
+		return result;
+	}
 }

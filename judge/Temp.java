@@ -85,7 +85,9 @@ public class Temp
 	{
 		ProblemDescription desc = new ProblemDescription("NEERC-2001", "B");
 		
-		desc.generateOutput("d:/a.exe");
+		Judge.checkProblem("BAPC-2005", "A");
+		
+		//desc.generateOutput("d:/a.exe");
 		
 /*		ProblemResult res = Judge.judgeSourceFile("d:/B-alt.cpp", "GCC342", desc, false).getProblemResult();
 		

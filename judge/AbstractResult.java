@@ -53,5 +53,9 @@ public abstract class AbstractResult extends XMLSerializable
 	{
 		return maxMemory;
 	}
-	
+
+	public TestResultEnum getJudgement()
+	{
+		return result;
+	}
 }

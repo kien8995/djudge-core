@@ -8,7 +8,10 @@ import java.util.Date;
 import runner.Runner;
 import runner.RunnerResult;
 import runner.RunnerResultEnum;
+import utils.DirectoryResult;
 import utils.FileWorks;
+import utils.HtmlWorks;
+import utils.JudgeDirectory;
 import validator.ValidationResult;
 
 import common.JudgeException;
@@ -20,6 +23,15 @@ import compiler.Compiler;
 
 public class Judge
 {
+	public static void checkProblem(String contestId, String problemId)
+	{
+		ProblemDescription desc = new ProblemDescription(contestId, problemId);
+		JudgeDirectory jd = new JudgeDirectory(desc);
+		DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
+		String s = HtmlWorks.directoryResultToHtml(res);
+		FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
+	}
+	
 	public static JudgeTaskResult judgeTask(JudgeTaskDescription task)
 	{
 		JudgeTaskResult res = new JudgeTaskResult();
@@ -56,6 +68,7 @@ public class Judge
 	{
 		System.out.println("Trial: " + fTrial);
 		SubmissionResult res = new SubmissionResult(problem);
+		res.comment = file;
 		String fname = FileWorks.getFileName(file);
 		FileWorks.CopyFile(settings.getWorkDir() + fname, file);
 		CompilationInfo ci = Compiler.Compile(settings.getWorkDir() + fname, lang);
@@ -261,7 +274,6 @@ public class Judge
         
         // now all files are present, we can running 'command'
         
-        f = new File(command);
         if (f.exists())
         {
         	String cexename = FileWorks.getFileName(command);
