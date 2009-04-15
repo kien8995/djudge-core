@@ -49,6 +49,11 @@ public abstract class AbstractResult extends XMLSerializable
 		return maxTime;
 	}
 
+	public final int getMaxOutput()
+	{
+		return 0;
+	}
+
 	public final int getMaxMemory()
 	{
 		return maxMemory;
