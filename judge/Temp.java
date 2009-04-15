@@ -16,13 +16,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.codec.binary.Base64;
+//import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.org.apache.bcel.internal.util.ByteSequence;
+//import com.sun.org.apache.bcel.internal.util.ByteSequence;
 
-import sun.misc.BASE64Decoder;
+//import sun.misc.BASE64Decoder;
 import utils.FileWorks;
 import utils.XmlWorks;
 
@@ -32,7 +32,7 @@ import common_data_structures.RunnerFiles;
 @SuppressWarnings("unused")
 public class Temp
 {
-	public static void checkFile(String inputXML, String outputXML)
+/*	public static void checkFile(String inputXML, String outputXML)
 	{
 		Document doc = XmlWorks.getDocument(inputXML);
 		Element elem = (Element)doc.getDocumentElement().getElementsByTagName("submission").item(0);
@@ -80,14 +80,14 @@ public class Temp
 		}
 		
 	}
-	
+	*/
 	public static void main(String arg[])
 	{
-		ProblemDescription desc = new ProblemDescription("NEERC-2001", "B");
+		ProblemDescription desc = new ProblemDescription("KOTOV", "R2-2");
 		
-		Judge.checkProblem("BAPC-2005", "A");
+		//Judge.checkProblem("KOTOV", "R2-1");
 		
-		//desc.generateOutput("d:/a.exe");
+		desc.generateOutput("d:/a.exe");
 		
 /*		ProblemResult res = Judge.judgeSourceFile("d:/B-alt.cpp", "GCC342", desc, false).getProblemResult();
 		
