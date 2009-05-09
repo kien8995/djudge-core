@@ -1,7 +1,18 @@
 package remoteFS;
 
-public interface RemoteFS
+import utils.FileWorks;
+
+// FIXME: this is just a stub
+public class RemoteFS
 {
-	public boolean readRemoteFile(String localFilename, String remoteFilename);
-	public boolean writeRemoteFilr(String remoteFilename, String localFilename);
+	public static String readContent(String filename)
+	{
+		return FileWorks.readFile(filename);
+	}
+	
+	public static boolean writeContent(String content, String filename)
+	{
+		FileWorks.saveToFile(content, filename);
+		return true;
+	}
 }

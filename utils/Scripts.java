@@ -26,7 +26,7 @@ import common_data_structures.RunnerLimits;
 public class Scripts 
 {
 	// TODO Hadrcode
-	public static final String problemsRoot = "D:\\Temp\\Work\\eJudge\\jTester\\problems\\";
+	public static final String problemsRoot = ".\\problems\\";
 
 	public static void generateProblemReport(String contestId, String problemId)
 	{
