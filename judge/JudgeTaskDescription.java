@@ -1,5 +1,7 @@
 package judge;
 
+import dservice.DServiceTask;
+
 public class JudgeTaskDescription
 {
 	public String tproblem;
@@ -8,4 +10,19 @@ public class JudgeTaskDescription
 	public int fTrial;
 	public String tlanguage;
 	public String tsourcecode;
+	
+	public JudgeTaskDescription()
+	{
+		
+	}
+
+	public JudgeTaskDescription(DServiceTask task)
+	{
+		tproblem = task.getProblem();
+		tcontest = task.getContest();
+		fTrial = 0;
+		tlanguage = task.getLanguage();
+		tsourcecode = task.getSource();
+		tid = task.getID();
+	}
 }

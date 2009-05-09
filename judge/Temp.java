@@ -23,7 +23,9 @@ import org.w3c.dom.Element;
 //import com.sun.org.apache.bcel.internal.util.ByteSequence;
 
 //import sun.misc.BASE64Decoder;
+import sun.font.Script;
 import utils.FileWorks;
+import utils.Scripts;
 import utils.XmlWorks;
 
 import common.settings;
@@ -83,11 +85,14 @@ public class Temp
 	*/
 	public static void main(String arg[])
 	{
-		ProblemDescription desc = new ProblemDescription("KOTOV", "R2-2");
+		ProblemDescription desc = new ProblemDescription("PA-2009", "3B-PIO");
 		
 		//Judge.checkProblem("KOTOV", "R2-1");
+		Judge j = new Judge();
 		
-		desc.generateOutput("d:/a.exe");
+		Scripts.generateProblemReport("PA-2009", "3B-PIO");
+		
+		//desc.generateOutput("d:/a.exe");
 		
 /*		ProblemResult res = Judge.judgeSourceFile("d:/B-alt.cpp", "GCC342", desc, false).getProblemResult();
 		

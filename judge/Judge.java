@@ -300,6 +300,9 @@ public class Judge
     	res.setRuntimeInfo(runtimeInfo);
     	res.setValidationInfo(validationInfo);
         
+    	FileWorks.deleteFile(inputFile);
+    	//FileWorks.deleteFile(command);
+    	
 		return res;
 	}
 	
