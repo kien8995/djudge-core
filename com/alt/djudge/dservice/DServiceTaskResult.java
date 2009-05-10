@@ -10,6 +10,8 @@ public class DServiceTaskResult
 	String languageId;
 	String xml;
 	String dateTime;
+	String clientData;
+	String judgement;
 	
 	public DServiceTaskResult()
 	{
@@ -22,6 +24,7 @@ public class DServiceTaskResult
 		contestId = task.contestId;
 		problemId = task.problemId;
 		languageId = task.languageId;
+		clientData = task.clientData;
 	}
 	
 	public int getID()
@@ -49,9 +52,19 @@ public class DServiceTaskResult
 		return xml;
 	}
 	
+	public String getClientData()
+	{
+		return clientData;
+	}
+	
 	public String getDateTime()
 	{
 		return dateTime;
+	}
+	
+	public String getJudgement()
+	{
+		return judgement;
 	}
 	
 	public DServiceTaskResult(HashMap<String, String> map)
@@ -62,6 +75,8 @@ public class DServiceTaskResult
 		languageId = map.get("language");
 		xml = map.get("xml");		
 		dateTime = map.get("time");
+		clientData = map.get("clientData");
+		judgement = map.get("judgement");
 	}
 	
 	public HashMap<String, String> toHashMap()
@@ -73,6 +88,8 @@ public class DServiceTaskResult
 		res.put("language", languageId);
 		res.put("xml", xml);
 		res.put("time", dateTime);
+		res.put("clientData", clientData);
+		res.put("judgement", judgement);
 		return res;
 	}
 }

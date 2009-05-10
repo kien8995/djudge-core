@@ -138,6 +138,7 @@ public class DService
 			if (rs.next())
 			{
 				res = new DServiceTask();
+				res.clientData = rs.getString("client_data");
 				res.contestId = rs.getString("contest");
 				res.problemId = rs.getString("problem");
 				res.languageId = rs.getString("language");
@@ -222,8 +223,16 @@ public class DService
 		return getUserTaskResults(userID, count);
 	}
 	
+	public static DServiceTaskResult[] fetchResults(String uid)
+	{
+		int userID = getUserID(uid);
+		if (userID <= 0)
+			return null;
+		return getUserTaskResults2(userID);
+	}
+	
 	synchronized public static int submitSolution(String uid, String contestId, String problemId, 
-			String languageId, String source)
+			String languageId, String source, String clientData)
 	{
 		int userID = getUserID(uid);
 		if (userID <= 0)
@@ -233,7 +242,7 @@ public class DService
 		Date date = new Date();
 		String dateStr = dateFormat.format(date);
 		
-		String sql = "INSERT INTO submissions(user_id, judgement, judge_id, judge_status, contest, problem, language, date, fetched)" +
+		String sql = "INSERT INTO submissions(user_id, judgement, judge_id, judge_status, contest, problem, language, date, fetched, client_data)" +
 				"VALUES(" +
 				"" + userID + "," + 
 				"''," +
@@ -243,7 +252,8 @@ public class DService
 				"'" + problemId + "'," + 
 				"'" + languageId + "'," + 
 				"'" + dateStr + "'," +
-				"0" +
+				"0," +
+				"'" + clientData + "'" +
 				")";
 				
 		executeSql(sql);
@@ -285,10 +295,12 @@ public class DService
 		{
     		int submissionId = rs.getInt("id");
     		res.id = submissionId;
+    		res.clientData = rs.getString("client_data");
     		res.contestId = rs.getString("contest");
     		res.problemId = rs.getString("problem");
     		res.languageId = rs.getString("language");
     		res.dateTime = rs.getString("date");
+    		res.judgement = rs.getString("judgement");
     		res.xml = RemoteFS.readContent("data/" + serviceName + "/sources/" + formatNumber(submissionId) + ".xml");
 		}
 		catch (Exception ex)
@@ -347,6 +359,37 @@ public class DService
 		{
 			e.printStackTrace();
 		}
+		return res.toArray(new DServiceTaskResult[0]);
+	}
+	
+	private static DServiceTaskResult[] getUserTaskResults2(int userId)
+	{
+		Vector<DServiceTaskResult> res = new Vector<DServiceTaskResult>();
+		Statement st = getStatement();
+		String sql = "SELECT * FROM submissions WHERE user_id = " + userId + " AND fetched <= 0 AND judge_status > 0 ORDER BY id DESC";
+		Vector <String> resSql = new Vector<String>();
+		try
+		{
+			ResultSet rs = st.executeQuery(sql);
+			int c = 0;
+			while (rs.next())
+			{
+				res.add(toTaskResult(rs));
+				c++;
+				String sql2 = "UPDATE submissions SET fetched = 1 WHERE id = " + rs.getInt("id");
+				resSql.add(sql2);
+			}
+			if (c == 0)
+				return null;
+			rs.close();
+			st.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		for (int i = 0; i < resSql.size(); i++)
+			executeSql(resSql.get(i));
 		return res.toArray(new DServiceTaskResult[0]);
 	}
 	
