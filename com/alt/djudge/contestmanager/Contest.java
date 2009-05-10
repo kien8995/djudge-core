@@ -2,12 +2,15 @@ package com.alt.djudge.contestmanager;
 
 import java.util.Date;
 
+import com.alt.djudge.dservice.DServiceTaskResult;
+
 public class Contest
 {
 	ContestSettings settings;
 	
 	LocalUsersProvider users;
 	LocalProblemsProvider problems;
+	LocalSubmissionsProvider submissions;
 	
 	public boolean enterContest(String userSid)
 	{
@@ -26,6 +29,7 @@ public class Contest
 		settings = new ContestSettings("contests/" + contestId + "/contest.xml");
 		users = new LocalUsersXmlProvider(settings);
 		problems = new LocalProblemsXmlProvider(settings);
+		submissions = new LocalSubmissionsXmlProvider(settings);
 	}
 	
 	public ContestSettings getSettings()
@@ -62,6 +66,7 @@ public class Contest
 	{
 		//FIXME
 		long diff = now().getTime() - settings.startTime.getTime();
+		System.out.println("Absolute Time: " + diff);
 		return diff;
 	}
 	
@@ -72,7 +77,7 @@ public class Contest
 	
 	public boolean isRunning()
 	{
-		return !isPaused() && getContestTime() == getContestAbsoluteTime(); 
+		return (!isPaused()) && (getContestTime() == getContestAbsoluteTime()); 
 	}
 	
 	public long getContestTime()
@@ -80,7 +85,14 @@ public class Contest
 		long diff = getContestAbsoluteTime();
 		if (diff <= 0) return 0;
 		if (diff >= settings.duration) return settings.duration;
+		System.out.println("Time: " + diff);
 		return diff;
+	}
+	
+	public boolean addResult(String submissionId, DServiceTaskResult res)
+	{
+		submissions.setSubmissionResult(submissionId, res.getJudgement(), res.getXml());
+		return true;
 	}
 
 	public boolean submitSolution(String userSid, String problemSid, 
@@ -88,6 +100,8 @@ public class Contest
 	{
 		LocalProblemDescription pr = problems.getProblem(problemSid);
 		if (null == pr) return false;
-		return Manager.submitSolutionInternal(this, pr.judgeContest, pr.judgeProblem, languageId, source);
+		String id = submissions.addSubmission(userSid, problemSid, languageId, source, getContestTime());
+		String clientData = settings.id + " " + id;
+		return Manager.submitSolutionInternal(clientData, pr.judgeContest, pr.judgeProblem, languageId, source);
 	}
 }

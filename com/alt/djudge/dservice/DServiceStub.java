@@ -5,6 +5,20 @@ import java.util.HashMap;
 public class DServiceStub implements DServiceClientInterface
 {
 	@SuppressWarnings("unchecked")
+	public HashMap<String, String>[] fetchResults(String uid)
+	{
+		DServiceTaskResult[] res = DService.fetchResults(uid);
+		if (res == null) return null;
+		int c = res.length;
+		HashMap res2[] = new HashMap[c];
+		for (int i = 0; i < c; i++)
+		{
+			res2[i] = res[i].toHashMap();
+		}
+		return res2;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public HashMap<String, String>[] getSubmissionResult(String uid, int count)
 	{
 		DServiceTaskResult[] res = DService.getSubmissionResult(uid, count);
@@ -44,9 +58,9 @@ public class DServiceStub implements DServiceClientInterface
 
 	@Override
 	public int submitSolution(String uid, String contestId, String problemId,
-			String languageId, String source)
+			String languageId, String source, String clientData)
 	{
-		return DService.submitSolution(uid, contestId, problemId, languageId, source);
+		return DService.submitSolution(uid, contestId, problemId, languageId, source, clientData);
 	}
 
 }

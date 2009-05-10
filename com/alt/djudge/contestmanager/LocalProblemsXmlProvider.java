@@ -2,6 +2,11 @@ package com.alt.djudge.contestmanager;
 
 import java.util.HashMap;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import com.alt.utils.XmlWorks;
+
 public class LocalProblemsXmlProvider implements LocalProblemsProvider
 {
 	
@@ -9,8 +14,21 @@ public class LocalProblemsXmlProvider implements LocalProblemsProvider
 	
 	ContestSettings contest;
 	
+	private String getFilename()
+	{
+		return "contests/" + contest.id + "/problems.xml";
+	}
+	
 	public boolean loadData()
 	{
+		Element elem = XmlWorks.getDocument(getFilename()).getDocumentElement();
+		NodeList users = elem.getElementsByTagName("Problem");
+		int uc = users.getLength();
+		for (int i = 0; i < uc; i++)
+		{
+			LocalProblemDescription ui = new LocalProblemDescription((Element)users.item(i));
+			map.put(ui.sid, ui);
+		}		
 		return true;
 	}
 	

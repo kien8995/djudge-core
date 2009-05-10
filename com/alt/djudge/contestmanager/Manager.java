@@ -6,19 +6,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.alt.djudge.dservice.DServiceTaskResult;
+import com.alt.utils.FileWorks;
+
 public class Manager
 {
-	protected static HashMap<String, Contest> map = new HashMap<String, Contest>();  
+	protected static HashMap<String, Contest> map = new HashMap<String, Contest>();
+	
+	protected static DServiceClientConnector judgeConnector = new DServiceClientConnector();
 
 	public static void setUpInterfaces()
 	{
-		
-	}
-	
-	public static void main(String[] argv)
-	{
-		setUpInterfaces();
-		loadContests();
+		judgeConnector.start();
 	}
 	
 	public static void log(Object o)
@@ -74,10 +73,36 @@ public class Manager
 		return contest.submitSolution(userSid, problemId, languageId, source);
 	}
 	
-	public static boolean submitSolutionInternal(Contest contest, String judgeContest, 
+	public static boolean submitSolutionInternal(String clientData, String judgeContest, 
 			String judgeProblem, String judgeLanguage, String source)
 	{
-		return true;
+		LocalTaskDescription desc = new LocalTaskDescription();
+		desc.clientData = clientData;
+		desc.language = judgeLanguage;
+		desc.problem = judgeProblem;
+		desc.contest = judgeContest;
+		desc.source = source;
+		return judgeConnector.addTask(desc);
 	}
+	
+	public static void updateSubmission(DServiceTaskResult res)
+	{
+		String data[] = res.getClientData().split(" ");
+		String contestId = data[0];
+		String submissionId = data[1];
+		Contest contest = getContest(contestId);
+		if (contest == null) return;
+		contest.addResult(submissionId, res);
+	}
+
+	public static void main(String[] argv)
+	{
+		setUpInterfaces();
+		loadContests();
+		String source = FileWorks.readFile("E:/A-alt.cpp");
+		submitSolution("alt", "123", "default", "A", "GCC342", source);
+		
+	}
+	
 	
 }
