@@ -9,14 +9,14 @@ import com.alt.utils.XmlWorks;
 
 
 
-public class RunnerSecurityLimits extends XMLSerializable
+public class ExecutorSecurityLimits extends XMLSerializable
 {
-	public RunnerSecurityLimits(Element elem)
+	public ExecutorSecurityLimits(Element elem)
 	{
 		readXML(elem);
 	}
 
-	public RunnerSecurityLimits()
+	public ExecutorSecurityLimits()
 	{
 		
 	}

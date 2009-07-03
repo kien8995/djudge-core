@@ -20,7 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.alt.djudge.common.XMLSerializable;
-import com.alt.djudge.judge.runner.RunnerResult;
+import com.alt.djudge.judge.executor.RunnerResult;
 import com.alt.utils.StringWorks;
 import com.alt.utils.XmlWorks;
 

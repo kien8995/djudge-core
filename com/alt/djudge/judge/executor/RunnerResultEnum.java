@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  */
 
-package com.alt.djudge.judge.runner;
+package com.alt.djudge.judge.executor;
 
 /**
  * Enumeration with possible run results

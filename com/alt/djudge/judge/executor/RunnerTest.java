@@ -1,6 +1,6 @@
-package com.alt.djudge.judge.runner;
+package com.alt.djudge.judge.executor;
 
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
 
 import junit.framework.TestCase;
 
@@ -14,7 +14,7 @@ public class RunnerTest extends TestCase
 	
 	public void testRun()
 	{
-		RunnerLimits limits = new RunnerLimits(5000, 100 * 1024 * 1024);
+		ExecutorLimits limits = new ExecutorLimits(5000, 100 * 1024 * 1024);
 		Runner run = new Runner(limits);
 		RunnerResult res;
 		

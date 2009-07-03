@@ -18,13 +18,14 @@ package com.alt.djudge.judge.compiler;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import org.w3c.dom.*;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
-import com.alt.djudge.judge.runner.Runner2;
-import com.alt.djudge.judge.runner.RunnerResult;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.executor.Runner2;
+import com.alt.djudge.judge.executor.RunnerResult;
 import com.alt.utils.FileWorks;
 
 
@@ -70,31 +71,33 @@ public class Language
 		CompilationInfo res = new CompilationInfo();
 		try
 		{
-			String currDir = System.getProperty("user.dir");
-			String name = FileWorks.getNameOnly(file);
-			String namePath = currDir + "\\temp\\" + name;
+			String sourceName = FileWorks.getNameOnly(file);
+			String sourceNameExt = FileWorks.getFileName(file);
+			String sourceDir = FileWorks.getAbsolutePath(file.substring(0, file.length() - sourceNameExt.length())) + "\\";
+			file = sourceDir + sourceNameExt;
 			
-			FileWorks.CopyFile(namePath + info.getExtension(), file);
+			if (!file.equals(sourceDir + sourceName + info.getExtension()))
+				FileWorks.CopyFile(sourceDir + sourceName + info.getExtension(), file);
 			
 			StringBuffer cmd = new StringBuffer(info.getCompileCommand());
 			int i1;
 			while ((i1 = cmd.indexOf("%name")) != -1)
-				cmd.replace(i1, i1 + 5, namePath);
+				cmd.replace(i1, i1 + 5, sourceDir + sourceName + info.getExtension());
 			while ((i1 = cmd.indexOf("%ext")) != -1)
 				cmd.replace(i1, i1 + 4, info.getExtension());
 			
-			String compOutput = FileWorks.getAbsolutePath(".//temp//compiler.output"); 
+			String compOutput = FileWorks.getAbsolutePath(sourceDir + "compiler.output"); 
 			
-			RunnerFiles files = new RunnerFiles(compOutput);
+			ExecutorFiles files = new ExecutorFiles(compOutput);
 			
-			RunnerLimits limits = new RunnerLimits(20000, 256 * 1024 * 1024);
+			ExecutorLimits limits = new ExecutorLimits(20000, 256 * 1024 * 1024);
 			
 			Runner2 run = new Runner2(limits, files);
 			
 			RunnerResult rres = run.run(cmd.toString());
 			
 			res.compilerExitCode = rres.exitCode;
-			res.command = info.getRunCommand().replace("%name", (info.getID().equals("JAVA") ? name : namePath));
+			res.command = info.getRunCommand().replace("%name", (info.getID().equals("JAVA") ? sourceName : file));
 
 			if (res.compilerExitCode == 0)
 				res.state = CompilationResult.OK;

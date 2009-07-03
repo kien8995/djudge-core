@@ -4,7 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
 
 
 
@@ -75,7 +75,7 @@ public class GroupDescription extends AbstractDescription
 	}
 
 	@Override
-	public void overrideFiles(RunnerFiles newFiles)
+	public void overrideFiles(ExecutorFiles newFiles)
 	{
 		for (int i = 0; i < testsCount; i++)
 			tests[i].overrideFiles(newFiles);

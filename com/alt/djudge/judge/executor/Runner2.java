@@ -1,12 +1,12 @@
 // TODO: review this class (old version used)
 
-package com.alt.djudge.judge.runner;
+package com.alt.djudge.judge.executor;
 
 import java.io.*;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
-import com.alt.djudge.judge.common_data_structures.RunnerSecurityLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorSecurityLimits;
 
 
 
@@ -14,40 +14,40 @@ public class Runner2
 {
 	private String homeDirectory;
 	
-	private RunnerLimits limits;
+	private ExecutorLimits limits;
 	
-	private RunnerFiles files;
+	private ExecutorFiles files;
 	
 	String saveOutputTo;
 	boolean fRedirect = false;
 	
 	
 	@SuppressWarnings("unused")
-	private RunnerSecurityLimits security = new RunnerSecurityLimits();
+	private ExecutorSecurityLimits security = new ExecutorSecurityLimits();
 	
-	public Runner2(String homeDir, RunnerLimits limits, RunnerFiles files)
+	public Runner2(String homeDir, ExecutorLimits limits, ExecutorFiles files)
 	{
 		this.homeDirectory = homeDir;
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner2(RunnerLimits limits, RunnerFiles files)
+	public Runner2(ExecutorLimits limits, ExecutorFiles files)
 	{
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner2(RunnerLimits limits)
+	public Runner2(ExecutorLimits limits)
 	{
 		this.limits = limits;
-		this.files = new RunnerFiles();
+		this.files = new ExecutorFiles();
 	}	
 	
 	public Runner2()
 	{
-		this.files = new RunnerFiles();
-		this.limits = new RunnerLimits();
+		this.files = new ExecutorFiles();
+		this.limits = new ExecutorLimits();
 	}
 	
 	public RunnerResult run(String command)

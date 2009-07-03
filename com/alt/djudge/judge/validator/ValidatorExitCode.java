@@ -1,4 +1,4 @@
-/* $Id: ValidatorExitCodeExtended.java, v 0.1 2008/07/24 05:13:08 alt Exp $ */
+/* $Id: ValidatorExitCode.java, v 0.1 2008/07/24 05:13:08 alt Exp $ */
 
 /* Copyright (C) 2008 Olexiy Palinkash <olexiy.palinkash@gmail.com> */
 
@@ -16,34 +16,24 @@
 
 package com.alt.djudge.judge.validator;
 
-import com.alt.djudge.judge.runner.*;
+import com.alt.djudge.judge.executor.*;
 
-public class Validator_ExitCodeExtended extends ValidatorExternalAbstract
+public class ValidatorExitCode extends ValidatorExternalAbstract
 {
-	public Validator_ExitCodeExtended(String ExeFile) 
+	public ValidatorExitCode(String ExeFile) 
 	{
 		super(ExeFile);
 	}
 	
 	protected void processData()
 	{
-		if (res.RunInfo.state == RunnerResultEnum.OK) res.Result = ValidationResultEnum.OK;
-		else if (res.RunInfo.state == RunnerResultEnum.NonZeroExitCode) 
+		if (res.RunInfo.state == RunnerResultEnum.OK)
 		{
-			switch (res.RunInfo.exitCode)
-			{
-			case 1 : 
-				res.Result = ValidationResultEnum.PresentationError; 
-				break;
-				
-			case 3 : 
-				res.Result = ValidationResultEnum.InternalError;
-				res.Fail = ValidationFailEnum.ValidatorFail;
-				break;
-				
-			default : 
-				res.Result = ValidationResultEnum.WrongAnswer;
-			}
+			res.Result = ValidationResultEnum.OK;
+		}
+		else if (res.RunInfo.state == RunnerResultEnum.NonZeroExitCode)
+		{
+			res.Result = ValidationResultEnum.WrongAnswer;
 		}
 		else
 		{

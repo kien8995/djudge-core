@@ -1,8 +1,8 @@
 package com.alt.djudge.judge;
 
 import com.alt.djudge.common.Loggable;
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
 import com.alt.djudge.judge.validator.Validator;
 import com.alt.djudge.judge.validator.ValidatorType;
 
@@ -13,8 +13,8 @@ public class GlobalProblemInfo extends Loggable implements Cloneable
 	String problemID;
 	String contestID;
 	
-	RunnerFiles files;
-	RunnerLimits limits;
+	ExecutorFiles files;	
+	ExecutorLimits limits;
 	Validator validator;
 	String solutions[];
 	
@@ -39,8 +39,8 @@ public class GlobalProblemInfo extends Loggable implements Cloneable
 	{
 		type = ProblemTypeEnum.ACM;
 		problemID = contestID = "unknown";
-		files = new RunnerFiles();
-		limits = new RunnerLimits();
+		files = new ExecutorFiles();
+		limits = new ExecutorLimits();
 		validator = new Validator(ValidatorType.InternalExact);
 		problemRoot = "";
 		solutions = new String[0];

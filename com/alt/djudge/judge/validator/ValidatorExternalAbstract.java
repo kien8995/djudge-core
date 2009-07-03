@@ -19,12 +19,11 @@ package com.alt.djudge.judge.validator;
 import java.io.*;
 import java.util.ArrayList;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
-import com.alt.djudge.judge.runner.Runner2;
-import com.alt.djudge.judge.runner.RunnerResultEnum;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.executor.Runner2;
+import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.utils.FileWorks;
-
 
 
 
@@ -81,9 +80,9 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		ValidatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
 		res.ValidatorOutput = new String[0];
 		
-		RunnerFiles files = new RunnerFiles(ValidatorOutputFile);
+		ExecutorFiles files = new ExecutorFiles(ValidatorOutputFile);
 		
-		RunnerLimits limits = new RunnerLimits(ValidatorLimits.MAX_VALIDATOR_RUNNING_TIME, 
+		ExecutorLimits limits = new ExecutorLimits(ValidatorLimits.MAX_VALIDATOR_RUNNING_TIME, 
 				ValidatorLimits.MAX_VALIDATOR_CONSUMED_MEMORY, ValidatorLimits.MAX_VALIDATOR_OUTPUT_SIZE);
 		
 		Runner2 runner = new Runner2(limits, files);

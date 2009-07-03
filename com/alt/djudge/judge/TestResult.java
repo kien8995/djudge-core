@@ -4,8 +4,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.alt.djudge.judge.runner.RunnerResult;
-import com.alt.djudge.judge.runner.RunnerResultEnum;
+import com.alt.djudge.judge.executor.RunnerResult;
+import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.djudge.judge.validator.ValidationResult;
 import com.alt.djudge.judge.validator.ValidationResultEnum;
 import com.alt.utils.StringWorks;

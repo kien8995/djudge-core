@@ -32,7 +32,6 @@ public class FileWorks
 		File f = new File(relativePath);
 		// FIXME
 		String res = f.getAbsolutePath().replace("\\.", "");
-		//System.out.println(res);
 		return res;
 	}
 	

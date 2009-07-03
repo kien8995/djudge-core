@@ -5,8 +5,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
 import com.alt.djudge.judge.validator.Validator;
 import com.alt.utils.StringWorks;
 import com.alt.utils.XmlWorks;
@@ -65,7 +65,7 @@ public class ProblemDescription extends AbstractDescription
 		String in = problemInfo.programInputFilename = elem.getAttribute("input-file");
 		String out = problemInfo.programOutputFilename = elem.getAttribute("output-file");
 		
-		problemInfo.files = new RunnerFiles(
+		problemInfo.files = new ExecutorFiles(
 				in.length() == 0 || in.equalsIgnoreCase("stdin") ? "input.txt" : null,
 				out.length() == 0 || out.equalsIgnoreCase("stdout") ? "output.txt" : null
 				);
@@ -101,13 +101,13 @@ public class ProblemDescription extends AbstractDescription
 		String in = problemInfo.programInputFilename = elem.getAttribute("input-file");
 		String out = problemInfo.programOutputFilename = elem.getAttribute("output-file");
 		
-		problemInfo.files = new RunnerFiles(
+		problemInfo.files = new ExecutorFiles(
 				in.length() == 0 || in.equalsIgnoreCase("stdin") ? "input.txt" : null,
 				out.length() == 0 || out.equalsIgnoreCase("stdout") ? "output.txt" : null
 				);
 		
 		// Limits
-		problemInfo.limits = new RunnerLimits();
+		problemInfo.limits = new ExecutorLimits();
 		problemInfo.limits.outputLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("output-limit"));
 		problemInfo.limits.memoryLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("memory-limit"));
 		problemInfo.limits.timeLimit = StringWorks.StrToTimeLimit(elem.getAttribute("time-limit"));
@@ -146,7 +146,7 @@ public class ProblemDescription extends AbstractDescription
 	}
 
 	@Override
-	public void overrideFiles(RunnerFiles newFiles)
+	public void overrideFiles(ExecutorFiles newFiles)
 	{
 		for (int i = 0; i < groupsCount; i++)
 			groups[i].overrideFiles(newFiles);

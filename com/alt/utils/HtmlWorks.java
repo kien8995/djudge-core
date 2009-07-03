@@ -21,7 +21,7 @@ import com.alt.djudge.judge.ProblemResult;
 import com.alt.djudge.judge.SubmissionResult;
 import com.alt.djudge.judge.TestResult;
 import com.alt.djudge.judge.TestResultEnum;
-import com.alt.djudge.judge.runner.RunnerResult;
+import com.alt.djudge.judge.executor.RunnerResult;
 import com.alt.djudge.judge.validator.ValidationResult;
 
 
