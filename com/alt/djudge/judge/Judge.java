@@ -8,12 +8,12 @@ import java.util.Date;
 import com.alt.djudge.common.JudgeException;
 import com.alt.djudge.common.JudgeExceptionType;
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
 import com.alt.djudge.judge.compiler.CompilationInfo;
 import com.alt.djudge.judge.compiler.Compiler;
-import com.alt.djudge.judge.runner.Runner;
-import com.alt.djudge.judge.runner.RunnerResult;
-import com.alt.djudge.judge.runner.RunnerResultEnum;
+import com.alt.djudge.judge.executor.Runner;
+import com.alt.djudge.judge.executor.RunnerResult;
+import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.djudge.judge.validator.ValidationResult;
 import com.alt.utils.DirectoryResult;
 import com.alt.utils.FileWorks;
@@ -68,12 +68,14 @@ public class Judge
 	
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
 	{
-		System.out.println("Trial: " + fTrial);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+        String id = dateFormat.format(new Date());
+        
 		SubmissionResult res = new SubmissionResult(problem);
 		res.comment = file;
 		String fname = FileWorks.getFileName(file);
-		FileWorks.CopyFile(settings.getWorkDir() + fname, file);
-		CompilationInfo ci = Compiler.Compile(settings.getWorkDir() + fname, lang);
+		FileWorks.CopyFile(settings.getWorkDir() + id + "/" + fname, file);
+		CompilationInfo ci = Compiler.Compile(settings.getWorkDir() + id + "/" + fname, lang);
 		res.setCompilationInfo(ci);
 		if (!ci.isSuccessfull())
 		{
@@ -228,7 +230,7 @@ public class Judge
         		command = cexename;
         }
     	
-        RunnerFiles files = desc.getFiles();
+        ExecutorFiles files = desc.getFiles();
         files.rootDirectory = tempDir;
         Runner run = new Runner(desc.getLimits(), files);
         
@@ -286,7 +288,7 @@ public class Judge
         		command = cexename;
         }
     	
-        RunnerFiles files = desc.getFiles();
+        ExecutorFiles files = desc.getFiles();
         
         files.rootDirectory = tempDir;
         

@@ -21,7 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
 import com.alt.utils.FileWorks;
 import com.alt.utils.Scripts;
 import com.alt.utils.XmlWorks;
@@ -87,12 +87,12 @@ public class Temp
 	*/
 	public static void main(String arg[])
 	{
-		ProblemDescription desc = new ProblemDescription("PA-2009", "3B-PIO");
+		//ProblemDescription desc = new ProblemDescription("PA-2009", "3B-PIO");
 		
 		//Judge.checkProblem("KOTOV", "R2-1");
-		Judge j = new Judge();
+		//Judge j = new Judge();
 		
-		Scripts.generateProblemReport("PA-2009", "3B-PIO");
+		Scripts.generateProblemReport("NEERC-2004-Northern", "E");
 		
 		//desc.generateOutput("d:/a.exe");
 		

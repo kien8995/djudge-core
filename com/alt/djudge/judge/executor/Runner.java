@@ -1,6 +1,6 @@
 // TODO: review this class (old version used)
 
-package com.alt.djudge.judge.runner;
+package com.alt.djudge.judge.executor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,9 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
-import com.alt.djudge.judge.common_data_structures.RunnerSecurityLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorSecurityLimits;
 import com.alt.utils.FileWorks;
 
 
@@ -22,40 +22,40 @@ public class Runner extends Runner2
 	@SuppressWarnings("unused")
 	private String homeDirectory;
 	
-	private RunnerLimits limits;
+	private ExecutorLimits limits;
 	
-	private RunnerFiles files;
+	private ExecutorFiles files;
 	
 	String saveOutputTo;
 	boolean fRedirect = false;
 	
 	
 	@SuppressWarnings("unused")
-	private RunnerSecurityLimits security = new RunnerSecurityLimits();
+	private ExecutorSecurityLimits security = new ExecutorSecurityLimits();
 	
-	public Runner(String homeDir, RunnerLimits limits, RunnerFiles files)
+	public Runner(String homeDir, ExecutorLimits limits, ExecutorFiles files)
 	{
 		this.homeDirectory = homeDir;
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner(RunnerLimits limits, RunnerFiles files)
+	public Runner(ExecutorLimits limits, ExecutorFiles files)
 	{
 		this.limits = limits;
 		this.files = files;
 	}
 	
-	public Runner(RunnerLimits limits)
+	public Runner(ExecutorLimits limits)
 	{
 		this.limits = limits;
-		this.files = new RunnerFiles();
+		this.files = new ExecutorFiles();
 	}	
 	
 	public Runner()
 	{
-		this.files = new RunnerFiles();
-		this.limits = new RunnerLimits();
+		this.files = new ExecutorFiles();
+		this.limits = new ExecutorLimits();
 	}
 	
 	public RunnerResult run(String command)

@@ -4,8 +4,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.alt.djudge.common.XMLSerializable;
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
 import com.alt.djudge.judge.validator.Validator;
 import com.alt.utils.StringWorks;
 
@@ -18,26 +18,26 @@ public abstract class AbstractDescription extends XMLSerializable
 	int score = 0;
 	final String scoreAttributeName = "score";
 	
-	public abstract void overrideFiles(RunnerFiles newFiles); 
+	public abstract void overrideFiles(ExecutorFiles newFiles); 
 	
-	public final RunnerFiles getFiles()
+	public final ExecutorFiles getFiles()
 	{
 		return problemInfo.files;
 	}
 	
 	public abstract void generateOutput(String command); 
 	
-	public final void setFiles(RunnerFiles files)
+	public final void setFiles(ExecutorFiles files)
 	{
 		problemInfo.files = files;
 	}
 	
-	public final RunnerLimits getLimits()
+	public final ExecutorLimits getLimits()
 	{
 		return problemInfo.limits;
 	}
 	
-	public final void setLimits(RunnerLimits limits)
+	public final void setLimits(ExecutorLimits limits)
 	{
 		problemInfo.limits = limits;
 	}
@@ -62,8 +62,8 @@ public abstract class AbstractDescription extends XMLSerializable
         if (list.getLength() > 0)
         	problemInfo.validator = new Validator((Element)list.item(0), 2);
 
-		list = elem.getElementsByTagName(RunnerLimits.XMLRootElement);
+		list = elem.getElementsByTagName(ExecutorLimits.XMLRootElement);
         if (list.getLength() > 0)
-        	problemInfo.limits = new RunnerLimits((Element)list.item(0));
+        	problemInfo.limits = new ExecutorLimits((Element)list.item(0));
 	}
 }

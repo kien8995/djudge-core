@@ -1,6 +1,6 @@
 package com.alt.djudge.judge;
 
-import com.alt.djudge.judge.runner.RunnerResultEnum;
+import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.djudge.judge.validator.ValidationResultEnum;
 
 

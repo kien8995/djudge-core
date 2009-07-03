@@ -9,7 +9,7 @@ import com.alt.utils.XmlWorks;
 
 
 
-public class RunnerFiles extends XMLSerializable
+public class ExecutorFiles extends XMLSerializable
 {
 	public final static String XMLRootElement = "RunnerFiles";
 	
@@ -30,30 +30,30 @@ public class RunnerFiles extends XMLSerializable
 		rootDirectory = "";
 	}
 	
-	public RunnerFiles(Element elem)
+	public ExecutorFiles(Element elem)
 	{
 		readXML(elem);
 	}
 	
-	public RunnerFiles()
+	public ExecutorFiles()
 	{
 		// nothing
 	}
 	
-	public RunnerFiles(String in, String out, String err)
+	public ExecutorFiles(String in, String out, String err)
 	{
 		inputFilename = in;
 		outputFilename = out;
 		errorFilename = err;
 	}
 
-	public RunnerFiles(String in, String out)
+	public ExecutorFiles(String in, String out)
 	{
 		inputFilename = in;
 		outputFilename = out;
 	}
 	
-	public RunnerFiles(String out)
+	public ExecutorFiles(String out)
 	{
 		outputFilename = out;
 		outputFilename = out;

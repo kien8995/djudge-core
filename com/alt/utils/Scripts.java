@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import com.alt.djudge.judge.ProblemDescription;
-import com.alt.djudge.judge.common_data_structures.RunnerLimits;
+import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
 
 
 
@@ -32,10 +32,10 @@ public class Scripts
 
 	public static void generateProblemReport(String contestId, String problemId)
 	{
-		generateProblemReport(contestId, problemId, new RunnerLimits());
+		generateProblemReport(contestId, problemId, new ExecutorLimits());
 	}
 	
-	public static void generateProblemReport(String contestId, String problemId, RunnerLimits limits)
+	public static void generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
 	{
 		ProblemDescription desc = new ProblemDescription(contestId, problemId);
 		
@@ -49,10 +49,10 @@ public class Scripts
 	
 	public static void generateContestReport(String contestId)
 	{
-		generateContestReport(contestId, new RunnerLimits());
+		generateContestReport(contestId, new ExecutorLimits());
 	}
 	
-	public static void generateContestReport(String contestId, RunnerLimits limits)
+	public static void generateContestReport(String contestId, ExecutorLimits limits)
 	{
 		StringBuffer s = new StringBuffer();
 		String contestPath = problemsRoot + contestId + "\\";

@@ -84,15 +84,15 @@ public class Validator
 		switch (type)
 		{
 		case ExternalExitCode:
-			res = (new Validator_ExitCode(exeFile)).Validate(input, output, answer);
+			res = (new ValidatorExitCode(exeFile)).Validate(input, output, answer);
 			break;
 
 		case ExternalExitCodeExtended:
-			res = (new Validator_ExitCodeExtended(exeFile)).Validate(input, output, answer);
+			res = (new ValidatorExitCodeExtended(exeFile)).Validate(input, output, answer);
 			break;
 
 		case ExternalTestLib:
-			res = (new Validator_TestLib(exeFile)).Validate(input, output, answer);
+			res = (new ValidatorTestLib(exeFile)).Validate(input, output, answer);
 			break;
 
 		case InternalExact:

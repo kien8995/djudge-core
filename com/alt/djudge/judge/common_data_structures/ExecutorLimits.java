@@ -11,7 +11,7 @@ import com.alt.utils.XmlWorks;
 
 
 
-public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLimits>
+public class ExecutorLimits extends XMLSerializable implements Comparable<ExecutorLimits>
 {
 	public final static String XMLRootElement = "limits"; 
 	
@@ -24,9 +24,9 @@ public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLi
 	public int outputLimit;
 	private final String outputLimitAttributeName = "output-limit";
 	
-	public RunnerSecurityLimits securityLimits;
+	public ExecutorSecurityLimits securityLimits;
 
-	private void init(int time, int memory, int output, RunnerSecurityLimits security)
+	private void init(int time, int memory, int output, ExecutorSecurityLimits security)
 	{
 		timeLimit = time;
 		memoryLimit = memory;
@@ -36,30 +36,30 @@ public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLi
 	
 	private void initEmpty()
 	{
-		init(-1, -1, -1, new RunnerSecurityLimits());
+		init(-1, -1, -1, new ExecutorSecurityLimits());
 	}
 	
-	public RunnerLimits(Element element)
+	public ExecutorLimits(Element element)
 	{
 		readXML(element);
 	}
 	
-	public RunnerLimits(int time, int memory, int output)
+	public ExecutorLimits(int time, int memory, int output)
 	{
-		init(time, memory, output, new RunnerSecurityLimits());
+		init(time, memory, output, new ExecutorSecurityLimits());
 	}
 	
-	public RunnerLimits(int time, int memory)
+	public ExecutorLimits(int time, int memory)
 	{
-		init(time, memory, -1, new RunnerSecurityLimits());
+		init(time, memory, -1, new ExecutorSecurityLimits());
 	}
 	
-	public RunnerLimits()
+	public ExecutorLimits()
 	{
-		init(-1, -1, -1, new RunnerSecurityLimits());
+		init(-1, -1, -1, new ExecutorSecurityLimits());
 	}
 
-	public void setSecurityLimits(RunnerSecurityLimits securityLimits)
+	public void setSecurityLimits(ExecutorSecurityLimits securityLimits)
 	{
 		this.securityLimits = securityLimits;
 	}
@@ -115,15 +115,15 @@ public class RunnerLimits extends XMLSerializable implements Comparable<RunnerLi
 		if (tempStr != "")
 			outputLimit = StringWorks.StrToMemoryLimit(tempStr);
 			
-		NodeList securityElement = elem.getElementsByTagName(RunnerSecurityLimits.XMLRootElement);
+		NodeList securityElement = elem.getElementsByTagName(ExecutorSecurityLimits.XMLRootElement);
         if (securityElement.getLength() > 0)
-        	securityLimits = new RunnerSecurityLimits((Element)securityElement.item(0));
+        	securityLimits = new ExecutorSecurityLimits((Element)securityElement.item(0));
 		
 		return true;
 	}
 
 	@Override
-	public int compareTo(RunnerLimits arg)
+	public int compareTo(ExecutorLimits arg)
 	{
 		int k;
 		k = timeLimit - arg.timeLimit;

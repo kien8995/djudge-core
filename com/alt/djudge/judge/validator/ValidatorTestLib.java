@@ -16,11 +16,11 @@
 
 package com.alt.djudge.judge.validator;
 
-import com.alt.djudge.judge.runner.RunnerResultEnum;
+import com.alt.djudge.judge.executor.RunnerResultEnum;
 
-public class Validator_TestLib extends ValidatorExternalAbstract
+public class ValidatorTestLib extends ValidatorExternalAbstract
 {
-	public Validator_TestLib(String ExeFile) 
+	public ValidatorTestLib(String ExeFile) 
 	{
 		super(ExeFile);
 	}

@@ -1,4 +1,4 @@
-package com.alt.djudge.judge.runner;
+package com.alt.djudge.judge.executor;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

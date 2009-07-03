@@ -3,7 +3,7 @@ package com.alt.djudge.judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.alt.djudge.judge.common_data_structures.RunnerFiles;
+import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
 import com.alt.utils.PrintfFormat;
 
 
@@ -96,7 +96,7 @@ public class TestDescription extends AbstractDescription
 	}
 
 	@Override
-	public void overrideFiles(RunnerFiles newFiles)
+	public void overrideFiles(ExecutorFiles newFiles)
 	{
 		problemInfo.files = newFiles;
 	}
