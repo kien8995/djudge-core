@@ -31,4 +31,9 @@ public class ExecutionResult
 	{
 		return exitCode;
 	}
+	
+	public ExecutionResultEnum getResult()
+	{
+		return result;
+	}
 }

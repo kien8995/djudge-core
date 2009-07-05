@@ -3,11 +3,8 @@ package com.alt.djudge.judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
+import com.alt.djudge.judge.dexecutor.ExecutorFiles;
 import com.alt.utils.PrintfFormat;
-
-
-
 
 public class TestDescription extends AbstractDescription
 {
@@ -104,7 +101,17 @@ public class TestDescription extends AbstractDescription
 	@Override
 	public void generateOutput(String command)
 	{
-		Judge.generateTestAnswer(this, command);
-	}	
+		//Judge.generateTestAnswer(this, command);
+	}
+	
+	//FIXME
+	public ExecutorFiles getExecutorFiles()
+	{
+		ExecutorFiles res = new ExecutorFiles();
+		res.errorFilename = "error.txt";
+		res.inputFilename = "input.txt";
+		res.outputFilename = "output.txt";
+		return res;
+	}
 	
 }
