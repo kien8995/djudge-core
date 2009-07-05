@@ -47,9 +47,9 @@ public class FileWorks
 		return (new File(filePathName)).getName();
 	}
 	
-	public static void ClearDirectory(String dir)
+	public static void clearDirectory(String dir)
 	{
-		ClearDirectory(dir, new ArrayList<String>());
+		clearDirectory(dir, new ArrayList<String>());
 	}
 	
 	public static String[] getDirectoryListing(String dir)
@@ -59,7 +59,7 @@ public class FileWorks
 		return file.list();
 	}
 	
-	public static void ClearDirectory(String dir, ArrayList<String> excl)
+	public static void clearDirectory(String dir, ArrayList<String> excl)
 	{
 		File f1 = new File(dir);
 		if (f1.isDirectory())
@@ -104,6 +104,44 @@ public class FileWorks
 	    {
 	    	System.out.println(e.getMessage());      
 	    }
+	}
+	
+	public static void writeFileContent(String file, byte[] content)
+	{
+		try
+		{
+			File f = new File(file);
+			f.getParentFile().mkdirs();
+			OutputStream out = new FileOutputStream(f);
+			out.write(content, 0, content.length);
+			out.close();
+		}
+	    catch(IOException e)
+	    {
+	    	System.out.println(e.getMessage());      
+	    }
+	}
+	
+	public static byte[] readFileContent(String file)
+	{
+		byte[] res = null;
+		try
+		{
+			File f = new File(file);
+			InputStream in = new FileInputStream(f);
+			res = new byte[(int)f.length()];
+			in.read(res);
+			in.close();
+		}
+		catch(FileNotFoundException ex)
+	    {
+			System.out.println(ex.getMessage() + " in the specified directory.");
+	    }
+	    catch(IOException e)
+	    {
+	    	System.out.println(e.getMessage());      
+	    }
+	    return res;
 	}
 	
 	public static void saveToFile(String s, String filename)

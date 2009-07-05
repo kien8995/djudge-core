@@ -3,7 +3,7 @@ package com.alt.djudge.judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.alt.djudge.judge.compiler.CompilationInfo;
+import com.alt.djudge.judge.dcompiler.CompilationInfo;
 import com.alt.utils.XmlWorks;
 
 

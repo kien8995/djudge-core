@@ -9,8 +9,10 @@ import com.alt.djudge.common.JudgeException;
 import com.alt.djudge.common.JudgeExceptionType;
 import com.alt.djudge.common.settings;
 import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
-import com.alt.djudge.judge.compiler.CompilationInfo;
-import com.alt.djudge.judge.compiler.Compiler;
+import com.alt.djudge.judge.dcompiler.CompilationInfo;
+import com.alt.djudge.judge.dcompiler.CompilerTask;
+import com.alt.djudge.judge.dcompiler.Compiler;
+import com.alt.djudge.judge.dexecutor.ExecutorProgram;
 import com.alt.djudge.judge.executor.Runner;
 import com.alt.djudge.judge.executor.RunnerResult;
 import com.alt.djudge.judge.executor.RunnerResultEnum;
@@ -19,9 +21,6 @@ import com.alt.utils.DirectoryResult;
 import com.alt.utils.FileWorks;
 import com.alt.utils.HtmlWorks;
 import com.alt.utils.JudgeDirectory;
-
-
-
 
 public class Judge
 {
@@ -68,14 +67,9 @@ public class Judge
 	
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
 	{
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date());
-        
 		SubmissionResult res = new SubmissionResult(problem);
 		res.comment = file;
-		String fname = FileWorks.getFileName(file);
-		FileWorks.CopyFile(settings.getWorkDir() + id + "/" + fname, file);
-		CompilationInfo ci = Compiler.Compile(settings.getWorkDir() + id + "/" + fname, lang);
+		CompilationInfo ci = Compiler.compile(new CompilerTask(file, lang));
 		res.setCompilationInfo(ci);
 		if (!ci.isSuccessfull())
 		{
@@ -86,30 +80,25 @@ public class Judge
 		{
 			System.out.println("Trial: " + fTrial);
 			if (fTrial)
-				res.setProblemResult(judgeProblemTrial(ci.getCommand(), problem));
+				res.setProblemResult(judgeProblemTrial(ci, problem));
 			else
-				res.setProblemResult(judgeProblem(ci.getCommand(), problem));
+				res.setProblemResult(judgeProblem(ci, problem));
 		}
 		return res;
 	}
 	
-	public static ProblemResult judgeProblem(String command, ProblemDescription problem)
+	public static ProblemResult judgeProblem(CompilationInfo cinfo, ProblemDescription problem)
 	{
-		return judgeProblem(command, problem, true, false);
+		return judgeProblem(cinfo, problem, true, false);
 	}
 	
-	public static ProblemResult judgeProblem(String command, ProblemDescription problem, boolean fFullTesting)
-	{
-		return judgeProblem(command, problem, fFullTesting, false);
-	}
-	
-	public static ProblemResult judgeProblem(String command, ProblemDescription problem, boolean fFullTesting, boolean fFullResults)
+	public static ProblemResult judgeProblem(CompilationInfo cinfo, ProblemDescription problem, boolean fFullTesting, boolean fFullResults)
 	{
 		ProblemResult res = new ProblemResult(problem);
 
 		for (int i = 0; i < problem.groupsCount; i++)
 		{
-			GroupResult t = res.groupResults[i] = judgeGroup(command, problem.groups[i], fFullTesting, fFullResults);
+			GroupResult t = res.groupResults[i] = judgeGroup(cinfo, problem.groups[i], fFullTesting, fFullResults);
 			if (!fFullTesting && t.result != TestResultEnum.AC)
 				break;
 		}
@@ -118,7 +107,7 @@ public class Judge
 		return res;
 	}
 	
-	public static ProblemResult judgeProblemTrial(String command, ProblemDescription problem)
+	public static ProblemResult judgeProblemTrial(CompilationInfo command, ProblemDescription problem)
 	{
 		System.out.println("Trial: " + true);
 		ProblemResult res = new ProblemResult(problem);
@@ -131,13 +120,13 @@ public class Judge
 		return res;
 	}
 	
-	public static GroupResult judgeGroup(String command, GroupDescription group, boolean fFullTesting, boolean fFullResults)
+	public static GroupResult judgeGroup(CompilationInfo cinfo, GroupDescription group, boolean fFullTesting, boolean fFullResults)
 	{
 		GroupResult res = new GroupResult(group);
 		
 		for (int i = 0; i < group.testsCount; i++)
 		{
-			TestResult t = res.testResults[i] = judgeTest(command, group.tests[i], fFullResults);
+			TestResult t = res.testResults[i] = judgeTest(cinfo, group.tests[i], fFullResults);
 			if (!fFullTesting && t.result != TestResultEnum.AC)
 				break;
 		}
@@ -146,7 +135,7 @@ public class Judge
 		return res;
 	}
 	
-	public static TestResult judgeTest(String command, TestDescription test, boolean fFullResults)
+	public static TestResult judgeTest(CompilationInfo cinfo, TestDescription test, boolean fFullResults)
 	{
 		TestResult res = new TestResult(test);
 		
@@ -157,7 +146,7 @@ public class Judge
         {
         	String input = (test.judgeInput != null && test.judgeInput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeInput : "";
         	String output = (test.judgeOutput != null && test.judgeOutput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeOutput : "";
-        	res = judgeTest(id, command, input, output, test, fFullResults);
+        	res = judgeTest(id, cinfo, input, output, test, fFullResults);
         }
         catch (Exception exc)
         {
@@ -203,8 +192,6 @@ public class Judge
         if (!f.exists())
         	throw new JudgeException(JudgeExceptionType.FileNotFound, inputFile, "global input test #" + desc.getTestNumber());
 
-        // local answer & input files
-        
         desc.getFiles().print();
         
 		String inputFileLocal = tempDir + (desc.getInputFilename() != null ? desc.getInputFilename() : "input.txt");
@@ -243,7 +230,7 @@ public class Judge
 		return res;		
 	}
 	
-	public static TestResult judgeTest(String solutionID, String command, String inputGlobalFile, String etalonGlobalFile, TestDescription desc, boolean fFullResults) throws JudgeException
+	public static TestResult judgeTest(String solutionID, CompilationInfo cinfo, String inputGlobalFile, String etalonGlobalFile, TestDescription desc, boolean fFullResults) throws JudgeException
 	{
 		TestResult res = new TestResult(desc);
 		File f;
@@ -251,7 +238,7 @@ public class Judge
 		String globalTempDir = settings.getWorkDir();
 		String tempDir = globalTempDir + solutionID + "/";
 		
-		FileWorks.CopyFile(tempDir + FileWorks.getFileName(command), command);
+		
 		
         // global input & etalon files checking 
         f = new File(inputGlobalFile);
@@ -310,4 +297,36 @@ public class Judge
 		return res;
 	}
 	
+	public static ProblemResult judgeProblem(ProblemDescription desc, ParamsOverride params, ExecutorProgram program)
+	{
+		ProblemResult res = new ProblemResult(desc);
+
+		for (int i = 0; i < desc.groupsCount; i++)
+		{
+			res.groupResults[i] = judgeGroup(desc.groups[i], params, program);
+		}
+		res.updateResult();
+		
+		return res;
+	}
+	
+	public static GroupResult judgeGroup(GroupDescription desc, ParamsOverride params, ExecutorProgram program)
+	{
+		GroupResult res = new GroupResult(desc);
+		
+		for (int i = 0; i < desc.testsCount; i++)
+		{
+			res.testResults[i] = judgeTest(desc.tests[i], params,  program);
+		}
+		res.updateResult();
+		
+		return res;		
+	}
+	
+	public static TestResult judgeTest(TestDescription test, ParamsOverride params, ExecutorProgram program)
+	{
+		TestResult res = new TestResult(test);
+		
+		return res;
+	}	
 }

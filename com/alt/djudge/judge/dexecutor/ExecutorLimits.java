@@ -1,4 +1,4 @@
-package com.alt.djudge.judge.common_data_structures;
+package com.alt.djudge.judge.dexecutor;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -9,19 +9,17 @@ import com.alt.utils.StringWorks;
 import com.alt.utils.XmlWorks;
 
 
-
-
 public class ExecutorLimits extends XMLSerializable implements Comparable<ExecutorLimits>
 {
 	public final static String XMLRootElement = "limits"; 
 	
-	public long timeLimit;
+	public int timeLimit;
 	private final String timeLimitAttributeName = "time-limit";
 	
-	public long memoryLimit;
+	public int memoryLimit;
 	private final String memoryLimitAttributeName = "memory-limit";
 	
-	public long outputLimit;
+	public int outputLimit;
 	private final String outputLimitAttributeName = "output-limit";
 	
 	public ExecutorSecurityLimits securityLimits;
@@ -125,12 +123,12 @@ public class ExecutorLimits extends XMLSerializable implements Comparable<Execut
 	@Override
 	public int compareTo(ExecutorLimits arg)
 	{
-		long k;
+		int k;
 		k = timeLimit - arg.timeLimit;
-		if (k != 0) return (int)k;
+		if (k != 0) return k;
 		k = memoryLimit - arg.memoryLimit;
-		if (k != 0) return (int)k;
+		if (k != 0) return k;
 		k = outputLimit - arg.outputLimit;
-		return (int)k;
+		return k;
 	}
 }
