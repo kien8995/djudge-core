@@ -1,18 +1,23 @@
 package com.alt.djudge.judge;
 
-import java.io.File;
 import java.text.DateFormat;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.alt.djudge.common.JudgeException;
 import com.alt.djudge.common.JudgeExceptionType;
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
 import com.alt.djudge.judge.dcompiler.CompilationInfo;
 import com.alt.djudge.judge.dcompiler.CompilerTask;
 import com.alt.djudge.judge.dcompiler.Compiler;
+import com.alt.djudge.judge.dexecutor.ExecutionResult;
+import com.alt.djudge.judge.dexecutor.ExecutionResultEnum;
+import com.alt.djudge.judge.dexecutor.ExecutorFiles;
+import com.alt.djudge.judge.dexecutor.ExecutorLimits;
 import com.alt.djudge.judge.dexecutor.ExecutorProgram;
+import com.alt.djudge.judge.dexecutor.ExecutorTask;
+import com.alt.djudge.judge.dexecutor.LocalExecutor;
 import com.alt.djudge.judge.executor.Runner;
 import com.alt.djudge.judge.executor.RunnerResult;
 import com.alt.djudge.judge.executor.RunnerResultEnum;
@@ -24,6 +29,7 @@ import com.alt.utils.JudgeDirectory;
 
 public class Judge
 {
+	/*
 	public static void checkProblem(String contestId, String problemId)
 	{
 		ProblemDescription desc = new ProblemDescription(contestId, problemId);
@@ -295,7 +301,7 @@ public class Judge
     	//FileWorks.deleteFile(command);
     	
 		return res;
-	}
+	}*/
 	
 	public static ProblemResult judgeProblem(ProblemDescription desc, ParamsOverride params, ExecutorProgram program)
 	{
@@ -326,6 +332,17 @@ public class Judge
 	public static TestResult judgeTest(TestDescription test, ParamsOverride params, ExecutorProgram program)
 	{
 		TestResult res = new TestResult(test);
+		
+		ExecutorFiles files = test.getExecutorFiles();
+		ExecutorLimits limits = test.getLimits();
+		ExecutorTask exTask = new ExecutorTask(program, limits, files);
+		LocalExecutor ex = new LocalExecutor();
+		
+		ExecutionResult exRes = ex.execute(exTask);
+		if (exRes.getResult() == ExecutionResultEnum.OK)
+		{
+			
+		}
 		
 		return res;
 	}	

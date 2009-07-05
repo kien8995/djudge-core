@@ -1,8 +1,8 @@
 package com.alt.djudge.judge;
 
 import com.alt.djudge.common.Loggable;
-import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
-import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.dexecutor.ExecutorFiles;
+import com.alt.djudge.judge.dexecutor.ExecutorLimits;
 import com.alt.djudge.judge.validator.Validator;
 import com.alt.djudge.judge.validator.ValidatorType;
 

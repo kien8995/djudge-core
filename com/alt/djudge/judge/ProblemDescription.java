@@ -5,13 +5,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
-import com.alt.djudge.judge.common_data_structures.ExecutorLimits;
+import com.alt.djudge.judge.dexecutor.ExecutorFiles;
+import com.alt.djudge.judge.dexecutor.ExecutorLimits;
 import com.alt.djudge.judge.validator.Validator;
 import com.alt.utils.StringWorks;
 import com.alt.utils.XmlWorks;
-
-
 
 
 public class ProblemDescription extends AbstractDescription 

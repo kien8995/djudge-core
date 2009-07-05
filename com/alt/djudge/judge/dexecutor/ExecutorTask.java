@@ -27,6 +27,18 @@ public class ExecutorTask extends XMLSerializable
 	 */
 	public boolean returnDirectoryContent = true;
 	
+	public ExecutorTask()
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+	public ExecutorTask(ExecutorProgram pr, ExecutorLimits limits, ExecutorFiles files)
+	{
+		this.program = pr;
+		this.files = files;
+		this.limits = limits;
+	}
+	
 	@Override
 	public Document getXML()
 	{

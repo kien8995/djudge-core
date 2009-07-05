@@ -3,33 +3,6 @@ package com.alt.djudge.judge.dcompiler;
 import java.io.File;
 import java.util.HashMap;
 
-import com.alt.utils.FileWorks;
-
-class DFile
-{
-	String filename;
-	byte[] content;
-	
-	public DFile(String filename)
-	{
-		loadFile(filename);
-	}
-	
-	public boolean loadFile(String filename)
-	{
-		String name = FileWorks.getFileName(filename);
-		this.filename = name;
-		content = FileWorks.readFileContent(filename);
-		return true;
-	}
-	
-	public boolean saveFile(String rootDirectory)
-	{
-		FileWorks.writeFileContent(FileWorks.ConcatPaths(rootDirectory, filename), content);
-		return true;
-	}
-}
-
 public class DFilePack
 {
 	public HashMap<String, DFile> map = new HashMap<String, DFile>();

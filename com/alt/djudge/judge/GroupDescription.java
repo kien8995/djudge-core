@@ -4,9 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.alt.djudge.judge.common_data_structures.ExecutorFiles;
-
-
+import com.alt.djudge.judge.dexecutor.ExecutorFiles;
 
 public class GroupDescription extends AbstractDescription
 {
