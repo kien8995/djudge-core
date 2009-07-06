@@ -89,7 +89,6 @@ public class Compiler extends Loggable
 		// Automatic language
 		else if (LanguageID.equalsIgnoreCase("%AUTO%"))
 		{
-			System.out.println(LanguageID);
 			String native_output[] = new String[0];
 			Object[] LangId = languages.keySet().toArray();
 			String Extension = FileWorks.getExtension(file);

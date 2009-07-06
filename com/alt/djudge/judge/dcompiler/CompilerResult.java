@@ -1,16 +1,21 @@
 package com.alt.djudge.judge.dcompiler;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.alt.djudge.common.XMLSerializable;
 import com.alt.djudge.judge.dexecutor.ExecutionResult;
+import com.alt.utils.XmlWorks;
 
 
-public class CompilerResult
+public class CompilerResult extends XMLSerializable
 {
 	
-	CompiledProgram program;
+	public CompiledProgram program;
 	
-	CompilationResult result = CompilationResult.Undefined;
+	public CompilationResult result = CompilationResult.Undefined;
 	
-	ExecutionResult compilerExecution;
+	public ExecutionResult compilerExecution;
 	
 	public boolean compilationSuccessfull()
 	{
@@ -27,6 +32,28 @@ public class CompilerResult
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	public boolean isSuccessfull()
+	{
+		return result == CompilationResult.OK;
+	}
+
+	@Override
+	public Document getXML()
+	{
+		Document doc = XmlWorks.getDocument();
+		Element res = doc.createElement(XMLRootElement);
+		// TODO: fill me
+		doc.appendChild(res);
+		return doc;
+	}
+
+	@Override
+	public boolean readXML(Element elem)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

@@ -43,7 +43,7 @@ public class JudgeDirectory
 		for (int i = 0; i < files.length; i++)
 			if (!files[i].isDirectory())
 				if (files[i].getName().charAt(0) != '_')
-					res.setProblemResult(i, Judge.judgeSourceFile(FileWorks.getAbsolutePath(files[i].getAbsolutePath()), "%AUTO%", desc, false));
+					res.setProblemResult(i, Judge.judgeSourceFile(FileWorks.getAbsolutePath(files[i].getAbsolutePath()), "%AUTO%", desc));
 		return res;
 	}
 }

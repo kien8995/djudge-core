@@ -1,16 +1,9 @@
 package com.alt.djudge.judge;
 
-import java.text.DateFormat;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.alt.djudge.common.JudgeException;
-import com.alt.djudge.common.JudgeExceptionType;
 import com.alt.djudge.common.settings;
-import com.alt.djudge.judge.dcompiler.CompilationInfo;
-import com.alt.djudge.judge.dcompiler.CompilerTask;
 import com.alt.djudge.judge.dcompiler.Compiler;
+import com.alt.djudge.judge.dcompiler.CompilerResult;
+import com.alt.djudge.judge.dcompiler.CompilerTask;
 import com.alt.djudge.judge.dexecutor.ExecutionResult;
 import com.alt.djudge.judge.dexecutor.ExecutionResultEnum;
 import com.alt.djudge.judge.dexecutor.ExecutorFiles;
@@ -18,9 +11,8 @@ import com.alt.djudge.judge.dexecutor.ExecutorLimits;
 import com.alt.djudge.judge.dexecutor.ExecutorProgram;
 import com.alt.djudge.judge.dexecutor.ExecutorTask;
 import com.alt.djudge.judge.dexecutor.LocalExecutor;
-import com.alt.djudge.judge.executor.Runner;
-import com.alt.djudge.judge.executor.RunnerResult;
-import com.alt.djudge.judge.executor.RunnerResultEnum;
+import com.alt.djudge.judge.dvalidator.LocalValidator;
+import com.alt.djudge.judge.dvalidator.ValidatorTask;
 import com.alt.djudge.judge.validator.ValidationResult;
 import com.alt.utils.DirectoryResult;
 import com.alt.utils.FileWorks;
@@ -332,6 +324,17 @@ public class Judge
 	public static TestResult judgeTest(TestDescription test, ParamsOverride params, ExecutorProgram program)
 	{
 		TestResult res = new TestResult(test);
+		String contestId = test.problemInfo.contestID;
+		String problemId = test.problemInfo.problemID;
+		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
+		
+		String inputTestFilename = test.getInputFilename();
+		if ((inputTestFilename == null) || ("".equals(inputTestFilename)))
+		{
+			inputTestFilename = "input.txt";
+		}
+		//System.out.println(inputTestFilename);
+		program.files.addFile(testsDir + test.judgeInput, inputTestFilename);
 		
 		ExecutorFiles files = test.getExecutorFiles();
 		ExecutorLimits limits = test.getLimits();
@@ -339,11 +342,105 @@ public class Judge
 		LocalExecutor ex = new LocalExecutor();
 		
 		ExecutionResult exRes = ex.execute(exTask);
+		res.setRuntimeInfo(exRes);
 		if (exRes.getResult() == ExecutionResultEnum.OK)
 		{
+			// Filling ValidatorTask structure 
+			ValidatorTask task = new ValidatorTask();
+			task.contestId = contestId;
+			task.problemId = problemId;
+			String filename = test.getAnswerFilename();
+			if ((filename == null) || ("".equals(filename)))
+			{
+				filename = "output.txt";//LocalExecutor.stdOutputFileName;
+			}
+			System.out.println("ddd "  + filename);
+			task.programOutput = new String(exRes.getFile(filename));
+			task.testInput = FileWorks.ConcatPaths(testsDir, test.judgeInput); 
+			task.testOutput = FileWorks.ConcatPaths(testsDir, test.judgeOutput);
 			
+			// validation
+			LocalValidator vall = new LocalValidator();
+			ValidationResult vres = vall.validate(task);
+			res.setValidationInfo(vres);
+		}
+		
+		return res;
+	}
+	
+	public static void checkProblem(String contestId, String problemId)
+	{
+		ProblemDescription desc = new ProblemDescription(contestId, problemId);
+		JudgeDirectory jd = new JudgeDirectory(desc);
+		DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
+		String s = HtmlWorks.directoryResultToHtml(res);
+		FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
+	}
+	
+	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem)
+	{
+		SubmissionResult res = new SubmissionResult(problem);
+		res.comment = file;
+		CompilerTask ctask = new CompilerTask(file, lang);
+		CompilerResult ci = Compiler.compile(ctask);
+		res.setCompilationInfo(ci);
+		if (!ci.isSuccessfull())
+		{
+			res.result = TestResultEnum.CE;
+		}
+		else
+		{
+			ExecutorProgram pr = new ExecutorProgram();
+			pr.command = ci.program.getRunCommand();
+			pr.files = ci.program.files;
+			ProblemResult pres = judgeProblem(problem, new ParamsOverride(), pr);
+			res.setProblemResult(pres);
+		}
+		return res;
+	}
+
+	public static JudgeTaskResult judgeTask(JudgeTaskDescription task)
+	{
+		JudgeTaskResult res = new JudgeTaskResult();
+		res.desc = task;
+		ProblemDescription pd;
+		
+		try
+		{
+			pd = new ProblemDescription(task.tcontest, task.tproblem);
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
+			return res;
+		}
+		
+		String filesrc = settings.getTempDir() + task.tid + ".xml";
+		
+		FileWorks.saveToFile(task.tsourcecode, filesrc);
+		
+		try
+		{
+			res.res = judgeSourceFile(filesrc, task.tlanguage, pd);
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
 		}
 		
 		return res;
 	}	
+	
+	
+	public static void main(String[] args)
+	{
+/*		ProblemDescription desc = new ProblemDescription("NEERC-2000", "A");
+		ParamsOverride params = new ParamsOverride();
+		ExecutorProgram program = new ExecutorProgram();
+		program.files = new DFilePack("d:\\a.exe");
+		program.command = "a.exe";
+		
+		judgeProblem(desc, params, program);*/
+		checkProblem("NEERC-2004-Northern", "E");
+	}
 }

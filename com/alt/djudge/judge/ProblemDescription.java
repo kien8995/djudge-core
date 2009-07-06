@@ -22,6 +22,8 @@ public class ProblemDescription extends AbstractDescription
 	public ProblemDescription(String contestID, String problemID)
 	{
 		loadByProblemContestIDs(contestID, problemID);
+		this.problemInfo.contestID = contestID;
+		this.problemInfo.problemID = problemID;
 	}
 	
 	private void loadByProblemContestIDs(String contestID, String problemID)

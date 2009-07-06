@@ -19,6 +19,13 @@ public class DFilePack
 		return true;
 	}
 	
+	public boolean addFile(String filename, String addAs)
+	{
+		DFile f = new DFile(filename, addAs);
+		map.put(f.filename, f);
+		return true;
+	}
+	
 	public DFilePack(String filename)
 	{
 		addFile(filename);

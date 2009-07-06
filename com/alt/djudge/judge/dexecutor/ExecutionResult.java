@@ -1,26 +1,38 @@
 package com.alt.djudge.judge.dexecutor;
 
-import com.alt.djudge.judge.dcompiler.DFilePack;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-public class ExecutionResult
+import com.alt.djudge.common.XMLSerializable;
+import com.alt.djudge.judge.dcompiler.DFile;
+import com.alt.djudge.judge.dcompiler.DFilePack;
+import com.alt.utils.XmlWorks;
+
+public class ExecutionResult extends XMLSerializable
 {
-	String stdOutputContent = "";
+	public String stdOutputContent = "";
 	
-	String stdErrorContent = "";
+	public String stdErrorContent = "";
 	
-	long timeConsumed;
+	public long timeConsumed;
 	
-	long memoryConsumed;
+	public long memoryConsumed;
 	
-	long outputGenerated;
+	public long outputGenerated;
 	
-	int exitCode;
+	public int exitCode;
 	
-	ExecutionResultEnum result;
+	public ExecutionResultEnum result;
 	
-	DFilePack files;
+	public DFilePack files;
 	
-	String runnerOutput;
+	public String runnerOutput;
+	
+	public byte[] getFile(String filename)
+	{
+		DFile file = files.map.get(filename); 
+		return file != null ? file.content : new byte[0]; 
+	}
 	
 	public DFilePack getFiles()
 	{
@@ -35,5 +47,32 @@ public class ExecutionResult
 	public ExecutionResultEnum getResult()
 	{
 		return result;
+	}
+
+	@Override
+	public Document getXML()
+	{
+		Document doc = XmlWorks.getDocument();
+		Element res = doc.createElement(XMLRootElement);
+		// TODO: fill me
+		doc.appendChild(res);
+		return doc;
+	}
+	
+	public ExecutionResult(Element elem)
+	{
+		readXML(elem);
+	}
+
+	public ExecutionResult()
+	{
+		
+	}
+
+	@Override
+	public boolean readXML(Element elem)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
