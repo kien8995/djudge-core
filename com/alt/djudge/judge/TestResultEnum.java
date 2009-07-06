@@ -1,12 +1,13 @@
 package com.alt.djudge.judge;
 
+import com.alt.djudge.judge.dexecutor.ExecutionResultEnum;
 import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.djudge.judge.validator.ValidationResultEnum;
 
 
 class TestResultEnumFactory
 {
-	static TestResultEnum getResult(RunnerResultEnum res)
+	static TestResultEnum getResult(ExecutionResultEnum res)
 	{
 		switch (res)
 		{

@@ -3,11 +3,8 @@ package com.alt.djudge.judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.alt.djudge.judge.dcompiler.CompilationInfo;
+import com.alt.djudge.judge.dcompiler.CompilerResult;
 import com.alt.utils.XmlWorks;
-
-
-
 
 public class SubmissionResult extends AbstractResult
 {
@@ -15,7 +12,7 @@ public class SubmissionResult extends AbstractResult
 	
 	private ProblemResult problemResult;
 	
-	private CompilationInfo compilationInfo;
+	private CompilerResult compilationInfo;
 	
 	public String comment;
 	
@@ -48,7 +45,7 @@ public class SubmissionResult extends AbstractResult
 		updateResult();
 	}
 	
-	public void setCompilationInfo(CompilationInfo ci)
+	public void setCompilationInfo(CompilerResult ci)
 	{
 		compilationInfo = ci;
 		updateResult();
@@ -56,7 +53,7 @@ public class SubmissionResult extends AbstractResult
 	
 	public SubmissionResult(ProblemDescription desc)
 	{
-		compilationInfo = new CompilationInfo();
+		compilationInfo = new CompilerResult();
 		problemResult = new ProblemResult(desc);
 	}
 	
@@ -86,7 +83,7 @@ public class SubmissionResult extends AbstractResult
 		return false;
 	}
 	
-	public CompilationInfo getCompilationInfo()
+	public CompilerResult getCompilationInfo()
 	{
 		return compilationInfo;
 	}

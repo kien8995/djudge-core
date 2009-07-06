@@ -85,7 +85,7 @@ public class Runner2
 		// FIXME
 		cmd = new StringBuffer("./tools/run.exe " + cmd + " \"" + command + "\"");
 		
-		System.out.println(cmd);
+		//System.out.println(cmd);
 
 		RunnerResult res = new RunnerResult();
 		
@@ -171,7 +171,7 @@ public class Runner2
 					// Debug info
 					if (true)
 					{
-						System.out.println(line);
+						//System.out.println(line);
 					}
 				}
 				out.close();

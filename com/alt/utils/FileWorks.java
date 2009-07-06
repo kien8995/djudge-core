@@ -110,6 +110,7 @@ public class FileWorks
 	{
 		try
 		{
+			//System.out.println(file.toString());
 			File f = new File(file);
 			f.getParentFile().mkdirs();
 			OutputStream out = new FileOutputStream(f);
@@ -148,6 +149,8 @@ public class FileWorks
 	{
 		try
 		{
+			File f = new File(filename);
+			f.getParentFile().mkdirs();
             PrintWriter writer = new PrintWriter(new FileOutputStream(filename));
             writer.print(s);
             writer.close();
@@ -181,5 +184,26 @@ public class FileWorks
 	    	System.out.println(e.getMessage());      
 	    }
 	    return res;
+	}
+	
+	public static void deleteDirectory(String dir)
+	{
+		File f = new File(dir);
+		if (f.isDirectory())
+		{
+			File[] files = f.listFiles();
+			for (File file : files)
+			{
+				if (file.isDirectory())
+				{
+					deleteDirectory(file.getAbsolutePath());
+				}
+				else
+				{
+					file.delete();
+				}
+			}
+			f.delete();
+		}
 	}
 }

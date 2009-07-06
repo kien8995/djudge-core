@@ -65,11 +65,9 @@ public class LocalExecutor
 
 		// FIXME
 		cmd = new StringBuffer("run.exe " + cmd + " \"" + pr.getCommand(workDir) + "\"");
-		
 		cmd = new StringBuffer(workDir + "crutch.exe " + workDir + "  " + cmd);
 		
-		System.out.println(cmd);
-
+		//System.out.println(cmd);
 		try
 		{
 			Process process = Runtime.getRuntime().exec(cmd.toString());
@@ -168,9 +166,15 @@ public class LocalExecutor
 			res.timeConsumed = time;
 			
 			if (files.outputFilename != null && files.outputFilename != "")
+			{
+				res.outputGenerated = new File(workDir + files.outputFilename).length();
 				res.stdOutputContent = FileWorks.readFile(workDir + files.outputFilename);
+			}
 			else
+			{
+				res.outputGenerated = new File(workDir + stdOutputFileName).length();
 				res.stdOutputContent = FileWorks.readFile(workDir + stdOutputFileName);
+			}
 
 			if (files.errorFilename != null && files.errorFilename != "")
 				res.stdErrorContent = FileWorks.readFile(workDir + files.errorFilename);
@@ -188,6 +192,7 @@ public class LocalExecutor
 		{
 			System.out.println("!!! IOException catched: " + exc);
 		}
+		FileWorks.saveToFile(cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
 	}
 	
 	/*
@@ -206,10 +211,11 @@ public class LocalExecutor
         task.program.files.unpack(workDir);
         
         executeWindowsNT(task, workDir, res);
-		
+        
 		return res;
 	}
 	
+	/*
 	public static void main(String[] args)
 	{
 		LocalExecutor ex = new LocalExecutor();
@@ -227,7 +233,7 @@ public class LocalExecutor
 		task.program = program;
 		
 		ExecutionResult res = ex.execute(task);
-		res.files.unpack("d:\\1\\");
+		//res.files.unpack("d:\\1\\");
 		//System.out.println(res.runnerOutput);
-	}
+	}*/
 }

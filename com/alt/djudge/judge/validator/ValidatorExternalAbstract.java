@@ -90,11 +90,11 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = exeFile + " " + input + " " + output + " " + answer;
 		
-		System.out.println("VOF: " + ValidatorOutputFile);
+		//System.out.println("VOF: " + ValidatorOutputFile);
 		
 		try
 		{
-			System.out.println("VOFCMD: " + cmd);
+			//System.out.println("VOFCMD: " + cmd);
 			res.RunInfo = runner.run(cmd);
 		}
 		catch (Exception exc)

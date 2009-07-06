@@ -10,7 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
 
 import com.alt.djudge.common.Loggable;
 import com.alt.djudge.common.settings;
@@ -67,12 +67,11 @@ public class Language extends Loggable
 			String fileNameExt = task.files.getFile();
 			String fileName = FileWorks.getNameOnly(tempDir + fileNameExt);
 			String fileDirNameExt = FileWorks.getAbsolutePath(tempDir + fileNameExt);
-			//String fileDirName = FileWorks.getAbsolutePath(tempDir + fileName);
 			
 			String fileDirNameExtComp = tempDir + fileName + info.getExtension();
 			
 			
-			if (!fileDirNameExt.equals(fileDirNameExtComp))
+			if (!fileNameExt.equals(fileName + info.getExtension()))
 				FileWorks.CopyFile(fileDirNameExtComp, fileDirNameExt);
 			
 			StringBuffer cmd = new StringBuffer(info.getCompileCommand());
@@ -112,7 +111,7 @@ public class Language extends Loggable
 			
 			CompiledProgram pr2 = new CompiledProgram();
 			pr2.files = res.compilerExecution.getFiles();
-			pr2.runCommand = info.getRunCommand().replace("%name",fileName);
+			pr2.runCommand = info.getRunCommand().replace("%name", fileName);
 			res.program = pr2;
 		}
 		catch (Exception exc)
@@ -120,10 +119,11 @@ public class Language extends Loggable
 			System.out.println("Exception in DJLanguage: " + exc);
 			exc.printStackTrace();
 		}
+		FileWorks.deleteDirectory(tempDir);
 		return res;
 	}
 	
-	public static void main(String[] args)
+	public static void main2(String[] args)
 	{
 		CompilerTask task = new CompilerTask();
 		task.languageId = "GCC342";

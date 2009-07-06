@@ -4,21 +4,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.alt.djudge.judge.dexecutor.ExecutionResult;
+import com.alt.djudge.judge.dexecutor.ExecutionResultEnum;
 import com.alt.djudge.judge.executor.RunnerResult;
-import com.alt.djudge.judge.executor.RunnerResultEnum;
 import com.alt.djudge.judge.validator.ValidationResult;
 import com.alt.djudge.judge.validator.ValidationResultEnum;
 import com.alt.utils.StringWorks;
 import com.alt.utils.XmlWorks;
 
-
-
-
 public class TestResult extends AbstractResult
 {
 	public final static String XMLRootElement = "test";
 	
-	private RunnerResult runResult;
+	private ExecutionResult runResult;
 	private ValidationResult validationResult;
 	
 	int testNumber;
@@ -47,9 +45,9 @@ public class TestResult extends AbstractResult
 	{
 		score = 0;
 		
-		if (runResult != null && runResult.state != RunnerResultEnum.OK)
+		if (runResult != null && runResult.result != ExecutionResultEnum.OK)
 		{
-			result = TestResultEnumFactory.getResult(runResult.state);
+			result = TestResultEnumFactory.getResult(runResult.result);
 		}
 		else if (runResult == null)
 		{
@@ -68,15 +66,15 @@ public class TestResult extends AbstractResult
 			result = TestResultEnum.AC;
 		}
 		
-		maxMemory = runResult.memory;
-		maxTime = runResult.time;
+		maxMemory = runResult.memoryConsumed;
+		maxTime = runResult.timeConsumed;
 		if (result == TestResultEnum.AC)
 		{
 			score = testScore;
 		}
 	}
 
-	public void setRuntimeInfo(RunnerResult runResult)
+	public void setRuntimeInfo(ExecutionResult runResult)
 	{
 		this.runResult = runResult;
 		updateResult();
@@ -103,7 +101,7 @@ public class TestResult extends AbstractResult
 		return validationResult;
 	}
 	
-	public RunnerResult getRuntimeInfo()
+	public ExecutionResult getRuntimeInfo()
 	{
 		return runResult;
 	}
@@ -137,7 +135,7 @@ public class TestResult extends AbstractResult
 		
 		NodeList runs = elem.getElementsByTagName(RunnerResult.XMLRootElement);
         if (runs.getLength() > 0)
-        	runResult = new RunnerResult((Element)runs.item(0));
+        	runResult = new ExecutionResult((Element)runs.item(0));
 		
 		NodeList vals = elem.getElementsByTagName(ValidationResult.XMLRootElement);
         if (vals.getLength() > 0)

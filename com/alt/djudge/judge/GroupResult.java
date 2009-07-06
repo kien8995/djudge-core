@@ -33,7 +33,7 @@ public class GroupResult extends AbstractResult
 	{
 		result = TestResultEnum.AC;
 		score = 0;
-		wrongTest = maxMemory = maxTime = -1;
+		maxMemory = maxTime = wrongTest = -1;
 		for (int i = 0; i < testsCount; i++)
 		{
 			score += testResults[i].score;

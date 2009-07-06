@@ -21,7 +21,7 @@ import com.alt.djudge.judge.ProblemResult;
 import com.alt.djudge.judge.SubmissionResult;
 import com.alt.djudge.judge.TestResult;
 import com.alt.djudge.judge.TestResultEnum;
-import com.alt.djudge.judge.executor.RunnerResult;
+import com.alt.djudge.judge.dexecutor.ExecutionResult;
 import com.alt.djudge.judge.validator.ValidationResult;
 
 
@@ -60,7 +60,7 @@ public class HtmlWorks
 		return "Gainsboro";
 	}
 	
-	private static String formatMemorySize(int size)
+	private static String formatMemorySize(long size)
 	{
 		if (size < 0)
 			return "n/a";
@@ -87,7 +87,7 @@ public class HtmlWorks
 		return res;
 	}
 	
-	private static String formatRuntime(int time)
+	private static String formatRuntime(long time)
 	{
 		if (time < 0)
 			return "n/a";
@@ -100,7 +100,7 @@ public class HtmlWorks
 	public static String testToHtml(TestResult res)
 	{
 		TestResultEnum judgement = res.getResult();
-		RunnerResult RunInfo = res.getRuntimeInfo();
+		ExecutionResult RunInfo = res.getRuntimeInfo();
 		int TestNum = res.getTestNumber();
 		ValidationResult ValidationInfo = res.getValidationInfo(); 
 		
@@ -108,11 +108,18 @@ public class HtmlWorks
 		String color = getJudgementColor(judgement);
 		s.append("<tr bgcolor=" + color + ">");
 			s.append("<td>" + (TestNum + 1)  + "</td>");
-			s.append("<td>" + formatRuntime(RunInfo.time)  + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.memory)  + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.output)  + "</td>");
+			s.append("<td>" + formatRuntime(RunInfo.timeConsumed)  + "</td>");
+			s.append("<td>" + formatMemorySize(RunInfo.memoryConsumed)  + "</td>");
+			s.append("<td>" + formatMemorySize(RunInfo.outputGenerated)  + "</td>");
 			s.append("<td>" + judgement  + "</td>");
-			s.append("<td>" + toSafeHtml(StringWorks.ArrayToString(ValidationInfo.ValidatorOutput))  + "</td>");
+			try
+			{
+				s.append("<td>" + toSafeHtml(StringWorks.ArrayToString(ValidationInfo.ValidatorOutput))  + "</td>");
+			}
+			catch (Exception e)
+			{
+				s.append("<td></td>");
+			}
 		s.append("</tr>\n");
 		return s.toString();		
 	}

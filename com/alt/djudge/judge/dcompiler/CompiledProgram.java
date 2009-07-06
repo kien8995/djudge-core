@@ -8,7 +8,7 @@ public class CompiledProgram
 	
 	public String getRunCommand()
 	{
-		return "";
+		return runCommand;
 	}
 	
 	public String getRunCommand(String rootDirectory)

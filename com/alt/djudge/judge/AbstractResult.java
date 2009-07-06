@@ -7,13 +7,13 @@ public abstract class AbstractResult extends XMLSerializable
 	TestResultEnum result = TestResultEnum.Undefined;
 	final String resultAttributeName = "result";
 	
-	int maxTime = -1;
+	long maxTime = -1;
 	final String maxTimeAttributeName = "max-time";
 
 	int wrongTest = -1;
 	final String wrongTestAttributeName = "wrong-test";
 	
-	int maxMemory = -1;
+	long maxMemory = -1;
 	final String maxMemoryAttributeName = "max-memory";
 	
 	int score = 0;
@@ -44,7 +44,7 @@ public abstract class AbstractResult extends XMLSerializable
 		this.score = score;
 	}
 	
-	public final int getMaxTime()
+	public final long getMaxTime()
 	{
 		return maxTime;
 	}
@@ -54,7 +54,7 @@ public abstract class AbstractResult extends XMLSerializable
 		return 0;
 	}
 
-	public final int getMaxMemory()
+	public final long getMaxMemory()
 	{
 		return maxMemory;
 	}
