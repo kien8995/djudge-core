@@ -1,18 +1,17 @@
 package djudge.utils;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Hashtable;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -47,6 +46,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	JButton btnTestSolution;
 	
+	JSplitPane spSplit;
+	
 	Hashtable<String, Hashtable<String, String[]>> getTree()
 	{
 		Hashtable<String, Hashtable<String, String[]>> res = new Hashtable<String, Hashtable<String, String[]>>();
@@ -65,32 +66,54 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		return res;
 	}
 	
-	void reloadData()
+	private void setupGUI()
 	{
-		if (treePane != null)
-		{
-			treePane.removeAll();
-		}
-		tree = new JTree(getTree());
-		tree.setPreferredSize(new Dimension(200, 200));
-		tree.addTreeSelectionListener(this);
-		add(treePane = new JScrollPane(tree), BorderLayout.WEST);		
+		GridBagConstraints c = new GridBagConstraints();
 		
-		JPanel spSouth = new JPanel();
-		spSouth.setVisible(true);
+		treePane = new JScrollPane();
+		treePane.setBorder(BorderFactory.createTitledBorder("Tests tree"));
+		treePane.setMinimumSize(new Dimension(200, 200));
+		treePane.setPreferredSize(new Dimension(250, 250));
+		
+		dataPane = new JScrollPane();
+		dataPane.setBorder(BorderFactory.createTitledBorder("Test's info"));
+		dataPane.setMinimumSize(new Dimension(200, 200));
+		
+		spSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treePane, dataPane);
+		spSplit.setOneTouchExpandable(true);
+		spSplit.setDividerLocation(200);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 10;
+		c.gridheight = 9;
+		c.weightx = c.weighty = 1;
+		add(spSplit, c);
+
+		//* Buttons 
+		c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 9;
+		c.gridwidth = 3;
+		c.gridheight = 1;
 		
 		btnViewTests = new JButton("View Tests");
 		btnViewTests.addActionListener(this);
-		//btnViewTests.setPreferredSize(new Dimension(100, 25));
-		spSouth.add(btnViewTests);
+		add(btnViewTests, c);
 		
+		c.gridx = 3;
 		btnTestSolution = new JButton("Test Solution");
 		btnTestSolution.addActionListener(this);
-		//btnTestSolution.setPreferredSize(new Dimension(100, 25));
-		spSouth.add(btnTestSolution);
-		
-		add(spSouth, BorderLayout.SOUTH);
-		
+		add(btnTestSolution, c);
+	}
+	
+	void loadTree()
+	{
+		tree = new JTree(getTree());
+		tree.addTreeSelectionListener(this);
+		spSplit.setLeftComponent(treePane = new JScrollPane(tree));
 		showProblemInfo();
 	}
 	
@@ -107,8 +130,9 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 			e.printStackTrace();
 		}
 		setSize(640, 480);
-		setLayout(new BorderLayout());
-		reloadData();
+		setLayout(new GridBagLayout());
+		setupGUI();
+		loadTree();
 		setVisible(true);
 	}
 	
@@ -122,21 +146,16 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	ExecutorLimits limits;
 	Validator val;
 	
+	JLimitsPanel lpLimits;
+	
 	public void showData()
 	{
-/*		if (dataPane != null)
-		{
-			dataPane.setVisible(false);
-			dataPane.removeAll();
-			remove(dataPane);
-		}
-		dataPane = new JScrollPane();
-		dataPane.add(new JLimitsPanel(limits));
-		dataPane.setPreferredSize(new Dimension(400, 400));
-		add(dataPane, BorderLayout.CENTER);*/
-		//dataPane.setVisible(true);
-		add(new JLimitsPanel(limits), BorderLayout.CENTER);
-		setVisible(true);
+		spSplit.remove(dataPane);
+
+		lpLimits = new JLimitsPanel(limits);
+		dataPane.add(dataPane = new JScrollPane(lpLimits));
+
+		spSplit.setRightComponent(dataPane);
 	}
 	
 	public void showProblemInfo()

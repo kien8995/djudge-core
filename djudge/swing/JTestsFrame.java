@@ -1,10 +1,12 @@
 package djudge.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import utils.FileWorks;
-
 import djudge.judge.ProblemDescription;
 import djudge.judge.dvalidator.LocalValidator;
 import djudge.judge.dvalidator.ValidatorTask;
@@ -126,21 +127,35 @@ public class JTestsFrame extends JFrame implements ActionListener
 		setSize(640, 480);
 		setJMenuBar(getMenu());
 		
-		setLayout(new BorderLayout());
+		setLayout(new GridBagLayout());
 
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.insets = new Insets(2, 2, 2, 2);
+
+		JScrollPane pane;
+		
 		txtInput = new JTextArea();
-		txtInput.setPreferredSize(new Dimension(200, 200));
-		txtInput.setAutoscrolls(true);
-		add(new JScrollPane(txtInput), BorderLayout.WEST);
+		pane = new JScrollPane(txtInput);
+		pane.setBorder(BorderFactory.createTitledBorder("Input File"));
+		add(pane, c);
 		
+		c.gridx = 1;
 		txtOutput = new JTextArea();
-		txtOutput.setAutoscrolls(true);
-		add(new JScrollPane(txtOutput), BorderLayout.CENTER);
+		pane = new JScrollPane(txtOutput);
+		pane.setBorder(BorderFactory.createTitledBorder("Output File"));
+		add(pane, c);
 		
+		c.gridx = 2;
 		txtAnswer = new JTextArea();
-		txtAnswer.setAutoscrolls(true);
-		txtAnswer.setPreferredSize(new Dimension(200, 200));
-		add(new JScrollPane(txtAnswer), BorderLayout.EAST);
+		pane = new JScrollPane(txtAnswer);
+		pane.setBorder(BorderFactory.createTitledBorder("Answer File"));
+		add(pane, c);
 		
 		loadData();
 		
