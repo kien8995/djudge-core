@@ -3,6 +3,8 @@ package djudge.utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -124,7 +126,7 @@ class ProblemScanner
 	}
 }
 
-public class ProblemManager extends JFrame
+public class ProblemManager extends JFrame implements MouseListener
 {
 	/**
 	 * 
@@ -239,6 +241,7 @@ public class ProblemManager extends JFrame
 		table = new JTable(new TableModel());
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(20);
+		table.addMouseListener(this);
 		TableColumnModel cm = table.getColumnModel();
 		cm.getColumn(table.getColumnCount()-1).setCellRenderer(new ColorRenderer());
 		add(new JScrollPane(table), BorderLayout.CENTER);
@@ -250,4 +253,30 @@ public class ProblemManager extends JFrame
 		wnd.setVisible(true);
 		wnd.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		if (e.getClickCount() == 2)
+		{
+			JTable target = (JTable) e.getSource();
+			int row = target.getSelectedRow();
+			String contestId = table.getValueAt(row, 0).toString();
+			String problemId = table.getValueAt(row, 1).toString();
+			System.out.println(contestId + " - " + problemId);
+			new ProblemEditor(contestId, problemId);
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
 }
