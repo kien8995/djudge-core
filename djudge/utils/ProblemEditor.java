@@ -17,15 +17,13 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import utils.XmlWorks;
-
 import djudge.judge.GroupDescription;
 import djudge.judge.ProblemDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.validator.ValidatorDescription;
 import djudge.swing.JLimitsPanel;
-import djudge.swing.JTestPanel;
+import djudge.swing.JBlockInfoPanel;
 import djudge.swing.JTestsFrame;
 
 public class ProblemEditor extends JFrame implements TreeSelectionListener, ActionListener
@@ -51,7 +49,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	JSplitPane spSplit;
 	
-	JTestPanel jtpTest;
+	JBlockInfoPanel jtpTest;
 	
 	Hashtable<String, Hashtable<String, String[]>> getTree()
 	{
@@ -82,7 +80,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		treePane.setMinimumSize(new Dimension(200, 200));
 		treePane.setPreferredSize(new Dimension(250, 250));
 		
-		dataPane = new JScrollPane(jtpTest = new JTestPanel());
+		dataPane = new JScrollPane(jtpTest = new JBlockInfoPanel());
 		dataPane.setMinimumSize(new Dimension(200, 200));
 		
 		spSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treePane, dataPane);
@@ -120,7 +118,6 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		tree = new JTree(getTree());
 		tree.addTreeSelectionListener(this);
 		spSplit.setLeftComponent(treePane = new JScrollPane(tree));
-		showProblemInfo();
 	}
 	
 	public ProblemEditor(String contestId, String problemId)
@@ -130,7 +127,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		try
 		{
 			pd = new ProblemDescription(contestId, problemId);
-			//XmlWorks.saveXmlToFile(pd.getXML(), "d:\\1.xml");
+			pd.saveXML("d:\\1.xml");
 		}
 		catch (Exception e)
 		{
@@ -174,12 +171,23 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	public void showGroupInfo()
 	{
-		
+		String str = treePath[2].toString();
+		int groupNumber = Integer.parseInt(str.substring(7)) - 1;
+		files = pd.getFiles();
+		limits = pd.getGroupLimits(groupNumber);
+		val = pd.getGroupValidator(groupNumber);
+		showData();
 	}
 	
 	public void showTestInfo()
 	{
-		
+		String str = treePath[3].toString();
+		int groupNumber = Integer.parseInt(str.substring(6, str.lastIndexOf('.'))) - 1;
+		int testNumber = Integer.parseInt(str.substring(str.lastIndexOf('.') + 1)) - 1;
+		files = pd.getFiles();
+		limits = pd.getTestLimits(groupNumber, testNumber);
+		val = pd.getTestValidator(groupNumber, testNumber);
+		showData();		
 	}
 
 	Object[] treePath;
@@ -196,11 +204,11 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		}
 		else if (pathLength == 3)
 		{
-			showProblemInfo();
+			showGroupInfo();
 		}
 		else if (pathLength == 4)
 		{
-			showProblemInfo();
+			showTestInfo();
 		}
 	}
 

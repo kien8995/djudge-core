@@ -21,11 +21,10 @@ import java.io.*;
 
 import org.w3c.dom.*;
 
-import javax.xml.parsers.*;
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
+import javax.xml.parsers.*;
 
 public class XmlWorks 
 {
@@ -78,36 +77,28 @@ public class XmlWorks
 		return doc;
 	}
 	
+	public static String formatDoc(Document document)
+	{
+	        try {
+	            OutputFormat format = new OutputFormat(document);
+	            format.setLineWidth(65);
+	            format.setIndenting(true);
+	            format.setIndent(2);
+	            Writer out = new StringWriter();
+	            XMLSerializer serializer = new XMLSerializer(out, format);
+	            serializer.serialize(document);
+
+	            System.out.println(out.toString());
+	            return out.toString();
+	        } catch (IOException e)
+	        {
+	            throw new RuntimeException(e);
+	        }
+	}
+	
 	public static void saveXmlToFile(Document doc, String file)
 	{
-		try
-		{
-	        //set up a transformer
-	        TransformerFactory transfac = TransformerFactory.newInstance();
-	        Transformer trans = transfac.newTransformer();
-	        trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-	        trans.setOutputProperty(OutputKeys.INDENT, "yes");
-	
-	        //create string from xml tree
-	        StringWriter sw = new StringWriter();
-	        StreamResult result = new StreamResult(sw);
-	        DOMSource source = new DOMSource(doc);
-	        trans.transform(source, result);
-	        String xmlString = sw.toString();
-	        
-	        FileWorks.saveToFile(xmlString, file);
-	        System.out.println(xmlString);
-		}
-		catch (TransformerConfigurationException exc)
-		{
-			// FIXME			
-			System.out.println("!!![XmlWorks.saveXmlToFile]: " + exc);
-		}
-		catch (TransformerException exc)
-		{
-			// FIXME
-			System.out.println("!!![XmlWorks.saveXmlToFile]: " + exc);
-		}
+        FileWorks.saveToFile(formatDoc(doc), file);
 	}
 	
 //	public static void saveXmlElementToFile(Element elem, String file)
