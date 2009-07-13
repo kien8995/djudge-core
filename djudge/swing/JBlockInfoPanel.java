@@ -1,7 +1,6 @@
 package djudge.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,10 +9,11 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.validator.ValidatorDescription;
 
-public class JTestPanel extends JPanel
+public class JBlockInfoPanel extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
@@ -32,12 +32,11 @@ public class JTestPanel extends JPanel
 		val = newValidator;
 	}
 	
-	public JTestPanel()
+	public JBlockInfoPanel()
 	{
 		setupGUI();
 		setData(limits = new ExecutorLimits(), val = new ValidatorDescription());
-		setBorder(BorderFactory.createTitledBorder("Test Info"));
-		setPreferredSize(new Dimension(400, 400));
+		setBorder(BorderFactory.createTitledBorder("Block Info"));
 		setVisible(true);
 	}
 	
@@ -66,7 +65,7 @@ public class JTestPanel extends JPanel
 		frame.setSize(640, 480);
 		frame.setLayout(new FlowLayout());
 		
-		frame.add(new JTestPanel(), BorderLayout.CENTER);
+		frame.add(new JBlockInfoPanel(), BorderLayout.CENTER);
 		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
