@@ -14,36 +14,48 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.validator.ValidatorDescription;
 import djudge.judge.validator.ValidatorType;
 
-public class JValidatorPanel extends JPanel implements ActionListener
+public class JValidatorPanel extends JPanel implements ActionListener, DocumentListener
 {
 
 	private static final long serialVersionUID = 1L;
 
 	ValidatorDescription val;
 	
-	JTextArea txtParam;
+	JTextField txtParam;
 	
-	JTextArea txtFile;
+	JTextField txtFile;
 	
 	JComboBox cbTypes;
 	
 	boolean fChanged = false;
 	
-	public JValidatorPanel(ValidatorDescription val)
+	private void setupComponent()
 	{
 		setupGUI();
-		setLimits(val);
 		setBorder(BorderFactory.createTitledBorder("Validator"));
-		setPreferredSize(new Dimension(250, 100));
+		setPreferredSize(new Dimension(250, 100));		
+	}
+	
+	public JValidatorPanel(ValidatorDescription val)
+	{
+		setupComponent();
+		setLimits(val);
 		setVisible(true);
 	}
 	
+	public JValidatorPanel()
+	{
+		setupComponent();
+		setVisible(true);
+	}
+
 	protected void setupGUI()
 	{
 		final Dimension sz = new Dimension(150, 20);
@@ -63,15 +75,19 @@ public class JValidatorPanel extends JPanel implements ActionListener
 		add(cbTypes, c);
 		
 		c.gridy = 1;
-		txtParam = new JTextArea();
+		txtParam = new JTextField();
 		txtParam.setPreferredSize(sz);
 		txtParam.setEnabled(false);
+		txtParam.addActionListener(this);
+		txtParam.getDocument().addDocumentListener(this);
 		add(txtParam, c);
 		
 		c.gridy = 2;
-		txtFile = new JTextArea();
+		txtFile = new JTextField();
 		txtFile.setPreferredSize(sz);
 		txtFile.setEnabled(false);
+		txtFile.addActionListener(this);
+		txtFile.getDocument().addDocumentListener(this);
 		add(txtFile, c);
 		
 		c.gridx = 0;
@@ -111,15 +127,17 @@ public class JValidatorPanel extends JPanel implements ActionListener
 		this.val = limits.clone();
 		fChanged = false;
 		cbTypes.setSelectedItem(limits.type);
+		txtFile.setText(limits.exeName);
+		txtParam.setText(limits.param);
 	}
 	
 	public void updateType()
 	{
 		String strType = cbTypes.getSelectedItem().toString();
 		ValidatorType type = ValidatorType.parse(strType);
+		val.type = type;
 		txtFile.setEnabled(false);
 		txtParam.setEnabled(false);
-		System.out.println(type);
 		if (type.isParametrized())
 		{
 			txtParam.setEnabled(true);
@@ -138,6 +156,8 @@ public class JValidatorPanel extends JPanel implements ActionListener
 		
 		ValidatorDescription val = new ValidatorDescription();
 		val.type = ValidatorType.InternalExact;
+		val.exeName = "check.exe";
+		val.param = "1E-3";
 		
 		frame.add(new JValidatorPanel(val), BorderLayout.CENTER);
 		
@@ -149,6 +169,30 @@ public class JValidatorPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent arg0)
 	{
 		updateType();
-		System.out.println(cbTypes.getSelectedItem() + " selected");
+	}
+	
+	private void updateParams()
+	{
+		fChanged = true;
+		val.exeName = txtFile.getText();
+		val.param = txtParam.getText();
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent arg0)
+	{
+		updateParams();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent arg0)
+	{
+		updateParams();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent arg0)
+	{
+		updateParams();
 	}
 }

@@ -11,7 +11,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+
+import javax.swing.JTextField;
 
 import djudge.judge.dexecutor.ExecutorLimits;
 
@@ -22,26 +23,43 @@ public class JLimitsPanel extends JPanel
 
 	ExecutorLimits limits;
 	
-	JTextArea txtMemory;
+	JTextField txtMemory;
 	
-	JTextArea txtTime;
+	JTextField txtTime;
 	
-	JTextArea txtOutput;
+	JTextField txtOutput;
+	
+	JLabel jlblTime;
+	
+	JLabel jlblMemory;
+	
+	JLabel jlblOutput;
 	
 	boolean fChanged = false;
+
+	private void setupComponent()
+	{
+		setupGUI();
+		setBorder(BorderFactory.createTitledBorder("Runtime Limits"));
+		setPreferredSize(new Dimension(250, 100));		
+	}
+	
+	public JLimitsPanel()
+	{
+		setupComponent();
+		setVisible(true);
+	}
 	
 	public JLimitsPanel(ExecutorLimits limits)
 	{
-		setupGUI();
+		setupComponent();
 		setLimits(limits);
-		setBorder(BorderFactory.createTitledBorder("Runtime Limits"));
-		setPreferredSize(new Dimension(200, 100));
 		setVisible(true);
 	}
 	
 	protected void setupGUI()
 	{
-		final Dimension sz = new Dimension(50, 20);
+		final Dimension sz = new Dimension(120, 20);
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.WEST;
@@ -52,32 +70,38 @@ public class JLimitsPanel extends JPanel
 		c.weighty = 1;
 		c.insets = new Insets(2, 5, 2, 5);
 		
-		txtTime = new JTextArea();
+		txtTime = new JTextField();
 		txtTime.setPreferredSize(sz);
 		add(txtTime, c);
 		
 		c.gridy = 1;
-		txtMemory = new JTextArea();
+		txtMemory = new JTextField();
 		txtMemory.setPreferredSize(sz);
 		add(txtMemory, c);
 		
 		c.gridy = 2;
-		txtOutput = new JTextArea();
+		txtOutput = new JTextField();
 		txtOutput.setPreferredSize(sz);
 		add(txtOutput, c);
 		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("Time Limit"), c);
+		add(jlblTime = new JLabel("Time Limit"), c);
+		jlblTime.setLabelFor(txtTime);
+		jlblTime.setDisplayedMnemonic('t');
 		
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("Memory Limit"), c);		
+		add(jlblMemory = new JLabel("Memory Limit"), c);
+		jlblMemory.setLabelFor(txtMemory);
+		jlblMemory.setDisplayedMnemonic('m');
 
 		c.gridy = 2;
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("Output Limit"), c);				
+		add(jlblOutput = new JLabel("Output Limit"), c);
+		jlblOutput.setLabelFor(txtOutput);
+		jlblOutput.setDisplayedMnemonic('o');
 	}
 	
 	

@@ -17,12 +17,15 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import utils.XmlWorks;
+
 import djudge.judge.GroupDescription;
 import djudge.judge.ProblemDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.Validator;
+import djudge.judge.validator.ValidatorDescription;
 import djudge.swing.JLimitsPanel;
+import djudge.swing.JTestPanel;
 import djudge.swing.JTestsFrame;
 
 public class ProblemEditor extends JFrame implements TreeSelectionListener, ActionListener
@@ -48,6 +51,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	JSplitPane spSplit;
 	
+	JTestPanel jtpTest;
+	
 	Hashtable<String, Hashtable<String, String[]>> getTree()
 	{
 		Hashtable<String, Hashtable<String, String[]>> res = new Hashtable<String, Hashtable<String, String[]>>();
@@ -66,6 +71,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		return res;
 	}
 	
+	JLimitsPanel jlpLimits;
+	
 	private void setupGUI()
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -75,8 +82,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		treePane.setMinimumSize(new Dimension(200, 200));
 		treePane.setPreferredSize(new Dimension(250, 250));
 		
-		dataPane = new JScrollPane();
-		dataPane.setBorder(BorderFactory.createTitledBorder("Test's info"));
+		dataPane = new JScrollPane(jtpTest = new JTestPanel());
 		dataPane.setMinimumSize(new Dimension(200, 200));
 		
 		spSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treePane, dataPane);
@@ -124,11 +130,13 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		try
 		{
 			pd = new ProblemDescription(contestId, problemId);
+			//XmlWorks.saveXmlToFile(pd.getXML(), "d:\\1.xml");
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+		setTitle(pd.getName());
 		setSize(640, 480);
 		setLayout(new GridBagLayout());
 		setupGUI();
@@ -138,24 +146,22 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	public static void main(String[] args)
 	{
-		ProblemEditor pe = new ProblemEditor("univ-2009-stdio", "E");
+		ProblemEditor pe = new ProblemEditor("univ-2009-stdio", "AA");
 		pe.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	ExecutorFiles files;
-	ExecutorLimits limits;
-	Validator val;
+	ExecutorFiles files = new ExecutorFiles();
+	
+	ExecutorLimits limits = new ExecutorLimits();
+	
+	ValidatorDescription val = new ValidatorDescription();
 	
 	JLimitsPanel lpLimits;
-	
+
 	public void showData()
 	{
-		spSplit.remove(dataPane);
-
-		lpLimits = new JLimitsPanel(limits);
-		dataPane.add(dataPane = new JScrollPane(lpLimits));
-
-		spSplit.setRightComponent(dataPane);
+		jtpTest.setLimits(limits);
+		jtpTest.setValidator(val);
 	}
 	
 	public void showProblemInfo()
