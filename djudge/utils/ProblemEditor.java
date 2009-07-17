@@ -170,8 +170,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	public void showProblemInfo()
 	{
 		files = pd.getFiles();
-		limits = pd.getLimits();
-		val = pd.getValidator();
+		limits = pd.getActualLimits();
+		val = pd.getActualValidator();
 		inputMask = pd.getInputMask();
 		outputMask = pd.getOutputMask();
 		showData();
