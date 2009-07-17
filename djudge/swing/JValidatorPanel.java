@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,6 +34,8 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	JTextField txtFile;
 	
 	JComboBox cbTypes;
+	
+	JButton jbChooseFile;
 	
 	boolean fChanged = false;
 	
@@ -99,11 +102,11 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("Param"), c);		
+		add(new JLabel("Param"), c);	
 
 		c.gridy = 2;
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("File"), c);				
+		add(new JLabel("File"), c);
 	}
 	
 	

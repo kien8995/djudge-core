@@ -22,6 +22,7 @@ import djudge.judge.ProblemDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.validator.ValidatorDescription;
+import djudge.swing.JFileMaskPanel;
 import djudge.swing.JLimitsPanel;
 import djudge.swing.JBlockInfoPanel;
 import djudge.swing.JTestsFrame;
@@ -50,6 +51,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	JSplitPane spSplit;
 	
 	JBlockInfoPanel jtpTest;
+	
+	JFileMaskPanel jfmpMasks;
 	
 	Hashtable<String, Hashtable<String, String[]>> getTree()
 	{
@@ -154,11 +157,14 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	ValidatorDescription val = new ValidatorDescription();
 	
 	JLimitsPanel lpLimits;
+	
+	String inputMask, outputMask;
 
 	public void showData()
 	{
 		jtpTest.setLimits(limits);
 		jtpTest.setValidator(val);
+		jtpTest.setData(inputMask, outputMask);
 	}
 	
 	public void showProblemInfo()
@@ -166,6 +172,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		files = pd.getFiles();
 		limits = pd.getLimits();
 		val = pd.getValidator();
+		inputMask = pd.getInputMask();
+		outputMask = pd.getOutputMask();
 		showData();
 	}
 	
@@ -176,6 +184,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		files = pd.getFiles();
 		limits = pd.getGroupLimits(groupNumber);
 		val = pd.getGroupValidator(groupNumber);
+		inputMask = pd.getInputMask(groupNumber);
+		outputMask = pd.getOutputMask(groupNumber);
 		showData();
 	}
 	
@@ -187,7 +197,9 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		files = pd.getFiles();
 		limits = pd.getTestLimits(groupNumber, testNumber);
 		val = pd.getTestValidator(groupNumber, testNumber);
-		showData();		
+		inputMask = pd.getInputMask(groupNumber, testNumber);
+		outputMask = pd.getOutputMask(groupNumber, testNumber);
+		showData();
 	}
 
 	Object[] treePath;

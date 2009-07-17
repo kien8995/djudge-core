@@ -26,10 +26,17 @@ public class JBlockInfoPanel extends JPanel
 	
 	JLimitsPanel jlpLimits;
 	
+	JFileMaskPanel jfmpMasks;
+	
 	public void setData(ExecutorLimits newLimits, ValidatorDescription newValidator)
 	{
 		limits = newLimits;
 		val = newValidator;
+	}
+	
+	public void setData(String inputMask, String outputMask)
+	{
+		jfmpMasks.setData(inputMask, outputMask);
 	}
 	
 	public JBlockInfoPanel()
@@ -56,6 +63,9 @@ public class JBlockInfoPanel extends JPanel
 		
 		c.gridy = 2;
 		add(jvpValidator = new JValidatorPanel(), c);
+		
+		c.gridy = 4;
+		add(jfmpMasks = new JFileMaskPanel(), c);
 		
 	}
 	

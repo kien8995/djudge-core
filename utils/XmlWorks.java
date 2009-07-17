@@ -87,7 +87,6 @@ public class XmlWorks
 	            Writer out = new StringWriter();
 	            XMLSerializer serializer = new XMLSerializer(out, format);
 	            serializer.serialize(document);
-
 	            System.out.println(out.toString());
 	            return out.toString();
 	        } catch (IOException e)
