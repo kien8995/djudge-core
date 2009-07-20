@@ -1,7 +1,7 @@
 package djudge.utils;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,12 +17,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import djudge.judge.AbstractDescription;
 import djudge.judge.GroupDescription;
 import djudge.judge.ProblemDescription;
-import djudge.judge.dexecutor.ExecutorFiles;
-import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.ValidatorDescription;
-import djudge.swing.JFileMaskPanel;
 import djudge.swing.JLimitsPanel;
 import djudge.swing.JBlockInfoPanel;
 import djudge.swing.JTestsFrame;
@@ -52,7 +49,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	JBlockInfoPanel jtpTest;
 	
-	JFileMaskPanel jfmpMasks;
+	AbstractDescription currentBlock;
 	
 	Hashtable<String, Hashtable<String, String[]>> getTree()
 	{
@@ -144,36 +141,14 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		setVisible(true);
 	}
 	
-	public static void main(String[] args)
-	{
-		ProblemEditor pe = new ProblemEditor("univ-2009-stdio", "AA");
-		pe.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-	
-	ExecutorFiles files = new ExecutorFiles();
-	
-	ExecutorLimits limits = new ExecutorLimits();
-	
-	ValidatorDescription val = new ValidatorDescription();
-	
-	JLimitsPanel lpLimits;
-	
-	String inputMask, outputMask;
-
 	public void showData()
 	{
-		jtpTest.setLimits(limits);
-		jtpTest.setValidator(val);
-		jtpTest.setData(inputMask, outputMask);
+		jtpTest.setData(currentBlock);
 	}
 	
 	public void showProblemInfo()
 	{
-		files = pd.getFiles();
-		limits = pd.getActualLimits();
-		val = pd.getActualValidator();
-		inputMask = pd.getInputMask();
-		outputMask = pd.getOutputMask();
+		currentBlock = pd;
 		showData();
 	}
 	
@@ -181,11 +156,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	{
 		String str = treePath[2].toString();
 		int groupNumber = Integer.parseInt(str.substring(7)) - 1;
-		files = pd.getFiles();
-		limits = pd.getGroupLimits(groupNumber);
-		val = pd.getGroupValidator(groupNumber);
-		inputMask = pd.getInputMask(groupNumber);
-		outputMask = pd.getOutputMask(groupNumber);
+		currentBlock = pd.getGroup(groupNumber);		
 		showData();
 	}
 	
@@ -194,11 +165,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		String str = treePath[3].toString();
 		int groupNumber = Integer.parseInt(str.substring(6, str.lastIndexOf('.'))) - 1;
 		int testNumber = Integer.parseInt(str.substring(str.lastIndexOf('.') + 1)) - 1;
-		files = pd.getFiles();
-		limits = pd.getTestLimits(groupNumber, testNumber);
-		val = pd.getTestValidator(groupNumber, testNumber);
-		inputMask = pd.getInputMask(groupNumber, testNumber);
-		outputMask = pd.getOutputMask(groupNumber, testNumber);
+		currentBlock = pd.getGroup(groupNumber).getTest(testNumber);
 		showData();
 	}
 
@@ -251,4 +218,10 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 			actionTestSolution();
 		}
 	}
+	
+	public static void main(String[] args)
+	{
+		ProblemEditor pe = new ProblemEditor("NEERC-1998", "A");
+		pe.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}	
 }

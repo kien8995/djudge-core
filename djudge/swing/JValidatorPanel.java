@@ -1,8 +1,6 @@
 package djudge.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,7 +10,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -130,7 +127,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		this.val = limits.clone();
 		fChanged = false;
 		cbTypes.setSelectedItem(limits.type);
-		txtFile.setText(limits.exeName);
+		txtFile.setText(limits.getExeName());
 		txtParam.setText(limits.param);
 	}
 	
@@ -151,23 +148,6 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		}
 	}
 	
-	public static void main(String[] args)
-	{
-		JFrame frame = new JFrame();
-		frame.setSize(640, 480);
-		frame.setLayout(new FlowLayout());
-		
-		ValidatorDescription val = new ValidatorDescription();
-		val.type = ValidatorType.InternalExact;
-		val.exeName = "check.exe";
-		val.param = "1E-3";
-		
-		frame.add(new JValidatorPanel(val), BorderLayout.CENTER);
-		
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -177,7 +157,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	private void updateParams()
 	{
 		fChanged = true;
-		val.exeName = txtFile.getText();
+		val.setExeName(txtFile.getText());
 		val.param = txtParam.getText();
 	}
 

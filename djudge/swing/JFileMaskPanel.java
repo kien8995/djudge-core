@@ -1,7 +1,6 @@
 package djudge.swing;
 
 import java.awt.Dimension;
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import javax.swing.JTextField;
+
+import djudge.judge.AbstractDescription;
 
 public class JFileMaskPanel extends JPanel
 {
@@ -32,6 +33,8 @@ public class JFileMaskPanel extends JPanel
 	JLabel jlblOutput;
 	
 	boolean fChanged = false;
+	
+	AbstractDescription desc;
 
 	private void setupComponent()
 	{
@@ -43,13 +46,6 @@ public class JFileMaskPanel extends JPanel
 	public JFileMaskPanel()
 	{
 		setupComponent();
-		setVisible(true);
-	}
-	
-	public JFileMaskPanel(String inputMask, String outputMask)
-	{
-		setupComponent();
-		setData(inputMask, outputMask);
 		setVisible(true);
 	}
 	
@@ -90,10 +86,11 @@ public class JFileMaskPanel extends JPanel
 	}
 	
 	
-	public void setData(String inputMask, String outputMask)
+	public void setData(AbstractDescription desc)
 	{
-		this.inputMask = inputMask;
-		this.outputMask = outputMask;
+		this.desc = desc;
+		this.inputMask = desc.getInputMask();
+		this.outputMask = desc.getOutputMask();
 		fChanged = false;
 		txtInput.setText(inputMask);
 		txtOutput.setText(outputMask);
@@ -105,7 +102,7 @@ public class JFileMaskPanel extends JPanel
 		frame.setSize(640, 480);
 		frame.setLayout(new FlowLayout());
 		
-		frame.add(new JFileMaskPanel("input", "output"), BorderLayout.CENTER);
+//		frame.add(new JFileMaskPanel("input", "output"), BorderLayout.CENTER);
 		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
