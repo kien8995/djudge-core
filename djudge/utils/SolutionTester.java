@@ -65,7 +65,7 @@ public class SolutionTester extends JFrame implements ActionListener
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(20);
 		TableColumnModel cm = table.getColumnModel();
-		cm.getColumn(table.getColumnCount()-1).setCellRenderer(new ColorRenderer());
+		cm.getColumn(table.getColumnCount()-2).setCellRenderer(new ColorRenderer());
 		add(spTable = new JScrollPane(table), BorderLayout.CENTER);
 		setVisible(true);
 	}
@@ -115,6 +115,7 @@ public class SolutionTester extends JFrame implements ActionListener
 			"6 validation",
 			"7 validator_output",
 			"8 summary",
+			"9 val"
 			
 	};
 	
@@ -135,7 +136,7 @@ public class SolutionTester extends JFrame implements ActionListener
 			return;
 		}
 		int tests = pd.getTestsCount();
-		data = new Object[tests][9];
+		data = new Object[tests][10];
 		int k = 0;
 		for (int i = 0; i < pd.getGroupsCount(); i++)
 		{
@@ -151,6 +152,7 @@ public class SolutionTester extends JFrame implements ActionListener
 				data[k][6] = tRes.getValidationInfo().Result;
 				data[k][7] = tRes.getValidationInfo().ValidatorOutput;
 				data[k][8] = tRes.getJudgement();
+				data[k][9] = tRes.getValidationInfo().ValidatorName;
 				k++;
 			}
 		}

@@ -45,6 +45,8 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	JButton btnTestSolution;
 	
+	JButton btnSaveDescription;
+	
 	JSplitPane spSplit;
 	
 	JBlockInfoPanel jtpTest;
@@ -111,6 +113,11 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		btnTestSolution = new JButton("Test Solution");
 		btnTestSolution.addActionListener(this);
 		add(btnTestSolution, c);
+		
+		c.gridx = 6;
+		btnSaveDescription = new JButton("Save");
+		btnSaveDescription.addActionListener(this);
+		add(btnSaveDescription, c);
 	}
 	
 	void loadTree()
@@ -205,6 +212,11 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		new SolutionTester(pd);
 	}
 	
+	private void actionSaveDescription()
+	{
+		pd.save();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -216,6 +228,10 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 		if (source.equals(btnTestSolution))
 		{
 			actionTestSolution();
+		}
+		if (source.equals(btnSaveDescription))
+		{
+			actionSaveDescription();
 		}
 	}
 	

@@ -1,27 +1,28 @@
 package djudge.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import javax.swing.JTextField;
 
+import djudge.judge.AbstractDescription;
 import djudge.judge.dexecutor.ExecutorLimits;
 
-public class JLimitsPanel extends JPanel
+public class JLimitsPanel extends JPanel implements ActionListener
 {
 
 	private static final long serialVersionUID = 1L;
 
-	ExecutorLimits limits;
+	AbstractDescription desc;
 	
 	JTextField txtMemory;
 	
@@ -35,25 +36,18 @@ public class JLimitsPanel extends JPanel
 	
 	JLabel jlblOutput;
 	
-	boolean fChanged = false;
-
+	JButton jbtnSave;
+	
 	private void setupComponent()
 	{
 		setupGUI();
 		setBorder(BorderFactory.createTitledBorder("Runtime Limits"));
-		setPreferredSize(new Dimension(250, 100));		
+		setPreferredSize(new Dimension(250, 140));		
 	}
 	
 	public JLimitsPanel()
 	{
 		setupComponent();
-		setVisible(true);
-	}
-	
-	public JLimitsPanel(ExecutorLimits limits)
-	{
-		setupComponent();
-		setLimits(limits);
 		setVisible(true);
 	}
 	
@@ -84,6 +78,11 @@ public class JLimitsPanel extends JPanel
 		txtOutput.setPreferredSize(sz);
 		add(txtOutput, c);
 		
+		c.gridy = 3;
+		jbtnSave = new JButton("Save");
+		jbtnSave.addActionListener(this);
+		add(jbtnSave, c);
+		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.EAST;
@@ -105,40 +104,37 @@ public class JLimitsPanel extends JPanel
 	}
 	
 	
-	public boolean getLimitsChanged()
+	public void setData(AbstractDescription desc)
 	{
-		return fChanged;
-	}
-	
-	public void setLimitsChanged(boolean fChanged)
-	{
-		this.fChanged = fChanged;
-	}
-	
-	public ExecutorLimits getLimits()
-	{
-		return limits;
-	}
-	
-	public void setLimits(ExecutorLimits limits)
-	{
-		this.limits = limits.clone();
-		fChanged = false;
+		this.desc = desc;
+		ExecutorLimits limits = desc.getWorkLimits();
 		txtTime.setText("" + limits.timeLimit);
 		txtMemory.setText("" + limits.memoryLimit);
 		txtOutput.setText("" + limits.outputLimit);
 	}
 	
-	public static void main(String[] args)
+	private void saveData()
 	{
-		JFrame frame = new JFrame();
-		frame.setSize(640, 480);
-		frame.setLayout(new FlowLayout());
-		
-		ExecutorLimits limits = new ExecutorLimits(1000, 2000, 3000);
-		frame.add(new JLimitsPanel(limits), BorderLayout.CENTER);
-		
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ExecutorLimits newLimits = new ExecutorLimits(
+				Integer.parseInt(txtTime.getText()),
+				Integer.parseInt(txtMemory.getText()),
+				Integer.parseInt(txtOutput.getText())
+				);
+		if (!newLimits.equals(desc.getWorkLimits()))
+		{
+			desc.setLimits(newLimits);
+		}
 	}
+	
+	
+
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		if (arg0.getSource().equals(jbtnSave))
+		{
+			saveData();
+		}
+	}
+	
 }

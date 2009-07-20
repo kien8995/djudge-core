@@ -181,6 +181,8 @@ public class JTestsFrame extends JFrame implements ActionListener
 		ValidatorTask vTask = new ValidatorTask();
 		vTask.contestId = pd.getContestID();
 		vTask.problemId = pd.getProblemID();
+		vTask.groupNumber = groupNumber;
+		vTask.testNumber = testNumber;
 		vTask.programOutput = txtAnswer.getText();
 		vTask.testInput = pd.getJudgeInputFilepath(groupNumber, testNumber);
 		vTask.testOutput = pd.getJudgeOutputFilepath(groupNumber, testNumber);

@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import djudge.judge.AbstractDescription;
 import djudge.judge.validator.ValidatorDescription;
 import djudge.judge.validator.ValidatorType;
 
@@ -24,7 +25,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 
 	private static final long serialVersionUID = 1L;
 
-	ValidatorDescription val;
+	AbstractDescription desc;
 	
 	JTextField txtParam;
 	
@@ -34,20 +35,13 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	
 	JButton jbChooseFile;
 	
-	boolean fChanged = false;
+	JButton jbSave;
 	
 	private void setupComponent()
 	{
 		setupGUI();
 		setBorder(BorderFactory.createTitledBorder("Validator"));
-		setPreferredSize(new Dimension(250, 100));		
-	}
-	
-	public JValidatorPanel(ValidatorDescription val)
-	{
-		setupComponent();
-		setLimits(val);
-		setVisible(true);
+		setPreferredSize(new Dimension(250, 140));		
 	}
 	
 	public JValidatorPanel()
@@ -90,6 +84,11 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		txtFile.getDocument().addDocumentListener(this);
 		add(txtFile, c);
 		
+		c.gridy = 3;
+		jbSave = new JButton("Save");
+		jbSave.addActionListener(this);
+		add(jbSave, c);
+		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
@@ -105,27 +104,11 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		c.anchor = GridBagConstraints.EAST;
 		add(new JLabel("File"), c);
 	}
-	
-	
-	public boolean getLimitsChanged()
+		
+	public void setData(AbstractDescription desc)
 	{
-		return fChanged;
-	}
-	
-	public void setLimitsChanged(boolean fChanged)
-	{
-		this.fChanged = fChanged;
-	}
-	
-	public ValidatorDescription getLimits()
-	{
-		return val;
-	}
-	
-	public void setLimits(ValidatorDescription limits)
-	{
-		this.val = limits.clone();
-		fChanged = false;
+		this.desc = desc;
+		ValidatorDescription limits = desc.getWorkValidator();
 		cbTypes.setSelectedItem(limits.type);
 		txtFile.setText(limits.getExeName());
 		txtParam.setText(limits.param);
@@ -135,7 +118,6 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	{
 		String strType = cbTypes.getSelectedItem().toString();
 		ValidatorType type = ValidatorType.parse(strType);
-		val.type = type;
 		txtFile.setEnabled(false);
 		txtParam.setEnabled(false);
 		if (type.isParametrized())
@@ -148,19 +130,36 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		}
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent arg0)
+	private void saveData()
 	{
-		updateType();
+		String strType = cbTypes.getSelectedItem().toString();
+		ValidatorType type = ValidatorType.parse(strType);
+		ValidatorDescription vd = new ValidatorDescription(desc.getContestID(),
+				desc.getProblemID(), type, txtParam.getText(), txtFile.getText());
+		if (!vd.equals(desc.getWorkValidator()))
+		{
+			desc.setValidator(vd);
+		}
 	}
 	
 	private void updateParams()
 	{
-		fChanged = true;
-		val.setExeName(txtFile.getText());
-		val.param = txtParam.getText();
+		
 	}
-
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		if (arg0.getSource().equals(cbTypes))
+		{
+			updateType();
+		}
+		else if (arg0.getSource().equals(jbSave))
+		{
+			saveData();
+		}
+	}
+	
 	@Override
 	public void changedUpdate(DocumentEvent arg0)
 	{
