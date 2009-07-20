@@ -10,39 +10,30 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.ValidatorDescription;
+import djudge.judge.AbstractDescription;
 
 public class JBlockInfoPanel extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
 
-	ExecutorLimits limits;
-	
-	ValidatorDescription val;
-	
 	JValidatorPanel jvpValidator;
 	
 	JLimitsPanel jlpLimits;
 	
 	JFileMaskPanel jfmpMasks;
 	
-	public void setData(ExecutorLimits newLimits, ValidatorDescription newValidator)
-	{
-		limits = newLimits;
-		val = newValidator;
-	}
+	AbstractDescription desc;
 	
-	public void setData(String inputMask, String outputMask)
+	public void setData(AbstractDescription desc)
 	{
-		jfmpMasks.setData(inputMask, outputMask);
+		this.desc = desc;
+		jfmpMasks.setData(desc);
 	}
 	
 	public JBlockInfoPanel()
 	{
 		setupGUI();
-		setData(limits = new ExecutorLimits(), val = new ValidatorDescription());
 		setBorder(BorderFactory.createTitledBorder("Block Info"));
 		setVisible(true);
 	}
@@ -79,15 +70,5 @@ public class JBlockInfoPanel extends JPanel
 		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	public void setValidator(ValidatorDescription val)
-	{
-		jvpValidator.setLimits(val);
-	}
-	
-	public void setLimits(ExecutorLimits newLimits)
-	{
-		jlpLimits.setLimits(newLimits);
 	}
 }
