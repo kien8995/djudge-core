@@ -1,7 +1,7 @@
 package djudge.swing;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,6 +29,8 @@ public class JBlockInfoPanel extends JPanel
 	{
 		this.desc = desc;
 		jfmpMasks.setData(desc);
+		jlpLimits.setData(desc);
+		jvpValidator.setData(desc);
 	}
 	
 	public JBlockInfoPanel()
