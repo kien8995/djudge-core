@@ -36,5 +36,29 @@ public class AbstractDBModel
 			e.printStackTrace();
 		}
 		return null;
-	}	
+	}
+	
+	public static void executeUpdate(String sql)
+	{
+		synchronized (AbstractDBModel.dbMutex)
+		{
+			Statement st = AbstractDBModel.getStatement();
+			try
+			{
+				System.out.println(sql);
+				st.executeUpdate(sql);
+				st.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	//FIXME
+	public static String escape(String data)
+	{
+		return data;
+	}
 }

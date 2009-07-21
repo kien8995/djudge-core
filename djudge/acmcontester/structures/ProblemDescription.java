@@ -2,32 +2,30 @@ package djudge.acmcontester.structures;
 
 import java.sql.ResultSet;
 
-import djudge.acmcontester.Admin;
 import djudge.acmcontester.models.AbstractDBModel;
 
-public class UserDescription
+public class ProblemDescription
 {
 	public final static String[] names = {
 		"id",
-		"surname",
+		"sid",
 		"name",
-		"password",
-		"role",
+		"djudge_contest",
+		"djudge_problem",
 	};
 
 	public String id;
-	public String surname;
+	public String sid;
 	public String name;
-	public String password;
-	public String username;
-	public String role;
+	public String djudgeContest;
+	public String djudgeProblem;
 	
-	public UserDescription()
+	public ProblemDescription()
 	{
 		
 	}
 	
-	public UserDescription(ResultSet rs)
+	public ProblemDescription(ResultSet rs)
 	{
 		fill(rs);
 	}
@@ -37,11 +35,10 @@ public class UserDescription
 		try
 		{
         	id = rs.getString("id");
-        	username = rs.getString("username");
-        	password = rs.getString("password");
+        	sid = rs.getString("sid");
         	name = rs.getString("name");
-        	surname = rs.getString("surname");
-        	role = rs.getString("role");
+        	djudgeContest = rs.getString("djudge_contest");
+        	djudgeProblem = rs.getString("djudge_problem");
 		}
 		catch (Exception e)
 		{
@@ -51,12 +48,11 @@ public class UserDescription
 	
 	public String getUpdateStatement()
 	{
-		return "UPDATE `users` SET " + 
-			"`username` = '" + AbstractDBModel.escape(username)  + "', " +
-			"`password` = '" + AbstractDBModel.escape(password) + "', " + 
+		return "UPDATE `problems` SET " + 
+			"`sid` = '" + AbstractDBModel.escape(sid)  + "', " +
 			"`name` = '" + AbstractDBModel.escape(name) + "', " +
-			"`surname` = '" + AbstractDBModel.escape(surname) + "', " +
-			"`role` = '" + AbstractDBModel.escape(role) + "' " +
+			"`djudge_contest` = '" + AbstractDBModel.escape(djudgeContest) + "', " +
+			"`djudge_problem` = '" + AbstractDBModel.escape(djudgeProblem) + "' " +
 			"WHERE `id` = '" + AbstractDBModel.escape(id) + "'";
 			
 	}
@@ -66,10 +62,10 @@ public class UserDescription
 		switch (columnIndex)
 		{
 		case 0: return id;
-		case 1: return username;
+		case 1: return sid;
 		case 2: return name;
-		case 3: return surname;
-		case 4: return role;
+		case 3: return djudgeContest;
+		case 4: return djudgeProblem;
 		}
 		return "";
 	}
@@ -79,7 +75,7 @@ public class UserDescription
 		switch (columnIndex)
 		{
 		case 1:
-			username = newValue;
+			sid = newValue;
 			break;
 			
 		case 2:
@@ -87,18 +83,13 @@ public class UserDescription
 			break;
 			
 		case 3: 
-			surname = newValue;
+			djudgeContest = newValue;
 			break;
 			
 		case 4:
-			role = newValue;
+			djudgeProblem = newValue;
 			break;
 		}
-	}
-
-	public static void main(String[] args)
-	{
-		new Admin();
 	}
 	
 }
