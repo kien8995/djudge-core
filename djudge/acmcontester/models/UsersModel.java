@@ -1,34 +1,20 @@
 package djudge.acmcontester.models;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import djudge.acmcontester.Admin;
+import djudge.acmcontester.exceptions.NoDataException;
 import djudge.acmcontester.structures.UserDescription;
 
-public class UsersModel
+public class UsersModel extends AbstractDBModel
 {
-	private static UserDescription fillDescription(ResultSet rs)
-	{
-		UserDescription ud = new UserDescription();
-		try
-		{
-        	ud.id = rs.getString("id");
-        	ud.username = rs.getString("username");
-        	ud.password = rs.getString("password");
-        	ud.name = rs.getString("name");
-        	ud.surname = rs.getString("surname");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return ud;
-	}
 	
-	public static UserDescription[] getAllUsers()
+	public static Vector<UserDescription> getAllUsers()
 	{
-		Vector <UserDescription> v = new Vector <UserDescription>();  
+		Vector <UserDescription> v = new Vector <UserDescription>();
 		synchronized (AbstractDBModel.dbMutex)
 		{
 			Statement st = AbstractDBModel.getStatement();
@@ -38,7 +24,7 @@ public class UsersModel
 				ResultSet rs = st.executeQuery(sql);
 				while (rs.next())
 				{
-					v.add(fillDescription(rs));
+					v.add(new UserDescription(rs));
 				}
 				rs.close();
 				st.close();
@@ -48,10 +34,37 @@ public class UsersModel
 				e.printStackTrace();
 			}
 		}
-		return v.toArray(new UserDescription[0]);
+		return v;
+	}
+	
+	public static UserDescription insertRow()
+	{
+		UserDescription res = new UserDescription();
+		synchronized (AbstractDBModel.dbMutex)
+		{
+			Statement st = AbstractDBModel.getStatement();
+			String sql = "INSERT INTO users(`name`) VALUES('new')";
+			String sql2 = "SELECT MAX(id) AS maxid FROM users";
+			try
+			{
+				st.executeUpdate(sql);
+				ResultSet rs = st.executeQuery(sql2);
+				if (rs.next())
+				{
+					res.id = rs.getString("maxid");
+				}
+				rs.close();
+				st.close();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return res;
 	}
 
-	public static UserDescription getUser(String userID)
+	public static UserDescription getUserByID(String userID) throws NoDataException
 	{
 		UserDescription result = null;
 		synchronized (AbstractDBModel.dbMutex)
@@ -63,12 +76,16 @@ public class UsersModel
 				ResultSet rs = st.executeQuery(sql);
 				if (rs.next())
 				{
-					result = fillDescription(rs);
+					result = new UserDescription(rs);
+				}
+				else
+				{
+					throw new NoDataException();
 				}
 				rs.close();
 				st.close();
 			}
-			catch (Exception e)
+			catch (SQLException e)
 			{
 				e.printStackTrace();
 			}
@@ -76,4 +93,13 @@ public class UsersModel
 		return result;
 	}
 	
+	public static void updateData(UserDescription ud)
+	{
+		AbstractDBModel.executeUpdate(ud.getUpdateStatement());
+	}
+
+	public static void main(String[] args)
+	{
+		new Admin();
+	}	
 }
