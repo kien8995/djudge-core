@@ -173,7 +173,6 @@ public class JTestsFrame extends JFrame implements ActionListener
 		{
 			e.printStackTrace();
 		}
-
 	}
 	
 	protected void doTestAnswer()

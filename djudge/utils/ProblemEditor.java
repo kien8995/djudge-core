@@ -237,7 +237,7 @@ public class ProblemEditor extends JFrame implements TreeSelectionListener, Acti
 	
 	public static void main(String[] args)
 	{
-		ProblemEditor pe = new ProblemEditor("NEERC-1998", "A");
+		ProblemEditor pe = new ProblemEditor("NEERC-1998", "C");
 		pe.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}	
 }

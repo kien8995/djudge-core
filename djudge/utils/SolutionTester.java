@@ -94,7 +94,7 @@ public class SolutionTester extends JFrame implements ActionListener
 	{
 		try
 		{
-			SolutionTester wnd = new SolutionTester(new ProblemDescription("NEERC", "A"));
+			SolutionTester wnd = new SolutionTester(new ProblemDescription("WS-2009", "3G"));
 			wnd.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		}
 		catch (Exception e)

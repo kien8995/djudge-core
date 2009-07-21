@@ -102,7 +102,7 @@ class ProblemScanner
 			djudge.judge.ProblemDescription pd = new djudge.judge.ProblemDescription(contestId, problemId);
 			desc.groupsCount = pd.getGroupsCount();
 			desc.testsCount = pd.getTestsCount();
-			desc.name = pd.problemInfo.getName();
+			desc.name = pd.getGlobalProblemInfo().getName();
 		} catch (DJudgeXmlNotFoundException e)
 		{
 			desc.status = ProblemStatus.NOT_A_PROBLEM;
