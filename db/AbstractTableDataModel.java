@@ -7,8 +7,6 @@ import java.util.Vector;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
-import sun.awt.image.DataBufferNative;
-
 public abstract class AbstractTableDataModel extends AbstractTableModel
 {
 	public final static String dbMutex = "Mutex";
@@ -143,36 +141,43 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		return res;
 	}
 	
+	@Override
 	public int getColumnCount()
 	{
 		return columns.length;
 	}
 
+	@Override
 	public Class<?> getColumnClass(int arg0)
 	{
 		return columns[arg0].type;
 	}
 
+	@Override
 	public String getColumnName(int arg0)
 	{
 		return columns[arg0].caption;
 	}
 
+	@Override
 	public int getRowCount()
 	{
 		return rows.size();
 	}
 
+	@Override
 	public Object getValueAt(int arg0, int arg1)
 	{
 		return rows.get(arg0).data[arg1];
 	}
 
+	@Override
 	public boolean isCellEditable(int arg0, int arg1)
 	{
 		return arg1 > 0;
 	}
 
+	@Override
 	public void setValueAt(Object arg0, int arg1, int arg2)
 	{
 		DBRowAbstract row = rows.get(arg1);
