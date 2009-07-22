@@ -7,23 +7,25 @@ import db.LanguagesDataModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
+import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 
 public class ContestCore
 {
-	private UsersDataModel usersModel;
+	private static UsersDataModel usersModel;
 	
-	private ProblemsDataModel problemsModel;
+	private static ProblemsDataModel problemsModel;
 	
-	private LanguagesDataModel languagesModel;
+	private static LanguagesDataModel languagesModel;
 	
-	private SubmissionsDataModel submissionsModel;
+	private static SubmissionsDataModel submissionsModel;
 	
-	private ContestSettings contest = new ContestSettings();
+	private static ContestSettings contest = new ContestSettings();
 	
-	private DServiceInterface djudgeInterface;
+	private static DServiceInterface djudgeInterface;
 	
-	private void setData()
+	static
 	{
 		usersModel = new UsersDataModel();
 		usersModel.fill();
@@ -39,29 +41,26 @@ public class ContestCore
 		
 		djudgeInterface = new DServiceInterface();
 		djudgeInterface.start();
+		
+		new AcmContesterXmlRpcServer().start();
 	}
 	
-	public ContestCore()
-	{
-		setData();
-	}
-	
-	public UsersDataModel getUsersModel()
+	public static UsersDataModel getUsersModel()
 	{
 		return usersModel;
 	}
 	
-	public LanguagesDataModel getLanguagesModel()
+	public static LanguagesDataModel getLanguagesModel()
 	{
 		return languagesModel;
 	}
 	
-	public ProblemsDataModel getProblemsModel()
+	public static ProblemsDataModel getProblemsModel()
 	{
 		return problemsModel;
 	}
 	
-	public SubmissionsDataModel getSubmissionsDataModel()
+	public static SubmissionsDataModel getSubmissionsDataModel()
 	{
 		return submissionsModel;
 	}
@@ -71,7 +70,7 @@ public class ContestCore
 		new Admin();
 	}
 	
-	public boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
+	public static boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
 	{
 		String userID = usersModel.getUserID(username, password);
 		if (!contest.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(problemID))
@@ -91,5 +90,47 @@ public class ContestCore
 		DBRowAbstract row = submissionsModel.toRow(sd);
 		row.appendTo(submissionsModel);
 		return true;
+	}
+
+	public static ProblemData[] getProblems(AuthentificationData userInfo)
+	{
+		return problemsModel.getRows().toArray(new ProblemData[0]);
+	}
+
+	public static boolean enterContest(AuthentificationData userInfo)
+	{
+		String userID = usersModel.getUserID(userInfo.username, userInfo.password);
+		return Integer.parseInt(userID) > 0;
+	}
+
+	public static String registerUser(String username, String password)
+	{
+		return "OK";
+	}
+
+	public static SubmissionData[] getAllSubmissions(AuthentificationData userInfo)
+	{
+		return submissionsModel.getRows().toArray(new SubmissionData[0]);
+	}
+
+	public static SubmissionData[] getOwnSubmissions(AuthentificationData userInfo)
+	{
+		return submissionsModel.getRows().toArray(new SubmissionData[0]);
+	}
+
+	public static boolean submitSolution(AuthentificationData userInfo,
+			String problemID, String languageID, String sourceCode)
+	{
+		return submitSolution(userInfo.username, userInfo.password, problemID, languageID, sourceCode);
+	}
+
+	public static LanguageData[] getLanguages(AuthentificationData userInfo)
+	{
+		return languagesModel.getRows().toArray(new LanguageData[0]);
+	}
+
+	public static String getVersion()
+	{
+		return "Version 1E-2";
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
@@ -44,7 +45,7 @@ public class DServiceInterface extends Thread
     		
     		client.setConfig(config);
     		
-    		System.out.println("Connection set-up");
+    		System.out.println("DService client started");
 		}
 		catch (Exception ex)
 		{
@@ -104,11 +105,14 @@ public class DServiceInterface extends Thread
 					}
 				}
 			}
+			catch (XmlRpcException ex)
+			{
+				System.out.println("Failed connect to DService");
+			}
 			catch (Exception ex)
 			{
 				ex.printStackTrace();
-			}			
-			
+			}
 			try
 			{
 				sleep(1000);

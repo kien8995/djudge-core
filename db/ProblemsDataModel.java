@@ -1,5 +1,9 @@
 package db;
 
+import java.util.Vector;
+
+import djudge.acmcontester.structures.ProblemData;
+
 
 class DBRowProblems extends DBRowAbstract
 {
@@ -39,5 +43,35 @@ public class ProblemsDataModel extends AbstractTableDataModel
 	{
 		return tableName;
 	}
+
+	public DBRowAbstract toRow(ProblemData ld)
+	{
+		DBRowProblems row = new DBRowProblems();
+		row.data[0] = ld.id;
+		row.data[1] = ld.sid;
+		row.data[2] = ld.name;
+		return row;
+	}
+
+	public ProblemData toProblemData(DBRowAbstract row)
+	{
+		ProblemData ld = new ProblemData();
+		ld.id = row.data[0].toString();
+		ld.sid = row.data[1].toString();
+		ld.name = row.data[2].toString();
+		return ld;
+	}
+		
+	public Vector<ProblemData> getRows()
+	{
+		Vector<ProblemData> res = new Vector<ProblemData>();
+		for (int i = 0; i < rows.size(); i++)
+		{
+			res.add(toProblemData(rows.get(i)));
+		}
+		return res;
+	}
+	
+	
 }
 

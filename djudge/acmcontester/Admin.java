@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import utils.FileWorks;
-
 public class Admin extends JFrame
 {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +54,7 @@ public class Admin extends JFrame
 
 	private void setData()
 	{
+		//core.getAllSubmissions(new AuthentificationData());
 		//core.submitSolution("alt", "p78", "1", "1", FileWorks.readFile("d:/A-alt.cpp"));
 	}
 
