@@ -1,23 +1,26 @@
 package db;
 
 
-class DBRowProblems extends DBRowAbstract
+class DBRowLanguages extends DBRowAbstract
 {
 	@Override
 	public Class<? extends AbstractTableDataModel> getTableClass()
 	{
-		return ProblemsDataModel.class;
+		return LanguagesDataModel.class;
 	}
 }
 
-public class ProblemsDataModel extends AbstractTableDataModel
+public class LanguagesDataModel extends AbstractTableDataModel
 {
-	public final static String tableName = "problems";
+	public final static String tableName = "languages";
 
 	public final static DBField[] columns = {
 		new DBField("id", "#"),
 		new DBField("sid", "Скорочена назва", CellDefault.class, "-"),
-		new DBField("name", "Повна назва", CellDefault.class, "-"),
+//		new DBField("short_name", "Повна назва", CellDefault.class, "-"),
+		new DBField("full_name", "Повна назва", CellDefault.class, "-"),
+//		new DBField("compilation_command", "Повна назва", CellDefault.class, "-"),
+		new DBField("djudge_id", "Повна назва", CellDefault.class, "-"),
 	};
 	
 	@Override
@@ -31,7 +34,7 @@ public class ProblemsDataModel extends AbstractTableDataModel
 	@Override
 	protected Class<? extends DBRowAbstract> getRowClass()
 	{
-		return DBRowProblems.class;
+		return DBRowLanguages.class;
 	}
 
 	@Override

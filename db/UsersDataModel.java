@@ -1,10 +1,9 @@
 package db;
 
-
 class DBRowUsers extends DBRowAbstract
 {
 	@Override
-	public Class<? extends DBTableAbstract> getTableClass()
+	public Class<? extends AbstractTableDataModel> getTableClass()
 	{
 		return UsersDataModel.class;
 	}
@@ -19,6 +18,7 @@ public class UsersDataModel extends AbstractTableDataModel
 		new DBField("username", "Скорочена назва", CellDefault.class, "-"),
 		new DBField("name", "Повна назва", CellDefault.class, "-"),
 		new DBField("surname", "Повна назва", CellDefault.class, "-"),
+		new DBField("password", "Повна назва", CellDefault.class, "-"),
 	};
 	
 	@Override
@@ -39,6 +39,18 @@ public class UsersDataModel extends AbstractTableDataModel
 	protected String getTableName()
 	{
 		return tableName;
+	}
+	
+	public String getUserID(String username, String password)
+	{
+		for (int i = 0; i < getRowCount(); i++)
+		{
+			if (getValueAt(i, 1).equals(username) && getValueAt(i, 4).equals(password))
+			{
+				return getValueAt(i, 0).toString(); 
+			}
+		}
+		return "-1";
 	}
 }
 
