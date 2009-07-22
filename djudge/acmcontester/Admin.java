@@ -6,9 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import db.AbstractTableDataModel;
-import db.ProblemsDataModel;
-import db.UsersDataModel;
+import utils.FileWorks;
 
 public class Admin extends JFrame
 {
@@ -16,29 +14,31 @@ public class Admin extends JFrame
 
 	private JTabbedPane jtpTabs;
 	
-	private UsersPanel usersPanel;
+	private JTablePanel usersPanel;
 
-	private ProblemsPanel problemsPanel;
+	private JTablePanel problemsPanel;
 	
-	private AbstractTableDataModel usersModel;
+	private JTablePanel languagesPanel;
 	
-	private AbstractTableDataModel problemsModel;
+	private JTablePanel submissionsPanel;
+	
+	private ContestCore core;
 	
 	private void setupGUI()
 	{
-		usersModel = new UsersDataModel();
-		usersModel.fill();
-		
-		problemsModel = new ProblemsDataModel();
-		problemsModel.fill();
+		core = new ContestCore();
 		
 		setTitle("Contest Manager");
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
 		
-		jtpTabs.add("Users", usersPanel = new UsersPanel(usersModel));
+		jtpTabs.add("Users", usersPanel = new JTablePanel(core.getUsersModel()));
 		
-		jtpTabs.add("Problems", problemsPanel = new ProblemsPanel(problemsModel));
+		jtpTabs.add("Problems", problemsPanel = new JTablePanel(core.getProblemsModel()));
+		
+		jtpTabs.add("Languages", languagesPanel = new JTablePanel(core.getLanguagesModel()));
+		
+		jtpTabs.add("Runs", submissionsPanel = new JTablePanel(core.getSubmissionsDataModel()));
 		
 		add(jtpTabs, BorderLayout.CENTER);
 	}
@@ -53,10 +53,10 @@ public class Admin extends JFrame
 		setData();
 		setVisible(true);
 	}
-	
+
 	private void setData()
 	{
-		
+		//core.submitSolution("alt", "p78", "1", "1", FileWorks.readFile("d:/A-alt.cpp"));
 	}
 
 	public static void log(Object o)

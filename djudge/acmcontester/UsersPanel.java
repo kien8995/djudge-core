@@ -52,7 +52,8 @@ public class UsersPanel extends JPanel implements ActionListener
 		Object source = arg0.getSource();
 		if (source.equals(jbtnAdd))
 		{
-			jtUsersModel.insertRow();//appendRecord();
+			jtUsersModel.insertRow();
+			jtUsers.updateUI();
 		}
 	}
 }

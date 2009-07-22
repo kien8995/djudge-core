@@ -12,12 +12,12 @@ public abstract class DBRowAbstract extends SQLAbstract
 {
 	public Object[] data;
 	
-	private DBTableAbstract table;
+	private AbstractTableDataModel table;
 	
 	{
 		try
 		{
-			table = (DBTableAbstract) getTableClass().newInstance();
+			table = (AbstractTableDataModel) getTableClass().newInstance();
 		}
 		catch (Exception e)
 		{
@@ -27,7 +27,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 	
 	public DBRowAbstract()
 	{
-		
+		data = new Object[getColumnCount()];
 	}
 	
 	protected String getFillStatement(int index)
@@ -35,7 +35,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return "SELECT * FROM " + getTableName() + " WHERE id = " + index;
 	}
 	
-	public DBRowAbstract(DBTableAbstract table, ResultSet rs)
+	public DBRowAbstract(AbstractTableDataModel table, ResultSet rs)
 	{
 		fill(rs, table);
 	}
@@ -55,7 +55,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return table.getTableName();
 	}
 	
-	public abstract Class<?extends DBTableAbstract> getTableClass();
+	public abstract Class<?extends AbstractTableDataModel> getTableClass();
 	
 	private void fillRow(ResultSet rs) throws SQLException
 	{
@@ -81,7 +81,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 	{
 		String[] columns = new String[getColumnCount() - 1];
 		Object[] values = new Object[getColumnCount() - 1];
-		String[] columnKeys = getColumnKeys();		
+		String[] columnKeys = getColumnKeys();
 		Object[] columnValues = getColumnDefaultValues();
 		for (int i = 0; i < getColumnCount() - 1; i++)
 		{
@@ -95,7 +95,27 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return s.toString();
 	}
 	
-	public boolean create(DBTableAbstract table)
+	private String getCreateStatement2()
+	{
+		String[] columns = new String[getColumnCount() - 1];
+		Object[] values = new Object[getColumnCount() - 1];
+		String[] columnKeys = getColumnKeys();
+		Object[] columnValues = new Object[getColumnCount()];
+		for (int i = 0; i < getColumnCount(); i++)
+			columnValues[i] = data[i];
+		for (int i = 0; i < getColumnCount() - 1; i++)
+		{
+			columns[i] = columnKeys[i+1];
+			values[i] = columnValues[i+1];
+		}
+		
+		StringBuffer s = new StringBuffer();
+		setInsert(s, getTableName());
+		setValues2(s, columns, values);
+		return s.toString();
+	}
+	
+	public boolean create(AbstractTableDataModel table)
 	{
 		this.table = table;
 		boolean f = false;
@@ -128,7 +148,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return f;
 	}
 	
-	public boolean delete(DBTableAbstract table)
+	public boolean delete(AbstractTableDataModel table)
 	{
 		this.table = table;
 		boolean f = false;
@@ -148,7 +168,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return f;
 	}
 	
-	public boolean fill(ResultSet rs, DBTableAbstract table)
+	public boolean fill(ResultSet rs, AbstractTableDataModel table)
 	{
 		this.table = table;
 		boolean res = true;
@@ -208,6 +228,8 @@ public abstract class DBRowAbstract extends SQLAbstract
 			String query = this.getUpdateStatement();
 			log(query);
 			stmt.executeUpdate(query);
+			stmt.close();
+//			con.close();
 		}
 		catch (Exception e)
 		{
@@ -215,6 +237,39 @@ public abstract class DBRowAbstract extends SQLAbstract
 			f = false;
 		}
 		return f;
+	}
+
+	public boolean appendTo(AbstractTableDataModel abstractTableDataModel)
+	{
+		this.table = abstractTableDataModel;
+		boolean f = false;
+		try
+		{
+			Connection con = Settings.getConnection();
+			Statement stmt = con.createStatement();
+			String query = getCreateStatement2();
+			log(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			query = "SELECT * FROM " + getTableName() + " ORDER BY id desc LIMIT 0,1";
+			log(query);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			if (rs.next())
+			{
+				DBRowAbstract newRow = table.getRowClass().newInstance();
+				newRow.fillRow(rs);
+				table.rows.add(newRow);
+				f = true;
+			}
+			stmt.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			f = false;
+		}
+		return f;		
 	}
 	
 }
