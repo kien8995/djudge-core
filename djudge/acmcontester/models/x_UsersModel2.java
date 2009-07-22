@@ -9,7 +9,7 @@ import djudge.acmcontester.Admin;
 import djudge.acmcontester.exceptions.NoDataException;
 import djudge.acmcontester.structures.UserDescription;
 
-public class UsersModel extends AbstractDBModel
+public class x_UsersModel2 extends AbstractDBModel
 {
 	
 	public static Vector<UserDescription> getAllUsers()

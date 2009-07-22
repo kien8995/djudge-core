@@ -2,15 +2,13 @@ package djudge.acmcontester;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import djudge.acmcontester.models.ProblemsModel;
-import djudge.acmcontester.models.UsersModel;
-import djudge.acmcontester.structures.ProblemDescription;
-import djudge.acmcontester.structures.UserDescription;
+import db.AbstractTableDataModel;
+import db.ProblemsDataModel;
+import db.UsersDataModel;
 
 public class Admin extends JFrame
 {
@@ -22,17 +20,26 @@ public class Admin extends JFrame
 
 	private ProblemsPanel problemsPanel;
 	
-	private Vector<UserDescription> users;
+	private AbstractTableDataModel usersModel;
 	
-	private Vector<ProblemDescription> problems;
+	private AbstractTableDataModel problemsModel;
 	
 	private void setupGUI()
 	{
+		usersModel = new UsersDataModel();
+		usersModel.fill();
+		
+		problemsModel = new ProblemsDataModel();
+		problemsModel.fill();
+		
 		setTitle("Contest Manager");
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
-		jtpTabs.add("Users", usersPanel = new UsersPanel());
-		jtpTabs.add("Problems", problemsPanel = new ProblemsPanel());
+		
+		jtpTabs.add("Users", usersPanel = new UsersPanel(usersModel));
+		
+		jtpTabs.add("Problems", problemsPanel = new ProblemsPanel(problemsModel));
+		
 		add(jtpTabs, BorderLayout.CENTER);
 	}
 	
@@ -49,13 +56,14 @@ public class Admin extends JFrame
 	
 	private void setData()
 	{
-		users = UsersModel.getAllUsers();
-		usersPanel.setData(users);
 		
-		problems = ProblemsModel.getAllProblems();
-		problemsPanel.setData(problems);
 	}
 
+	public static void log(Object o)
+	{
+		System.out.println(o);
+	}
+	
 	public static void main(String[] args)
 	{
 		new Admin();

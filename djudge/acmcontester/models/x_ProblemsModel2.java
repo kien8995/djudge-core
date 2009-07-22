@@ -8,7 +8,7 @@ import java.util.Vector;
 import djudge.acmcontester.exceptions.NoDataException;
 import djudge.acmcontester.structures.ProblemDescription;
 
-public class ProblemsModel extends AbstractDBModel
+public class x_ProblemsModel2 extends AbstractDBModel
 {
 	
 	public static Vector<ProblemDescription> getAllProblems()
