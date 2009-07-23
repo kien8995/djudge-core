@@ -3,6 +3,7 @@ package djudge.acmcontester;
 import java.util.HashMap;
 
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.structures.MonitorData;
 import djudge.common.HashMapSerializer;
 
 public class AcmContesterClientStub extends HashMapSerializer implements AcmContesterXmlRpcClientInterface
@@ -84,6 +85,14 @@ public class AcmContesterClientStub extends HashMapSerializer implements AcmCont
 	public long getContestTimeLeft(String username, String password)
 	{
 		return ContestCore.getContestTimeLeft(username, password);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap getMonitor(String username, String password)
+	{
+		MonitorData md = ContestCore.getMonitor(username, password);
+		return md.toHashMap();
 	}
 
 }

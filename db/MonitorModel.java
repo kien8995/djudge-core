@@ -1,7 +1,7 @@
 package db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.Statement;
 
 import djudge.acmcontester.Admin;
@@ -24,7 +24,7 @@ public class MonitorModel
 	private UserProblemStatus getUserProblemStatistics(long contestTime, String userID, String problemID)
 	{
 		UserProblemStatus res = new UserProblemStatus();
-		String sqlFirstAc = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND judgement = 'AC' ORDER BY id DESC LIMIT 1";
+		String sqlFirstAc = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND judgement = 'AC' ORDER BY id asc LIMIT 1";
 		Connection conn = Settings.getConnection();
 		Statement st;
 		synchronized (AbstractTableDataModel.dbMutex)
@@ -34,21 +34,22 @@ public class MonitorModel
 				String firstAcId = null;
 				int acTime = -1;
 				st = conn.createStatement();
-				System.out.println(sqlFirstAc);
+				//System.out.println(sqlFirstAc);
 				ResultSet rs = st.executeQuery(sqlFirstAc);
 				if (rs.next())
 				{
 					firstAcId = rs.getString("id");
 					acTime = rs.getInt("contest_time");
+					System.out.println(firstAcId + " " + acTime);
 				}
 				else
 				{
-					firstAcId = "1000000000";
+					firstAcId = "1000000";
 				}
 				rs.close();
 				st.close();
-				String allBeforeAc = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' ORDER BY id ASC";
-				System.out.println(allBeforeAc);
+				String allBeforeAc = "SELECT * FROM `submissions` WHERE `id` < '" + firstAcId + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' ORDER BY id ASC";
+				//System.out.println(allBeforeAc);
 				st = conn.createStatement();
 				rs = st.executeQuery(allBeforeAc);
 				int waCnt = 0;
@@ -56,7 +57,7 @@ public class MonitorModel
 				while (rs.next())
 				{
 					waCnt++;
-					lastWaTime = acTime = rs.getInt("contest_time");
+					lastWaTime = rs.getInt("contest_time");
 				}
 				rs.close();
 				st.close();
@@ -65,12 +66,28 @@ public class MonitorModel
 					res.wasSolved = true;
 					res.penaltyTime = acTime + waCnt * 20 * 1000 * 60; 
 					res.lastSubmitTime = acTime;
+					res.isPending = false;
 				}
 				else
 				{
 					res.wasSolved = false;
 					res.lastSubmitTime = lastWaTime;
 					res.penaltyTime = 0;
+					String pending = "SELECT id FROM `submissions` WHERE `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag <= 0 LIMIT 1";
+					System.out.println(pending);
+					st = conn.createStatement();
+					rs = st.executeQuery(pending);
+					if (rs.next())
+					{
+						System.out.println(rs.getString(1));
+						res.isPending = true;
+					}
+					else
+					{
+						res.isPending = false;
+					}
+					rs.close();
+					st.close();
 				}
 				res.wrongTryes = waCnt;
 			}
@@ -80,7 +97,7 @@ public class MonitorModel
 			}
 			
 		}
-		System.out.println("User: " + userID + ", Problem: " + problemID + ": " + res.toString());
+		//System.out.println("User: " + userID + ", Problem: " + problemID + ": " + res.toString());
 		return res;
 	}
 	

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import djudge.acmcontester.JMonitorPanel;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 
@@ -72,11 +73,17 @@ public class Client extends JFrame
 		setTitle("DJudge - AcmContester - Contestant's Client");
 		
 		jtpTabs = new JTabbedPane();
+		
 		jtpTabs.add("Submit", new JSubmitPanel(server, authentificationDataProvider));
+		
 		jtpTabs.add("Runs", new JRunsPanel());
-		jtpTabs.add("Monitor", new JNotImplementedPanel());
+		
+		jtpTabs.add("Monitor", new JMonitorPanel(server, authentificationDataProvider));
+		
 		jtpTabs.add("Events", new JNotImplementedPanel());
+		
 		jtpTabs.add("Clars", new JNotImplementedPanel());
+		
 		jtpTabs.add("Settings", new JNotImplementedPanel());
 
 		jspStatus = new JStatusPanel();

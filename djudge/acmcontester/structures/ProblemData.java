@@ -20,12 +20,13 @@ public class ProblemData extends HashMapSerializable
 		fromHashMap(map);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void fromHashMap(HashMap<String, String> map)
+	public void fromHashMap(HashMap map)
 	{
-		id = map.get("id");
-		sid = map.get("sid");
-		name = map.get("name");
+		id = (String) map.get("id");
+		sid = (String) map.get("sid");
+		name = (String) map.get("name");
 	}
 
 	@Override

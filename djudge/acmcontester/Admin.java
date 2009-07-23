@@ -49,13 +49,13 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
 		
-		jtpTabs.add("Users", usersPanel = new JTablePanel(core.getUsersModel()));
+		jtpTabs.add("Users", usersPanel = new JTablePanel(ContestCore.getUsersModel()));
 		
-		jtpTabs.add("Problems", problemsPanel = new JTablePanel(core.getProblemsModel()));
+		jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
 		
-		jtpTabs.add("Languages", languagesPanel = new JTablePanel(core.getLanguagesModel()));
+		jtpTabs.add("Languages", languagesPanel = new JTablePanel(ContestCore.getLanguagesModel()));
 		
-		jtpTabs.add("Runs", submissionsPanel = new JTablePanel(core.getSubmissionsDataModel()));
+		jtpTabs.add("Runs", submissionsPanel = new JTablePanel(ContestCore.getSubmissionsDataModel()));
 		
 		jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverInterface, this));
 		

@@ -1,6 +1,8 @@
 package djudge.acmcontester;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -10,10 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.MonitorData;
+import djudge.acmcontester.structures.ProblemData;
+import djudge.acmcontester.structures.UserProblemStatus;
+import djudge.common.HashMapSerializer;
 
 public class JMonitorPanel extends JPanel implements ActionListener
 {
@@ -27,16 +34,35 @@ public class JMonitorPanel extends JPanel implements ActionListener
 	JButton jbtnRefresh;
 
 	MonitorData data = new MonitorData();
+	
+	Vector<ProblemData> problems;
 
 	AcmContesterXmlRpcClientInterface serverInterface;
 	
-	AuthentificationDataProvider authProvider;	
+	AuthentificationDataProvider authProvider;
 	
 	class MonitorDataModel extends AbstractTableModel
 	{
-
 		private static final long serialVersionUID = 1L;
 
+		@Override
+		public String getColumnName(int colNum)
+		{
+			if (colNum == 0)
+			{
+				return "User";
+			}
+			else if (colNum == 1)
+			{
+				return "Solved";
+			}
+			else if (colNum == 2)
+			{
+				return "Time";
+			}
+			return problems.get(colNum-3).sid; 
+		}
+		
 		@Override
 		public int getColumnCount()
 		{
@@ -75,6 +101,43 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		}
 	}
 
+	class ProblemCellRenderer extends DefaultTableCellRenderer
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column)
+		{
+			UserProblemStatus data = (UserProblemStatus) value;
+			if (data.wasSolved)
+			{
+				setBackground(Color.GREEN);
+			}
+			else if (data.isPending)
+			{
+				setBackground(Color.YELLOW);
+			}
+			else if (data.wrongTryes > 0)
+			{
+				setBackground(Color.RED);
+			}
+			else
+			{
+				setBackground(Color.WHITE);
+			}
+			setText(value.toString());
+			return this;
+		}
+
+		public void setValue(Object value)
+		{
+			setText(value.toString());
+		}
+	}
+
+	
+	
 	public JMonitorPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
 		this.serverInterface = serverInterface;
@@ -85,10 +148,20 @@ public class JMonitorPanel extends JPanel implements ActionListener
 
 	private void setupGUI()
 	{
-		data = ContestCore.getMonitor("", "");
+		problems = HashMapSerializer.deserializeFromHashMapArray(
+				serverInterface.getProblems(authProvider.getUsername(),
+						authProvider.getPassword()), ProblemData.class);
+		data = new MonitorData(serverInterface.getMonitor(authProvider.getUsername(), authProvider.getPassword()));
+		
 		jtMonitor = new JTable(new MonitorDataModel());
 		jtMonitor.setRowHeight(25);
 		jtMonitor.setAutoCreateRowSorter(true);
+		
+		TableColumnModel cm = jtMonitor.getColumnModel();
+		for (int i = 3; i < jtMonitor.getColumnCount(); i++)
+		{
+			cm.getColumn(i).setCellRenderer(new ProblemCellRenderer());
+		}
 		
 		jbtnRefresh = new JButton("Update");
 		jbtnRefresh.addActionListener(this);
@@ -115,7 +188,8 @@ public class JMonitorPanel extends JPanel implements ActionListener
 
 	private void doRefreshAction()
 	{
-		MonitorData data = serverInterface.getMonitor(authProvider.getUsername(), authProvider.getPassword());
+		MonitorData data = new MonitorData(serverInterface.getMonitor(
+				authProvider.getUsername(), authProvider.getPassword()));
 		setData(data);
 	}
 
@@ -127,7 +201,6 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		{
 			doRefreshAction();
 		}
-		
 	}
 	
 	public static void main(String[] args)

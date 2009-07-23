@@ -80,7 +80,7 @@ public class ContestCore
 	public static boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
 	{
 		String userID = usersModel.getUserID(username, password);
-		if (!contest.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(problemID))
+		if (!contest.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(languageID))
 		{
 			return false;
 		}

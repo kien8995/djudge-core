@@ -15,6 +15,8 @@ public class UserProblemStatus extends HashMapSerializable
 	
 	public long penaltyTime;
 	
+	public boolean isPending;
+	
 	public String toString()
 	{
 		String res = "";
@@ -23,13 +25,13 @@ public class UserProblemStatus extends HashMapSerializable
 			res += "+";
 			if (wrongTryes > 0)
 				res += "" + wrongTryes;
-			res += " " + penaltyTime / 1000 / 60;
+			res += " [" + (lastSubmitTime / 60000) + "]";  
 		}
 		else if (wrongTryes > 0)
 		{
 			res += "-";
 			res += "" + wrongTryes + "";
-			res += " " + penaltyTime / 1000 / 60;			
+			res += " [" + (lastSubmitTime / 60000) + "]";
 		}
 		return res;
 	}
@@ -38,11 +40,25 @@ public class UserProblemStatus extends HashMapSerializable
 	{
 		new Admin();
 	}
-
-	@Override
-	public void fromHashMap(HashMap<String, String> map)
+	
+	public UserProblemStatus()
 	{
+		// TODO Auto-generated constructor stub
+	}
+
+	@SuppressWarnings("unchecked")
+	public UserProblemStatus(HashMap map)
+	{
+		fromHashMap(map);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void fromHashMap(HashMap map0)
+	{
+		HashMap<String, String> map = (HashMap<String, String>) map0;
 		wasSolved = Boolean.parseBoolean(map.get("solved"));
+		isPending = Boolean.parseBoolean(map.get("pending"));
 		wrongTryes = Integer.parseInt(map.get("wrong-count"));
 		lastSubmitTime = Long.parseLong(map.get("last-time"));
 		penaltyTime = Long.parseLong(map.get("penalty"));
@@ -53,6 +69,7 @@ public class UserProblemStatus extends HashMapSerializable
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("solved", "" + wasSolved);
+		map.put("pending", "" + isPending);
 		map.put("wrong-count", "" + wrongTryes);
 		map.put("last-time", "" + lastSubmitTime);
 		map.put("penalty", "" + penaltyTime);

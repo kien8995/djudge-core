@@ -71,9 +71,11 @@ public class SubmissionData extends HashMapSerializable
 		fromHashMap(map);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void fromHashMap(HashMap<String, String> map)
+	public void fromHashMap(HashMap map0)
 	{
+		HashMap<String, String> map = (HashMap<String, String>) map0;
 		id = map.get("id");
 		userID = map.get("user-id");
 		problemID = map.get("problem-id");
