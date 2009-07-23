@@ -22,23 +22,25 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 
 	public final static DBField[] columns = {
 		new DBField("id", "#"),
-		new DBField("user_id", "User ID", CellDefault.class, -1),
-		new DBField("problem_id", "Problem ID", CellDefault.class, -1),
-		new DBField("language_id", "Language ID", CellDefault.class),
-		new DBField("contest_time", "Contest Time", CellDefault.class),
-		new DBField("real_time", "Real Time", CellDefault.class),
-		new DBField("judgement", "judgement", CellDefault.class),
-		new DBField("max_time", "judgement", CellDefault.class),
-		new DBField("max_memory", "judgement", CellDefault.class),
-		new DBField("max_output", "judgement", CellDefault.class),
-		new DBField("source_code", "Source", CellDefault.class),
-		new DBField("failed_test", "Failed", CellDefault.class),
-		new DBField("score", "Failed", CellDefault.class),
-		new DBField("judged", "Failed", CellDefault.class),
-		new DBField("active", "Failed", CellDefault.class),
-		new DBField("djudge_flag", "DJudge", CellDefault.class),
-		new DBField("xml", "XML", CellDefault.class),
+		new DBField("user_id", "User ID", String.class, -1),
+		new DBField("problem_id", "Problem ID", String.class, -1),
+		new DBField("language_id", "Language ID", String.class),
+		new DBField("contest_time", "Contest Time", String.class),
+		new DBField("real_time", "Real Time", String.class),
+		new DBField("judgement", "judgement", String.class),
+		new DBField("max_time", "judgement", String.class),
+		new DBField("max_memory", "judgement", String.class),
+		new DBField("max_output", "judgement", String.class),
+		new DBField("source_code", "Source", String.class),
+		new DBField("failed_test", "Failed", String.class),
+		new DBField("score", "Failed", String.class),
+		new DBField("judged", "Failed", String.class),
+		new DBField("active", "Failed", String.class),
+		new DBField("djudge_flag", "DJudge", String.class),
+		new DBField("xml", "XML", String.class),
 	};
+	
+	public final static int djudgeFlagFieldIndex = 15;
 	
 	@Override
 	protected DBField[] getTableFields()

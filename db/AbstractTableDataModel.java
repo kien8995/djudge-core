@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 public abstract class AbstractTableDataModel extends AbstractTableModel
@@ -18,12 +17,17 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 	{
 		columns = getTableFields();
 		tableName = getTableName();
-		fillSqlQuery = "SELECT * FROM `" + tableName + "`";
+		fillSqlQuery = getFillStatement();
+	}
+	
+	protected String getFillStatement()
+	{
+		return "SELECT * FROM `" + tableName + "`";
 	}
 	
 	public void setWhere(String where)
 	{
-		fillSqlQuery = "SELECT * FROM `" + tableName + "` WHERE "  + where;
+		fillSqlQuery = getFillStatement() + " WHERE "  + where;
 	}
 	
 	protected Vector<DBRowAbstract> rows = new Vector<DBRowAbstract>();
@@ -72,7 +76,7 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		try
 		{
 			Statement stmt = Settings.getConnection().createStatement();
-			log(query);
+			//log(query);
 			ResultSet rs = stmt.executeQuery(query);
 			rows = getRows(rs);
 			stmt.close();
@@ -185,12 +189,6 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		row.save();
 	}
 	
-	@Override
-	public void addTableModelListener(TableModelListener arg0) {}
-
-	@Override
-	public void removeTableModelListener(TableModelListener arg0) {}
-
 	public boolean isValidID(String id)
 	{
 		for (int i = 0; i < rows.size(); i++)
@@ -208,5 +206,12 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		DBRowAbstract row = rows.get(rowIndex);
 		row.data = data;
 		row.save();
+	}
+
+	public void deleteRow(int iRow)
+	{
+		DBRowAbstract row = rows.get(iRow);
+		row.delete(this);
+		fill();
 	}
 }

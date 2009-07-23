@@ -38,4 +38,10 @@ public class ProblemData extends HashMapSerializable
 		return res;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return sid + ": " + name;
+	}
+	
 }

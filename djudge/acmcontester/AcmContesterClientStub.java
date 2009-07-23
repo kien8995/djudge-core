@@ -62,4 +62,28 @@ public class AcmContesterClientStub extends HashMapSerializer implements AcmCont
 		return ContestCore.getVersion();
 	}
 
+	@Override
+	public String echo(String what)
+	{
+		return what;
+	}
+
+	@Override
+	public String getContestStatus(String username, String password)
+	{
+		return ContestCore.getContestStatus(username, password).toString();
+	}
+
+	@Override
+	public long getContestTimeElapsed(String username, String password)
+	{
+		return ContestCore.getContestTimeElapsed(username, password);
+	}
+
+	@Override
+	public long getContestTimeLeft(String username, String password)
+	{
+		return ContestCore.getContestTimeLeft(username, password);
+	}
+
 }

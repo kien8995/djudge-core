@@ -1,6 +1,7 @@
 package djudge.acmcontester.client;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -45,7 +46,9 @@ public class AcmContesterClientXmlRpcConnector extends HashMapSerializer impleme
 		Object result = null;
 		try
 		{
+			System.out.println("XML-RPC. Calling " + methodName + " with params " + Arrays.toString(params));
 			result = client.execute(methodName, params);
+			System.out.println("Result: " + result.toString());
 		}
 		catch (Exception e)
 		{
@@ -120,6 +123,30 @@ public class AcmContesterClientXmlRpcConnector extends HashMapSerializer impleme
 	public static void main(String[] args)
 	{
 		new Client();
+	}
+
+	@Override
+	public String echo(String what)
+	{
+		return (String) callRemoteMethod("AcmContester.echo", new Object[] {what});
+	}
+
+	@Override
+	public String getContestStatus(String username, String password)
+	{
+		return (String) callRemoteMethod("AcmContester.getContestStatus", new Object[] {username, password});
+	}
+
+	@Override
+	public long getContestTimeElapsed(String username, String password)
+	{
+		return (Long) callRemoteMethod("AcmContester.getContestTimeElapsed", new Object[] {username, password});
+	}
+
+	@Override
+	public long getContestTimeLeft(String username, String password)
+	{
+		return (Long) callRemoteMethod("AcmContester.getContestTimeLeft", new Object[] {username, password});
 	}
 
 }

@@ -14,15 +14,18 @@ import db.SubmissionsDataModel;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.dservice.DServiceTaskResult;
 
-public class DServiceInterface extends Thread
+public class DServiceConnector extends Thread
 {
 	XmlRpcClient client;
+	
+	int sleepTime = 1000;
 	
 	private void updateSubmissionResult(DServiceTaskResult tr)
 	{
 		SubmissionsDataModel sdm = new SubmissionsDataModel();
 		sdm.setWhere("`id` = " + tr.getClientData());
 		sdm.fill();
+		sdm.setValueAt(1, 0, SubmissionsDataModel.djudgeFlagFieldIndex);
 		SubmissionData sd = sdm.getRows().get(0);
 		sd.judgement = tr.getJudgement();
 		sd.xml = tr.getXml();
@@ -36,8 +39,8 @@ public class DServiceInterface extends Thread
     		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
     		config.setServerURL(new URL("http://127.0.0.1:8001/xmlrpc"));
     		config.setEnabledForExtensions(true);
-    		config.setConnectionTimeout(5 * 1000);
-    		config.setReplyTimeout(5 * 1000);
+    		config.setConnectionTimeout(1000);
+    		config.setReplyTimeout(1000);
     
     		client = new XmlRpcClient();
     
@@ -45,7 +48,7 @@ public class DServiceInterface extends Thread
     		
     		client.setConfig(config);
     		
-    		System.out.println("DService client started");
+    		System.out.println("AcmContester.DService Connector started");
 		}
 		catch (Exception ex)
 		{
@@ -68,8 +71,8 @@ public class DServiceInterface extends Thread
     			
     			//FIXME
     			t.add("NEERC-1998"); t.add("A");
-    			
     			t.add("GCC342");
+    			
     			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
     			t.add(sd.id);
     			try
@@ -79,13 +82,17 @@ public class DServiceInterface extends Thread
     				if (result > 0)
     				{
     					//FIXME: Hardcode (#15)
-    					sdm.setValueAt(-1, i, 15);
+    					sdm.setValueAt(-1, i, SubmissionsDataModel.djudgeFlagFieldIndex);
     				}
     			}
     			catch (Exception ex)
     			{
     				ex.printStackTrace();
     			}
+			}
+			if (vsd.size() > 0)
+			{
+				ContestCore.getSubmissionsDataModel().fill();
 			}
 			
 			/* Fetching results from judge */
@@ -103,11 +110,14 @@ public class DServiceInterface extends Thread
 						DServiceTaskResult tr = new DServiceTaskResult(map);
 						updateSubmissionResult(tr);
 					}
+					ContestCore.getSubmissionsDataModel().fill();
 				}
+				sleepTime = 1000;
 			}
 			catch (XmlRpcException ex)
 			{
-				System.out.println("Failed connect to DService");
+				System.out.println("Failed to connect to DService");
+				sleepTime = 10000;
 			}
 			catch (Exception ex)
 			{
@@ -115,7 +125,7 @@ public class DServiceInterface extends Thread
 			}
 			try
 			{
-				sleep(1000);
+				sleep(sleepTime);
 			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
@@ -125,7 +135,7 @@ public class DServiceInterface extends Thread
 	
 	public static void main(String[] args)
 	{
-		new DServiceInterface().start();
+		new DServiceConnector().start();
 	}
 
 }

@@ -20,11 +20,11 @@ public class LanguagesDataModel extends AbstractTableDataModel
 
 	public final static DBField[] columns = {
 		new DBField("id", "#"),
-		new DBField("sid", "Скорочена назва", CellDefault.class, "-"),
-		new DBField("short_name", "Повна назва", CellDefault.class, "-"),
-		new DBField("full_name", "Повна назва", CellDefault.class, "-"),
-		new DBField("compilation_command", "Повна назва", CellDefault.class, "-"),
-		new DBField("djudge_id", "Повна назва", CellDefault.class, "-"),
+		new DBField("sid", "ID", String.class, "-"),
+		new DBField("short_name", "Short name", String.class, "-"),
+		new DBField("full_name", "Full name", String.class, "-"),
+		new DBField("compilation_command", "Compilation command", String.class, "-"),
+		new DBField("djudge_id", "DJudgeID", String.class, "-"),
 	};
 	
 	@Override

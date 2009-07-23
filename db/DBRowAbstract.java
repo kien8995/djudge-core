@@ -155,7 +155,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		try
 		{
 			Connection con = Settings.getConnection();
-			Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			Statement stmt = con.createStatement();
 			String query = "DELETE FROM `" + getTableName() + "` WHERE id = " + this.data[0];
 			log(query);
 			stmt.executeUpdate(query);
