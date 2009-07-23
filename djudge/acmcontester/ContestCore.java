@@ -4,10 +4,13 @@ import org.apache.commons.codec.binary.Base64;
 
 import db.DBRowAbstract;
 import db.LanguagesDataModel;
+import db.MonitorModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
+import djudge.acmcontester.structures.ContestStatusEnum;
 import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 
@@ -21,9 +24,11 @@ public class ContestCore
 	
 	private static SubmissionsDataModel submissionsModel;
 	
+	private static MonitorModel monitorModel;
+	
 	private static ContestSettings contest = new ContestSettings();
 	
-	private static DServiceInterface djudgeInterface;
+	private static DServiceConnector djudgeInterface;
 	
 	static
 	{
@@ -39,8 +44,10 @@ public class ContestCore
 		submissionsModel = new SubmissionsDataModel();
 		submissionsModel.fill();
 		
-		djudgeInterface = new DServiceInterface();
+		djudgeInterface = new DServiceConnector();
 		djudgeInterface.start();
+		
+		monitorModel = new MonitorModel();
 		
 		new AcmContesterXmlRpcServer().start();
 	}
@@ -131,6 +138,26 @@ public class ContestCore
 
 	public static String getVersion()
 	{
-		return "Version 1E-2";
+		return "v 0.1";
+	}
+
+	public static ContestStatusEnum getContestStatus(String username, String password)
+	{
+		return ContestStatusEnum.Finished;
+	}
+
+	public static long getContestTimeElapsed(String username, String password)
+	{
+		return 20 * 1000 * 1000;
+	}
+
+	public static long getContestTimeLeft(String username, String password)
+	{
+		return 20 * 1000 * 1000;
+	}
+	
+	public static MonitorData getMonitor(String username, String password)
+	{
+		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
 	}
 }

@@ -14,10 +14,17 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.ProblemData;
+import djudge.common.HashMapSerializer;
 
 import utils.FileWorks;
 
@@ -41,19 +48,31 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	
 	JTextArea jtaSource;
 	
-	public JSubmitPanel()
+	JButton jbtnSubmit;
+	
+	AcmContesterXmlRpcClientInterface serverInterface;
+	
+	AuthentificationDataProvider authProvider;
+	
+	public JSubmitPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
+		this.serverInterface = serverInterface;
+		this.authProvider = authProvider;
 		setupGUI();
 		setVisible(true);
 	}
 	
 	private void setupGUI()
 	{
-		jcbLanguages = new JComboBox(/*new Object[] {"<No languages defined>"}*/Client.server.getLanguages("", ""));
+		jcbLanguages = new JComboBox(HashMapSerializer
+				.deserializeFromHashMapArray(serverInterface.getLanguages(
+						authProvider.getUsername(), authProvider.getPassword()), LanguageData.class));
 		jcbLanguages.setPreferredSize(new Dimension(30, 30));
 		glblLanguage = new JLabel("Language");
 		
-		jcbProblems = new JComboBox(/*new Object[] {"<No problems defined>"}*/Client.server.getProblems("", ""));
+		jcbProblems = new JComboBox(HashMapSerializer
+				.deserializeFromHashMapArray(serverInterface.getProblems(
+						authProvider.getUsername(), authProvider.getPassword()), ProblemData.class));
 		jcbProblems.setPreferredSize(new Dimension(30, 30));
 		glblProblem = new JLabel("Problem");
 		
@@ -71,6 +90,9 @@ public class JSubmitPanel extends JPanel implements ActionListener
 		JScrollPane tScrollPane = new JScrollPane(jtaSource);
 		tScrollPane.setBorder(BorderFactory.createTitledBorder("Load or Paste Your Source"));
 		
+		jbtnSubmit = new JButton("Submit");
+		jbtnSubmit.addActionListener(this);
+		
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -80,7 +102,7 @@ public class JSubmitPanel extends JPanel implements ActionListener
 		c.gridwidth = 7;
 		c.gridheight = 1;
 		c.weightx = 1;
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(10, 10, 5, 5);
 		
 		add(jcbProblems, c);
 		
@@ -119,11 +141,20 @@ public class JSubmitPanel extends JPanel implements ActionListener
 		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 10;
-		c.gridheight = 5;
+		c.gridheight = 7;
 		c.weightx = 2;
 		c.weighty = 1;
 		add(tScrollPane, c);
-		
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 9;
+		c.gridy = 10;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.weightx = 0;
+		c.weighty = 0;
+		add(jbtnSubmit, c);
 	}
 	
 	private void doChooseFile()
@@ -138,15 +169,40 @@ public class JSubmitPanel extends JPanel implements ActionListener
 			jtaSource.setText(content);
 		}
 	}
+	
+	private void doSubmitSolution()
+	{
+		LanguageData ld = (LanguageData) jcbLanguages.getSelectedItem();
+		ProblemData pd = (ProblemData) jcbProblems.getSelectedItem();
+		if (JOptionPane.showConfirmDialog(this,
+				"Do You Really Want to Submit This Solution for\nProblem "
+						+ jcbProblems.getSelectedItem() + "\nin Language"
+						+ jcbLanguages.getSelectedItem() + "?", "Confirm",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION)
+		{
+			if (serverInterface.submitSolution(authProvider.getUsername(), authProvider.getPassword(), pd.id, ld.id, jtaSource.getText()))
+			{
+				JOptionPane.showMessageDialog(this, "Submitted Ok");
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "Error occured");
+			}
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
-		if (arg0.getSource().equals(jbtnChooseFile))
+		Object src = arg0.getSource(); 
+		if (src.equals(jbtnChooseFile))
 		{
 			doChooseFile();
 		}
-		
+		else if (src.equals(jbtnSubmit))
+		{
+			doSubmitSolution();
+		}
 	}
 	
 	public static void main(String[] args)

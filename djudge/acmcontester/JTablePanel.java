@@ -1,7 +1,6 @@
 package djudge.acmcontester;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellEditor;
 
 import db.AbstractTableDataModel;
 
@@ -22,23 +22,41 @@ public class JTablePanel extends JPanel implements ActionListener
 	
 	protected AbstractTableDataModel jtttTableModel;
 	
+	protected JPanel jpButtons;
+	
 	protected JButton jbtnAddRecord;
+	
+	protected JButton jbtnDeleteRecord;
+	
+	protected JButton jbtnRefresh;
 	
 	public JTablePanel(AbstractTableDataModel atdm)
 	{
 		jtttTableModel = atdm;
-		setLayout(new BorderLayout());
+		
 		jbtnAddRecord = new JButton("Add");
-		jbtnAddRecord.setPreferredSize(new Dimension(120, 25));
 		jbtnAddRecord.addActionListener(this);
-		add(jbtnAddRecord, BorderLayout.SOUTH);
+
+		jbtnDeleteRecord = new JButton("Delte");
+		jbtnDeleteRecord.addActionListener(this);
+
+		jbtnRefresh = new JButton("Update");
+		jbtnRefresh.addActionListener(this);
 		
 		jtTable = new JTable(atdm);
 		jtTable.setRowHeight(20);
 		jtTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		jpButtons = new JPanel();
+		jpButtons.add(jbtnAddRecord);
+		jpButtons.add(jbtnDeleteRecord);
+		jpButtons.add(jbtnRefresh);
+		
+		setLayout(new BorderLayout());
+		add(jpButtons, BorderLayout.SOUTH);
 		add(new JScrollPane(jtTable), BorderLayout.CENTER);
 		
-		setVisible(true);
+		//setVisible(true);
 	}
 	
 	@Override
@@ -49,6 +67,20 @@ public class JTablePanel extends JPanel implements ActionListener
 		{
 			jtttTableModel.insertRow();
 			jtTable.updateUI();
+		}
+		else if (source.equals(jbtnRefresh))
+		{
+			jtttTableModel.fill();
+			jtTable.updateUI();
+		}
+		else if (source.equals(jbtnDeleteRecord))
+		{
+			int iRow = jtTable.getSelectedRow();
+			if (iRow >= 0)
+			{
+				jtttTableModel.deleteRow(iRow);
+				jtTable.updateUI();
+			}
 		}
 	}
 	

@@ -15,7 +15,8 @@ public class DBField
 	/*
 	 * Тип комірки таблиці JTable
 	 */
-	public Class<?extends CellDefault> type;
+	public Class<?> type;
+//	public Class<?extends CellDefault> type;
 	
 	/*
 	 * Значення за замовчуванням
@@ -27,7 +28,7 @@ public class DBField
 	 */
 	public boolean flagUpdate = true;
 	
-	public DBField(String key, String caption, Class<?extends CellDefault> type, Object defaultValue, boolean flagUpdate)
+	public DBField(String key, String caption, Class<?> type, Object defaultValue, boolean flagUpdate)
 	{
 		this.caption = caption;
 		this.key = key;
@@ -36,7 +37,7 @@ public class DBField
 		this.flagUpdate = flagUpdate;
 	}
 
-	public DBField(String key, String caption, Class<?extends CellDefault> type, Object defaultValue)
+	public DBField(String key, String caption, Class<?> type, Object defaultValue)
 	{
 		this.caption = caption;
 		this.key = key;
@@ -44,7 +45,7 @@ public class DBField
 		this.defaultValue = defaultValue;
 	}
 
-	public DBField(String key, String caption, Class<?extends CellDefault> type)
+	public DBField(String key, String caption, Class<?> type)
 	{
 		this.caption = caption;
 		this.key = key;
@@ -56,7 +57,7 @@ public class DBField
 	{
 		this.caption = caption;
 		this.key = key;
-		this.type = CellDefault.class;
+		this.type = String.class;
 		this.defaultValue = null;
 		this.flagUpdate = false;
 	}

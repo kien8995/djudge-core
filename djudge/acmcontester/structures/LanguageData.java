@@ -46,4 +46,10 @@ public class LanguageData extends HashMapSerializable
 		compilationCommand = map.get("compilation-command");
 		djudgeID = map.get("djudge-id");
 	}
+	
+	@Override
+	public String toString()
+	{
+		return sid + "(" + fullName +  ")";
+	}
 }

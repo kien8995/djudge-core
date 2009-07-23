@@ -20,8 +20,10 @@ public class ProblemsDataModel extends AbstractTableDataModel
 
 	public final static DBField[] columns = {
 		new DBField("id", "#"),
-		new DBField("sid", "Скорочена назва", CellDefault.class, "-"),
-		new DBField("name", "Повна назва", CellDefault.class, "-"),
+		new DBField("sid", "Скорочена назва", String.class, "-"),
+		new DBField("name", "Повна назва", String.class, "-"),
+		new DBField("djudge_problem", "Повна назва", String.class, "-"),
+		new DBField("djudge_contest", "Повна назва", String.class, "-"),
 	};
 	
 	@Override
@@ -71,7 +73,5 @@ public class ProblemsDataModel extends AbstractTableDataModel
 		}
 		return res;
 	}
-	
-	
 }
 
