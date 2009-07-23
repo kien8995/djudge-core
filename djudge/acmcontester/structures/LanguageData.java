@@ -1,7 +1,7 @@
 package djudge.acmcontester.structures;
 
-import java.util.HashMap;
 
+import java.util.HashMap;
 import djudge.common.HashMapSerializable;
 
 public class LanguageData extends HashMapSerializable
@@ -36,15 +36,16 @@ public class LanguageData extends HashMapSerializable
 		fromHashMap(map);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public void fromHashMap(HashMap<String, String> map)
+	public void fromHashMap(HashMap map)
 	{
-		id = map.get("id");
-		sid = map.get("sid");
-		fullName = map.get("full-name");
-		shortName = map.get("short-name");
-		compilationCommand = map.get("compilation-command");
-		djudgeID = map.get("djudge-id");
+		id = (String) map.get("id");
+		sid = (String) map.get("sid");
+		fullName = (String) map.get("full-name");
+		shortName = (String) map.get("short-name");
+		compilationCommand = (String) map.get("compilation-command");
+		djudgeID = (String) map.get("djudge-id");
 	}
 	
 	@Override

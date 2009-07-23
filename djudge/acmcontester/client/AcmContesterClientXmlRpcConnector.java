@@ -149,4 +149,11 @@ public class AcmContesterClientXmlRpcConnector extends HashMapSerializer impleme
 		return (Long) callRemoteMethod("AcmContester.getContestTimeLeft", new Object[] {username, password});
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap getMonitor(String username, String password)
+	{
+		return (HashMap) callRemoteMethod("AcmContester.getMonitor", new Object[] {username, password});
+	}
+
 }
