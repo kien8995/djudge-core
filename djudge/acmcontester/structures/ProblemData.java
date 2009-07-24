@@ -9,6 +9,8 @@ public class ProblemData extends HashMapSerializable
 	public String id;
 	public String sid;
 	public String name;
+	public String djudgeProblem;
+	public String djudgeContest;
 	
 	public ProblemData()
 	{

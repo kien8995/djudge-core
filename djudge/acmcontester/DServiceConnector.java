@@ -10,7 +10,11 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 
+import db.LanguagesDataModel;
+import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
+import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.dservice.DServiceTaskResult;
 
@@ -69,9 +73,20 @@ public class DServiceConnector extends Thread
     			Vector <Object> t = new Vector<Object>();
     			t.add("simpleacm");
     			
+    			ProblemsDataModel pdm = new ProblemsDataModel();
+    			pdm.setWhere(" `id` = " + sd.problemID);
+    			pdm.fill();
+    			ProblemData pd = pdm.getRows().get(0);
+    			
+    			LanguagesDataModel ldm = new LanguagesDataModel();
+    			ldm.setWhere(" `id` = " + sd.languageID);
+    			ldm.fill();
+    			LanguageData ld = ldm.getRows().get(0);
+    			
     			//FIXME
-    			t.add("NEERC-1998"); t.add("A");
-    			t.add("GCC342");
+    			t.add(pd.djudgeContest);
+    			t.add(pd.djudgeProblem);
+    			t.add(ld.djudgeID);
     			
     			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
     			t.add(sd.id);
@@ -84,6 +99,11 @@ public class DServiceConnector extends Thread
     					//FIXME: Hardcode (#15)
     					sdm.setValueAt(-1, i, SubmissionsDataModel.djudgeFlagFieldIndex);
     				}
+    			}
+    			catch (XmlRpcException ex)
+    			{
+    				System.out.println("Failed to connect to DService");
+    				sleepTime = 10000;
     			}
     			catch (Exception ex)
     			{

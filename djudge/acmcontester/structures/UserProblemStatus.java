@@ -25,12 +25,12 @@ public class UserProblemStatus extends HashMapSerializable
 			res += "+";
 			if (wrongTryes > 0)
 				res += "" + wrongTryes;
-			res += " [" + (lastSubmitTime / 60000) + "]";  
+			res += "\n [" + (lastSubmitTime / 60000) + "]";  
 		}
 		else if (wrongTryes > 0)
 		{
 			res += "-";
-			res += "" + wrongTryes + "";
+			res += "" + wrongTryes + "\n";
 			res += " [" + (lastSubmitTime / 60000) + "]";
 		}
 		return res;

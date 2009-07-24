@@ -48,7 +48,7 @@ public class MonitorModel
 				}
 				rs.close();
 				st.close();
-				String allBeforeAc = "SELECT * FROM `submissions` WHERE `id` < '" + firstAcId + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' ORDER BY id ASC";
+				String allBeforeAc = "SELECT * FROM `submissions` WHERE `id` < '" + firstAcId + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' AND contest_time <= " + contestTime  + " AND judgement != 'CE' ORDER BY id ASC";
 				//System.out.println(allBeforeAc);
 				st = conn.createStatement();
 				rs = st.executeQuery(allBeforeAc);
@@ -73,8 +73,8 @@ public class MonitorModel
 					res.wasSolved = false;
 					res.lastSubmitTime = lastWaTime;
 					res.penaltyTime = 0;
-					String pending = "SELECT id FROM `submissions` WHERE `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag <= 0 LIMIT 1";
-					System.out.println(pending);
+					String pending = "SELECT id FROM `submissions` WHERE `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag <= 0 AND contest_time <= " + contestTime  + " LIMIT 1";
+					//System.out.println(pending);
 					st = conn.createStatement();
 					rs = st.executeQuery(pending);
 					if (rs.next())

@@ -8,17 +8,26 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+
 public class JStatusPanel extends JPanel implements ActionListener
 {
 
 	private static final long serialVersionUID = 1L;
 	
-	public JLabel jlTime;
-	public JLabel jlStatus;
-	public JButton jbExit;
+	private JLabel jlTime;
+	private JLabel jlStatus;
+	private JButton jbExit;
 	
-	public JStatusPanel()
+	AcmContesterXmlRpcClientInterface serverInterface;
+	AuthentificationDataProvider authProvider;
+	
+	public JStatusPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
+		this.serverInterface = serverInterface;
+		this.authProvider = authProvider;
+		
 		jlTime = new JLabel("Time Left");
 		jlStatus = new JLabel("Contest Status");
 		jbExit = new JButton("Exit");
@@ -27,6 +36,14 @@ public class JStatusPanel extends JPanel implements ActionListener
 		add(jlStatus);
 		add(jlTime);
 		add(jbExit);		
+	}
+	
+	public void updateData()
+	{
+		String status = serverInterface.getContestStatus(authProvider.getUsername(), authProvider.getPassword());
+		jlStatus.setText(status);
+		long timeLeft = serverInterface.getContestTimeLeft(authProvider.getUsername(), authProvider.getPassword());
+		jlTime.setText("" + (timeLeft / (60 * 1000)));
 	}
 
 	@Override

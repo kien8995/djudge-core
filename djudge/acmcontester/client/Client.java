@@ -49,10 +49,7 @@ public class Client extends JFrame
 		{
 			while (true)
 			{
-				String status = Client.server.getContestStatus(Client.username, Client.password);
-				jspStatus.jlStatus.setText(status);
-				long timeLeft = Client.server.getContestTimeLeft(Client.username, Client.password);
-				jspStatus.jlTime.setText("" + (timeLeft / (60 * 1000)));
+				jspStatus.updateData();
 				try
 				{
 					sleep(5000);
@@ -86,7 +83,7 @@ public class Client extends JFrame
 		
 		jtpTabs.add("Settings", new JNotImplementedPanel());
 
-		jspStatus = new JStatusPanel();
+		jspStatus = new JStatusPanel(server, authentificationDataProvider);
 		
 		setLayout(new BorderLayout());
 		add(jtpTabs, BorderLayout.CENTER);
