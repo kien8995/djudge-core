@@ -9,6 +9,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
+import djudge.acmcontester.client.JContestSettingsPanel;
+import djudge.acmcontester.client.JStatusPanel;
 import djudge.acmcontester.client.JSubmitPanel;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
@@ -33,6 +35,8 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 	
 	private JSubmitPanel submitPanel;
 	
+	private JStatusPanel statusPanel;
+	
 	private ContestCore core;
 	
 	private String username = "root";
@@ -41,6 +45,22 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 	
 	private AcmContesterXmlRpcClientInterface serverInterface = new AcmContesterClientStub();
 	
+	class WatchThread extends Thread
+	{
+		@Override
+		public void run()
+		{
+			while (true)
+			{
+				statusPanel.updateData();
+				try
+				{
+					sleep(1000);
+				} catch (InterruptedException e) {}
+			}
+		}
+	}
+	
 	private void setupGUI()
 	{
 		core = new ContestCore();
@@ -48,6 +68,8 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		setTitle("Contest Manager");
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
+		
+		jtpTabs.add("Start/Stop", new JContestSettingsPanel());
 		
 		jtpTabs.add("Users", usersPanel = new JTablePanel(ContestCore.getUsersModel()));
 		
@@ -62,6 +84,8 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverInterface, this));
 		
 		add(jtpTabs, BorderLayout.CENTER);
+		
+		add(statusPanel = new JStatusPanel(serverInterface, this), BorderLayout.NORTH);
 	}
 	
 	public Admin()
@@ -73,6 +97,8 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		setupGUI();
 		setData();
 		setVisible(true);
+		new WatchThread().start();
+		new AcmContesterXmlRpcServer().start();
 	}
 
 	private void setData()

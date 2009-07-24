@@ -161,7 +161,8 @@ public class FileWorks
 	    }
 	    catch(Exception e)
 	    {
-	    	System.out.println("Exception in FileWorks.saveToFile: " + e.getMessage());      
+	    	System.out.println("Exception in FileWorks.saveToFile: " + e.getMessage());
+	    	e.printStackTrace();
 	    }		
 	}
 	

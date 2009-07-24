@@ -7,10 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -130,13 +132,45 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			return this;
 		}
 
-		public void setValue(Object value)
+	/*	public void setValue(Object value)
 		{
 			setText(value.toString());
-		}
+		}*/
 	}
-
 	
+	class InfoCellRenderer extends DefaultTableCellRenderer
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column)
+		{
+			if (table.getModel().getValueAt(row, 0).toString().equals(authProvider.getUsername()))
+			{
+				setBackground(Color.CYAN);
+			}
+			else if (getBackground() == Color.WHITE || getBackground() == Color.GRAY)
+			{
+				setBackground(Color.LIGHT_GRAY);
+			}
+			else
+			{
+				setBackground(Color.GRAY);
+			}
+			if (column == 2)
+			{
+				value = ((Long) value) / 1000 / 60;
+			}
+			setText(value.toString());
+			return this;
+		}
+
+	/*	public void setValue(Object value)
+		{
+			setText(value.toString());
+		}*/
+	}
 	
 	public JMonitorPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
@@ -158,6 +192,9 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		jtMonitor.setAutoCreateRowSorter(true);
 		
 		TableColumnModel cm = jtMonitor.getColumnModel();
+		cm.getColumn(0).setCellRenderer(new InfoCellRenderer());
+		cm.getColumn(1).setCellRenderer(new InfoCellRenderer());
+		cm.getColumn(2).setCellRenderer(new InfoCellRenderer());
 		for (int i = 3; i < jtMonitor.getColumnCount(); i++)
 		{
 			cm.getColumn(i).setCellRenderer(new ProblemCellRenderer());

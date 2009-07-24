@@ -52,6 +52,8 @@ public class ProblemsDataModel extends AbstractTableDataModel
 		row.data[0] = ld.id;
 		row.data[1] = ld.sid;
 		row.data[2] = ld.name;
+		row.data[3] = ld.djudgeProblem;
+		row.data[4] = ld.djudgeContest;
 		return row;
 	}
 
@@ -61,6 +63,8 @@ public class ProblemsDataModel extends AbstractTableDataModel
 		ld.id = row.data[0].toString();
 		ld.sid = row.data[1].toString();
 		ld.name = row.data[2].toString();
+		ld.djudgeProblem = row.data[3].toString();
+		ld.djudgeContest = row.data[4].toString();
 		return ld;
 	}
 		

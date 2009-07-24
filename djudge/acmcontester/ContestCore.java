@@ -28,7 +28,7 @@ public class ContestCore
 	
 	private static ContestSettings contest = new ContestSettings();
 	
-	private static DServiceConnector djudgeInterface;
+	private static final DServiceConnector djudgeInterface;
 	
 	static
 	{
@@ -48,8 +48,6 @@ public class ContestCore
 		djudgeInterface.start();
 		
 		monitorModel = new MonitorModel();
-		
-		new AcmContesterXmlRpcServer().start();
 	}
 	
 	public static UsersDataModel getUsersModel()
@@ -85,7 +83,7 @@ public class ContestCore
 			return false;
 		}
 		SubmissionData sd = new SubmissionData();
-		sd.contestTime = contest.getContestTime();
+		sd.contestTime = (int) contest.getContestTime();
 		sd.languageID = languageID;
 		sd.problemID = problemID;
 		sd.sourceCode = new String(Base64.encodeBase64(courceCode.getBytes()));
@@ -143,21 +141,32 @@ public class ContestCore
 
 	public static ContestStatusEnum getContestStatus(String username, String password)
 	{
-		return ContestStatusEnum.Finished;
+		return contest.getContestStatus();
 	}
 
 	public static long getContestTimeElapsed(String username, String password)
 	{
-		return 20 * 1000 * 1000;
+		return contest.getContestTime();
 	}
 
 	public static long getContestTimeLeft(String username, String password)
 	{
-		return 20 * 1000 * 1000;
+		return contest.getContestTimeLeft();
 	}
 	
 	public static MonitorData getMonitor(String username, String password)
 	{
 		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
 	}
+	
+	public static void stopContest()
+	{
+		contest.stopContest();
+	}
+	
+	public static void startContest(long timeLeft)
+	{
+		contest.startContest(timeLeft);
+	}
+	
 }
