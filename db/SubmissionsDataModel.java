@@ -3,6 +3,9 @@ package db;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Element;
+
+import utils.XmlWorks;
 
 import djudge.acmcontester.structures.SubmissionData;
 
@@ -106,6 +109,9 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		sd.active = Integer.parseInt(row.data[14].toString());
 		sd.djudgeFlag = Integer.parseInt(row.data[15].toString());
 		sd.xml = new String(Base64.decodeBase64(row.data[16].toString().getBytes()));
+		String sx = row.data[16].toString();
+		Element elem = (Element) XmlWorks.getDocumentFromString(sx);
+		System.out.println(elem.getAttribute("max-time"));
 		return sd;
 	}
 		

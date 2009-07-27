@@ -10,8 +10,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumnModel;
 
 import db.AbstractTableDataModel;
+
+class JAdminSubmissionsPanel extends JTablePanel
+{
+	private static final long serialVersionUID = 1L;
+
+	public JAdminSubmissionsPanel(AbstractTableDataModel atdm)
+	{
+		super(atdm);
+		TableColumnModel tcm = jtTable.getColumnModel();
+		tcm.getColumn(6).setCellRenderer(new JudgementCellRenderer());
+		tcm.getColumn(4).setCellRenderer(new ContestTimeCellRenderer());
+	}
+}
 
 public class JTablePanel extends JPanel implements ActionListener
 {

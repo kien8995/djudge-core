@@ -33,6 +33,7 @@ public class DServiceConnector extends Thread
 		SubmissionData sd = sdm.getRows().get(0);
 		sd.judgement = tr.getJudgement();
 		sd.xml = tr.getXml();
+		//System.out.println(sd.xml);
 		sdm.setRowData(0, sdm.toRow(sd).data);
 	}
 	

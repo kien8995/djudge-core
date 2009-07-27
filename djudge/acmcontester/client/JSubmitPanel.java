@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import djudge.acmcontester.Admin;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.LanguageData;
@@ -110,15 +111,22 @@ public class JSubmitPanel extends JPanel implements ActionListener
 		add(jcbLanguages, c);
 
 		c.gridy = 2;
-		c.gridwidth = 5;
+		c.gridwidth = 3;
 		add(jtfFile, c);
+		
+		c.gridx = 6;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.weightx = 0;
+		add(jbtnChooseFile, c);
 		
 		c.gridx = 8;
 		c.gridy = 2;
 		c.gridwidth = 2;
 		c.gridheight = 1;
 		c.weightx = 0;
-		add(jbtnChooseFile, c);
+		add(jbtnSubmit, c);
 		
 
 		c.anchor = GridBagConstraints.WEST;
@@ -154,7 +162,7 @@ public class JSubmitPanel extends JPanel implements ActionListener
 		c.gridheight = 1;
 		c.weightx = 0;
 		c.weighty = 0;
-		add(jbtnSubmit, c);
+		//add(jbtnSubmit, c);
 	}
 	
 	private void doChooseFile()
@@ -207,7 +215,7 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Client();
+		new Admin();
 	}
 
 }

@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 
+import djudge.acmcontester.JudgementCellRenderer;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.common.HashMapSerializer;
 
@@ -63,7 +65,7 @@ public class JRunsPanel extends JPanel implements ActionListener
 			return String.class;
 		}
 	}
-
+	
 	public JRunsPanel()
 	{
 		setupGUI();
@@ -79,6 +81,9 @@ public class JRunsPanel extends JPanel implements ActionListener
 		jtRuns = new JTable(new TableRunsDataModel());
 		jtRuns.setAutoCreateRowSorter(true);
 		jtRuns.setRowHeight(20);
+		
+		TableColumnModel tcm = jtRuns.getColumnModel();
+		tcm.getColumn(4).setCellRenderer(new JudgementCellRenderer());
 		
 		jbtnRefresh = new JButton("Update");
 		jbtnRefresh.addActionListener(this);
