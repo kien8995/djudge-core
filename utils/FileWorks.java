@@ -3,6 +3,8 @@ package utils;
 import java.io.*;
 import java.util.ArrayList;
 
+import djudge.judge.dvalidator.RemoteFile;
+
 public class FileWorks
 {
 	public static boolean deleteFile(String filename)
@@ -83,9 +85,10 @@ public class FileWorks
 			File f1 = new File(srFile);
 			File f2 = new File(dtFile);
 			f2.getParentFile().mkdirs();
+			//f2.mkdirs();
 			InputStream in = new FileInputStream(f1);
 			OutputStream out = new FileOutputStream(f2);
-			byte[] buf = new byte[1024 * 1024];
+			byte[] buf = new byte[64 * 1024];
 			int len;
 			
 			while ((len = in.read(buf)) > 0)
@@ -129,7 +132,7 @@ public class FileWorks
 		try
 		{
 			File f = new File(file);
-			InputStream in = new FileInputStream(f);
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(f));
 			res = new byte[(int)f.length()];
 			in.read(res);
 			in.close();
@@ -159,6 +162,24 @@ public class FileWorks
 	    {
 			System.out.println(ex.getMessage() + " in the specified directory.");
 	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println("Exception in FileWorks.saveToFile: " + e.getMessage());
+	    	e.printStackTrace();
+	    }		
+	}
+	
+	public static void saveToFile(RemoteFile file, String filename)
+	{
+		if (file.fIsPresent)
+		{
+			saveToFile(file.filename, filename);
+			return;
+		}
+		try
+		{
+			CopyFile(filename, file.filename);
+		}
 	    catch(Exception e)
 	    {
 	    	System.out.println("Exception in FileWorks.saveToFile: " + e.getMessage());
