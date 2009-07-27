@@ -22,16 +22,18 @@ public class UserProblemStatus extends HashMapSerializable
 		String res = "";
 		if (wasSolved)
 		{
-			res += "+";
-			if (wrongTryes > 0)
-				res += "" + wrongTryes;
-			res += "\n [" + (lastSubmitTime / 60000) + "]";  
+			res = (wrongTryes + 1) + "/" + lastSubmitTime / 60000;
+//			res += "+";
+//			if (wrongTryes > 0)
+//				res += "" + wrongTryes;
+//			res += "\n [" + (lastSubmitTime / 60000) + "]";  
 		}
 		else if (wrongTryes > 0)
 		{
-			res += "-";
-			res += "" + wrongTryes + "\n";
-			res += " [" + (lastSubmitTime / 60000) + "]";
+			res = (wrongTryes) + "/--";
+//			res += "-";
+//			res += "" + wrongTryes + "\n";
+//			res += " [" + (lastSubmitTime / 60000) + "]";
 		}
 		return res;
 	}

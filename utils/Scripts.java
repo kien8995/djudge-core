@@ -21,6 +21,7 @@ import java.util.Calendar;
 
 
 import djudge.judge.ProblemDescription;
+import djudge.judge.SubmissionResult;
 import djudge.judge.common_data_structures.ExecutorLimits;
 
 
@@ -36,7 +37,7 @@ public class Scripts
 		generateProblemReport(contestId, problemId, new ExecutorLimits());
 	}
 	
-	public static void generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
+	public static DirectoryResult generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
 	{
 		try
 		{
@@ -48,11 +49,13 @@ public class Scripts
     		String html = "<h1>Problem " + problemId + " (" + contestId + ") [ " + Calendar.getInstance().getTime() +  "]</h1>"
     						+ HtmlWorks.directoryResultToHtml(res);
     		FileWorks.saveToFile(html, problemsRoot + contestId + "\\" + problemId +"\\report.html");
+    		return res;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	public static void generateContestReport(String contestId)
@@ -69,8 +72,34 @@ public class Scripts
 		{
 			if (!(new File(contestPath + c).exists())) continue;
 			s.append("<h4><a href='./"+c+"/report.html'>Problem " + c + "<a></h4>");
+			s.append("<table border=1>\n");
+			s.append("<tr bgcolor=" + HtmlWorks.getHeaderColor() + ">");
+				s.append("<th>#</th>");
+				s.append("<th>File</th>");
+				s.append("<th>Judgement</th>");
+				s.append("<th>Score</th>");
+				s.append("<th>MaxTime</th>");
+				s.append("<th>MaxMemory</th>");
+				s.append("<th>TotalTime</th>");
+			s.append("</tr>\n");					
 			String str = "" + c;
-			generateProblemReport(contestId, str, limits);
+			DirectoryResult dr = generateProblemReport(contestId, str, limits);
+			for (int i = 0; i < dr.res.size(); i++)
+			{
+				//String str = HtmlWorks.directoryResultToHtml(dr.res.get(i));
+				SubmissionResult t = dr.res.get(i);
+				String color = HtmlWorks.getJudgementColor(t.getJudgement());
+				s.append("<tr bgcolor=" + color +">");
+					s.append("<td>" + (i+1) + "</td>");
+					s.append("<td><a href=#" + (i+1) + ">" + t.comment + "</a></td>");
+					s.append("<td>" + t.getJudgement() + "</td>");
+					s.append("<td>" + t.getScore() + "</td>");
+					s.append("<td>" + HtmlWorks.formatRuntime(t.getMaxTime()) + "</td>");
+					s.append("<td>" + HtmlWorks.formatMemorySize(t.getMaxMemory()) + "</td>");
+					//s.append("<td>" + formatRuntime(t.getTotalTime()) + "</td>");
+				s.append("</tr>\n");
+			}
+			s.append("</table>\n");
 		}
 		FileWorks.saveToFile(s.toString(), contestPath + "report.html");
 	}

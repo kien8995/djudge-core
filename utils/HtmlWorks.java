@@ -28,7 +28,7 @@ import djudge.judge.validator.ValidationResult;
 
 public class HtmlWorks 
 {
-	private static String toSafeHtml(String s)
+	public static String toSafeHtml(String s)
 	{
 		StringBuffer res = new StringBuffer();
 		for (int i = 0; i < s.length(); i++)
@@ -55,13 +55,13 @@ public class HtmlWorks
 		return res.toString();
 	}
 	
-	private static String getHeaderColor()
+	public static String getHeaderColor()
 	{
 		// Grey color
 		return "Gainsboro";
 	}
 	
-	private static String formatMemorySize(long size)
+	public static String formatMemorySize(long size)
 	{
 		if (size < 0)
 			return "n/a";
@@ -72,7 +72,7 @@ public class HtmlWorks
 		return "" + size/1000000 +  " " + ((size/1000)%1000) + " " + size%1000 + "";
 	}
 	
-	private static String getJudgementColor(TestResultEnum j)
+	public static String getJudgementColor(TestResultEnum j)
 	{
 		String res = "";
 		switch (j)
@@ -88,7 +88,7 @@ public class HtmlWorks
 		return res;
 	}
 	
-	private static String formatRuntime(long time)
+	public static String formatRuntime(long time)
 	{
 		if (time < 0)
 			return "n/a";
