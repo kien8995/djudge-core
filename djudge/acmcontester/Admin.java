@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
 import djudge.acmcontester.client.JContestSettingsPanel;
+import djudge.acmcontester.client.JRunsPanel;
 import djudge.acmcontester.client.JStatusPanel;
 import djudge.acmcontester.client.JSubmitPanel;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
@@ -77,7 +78,7 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		
 		jtpTabs.add("Languages", languagesPanel = new JTablePanel(ContestCore.getLanguagesModel()));
 		
-		jtpTabs.add("Runs", submissionsPanel = new JTablePanel(ContestCore.getSubmissionsDataModel()));
+		jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
 		
 		jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverInterface, this));
 		

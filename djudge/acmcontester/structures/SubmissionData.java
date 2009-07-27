@@ -1,5 +1,8 @@
 package djudge.acmcontester.structures;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import djudge.common.HashMapSerializable;
@@ -37,7 +40,10 @@ public class SubmissionData extends HashMapSerializable
 		maxTime = -1;
 		maxOutput = -1;
 		problemID = "-1";
-		realTime = "2009-10-03 17:45";
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		String dateStr = dateFormat.format(date);		
+		realTime = dateStr;
 		score = -1;
 		sourceCode = "";
 		userID = "-1";

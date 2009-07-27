@@ -20,7 +20,9 @@ package utils;
 import java.io.*;
 
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 
+import com.sun.org.apache.xerces.internal.parsers.XMLParser;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -45,6 +47,22 @@ public class XmlWorks
         return doc;
         
 	}
+
+	public static Document getDocumentFromString(String xmlString)
+	{
+		Document doc = null;
+		try
+		{
+			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder= dbfac.newDocumentBuilder();
+			doc = docBuilder.newDocument();
+		}
+		catch (Exception exc)
+		{
+			System.out.println("Exception in XmlWorks::getDocument: " + exc);
+		}
+        return doc;
+	}	
 	
 	public static Document getDocumentE(String filename) throws Exception
 	{
