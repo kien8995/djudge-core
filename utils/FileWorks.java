@@ -196,6 +196,7 @@ public class FileWorks
             String str = null;
             while ((str = r.readLine()) != null)
             	res = res + str + "\n";
+            r.close();
 		}
 		catch(FileNotFoundException ex)
 	    {

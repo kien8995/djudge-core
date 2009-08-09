@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,6 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
-import djudge.acmcontester.JudgementCellRenderer;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.common.HashMapSerializer;
 
@@ -83,7 +82,7 @@ public class JRunsPanel extends JPanel implements ActionListener
 		jtRuns.setRowHeight(20);
 		
 		TableColumnModel tcm = jtRuns.getColumnModel();
-		tcm.getColumn(4).setCellRenderer(new JudgementCellRenderer());
+		tcm.getColumn(4).setCellRenderer(new JudgementCellRenderer());		
 		
 		jbtnRefresh = new JButton("Update");
 		jbtnRefresh.addActionListener(this);

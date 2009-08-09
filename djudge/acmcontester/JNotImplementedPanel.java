@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

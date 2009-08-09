@@ -9,6 +9,10 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
+import org.w3c.dom.Element;
+
+import utils.FileWorks;
+import utils.XmlWorks;
 
 import db.LanguagesDataModel;
 import db.ProblemsDataModel;
@@ -33,7 +37,15 @@ public class DServiceConnector extends Thread
 		SubmissionData sd = sdm.getRows().get(0);
 		sd.judgement = tr.getJudgement();
 		sd.xml = tr.getXml();
-		//System.out.println(sd.xml);
+		//FIXME
+		FileWorks.saveToFile(sd.xml, "./temp/xml.xml");
+		Element elem = XmlWorks.getDocument("./temp/xml.xml").getDocumentElement();
+		int maxMemory = Integer.parseInt(elem.getAttribute("max-memory"));
+		int maxTime = Integer.parseInt(elem.getAttribute("max-time"));
+		int wrongTest = Integer.parseInt(elem.getAttribute("wrong-test"));
+		sd.maxMemory = maxMemory;
+		sd.maxTime = maxTime;
+		sd.failedTest = wrongTest;
 		sdm.setRowData(0, sdm.toRow(sd).data);
 	}
 	
