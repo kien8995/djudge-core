@@ -53,6 +53,26 @@ public class JRunsPanel extends JPanel implements ActionListener
 		@Override
 		public String getColumnName(int arg0)
 		{
+			switch (arg0)
+			{
+			case 0:
+				return "ID";
+
+			case 1:
+				return "Time";
+
+			case 2:
+				return "Problem";
+
+			case 3:
+				return "Language";
+
+			case 4:
+				return "Result";
+
+			default:
+				break;
+			}
 			return SubmissionData.fieldNames[arg0];
 		}
 
@@ -82,7 +102,8 @@ public class JRunsPanel extends JPanel implements ActionListener
 		jtRuns.setRowHeight(20);
 		
 		TableColumnModel tcm = jtRuns.getColumnModel();
-		tcm.getColumn(4).setCellRenderer(new JudgementCellRenderer());		
+		tcm.getColumn(1).setCellRenderer(new ContestTimeCellRenderer());
+		tcm.getColumn(4).setCellRenderer(new JudgementCellRenderer());
 		
 		jbtnRefresh = new JButton("Update");
 		jbtnRefresh.addActionListener(this);
