@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import utils.PrintfFormat;
 
 public class ContestTimeCellRenderer extends DefaultTableCellRenderer
 {
@@ -15,8 +18,9 @@ public class ContestTimeCellRenderer extends DefaultTableCellRenderer
 			int column)
 	{
 		int data = (Integer) value;
-		int minutes = data / 60 / 1000;
-		setText(minutes / 60 + ":" + minutes % 60);
+		int seconds = data / 1000;
+		setText(new PrintfFormat("%02d:%02d:%02d").sprintf(new Object[] {seconds / 60 / 60, (seconds / 60) % 60, seconds % 60}));
+		setHorizontalAlignment(SwingConstants.RIGHT);
 		return this;
 	}
 	

@@ -1,18 +1,16 @@
 package djudge.acmcontester;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 import org.w3c.dom.Element;
 
 import utils.XmlWorks;
 
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.common.HashMapSerializer;
+import djudge.judge.RPCClientFactory;
 
 public class AcmContesterClientXmlRpcConnector extends HashMapSerializer implements AcmContesterXmlRpcClientInterface
 {
@@ -33,18 +31,7 @@ public class AcmContesterClientXmlRpcConnector extends HashMapSerializer impleme
 	{
 		try
 		{
-    		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-    		config.setServerURL(new URL(serverURL));
-    		config.setEnabledForExtensions(true);
-    		config.setConnectionTimeout(5 * 1000);
-    		config.setReplyTimeout(5 * 1000);
-    
-    		client = new XmlRpcClient();
-    
-    		client.setTransportFactory(new XmlRpcCommonsTransportFactory(client));
-    		
-    		client.setConfig(config);
-    		
+			client = RPCClientFactory.getRPCClient(serverURL);
     		System.out.println("AcmContesterClientXmlRpcConnector is up");
 		}
 		catch (Exception ex)
