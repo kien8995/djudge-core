@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import djudge.acmcontester.Admin;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.LanguageData;

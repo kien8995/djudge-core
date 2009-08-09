@@ -3,9 +3,6 @@ package db;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
-import org.w3c.dom.Element;
-
-import utils.XmlWorks;
 
 import djudge.acmcontester.structures.SubmissionData;
 
@@ -30,16 +27,16 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		new DBField("language_id", "Language ID", String.class),
 		new DBField("contest_time", "Contest Time", String.class),
 		new DBField("real_time", "Real Time", String.class),
-		new DBField("judgement", "judgement", String.class),
-		new DBField("max_time", "judgement", String.class),
-		new DBField("max_memory", "judgement", String.class),
-		new DBField("max_output", "judgement", String.class),
+		new DBField("judgement", "Judgement", String.class),
+		new DBField("max_time", "Time", Integer.class),
+		new DBField("max_memory", "Memory", Integer.class),
+		new DBField("max_output", "Output", Integer.class),
 		new DBField("source_code", "Source", String.class),
-		new DBField("failed_test", "Failed", String.class),
-		new DBField("score", "Failed", String.class),
-		new DBField("judged", "Failed", String.class),
-		new DBField("active", "Failed", String.class),
-		new DBField("djudge_flag", "DJudge", String.class),
+		new DBField("failed_test", "Test #", Integer.class),
+		new DBField("score", "Score", Integer.class),
+		new DBField("judged", "Judged?", Integer.class),
+		new DBField("active", "Active?", Integer.class),
+		new DBField("djudge_flag", "DJudgeStatus", Integer.class),
 		new DBField("xml", "XML", String.class),
 	};
 	
@@ -110,8 +107,8 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		sd.djudgeFlag = Integer.parseInt(row.data[15].toString());
 		sd.xml = new String(Base64.decodeBase64(row.data[16].toString().getBytes()));
 		String sx = row.data[16].toString();
-		Element elem = (Element) XmlWorks.getDocumentFromString(sx);
-		System.out.println(elem.getAttribute("max-time"));
+		//Element elem = (Element) XmlWorks.getDocumentFromString(sx);
+		//System.out.println(elem.getAttribute("max-time"));
 		return sd;
 	}
 		

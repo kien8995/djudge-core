@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import djudge.acmcontester.JMonitorPanel;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 
@@ -39,7 +38,6 @@ public class Client extends JFrame
 		{
 			return Client.username;
 		}
-		
 	}
 	
 	class WatchThread extends Thread

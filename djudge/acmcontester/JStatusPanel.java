@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -9,10 +9,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
-import djudge.acmcontester.client.JContestSettingsPanel;
-import djudge.acmcontester.client.JRunsPanel;
-import djudge.acmcontester.client.JStatusPanel;
-import djudge.acmcontester.client.JSubmitPanel;
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 

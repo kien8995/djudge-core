@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 
 import db.AbstractTableDataModel;
@@ -22,8 +21,13 @@ class JAdminSubmissionsPanel extends JTablePanel
 	{
 		super(atdm);
 		TableColumnModel tcm = jtTable.getColumnModel();
-		tcm.getColumn(6).setCellRenderer(new JudgementCellRenderer());
 		tcm.getColumn(4).setCellRenderer(new ContestTimeCellRenderer());
+		tcm.getColumn(6).setCellRenderer(new JudgementCellRenderer());
+		tcm.getColumn(7).setCellRenderer(new RuntimeCellRenderer());
+		tcm.getColumn(8).setCellRenderer(new MemoryCellRenderer());
+		tcm.getColumn(9).setCellRenderer(new MemoryCellRenderer());
+		tcm.getColumn(11).setCellRenderer(new FailedTestCellRenderer());
+		tcm.getColumn(15).setCellRenderer(new DJudgeStatusCellRenderer());
 	}
 }
 
@@ -104,3 +108,4 @@ public class JTablePanel extends JPanel implements ActionListener
 	}
 	
 }
+

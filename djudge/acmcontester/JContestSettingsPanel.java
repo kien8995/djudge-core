@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -8,8 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import djudge.acmcontester.Admin;
-import djudge.acmcontester.ContestCore;
 
 public class JContestSettingsPanel extends JPanel implements ActionListener
 {

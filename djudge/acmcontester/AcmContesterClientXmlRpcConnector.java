@@ -1,4 +1,4 @@
-package djudge.acmcontester.client;
+package djudge.acmcontester;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -7,6 +7,9 @@ import java.util.HashMap;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
+import org.w3c.dom.Element;
+
+import utils.XmlWorks;
 
 import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
 import djudge.common.HashMapSerializer;
@@ -17,12 +20,21 @@ public class AcmContesterClientXmlRpcConnector extends HashMapSerializer impleme
 	
 	XmlRpcClient client;
 	
+	static final String serverURL; 
+	
+	static
+	{
+		Element elem = XmlWorks.getDocument("team.xml").getDocumentElement();
+		String url = elem.getAttribute("server-url");
+		serverURL = url != null && url.length() > 0 ? url : "http://127.0.0.1:8202/xmlrpc";
+	}
+	
 	public AcmContesterClientXmlRpcConnector()
 	{
 		try
 		{
     		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-    		config.setServerURL(new URL("http://127.0.0.1:8202/xmlrpc"));
+    		config.setServerURL(new URL(serverURL));
     		config.setEnabledForExtensions(true);
     		config.setConnectionTimeout(5 * 1000);
     		config.setReplyTimeout(5 * 1000);
