@@ -115,7 +115,7 @@ public class HtmlWorks
 			s.append("<td>" + judgement  + "</td>");
 			try
 			{
-				s.append("<td>" + toSafeHtml(StringWorks.ArrayToString(ValidationInfo.ValidatorOutput))  + "</td>");
+				s.append("<td>" + toSafeHtml(StringWorks.ArrayToString(ValidationInfo.validatorOutput))  + "</td>");
 			}
 			catch (Exception e)
 			{

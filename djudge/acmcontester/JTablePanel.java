@@ -19,6 +19,7 @@ import db.AbstractTableDataModel;
 import db.SubmissionsDataModel;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.judge.SubmissionResult;
+import djudge.swing.JSubmissionInfoFrame;
 import djudge.swing.JSubmissionResultFrame;
 
 class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
@@ -48,8 +49,11 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			int row = target.getSelectedRow();
 			SubmissionsDataModel sdm = (SubmissionsDataModel) jtttTableModel;
 			SubmissionData sd = sdm.getRow(row);
-			SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
-			new JSubmissionResultFrame(sr, "Testing submission #" + sd.id + " details");
+			//SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
+			//TODO: debug output
+			System.out.println(sd.xml);
+			new JSubmissionInfoFrame(sd);
+			//new JSubmissionResultFrame(sr, "Testing submission #" + sd.id + " details");
 		}
 	}
 
