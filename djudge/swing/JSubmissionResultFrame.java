@@ -4,6 +4,7 @@ package djudge.swing;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 import djudge.acmcontester.Admin;
 import djudge.judge.SubmissionResult;
@@ -21,12 +22,10 @@ public class JSubmissionResultFrame extends JFrame
 	void init(SubmissionResult data)
 	{
 		this.data = data;
-		setSize(640, 480);
-		setVisible(true);		
-		
-		this.data = data;
 		setLayout(new BorderLayout());
 		add(new JScrollPane(new JSubmissionResultPanel(data)), BorderLayout.CENTER);
+		setSize(640, 480);
+		setVisible(true);
 	}
 	
 	public JSubmissionResultFrame(SubmissionResult data)

@@ -77,30 +77,8 @@ public class JTestingResultPanel extends JPanel
 		}
 	}
 	
-	public void setTable()
-	{
-		table = new JTable(data, columnNames);
-		table.setAutoCreateRowSorter(true);
-		table.setRowHeight(20);
-		TableColumnModel cm = table.getColumnModel();
-		cm.getColumn(table.getColumnCount()-2).setCellRenderer(new ColorRenderer());
-		add(spTable = new JScrollPane(table), BorderLayout.CENTER);
-		setVisible(true);
-	}
-	
-	
-	
 	private void makeTable(ProblemResult pr)
 	{
-		// 0 - t.g. number
-		// 1 score
-		// 2 time
-		// 3 memory
-		// 4 output
-		// 5 runtime
-		// 6 validation
-		// 7 validator_output
-		// 8 summary
 		int tests = pr.getTestsCount();
 		data = new Object[tests][10];
 		int k = 0;
@@ -115,16 +93,14 @@ public class JTestingResultPanel extends JPanel
 				data[k][3] = tRes.getMaxMemory();
 				data[k][4] = tRes.getMaxOutput();
 				data[k][5] = tRes.getRuntimeInfo().result;
-				data[k][6] = tRes.getValidationInfo().Result;
-				data[k][7] = tRes.getValidationInfo().ValidatorOutput;
+				data[k][6] = tRes.getValidationInfo().result;
+				data[k][7] = tRes.getValidationInfo().validatorOutput;
 				data[k][8] = tRes.getJudgement();
-				data[k][9] = tRes.getValidationInfo().ValidatorName;
+				data[k][9] = tRes.getValidationInfo().validatorName;
 				k++;
 			}
 		}
-		setTable();
 	}
-
 	
 	
 	public JTestingResultPanel(ProblemResult sr)
@@ -132,6 +108,14 @@ public class JTestingResultPanel extends JPanel
 		setBorder(BorderFactory.createTitledBorder("Testing details"));
 		pd = sr;
 		makeTable(sr);
+		
+		table = new JTable(data, columnNames);
+		table.setRowHeight(20);
+		
+		TableColumnModel cm = table.getColumnModel();
+		cm.getColumn(table.getColumnCount()-2).setCellRenderer(new ColorRenderer());
+		
+		add(spTable = new JScrollPane(table), BorderLayout.CENTER);
 	}
 		
 	public static void main(String[] args)
