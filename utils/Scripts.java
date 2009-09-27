@@ -68,10 +68,12 @@ public class Scripts
 		StringBuffer s = new StringBuffer();
 		String contestPath = problemsRoot + contestId + "\\";
 		s.append("<h1> Contest \"" + contestId + "\" report [ " + Calendar.getInstance().getTime() + "]</h1>");
-		for (char c = 'A'; c <= 'Z'; c++)
+		String[] list = new File(contestPath).list();
+		//for (char c = 'A'; c <= 'Z'; c++)
+		for (int j = 0; j < list.length; j++)
 		{
-			if (!(new File(contestPath + c).exists())) continue;
-			s.append("<h4><a href='./"+c+"/report.html'>Problem " + c + "<a></h4>");
+			if (list[j].startsWith("_") || !(new File(contestPath + list[j]).exists()) || !(new File(contestPath + list[j]).isDirectory())) continue;
+			s.append("<h4><a href='./"+list[j]+"/report.html'>Problem " + list[j] + "<a></h4>");
 			s.append("<table border=1>\n");
 			s.append("<tr bgcolor=" + HtmlWorks.getHeaderColor() + ">");
 				s.append("<th>#</th>");
@@ -82,7 +84,7 @@ public class Scripts
 				s.append("<th>MaxMemory</th>");
 				s.append("<th>TotalTime</th>");
 			s.append("</tr>\n");					
-			String str = "" + c;
+			String str = "" + list[j];
 			DirectoryResult dr = generateProblemReport(contestId, str, limits);
 			for (int i = 0; i < dr.res.size(); i++)
 			{

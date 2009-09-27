@@ -1,7 +1,6 @@
 package db;
 
 import java.util.Vector;
-
 import org.apache.commons.codec.binary.Base64;
 
 import djudge.acmcontester.structures.SubmissionData;
@@ -120,6 +119,11 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 			res.add(toSubmissionData(rows.get(i)));
 		}
 		return res;
+	}
+	
+	public SubmissionData getRow(int index)
+	{
+		return toSubmissionData(rows.get(index));
 	}
 }
 
