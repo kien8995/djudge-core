@@ -1,8 +1,10 @@
 package djudge.acmcontester;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -11,9 +13,15 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
-import db.AbstractTableDataModel;
+import utils.XmlWorks;
 
-class JAdminSubmissionsPanel extends JTablePanel
+import db.AbstractTableDataModel;
+import db.SubmissionsDataModel;
+import djudge.acmcontester.structures.SubmissionData;
+import djudge.judge.SubmissionResult;
+import djudge.swing.JSubmissionResultFrame;
+
+class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +36,49 @@ class JAdminSubmissionsPanel extends JTablePanel
 		tcm.getColumn(9).setCellRenderer(new MemoryCellRenderer());
 		tcm.getColumn(11).setCellRenderer(new FailedTestCellRenderer());
 		tcm.getColumn(15).setCellRenderer(new DJudgeStatusCellRenderer());
+		jtTable.addMouseListener(this);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		if (e.getClickCount() == 2)
+		{
+			JTable target = (JTable) e.getSource();
+			int row = target.getSelectedRow();
+			SubmissionsDataModel sdm = (SubmissionsDataModel) jtttTableModel;
+			SubmissionData sd = sdm.getRow(row);
+			SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
+			new JSubmissionResultFrame(sr, "Testing submission #" + sd.id + " details");
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
 
