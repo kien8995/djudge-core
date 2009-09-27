@@ -1,6 +1,7 @@
 package djudge.swing;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import djudge.acmcontester.Admin;
@@ -20,7 +21,7 @@ public class JCompilationResultPanel extends JPanel
 
 	private void init()
 	{
-		
+		add(new JLabel());
 	}
 	
 	public JCompilationResultPanel(CompilerResult sr)

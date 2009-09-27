@@ -7,7 +7,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -26,18 +31,113 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 
-	public JAdminSubmissionsPanel(AbstractTableDataModel atdm)
+	private JPopupMenu popupMenu;
+	
+	private class PopupMenuHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			int iRow = jtTable.getSelectedRow();
+			if (iRow < 0)
+				return;
+			
+			String act = arg0.getActionCommand().toLowerCase();
+			if ("activate".equals(act))
+			{
+    			int prev = Integer.parseInt(jtttTableModel.getValueAt(iRow,
+    					SubmissionsDataModel.getActiveFlagIndex()).toString());
+    			if (prev <= 0)
+    				prev = 1;
+    			else
+    				prev = 0;
+    			jtttTableModel.setValueAt(prev, iRow, SubmissionsDataModel
+    					.getActiveFlagIndex());
+			}
+			else if (act.startsWith("rejudge"))
+			{
+				Object value = null;
+				String key = "";
+				if (act.equals("rejudge_submission"))
+				{
+					value = jtttTableModel.getValueAt(iRow, 0);
+					key = "id";
+				}
+				else if (act.equals("rejudge_user"))
+				{
+					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getUserFieldIndex());
+					key = "user_id";
+				}
+				else if (act.equals("rejudge_problem"))
+				{
+					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getProblemFieldIndex());
+					key = "problem_id";
+				}
+				else if (act.equals("rejudge_language"))
+				{
+					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getLanguageFieldIndex());
+					key = "language_id";
+				}
+				else
+				{
+					return;
+				}
+				((SubmissionsDataModel) jtttTableModel).rejudgeBy(key, value);
+			}
+		}
+	}
+	
+	public JAdminSubmissionsPanel(SubmissionsDataModel atdm)
 	{
 		super(atdm);
 		TableColumnModel tcm = jtTable.getColumnModel();
-		tcm.getColumn(4).setCellRenderer(new ContestTimeCellRenderer());
-		tcm.getColumn(6).setCellRenderer(new JudgementCellRenderer());
-		tcm.getColumn(7).setCellRenderer(new RuntimeCellRenderer());
-		tcm.getColumn(8).setCellRenderer(new MemoryCellRenderer());
-		tcm.getColumn(9).setCellRenderer(new MemoryCellRenderer());
-		tcm.getColumn(11).setCellRenderer(new FailedTestCellRenderer());
-		tcm.getColumn(15).setCellRenderer(new DJudgeStatusCellRenderer());
+		tcm.getColumn(SubmissionsDataModel.getRuntimeFieldIndex()).setCellRenderer(new ContestTimeCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getJudgementFieldIndex()).setCellRenderer(new JudgementCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getRuntimeFieldIndex()).setCellRenderer(new RuntimeCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getMemoryFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getOutputFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getFailedTestFieldIndex()).setCellRenderer(new FailedTestCellRenderer(atdm));
+		tcm.getColumn(SubmissionsDataModel.getDJudgeFlagIndex()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
 		jtTable.addMouseListener(this);
+		// Popup menu
+		PopupMenuHandler listener = new PopupMenuHandler();
+		JMenuItem item;
+		popupMenu = new JPopupMenu();
+		
+		item = new JMenuItem("Details");
+		item.setActionCommand("details");
+		item.addActionListener(listener);
+		popupMenu.add(item);
+		
+		item = new JMenuItem("[de]activate");
+		item.setActionCommand("activate");
+		item.addActionListener(listener);
+		popupMenu.add(item);
+		
+		/* 'rejudge' submenu */
+		JMenu submenu = new JMenu("Rejudge...");
+		
+		item = new JMenuItem("submission");
+		item.setActionCommand("rejudge_submission");
+		item.addActionListener(listener);
+		submenu.add(item);
+		
+		item = new JMenuItem("problem");
+		item.setActionCommand("rejudge_problem");
+		item.addActionListener(listener);
+		submenu.add(item);
+		
+		item = new JMenuItem("language");
+		item.setActionCommand("rejudge_language");
+		item.addActionListener(listener);
+		submenu.add(item);
+		
+		item = new JMenuItem("user");
+		item.setActionCommand("rejudge_user");
+		item.addActionListener(listener);
+		submenu.add(item);
+		
+		popupMenu.add(submenu);
 	}
 
 	@Override
@@ -47,6 +147,8 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 		{
 			JTable target = (JTable) e.getSource();
 			int row = target.getSelectedRow();
+			if  (row < 0)
+				return;
 			SubmissionsDataModel sdm = (SubmissionsDataModel) jtttTableModel;
 			SubmissionData sd = sdm.getRow(row);
 			//SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
@@ -68,13 +170,19 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 	public void mouseExited(MouseEvent arg0)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
+		if (arg0.getButton() == MouseEvent.BUTTON3)
+		{
+			int row = jtTable.getSelectedRow();
+			if (row != -1)
+			{
+				popupMenu.show(arg0.getComponent(), arg0.getX(), arg0.getY());
+			}
+		}
 		
 	}
 
