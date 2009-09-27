@@ -7,78 +7,168 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import db.SubmissionsDataModel;
+import djudge.gui.Formatter;
+
 import utils.PrintfFormat;
 
-public class ContestTimeCellRenderer extends DefaultTableCellRenderer
+class DefaultCellRenderer extends DefaultTableCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	private void checkFocusAndSelected(boolean isSelected, boolean hasFocus)
 	{
-		int data = (Integer) value;
-		int seconds = data / 1000;
-		setText(new PrintfFormat("%02d:%02d:%02d").sprintf(new Object[] {seconds / 60 / 60, (seconds / 60) % 60, seconds % 60}));
-		setHorizontalAlignment(SwingConstants.RIGHT);
-		return this;
+		// TODO: implement this
 	}
 	
+	void setTextAndColor(Object value, int row,int column)
+	{
+		setText(value.toString());
+	}
+	
+	void overrideActive(Object value, int row,int column)
+	{
+		// nothing to do here
+	}
+	
+	void checkActive(int row,int column)
+	{
+		// nothing to do here
+	}
+	
+	public Component getTableCellRendererComponent(JTable table,
+			Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
+		setForeground(Color.DARK_GRAY);
+		setTextAndColor(value, row, column);
+		checkActive(row, column);
+		overrideActive(value, row, column);
+		checkFocusAndSelected(isSelected, hasFocus);
+		return this;
+	}
+}
+
+class DefaultSubmissionsModelCellRenderer extends DefaultCellRenderer
+{
+	private static final long serialVersionUID = 1L;
+	
+	protected SubmissionsDataModel sdm;
+	
+	@Override
+	void checkActive(int row, int column)
+	{
+		if (sdm == null)
+			return;
+		
+		if (Integer.parseInt(sdm.getValueAt(row, SubmissionsDataModel.getActiveFlagIndex()).toString()) < 1)
+		{
+			setForeground(Color.LIGHT_GRAY);
+			setBackground(Color.WHITE);
+		}
+	}
+	
+	public DefaultSubmissionsModelCellRenderer(SubmissionsDataModel sdm)
+	{
+		this.sdm = sdm;
+	}
+}
+
+public class ContestTimeCellRenderer extends DefaultSubmissionsModelCellRenderer
+{
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		long data = (Integer) value;
+		setText(Formatter.formatContestTime(data));
+		setHorizontalAlignment(SwingConstants.RIGHT);
+	}
+	
+	public ContestTimeCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}
+		
+	public ContestTimeCellRenderer()
+	{
+		super(null);
+	}
+
 	public static void main(String[] args)
 	{
 		new Admin();
 	}	
 }
 
-class MemoryCellRenderer extends DefaultTableCellRenderer
+class MemoryCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	@Override
+	void setTextAndColor(Object value, int row,int column)
 	{
-		int data = (Integer) value;
-		if (data < 0)
-		{
-			setText("-");
-		}
-		else
-		{
-			setText("" + (data / 1024) + " KB");
-		}
-		return this;
+		String text = Formatter.formatMemory((Integer) value);
+		setText(text);
+		setHorizontalAlignment(SwingConstants.RIGHT);
+	}
+	
+	public MemoryCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}	
+}
+
+class RuntimeCellRenderer extends DefaultSubmissionsModelCellRenderer
+{
+	private static final long serialVersionUID = 1L;
+
+	public RuntimeCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}	
+	
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		String text = Formatter.formatRuntime((Integer) value);
+		setText(text);
 	}
 }
 
-class RuntimeCellRenderer extends DefaultTableCellRenderer
+class RealTimeCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	public RealTimeCellRenderer(SubmissionsDataModel sdm)
 	{
-		int data = (Integer) value;
-		if (data < 0)
-		{
-			setText("-");
-		}
-		else
-		{
-			setText("" + (data) + " ms");
-		}
-		return this;
-	}
+		super(sdm);
+	}	
+	
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		String text = Formatter.formatRealTime(value.toString());
+		setText(text);
+	}	
 }
 
-class JudgementCellRenderer extends DefaultTableCellRenderer
+class JudgementCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	public JudgementCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}	
+	
+	public JudgementCellRenderer()
+	{
+		super(null);
+	}
+
+	@Override
+	void setTextAndColor(Object value, int row, int column)
 	{
 		String data = (String) value;
 		if ("AC".equalsIgnoreCase(data))
@@ -101,57 +191,66 @@ class JudgementCellRenderer extends DefaultTableCellRenderer
 		{
 			setBackground(Color.WHITE);
 		}
-		setText(value.toString());
-		return this;
-	}
+		setText(Formatter.formatJudgement(data));
+	}	
 }
 
-class DJudgeStatusCellRenderer extends DefaultTableCellRenderer
+class DJudgeStatusCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	public DJudgeStatusCellRenderer(SubmissionsDataModel sdm)
 	{
-		int data = (Integer) value;
-		if (data < 0)
+		super(sdm);
+	}
+		
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		int val = (Integer) value;
+		String text = Formatter.formatDJudgeFlag(val);
+		setText(text);
+		if (val <= 0)
 		{
 			setForeground(Color.RED);
-			setText("Judging");
-		}
-		else if (data == 0)
-		{
-			setForeground(Color.GREEN);
-			setText("Waiting");
 		}
 		else
 		{
-			setForeground(Color.black);
-			setText("OK");
+			setForeground(Color.BLACK);
 		}
-		return this;
+	}	
+}
+
+class FailedTestCellRenderer extends DefaultSubmissionsModelCellRenderer
+{
+	private static final long serialVersionUID = 1L;
+	
+	public FailedTestCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}
+	
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		int data = (Integer) value;
+		setText(Formatter.formatFailedTest(data));
 	}
 }
 
-class FailedTestCellRenderer extends DefaultTableCellRenderer
+class ScoreCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column)
+	public ScoreCellRenderer(SubmissionsDataModel sdm)
+	{
+		super(sdm);
+	}
+		
+	@Override
+	void setTextAndColor(Object value, int row,int column)
 	{
 		int data = (Integer) value;
-		if (data < 0)
-		{
-			setText("-");
-		}
-		else
-		{
-			setText("" + (data + 1));
-		}
-		return this;
+		setText(Formatter.formatScore(data));
 	}
 }
-

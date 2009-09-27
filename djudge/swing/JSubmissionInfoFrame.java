@@ -17,6 +17,7 @@ import utils.XmlWorks;
 
 import djudge.acmcontester.Admin;
 import djudge.acmcontester.structures.SubmissionData;
+import djudge.gui.Formatter;
 import djudge.judge.SubmissionResult;
 
 public class JSubmissionInfoFrame extends JFrame
@@ -35,9 +36,24 @@ public class JSubmissionInfoFrame extends JFrame
 		setLayout(new BorderLayout());
 		JTabbedPane jtpTabs = new JTabbedPane();
 		
-		jtpTabs.add("Info", new JPanel());
-		jtpTabs.add("Source code", new JSourceCodePanel(new String(Base64.decodeBase64(data.sourceCode.getBytes()))));
+		Object[][] td = {
+				{"User:", data.userID},
+				{"Problem:", data.problemID},
+				{"Language:", data.languageID},
+				{"Judgement:", Formatter.formatJudgement(data.judgement)},
+				{"Contest time:", Formatter.formatContestTime(data.contestTime)},
+				{"DFlag:", Formatter.formatDJudgeFlag(data.djudgeFlag)},
+				{"Wrong test:", Formatter.formatFailedTest(data.failedTest)},
+				{"MaxMemory:", Formatter.formatMemory(data.maxMemory)},
+				{"MaxTime:", Formatter.formatRuntime(data.maxTime)},
+				{"MaxOutput:", Formatter.formatMemory(data.maxOutput)},
+				{"Real time:", data.realTime}
+		};
+		
+		jtpTabs.add("Info", new JColumnsPanel(td));
 		jtpTabs.add("Test result", new JSubmissionResultPanel(new SubmissionResult(XmlWorks.getDocumentFromString(data.xml))));	
+		jtpTabs.add("Source code", new JSourceCodePanel(new String(Base64.decodeBase64(data.sourceCode.getBytes()))));
+		jtpTabs.add("Raw log", new JSourceCodePanel(data.xml));
 		
 		add(jtpTabs, BorderLayout.CENTER);
 		setSize(640, 480);

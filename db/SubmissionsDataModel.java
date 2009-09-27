@@ -39,6 +39,67 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		new DBField("xml", "XML", String.class),
 	};
 	
+	public final static int getUserFieldIndex()
+	{
+		return 1;
+	}
+	
+	public final static int getProblemFieldIndex()
+	{
+		return 2;
+	}
+	
+	public final static int getLanguageFieldIndex()
+	{
+		return 3;
+	}
+	
+	public final static int getContestTimeFieldIndex()
+	{
+		return 4;
+	}
+	
+	
+	public final static int getActiveFlagIndex()
+	{
+		return 14;
+	}
+	
+	public final static int getDJudgeFlagIndex()
+	{
+		return 15;
+	}
+	
+	public final static int getJudgementFieldIndex()
+	{
+		return 6;
+	}
+	
+	public final static int getRuntimeFieldIndex()
+	{
+		return 7;
+	}
+	
+	public final static int getMemoryFieldIndex()
+	{
+		return 8;
+	}
+	
+	public final static int getOutputFieldIndex()
+	{
+		return 9;
+	}
+	
+	public final static int getFailedTestFieldIndex()
+	{
+		return 11;
+	}
+	
+	public final static int getScoreFieldIndex()
+	{
+		return 12;
+	}
+	
 	public final static int djudgeFlagFieldIndex = 15;
 	
 	@Override
@@ -64,7 +125,6 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 	public DBRowAbstract toRow(SubmissionData sd)
 	{
 		DBRowSubmissions row = new DBRowSubmissions();
-		row.data[0] = "";
 		row.data[0] = sd.id;
 		row.data[1] = sd.userID;
 		row.data[2] = sd.problemID;
@@ -124,6 +184,35 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 	public SubmissionData getRow(int index)
 	{
 		return toSubmissionData(rows.get(index));
+	}
+	
+	private void doRejudge(DBRowAbstract row)
+	{
+		row.data[getFailedTestFieldIndex()] = -1;
+		row.data[getJudgementFieldIndex()] = "N/A";
+		row.data[getMemoryFieldIndex()] = -1;
+		row.data[getOutputFieldIndex()] = -1;
+		row.data[getScoreFieldIndex()] = -1;
+		row.data[getDJudgeFlagIndex()] = 0;
+		row.data[getRuntimeFieldIndex()] = -1;
+		row.save();
+	}
+	
+	public void rejudgeBy(String fieldName, Object fieldValue)
+	{
+		int fieldIndex = -1;
+		for (int i = 0; i < getColumnCount(); i++)
+			if (columns[i].key.equals(fieldName))
+				fieldIndex = i;
+		if (fieldIndex < 0)
+			return;
+		for (int i = 0; i < getRowCount(); i++)
+		{
+			if (fieldValue.equals(getValueAt(i, fieldIndex)))
+			{
+				doRejudge(rows.get(i));
+			}
+		}
 	}
 }
 
