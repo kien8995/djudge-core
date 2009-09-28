@@ -32,7 +32,7 @@ public class DServiceConnector extends Thread
 	{
 		SubmissionsDataModel sdm = new SubmissionsDataModel();
 		sdm.setWhere("`id` = " + tr.getClientData());
-		sdm.fill();
+		sdm.updateData();
 		sdm.setValueAt(1, 0, SubmissionsDataModel.djudgeFlagFieldIndex);
 		SubmissionData sd = sdm.getRows().get(0);
 		sd.judgement = tr.getJudgement();
@@ -77,7 +77,7 @@ public class DServiceConnector extends Thread
 			/* Sending submissions to judge */
 			SubmissionsDataModel sdm = new SubmissionsDataModel();
 			sdm.setWhere("`djudge_flag` = 0");
-			sdm.fill();
+			sdm.updateData();
 			Vector<SubmissionData> vsd = sdm.getRows();
 			
 			for (int i = 0; i < vsd.size(); i++)
@@ -88,12 +88,12 @@ public class DServiceConnector extends Thread
     			
     			ProblemsDataModel pdm = new ProblemsDataModel();
     			pdm.setWhere(" `id` = " + sd.problemID);
-    			pdm.fill();
+    			pdm.updateData();
     			ProblemData pd = pdm.getRows().get(0);
     			
     			LanguagesDataModel ldm = new LanguagesDataModel();
     			ldm.setWhere(" `id` = " + sd.languageID);
-    			ldm.fill();
+    			ldm.updateData();
     			LanguageData ld = ldm.getRows().get(0);
     			
     			//FIXME
@@ -125,7 +125,7 @@ public class DServiceConnector extends Thread
 			}
 			if (vsd.size() > 0)
 			{
-				ContestCore.getSubmissionsDataModel().fill();
+				ContestCore.getSubmissionsDataModel().updateData();
 			}
 			
 			/* Fetching results from judge */
@@ -143,7 +143,7 @@ public class DServiceConnector extends Thread
 						DServiceTaskResult tr = new DServiceTaskResult(map);
 						updateSubmissionResult(tr);
 					}
-					ContestCore.getSubmissionsDataModel().fill();
+					ContestCore.getSubmissionsDataModel().updateData();
 				}
 				sleepTime = 1000;
 			}
