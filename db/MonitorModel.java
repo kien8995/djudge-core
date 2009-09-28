@@ -5,7 +5,8 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 import djudge.acmcontester.Admin;
-import djudge.acmcontester.ContestCore;
+import djudge.acmcontester.server.ContestCore;
+import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.MonitorRow;
 import djudge.acmcontester.structures.ProblemData;
@@ -17,7 +18,7 @@ public class MonitorModel
 	public MonitorData getMonitor(long contestTime)
 	{
 		UsersDataModel udm = new UsersDataModel();
-		udm.fill();
+		udm.updateData();
 		return getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
 	}
 	
@@ -105,7 +106,7 @@ public class MonitorModel
 	{
 		MonitorData md = new MonitorData();
 		md.rows = new MonitorRow[users.length];
-		ProblemData[] pr = ContestCore.getProblemsModel().getRows().toArray(new ProblemData[0]);
+		ProblemData[] pr = ContestServer.getCore().getProblemsModel().getRows().toArray(new ProblemData[0]);
 		for (int i = 0; i < users.length; i++)
 		{
 			MonitorRow mr = new MonitorRow();

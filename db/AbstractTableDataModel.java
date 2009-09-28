@@ -6,8 +6,15 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-public abstract class AbstractTableDataModel extends AbstractTableModel
+import org.apache.log4j.Logger;
+
+import djudge.acmcontester.server.ContestServer;
+import djudge.acmcontester.structures.AbstractDataTable;
+
+public abstract class AbstractTableDataModel extends AbstractDataTable
 {
+	private static final Logger log = Logger.getLogger(AbstractTableDataModel.class);
+	
 	public final static String dbMutex = "Mutex";
 	
 	public DBField[] columns;
@@ -65,7 +72,8 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		return res;
 	}
 	
-	public boolean fill()
+	@Override
+	public boolean updateData()
 	{
 		return fillSql(fillSqlQuery);
 	}
@@ -75,11 +83,20 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		boolean res = true;
 		try
 		{
-			Statement stmt = Settings.getConnection().createStatement();
-			//log(query);
-			ResultSet rs = stmt.executeQuery(query);
-			rows = getRows(rs);
-			stmt.close();
+			synchronized (dbMutex)
+			{
+				Statement stmt = Settings.getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				rows = getRows(rs);
+				if (log.isDebugEnabled() && false)
+				{
+					for (int i = 0; i < rows.size(); i++)
+					{
+						log.debug(rows.get(i).toString());
+					}
+				}
+				stmt.close();
+			}
 		}
 		catch (Exception e)
 		{
@@ -94,6 +111,7 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		System.out.println(s);
 	}
 
+	@Override
 	public boolean insertRow()
 	{
 		try
@@ -208,10 +226,28 @@ public abstract class AbstractTableDataModel extends AbstractTableModel
 		row.save();
 	}
 
-	public void deleteRow(int iRow)
+	@Override
+	public boolean deleteRow(int iRow)
 	{
 		DBRowAbstract row = rows.get(iRow);
 		row.delete(this);
-		fill();
+		updateData();
+		return true;
+	}
+	
+	public DBRowAbstract getRowByID(String id)
+	{
+		for (int i = 0; i < rows.size(); i++)
+		{
+			if (rows.get(i).data[0].toString().equals(id))
+				return rows.get(i);
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean saveData()
+	{
+		return true;
 	}
 }

@@ -9,12 +9,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
-import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.ServerInterfaceStub;
+import djudge.acmcontester.server.ContestCore;
+import djudge.acmcontester.structures.RemoteTableLanguages;
 
 import utils.FileWorks;
 
-public class Admin extends JFrame implements AuthentificationDataProvider
+public class Admin extends JFrame// implements AuthentificationDataProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -36,11 +40,9 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 	
 	private ContestCore core;
 	
-	private String username = "root";
+	private AuthentificationData authData = new AuthentificationData("root", "root");
 	
-	private String password = "root";
-	
-	private AcmContesterXmlRpcClientInterface serverInterface = new AcmContesterClientStub();
+	private ServerXmlRpcInterface serverXmlRpcInterface = new ServerXmlRpcConnector();
 	
 	class WatchThread extends Thread
 	{
@@ -52,7 +54,7 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 				statusPanel.updateData();
 				try
 				{
-					sleep(1000);
+					sleep(10000);
 				} catch (InterruptedException e) {}
 			}
 		}
@@ -68,21 +70,21 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		
 		jtpTabs.add("Start/Stop", new JContestSettingsPanel());
 		
-		jtpTabs.add("Users", usersPanel = new JTablePanel(ContestCore.getUsersModel()));
+		//jtpTabs.add("Users", usersPanel = new JTablePanel(ContestCore.getUsersModel()));
 		
-		jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
+		//jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
 		
-		jtpTabs.add("Languages", languagesPanel = new JTablePanel(ContestCore.getLanguagesModel()));
+		jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
 		
-		jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
+		//jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
 		
-		jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverInterface, this));
+	//	jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverXmlRpcInterface, this));
 		
-		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverInterface, this));
+		//jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, this));
 		
 		add(jtpTabs, BorderLayout.CENTER);
 		
-		add(statusPanel = new JStatusPanel(serverInterface, this), BorderLayout.NORTH);
+		add(statusPanel = new JStatusPanel(serverXmlRpcInterface, authData), BorderLayout.NORTH);
 	}
 	
 	public Admin()
@@ -95,7 +97,6 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		setData();
 		setVisible(true);
 		new WatchThread().start();
-		new AcmContesterXmlRpcServer().start();
 	}
 
 	private void setData()
@@ -114,7 +115,7 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 		new Admin();
 	}
 
-	@Override
+/*	@Override
 	public String getPassword()
 	{
 		return password;
@@ -124,5 +125,5 @@ public class Admin extends JFrame implements AuthentificationDataProvider
 	public String getUsername()
 	{
 		return username;
-	}
+	}*/
 }

@@ -17,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
@@ -39,7 +39,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 	
 	Vector<ProblemData> problems;
 
-	AcmContesterXmlRpcClientInterface serverInterface;
+	TeamXmlRpcInterface serverInterface;
 	
 	AuthentificationDataProvider authProvider;
 	
@@ -172,7 +172,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		}*/
 	}
 	
-	public JMonitorPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
+	public JMonitorPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
 		this.serverInterface = serverInterface;
 		this.authProvider = authProvider;

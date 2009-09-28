@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 
 public class Client extends JFrame
@@ -15,7 +15,7 @@ public class Client extends JFrame
 
 	private JTabbedPane jtpTabs;
 	
-	public static AcmContesterXmlRpcClientInterface server;
+	public static TeamXmlRpcInterface server;
 	public static String username;
 	public static String password;
 	public static boolean fConnected;
@@ -58,7 +58,7 @@ public class Client extends JFrame
 	
 	static
 	{
-		server = new AcmContesterClientXmlRpcConnector();
+		server = new TeamXmlRpcConnector();
 		username = "alt";
 		password = "p78";
 	}

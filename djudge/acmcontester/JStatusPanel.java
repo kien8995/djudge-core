@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 
 public class JStatusPanel extends JPanel implements ActionListener
@@ -20,10 +20,10 @@ public class JStatusPanel extends JPanel implements ActionListener
 	private JLabel jlStatus;
 	private JButton jbExit;
 	
-	AcmContesterXmlRpcClientInterface serverInterface;
+	TeamXmlRpcInterface serverInterface;
 	AuthentificationDataProvider authProvider;
 	
-	public JStatusPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
+	public JStatusPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
 		this.serverInterface = serverInterface;
 		this.authProvider = authProvider;
