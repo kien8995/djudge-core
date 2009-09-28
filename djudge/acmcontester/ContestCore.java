@@ -33,16 +33,16 @@ public class ContestCore
 	static
 	{
 		usersModel = new UsersDataModel();
-		usersModel.fill();
+		usersModel.updateData();
 		
 		problemsModel = new ProblemsDataModel();
-		problemsModel.fill();
+		problemsModel.updateData();
 		
 		languagesModel = new LanguagesDataModel();
-		languagesModel.fill();
+		languagesModel.updateData();
 		
 		submissionsModel = new SubmissionsDataModel();
-		submissionsModel.fill();
+		submissionsModel.updateData();
 		
 		djudgeInterface = new DServiceConnector();
 		djudgeInterface.start();
