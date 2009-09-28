@@ -2,16 +2,18 @@ package djudge.acmcontester.structures;
 
 
 import java.util.HashMap;
+
+import djudge.acmcontester.AuthentificationData;
 import djudge.common.HashMapSerializable;
 
 public class LanguageData extends HashMapSerializable
 {
-	public String id;
-	public String sid;
-	public String shortName;
-	public String fullName;
-	public String compilationCommand;
-	public String djudgeID;
+	public String id = "-1";
+	public String sid = "";
+	public String shortName = "";
+	public String fullName = "";
+	public String compilationCommand = "";
+	public String djudgeID = "";
 	
 	@Override
 	public HashMap<String, String> toHashMap()
@@ -29,6 +31,25 @@ public class LanguageData extends HashMapSerializable
 	public LanguageData()
 	{
 		// TODO Auto-generated constructor stub
+	}
+
+	public LanguageData(String sid, String shortName, String fullName, String compilationCommand, String djudgeID)
+	{
+		this.shortName = shortName;
+		this.sid = sid;
+		this.compilationCommand = compilationCommand;
+		this.djudgeID = djudgeID;
+		this.fullName = fullName;
+	}
+
+	public LanguageData(String id, String sid, String shortName, String fullName, String compilationCommand, String djudgeID)
+	{
+		this.id = id;
+		this.shortName = shortName;
+		this.sid = sid;
+		this.compilationCommand = compilationCommand;
+		this.djudgeID = djudgeID;
+		this.fullName = fullName;
 	}
 
 	public LanguageData(HashMap<String, String> map)
@@ -53,4 +74,80 @@ public class LanguageData extends HashMapSerializable
 	{
 		return sid + "(" + fullName +  ")";
 	}
+	
+	@Override
+	int getColumnCount()
+	{
+		return 6;
+	}
+
+	@Override
+	Class<? extends AbstractRemoteTable> getTableClass()
+	{
+		return RemoteTableLanguages.class;
+	}
+
+	@Override
+	Object getValueAt(int column)
+	{
+		switch (column)
+		{
+		case 0: return id;
+		case 1: return sid;
+		case 2: return shortName;
+		case 3: return fullName;
+		case 4: return compilationCommand;
+		case 5: return djudgeID;
+
+		default:
+			return id;
+		}
+	}
+	
+	@Override
+	void setValueAt(int column, String value)
+	{
+		switch (column)
+		{
+		case 1: sid = value; break;
+		case 2: shortName = value; break;
+		case 3: fullName = value; break;
+		case 4: compilationCommand = value; break;
+		case 5: djudgeID = value; break;
+		}
+	}
+	
+	@Override
+	boolean save()
+	{
+		if (!fDataChanged)
+			return true;
+		AuthentificationData ad = table.getAuthentificationData();
+		boolean res = table.getConnector().editLanguage(
+				ad.getUsername(),
+				ad.getPassword(), id, sid,
+				shortName, fullName, compilationCommand, djudgeID);
+		fDataChanged = false;
+		return res;
+	}
+	
+	@Override
+	boolean create()
+	{
+		AuthentificationData ad = table.getAuthentificationData();
+		return table.getConnector().addLanguage(
+				ad.getUsername(),
+				ad.getPassword(), sid,
+				shortName, fullName, compilationCommand, djudgeID);
+	}
+	
+	@Override
+	boolean delete()
+	{
+		AuthentificationData ad = table.getAuthentificationData();
+		return table.getConnector().deleteLanguage(
+				ad.getUsername(),
+				ad.getPassword(), id);
+	}
+	
 }

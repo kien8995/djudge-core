@@ -5,6 +5,8 @@ import org.apache.xmlrpc.server.XmlRpcStreamServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
+import djudge.acmcontester.server.ServerInterfaceStub;
+
 public class AcmContesterXmlRpcServer extends Thread
 {
 	private int port;
@@ -32,7 +34,7 @@ public class AcmContesterXmlRpcServer extends Thread
 
 			PropertyHandlerMapping phm = new PropertyHandlerMapping();
 
-			phm.addHandler("AcmContester", AcmContesterClientStub.class);
+			phm.addHandler("AcmContester", ServerInterfaceStub.class);
 
 			xmlRpcServer.setHandlerMapping(phm);
 
@@ -48,10 +50,4 @@ public class AcmContesterXmlRpcServer extends Thread
 			exc.printStackTrace();
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		new Admin();
-	}
-	
 }

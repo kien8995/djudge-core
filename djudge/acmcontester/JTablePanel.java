@@ -22,6 +22,8 @@ import utils.XmlWorks;
 
 import db.AbstractTableDataModel;
 import db.SubmissionsDataModel;
+import djudge.acmcontester.structures.AbstractDataTable;
+import djudge.acmcontester.structures.AbstractRemoteTable;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.judge.SubmissionResult;
 import djudge.swing.JSubmissionInfoFrame;
@@ -45,13 +47,13 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			String act = arg0.getActionCommand().toLowerCase();
 			if ("activate".equals(act))
 			{
-    			int prev = Integer.parseInt(jtttTableModel.getValueAt(iRow,
+    			int prev = Integer.parseInt(tableModel.getValueAt(iRow,
     					SubmissionsDataModel.getActiveFlagIndex()).toString());
     			if (prev <= 0)
     				prev = 1;
     			else
     				prev = 0;
-    			jtttTableModel.setValueAt(prev, iRow, SubmissionsDataModel
+    			tableModel.setValueAt(prev, iRow, SubmissionsDataModel
     					.getActiveFlagIndex());
 			}
 			else if (act.startsWith("rejudge"))
@@ -60,29 +62,29 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				String key = "";
 				if (act.equals("rejudge_submission"))
 				{
-					value = jtttTableModel.getValueAt(iRow, 0);
+					value = tableModel.getValueAt(iRow, 0);
 					key = "id";
 				}
 				else if (act.equals("rejudge_user"))
 				{
-					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getUserFieldIndex());
+					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getUserFieldIndex());
 					key = "user_id";
 				}
 				else if (act.equals("rejudge_problem"))
 				{
-					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getProblemFieldIndex());
+					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getProblemFieldIndex());
 					key = "problem_id";
 				}
 				else if (act.equals("rejudge_language"))
 				{
-					value = jtttTableModel.getValueAt(iRow, SubmissionsDataModel.getLanguageFieldIndex());
+					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getLanguageFieldIndex());
 					key = "language_id";
 				}
 				else
 				{
 					return;
 				}
-				((SubmissionsDataModel) jtttTableModel).rejudgeBy(key, value);
+				((SubmissionsDataModel) tableModel).rejudgeBy(key, value);
 			}
 		}
 	}
@@ -149,7 +151,7 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			int row = target.getSelectedRow();
 			if  (row < 0)
 				return;
-			SubmissionsDataModel sdm = (SubmissionsDataModel) jtttTableModel;
+			SubmissionsDataModel sdm = (SubmissionsDataModel) tableModel;
 			SubmissionData sd = sdm.getRow(row);
 			//SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
 			//TODO: debug output
@@ -201,7 +203,7 @@ public class JTablePanel extends JPanel implements ActionListener
 	
 	protected JTable jtTable;
 	
-	protected AbstractTableDataModel jtttTableModel;
+	protected AbstractDataTable tableModel;
 	
 	protected JPanel jpButtons;
 	
@@ -211,9 +213,12 @@ public class JTablePanel extends JPanel implements ActionListener
 	
 	protected JButton jbtnRefresh;
 	
-	public JTablePanel(AbstractTableDataModel atdm)
+	protected JButton jbtnSave;
+	
+	public JTablePanel(AbstractDataTable model)
 	{
-		jtttTableModel = atdm;
+		tableModel = model;
+		tableModel.updateData();
 		
 		jbtnAddRecord = new JButton("Add");
 		jbtnAddRecord.addActionListener(this);
@@ -224,7 +229,10 @@ public class JTablePanel extends JPanel implements ActionListener
 		jbtnRefresh = new JButton("Update");
 		jbtnRefresh.addActionListener(this);
 		
-		jtTable = new JTable(atdm);
+		jbtnSave = new JButton("Save");
+		jbtnSave.addActionListener(this);
+		
+		jtTable = new JTable(model);
 		jtTable.setRowHeight(20);
 		jtTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -232,12 +240,11 @@ public class JTablePanel extends JPanel implements ActionListener
 		jpButtons.add(jbtnAddRecord);
 		jpButtons.add(jbtnDeleteRecord);
 		jpButtons.add(jbtnRefresh);
+		jpButtons.add(jbtnSave);
 		
 		setLayout(new BorderLayout());
 		add(jpButtons, BorderLayout.SOUTH);
 		add(new JScrollPane(jtTable), BorderLayout.CENTER);
-		
-		//setVisible(true);
 	}
 	
 	@Override
@@ -246,12 +253,17 @@ public class JTablePanel extends JPanel implements ActionListener
 		Object source = arg0.getSource();
 		if (source.equals(jbtnAddRecord))
 		{
-			jtttTableModel.insertRow();
+			tableModel.insertRow();
+			jtTable.updateUI();
+		}
+		else if (source.equals(jbtnSave))
+		{
+			tableModel.saveData();
 			jtTable.updateUI();
 		}
 		else if (source.equals(jbtnRefresh))
 		{
-			jtttTableModel.fill();
+			tableModel.updateData();
 			jtTable.updateUI();
 		}
 		else if (source.equals(jbtnDeleteRecord))
@@ -259,7 +271,7 @@ public class JTablePanel extends JPanel implements ActionListener
 			int iRow = jtTable.getSelectedRow();
 			if (iRow >= 0)
 			{
-				jtttTableModel.deleteRow(iRow);
+				tableModel.deleteRow(iRow);
 				jtTable.updateUI();
 			}
 		}
@@ -271,4 +283,3 @@ public class JTablePanel extends JPanel implements ActionListener
 	}
 	
 }
-

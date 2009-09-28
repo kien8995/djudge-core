@@ -1,6 +1,8 @@
 package djudge.acmcontester;
 
-public class AuthentificationData
+import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+
+public class AuthentificationData implements AuthentificationDataProvider
 {
 	public AuthentificationData(String username2, String password2)
 	{
@@ -15,4 +17,16 @@ public class AuthentificationData
 	
 	public String username;
 	public String password;
+	
+	@Override
+	public String getPassword()
+	{
+		return password;
+	}
+
+	@Override
+	public String getUsername()
+	{
+		return username;
+	}
 }

@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import djudge.acmcontester.server.ContestCore;
+
 
 public class JContestSettingsPanel extends JPanel implements ActionListener
 {
@@ -45,11 +47,11 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 			String timeLeft = jtfTimeLeft.getText();
 			String t[] = timeLeft.split(":");
 			long left = ((Long.parseLong(t[0]) * 60 + Long.parseLong(t[1])) * 60 + Long.parseLong(t[2])) * 1000;
-			ContestCore.startContest(left);
+			//ContestCore.startContest(left);
 		}
 		else if (src.equals(jbStopContest))
 		{
-			ContestCore.stopContest();
+			//ContestCore.stopContest();
 		}
 	}
 	

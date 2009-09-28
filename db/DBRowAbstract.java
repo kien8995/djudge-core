@@ -7,9 +7,15 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import djudge.acmcontester.server.ContestServer;
+
 
 public abstract class DBRowAbstract extends SQLAbstract
 {
+	private static final Logger log = Logger.getLogger(DBRowAbstract.class);
+	
 	public Object[] data;
 	
 	private AbstractTableDataModel table;
@@ -68,7 +74,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+			log.error("fillRow", e);
 		}
 	}
 	
@@ -121,24 +127,27 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = false;
 		try
 		{
-			Connection con = Settings.getConnection();
-			Statement stmt = con.createStatement();
-			String query = getCreateStatement();
-			log(query);
-			stmt.executeUpdate(query);
-			stmt.close();
-			query = "SELECT * FROM " + getTableName() + " ORDER BY id desc LIMIT 0,1";
-			log(query);
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			if (rs.next())
+			synchronized (AbstractTableDataModel.dbMutex)
 			{
-				DBRowAbstract newRow = table.getRowClass().newInstance();
-				newRow.fillRow(rs);
-				table.rows.add(newRow);
-				f = true;
+				Connection con = Settings.getConnection();
+				Statement stmt = con.createStatement();
+				String query = getCreateStatement();
+				log.debug(query);
+				stmt.executeUpdate(query);
+				stmt.close();
+				query = "SELECT * FROM " + getTableName() + " ORDER BY id desc LIMIT 0,1";
+				log.debug(query);
+				stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				if (rs.next())
+				{
+					DBRowAbstract newRow = table.getRowClass().newInstance();
+					newRow.fillRow(rs);
+					table.rows.add(newRow);
+					f = true;
+				}
+				stmt.close();
 			}
-			stmt.close();
 		}
 		catch (Exception e)
 		{
@@ -154,15 +163,18 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = false;
 		try
 		{
-			Connection con = Settings.getConnection();
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM `" + getTableName() + "` WHERE id = " + this.data[0];
-			log(query);
-			stmt.executeUpdate(query);
+			synchronized (AbstractTableDataModel.dbMutex)
+			{
+				Connection con = Settings.getConnection();
+				Statement stmt = con.createStatement();
+				String query = "DELETE FROM `" + getTableName() + "` WHERE id = " + this.data[0];
+				log.debug(query);
+				stmt.executeUpdate(query);
+			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("delete", e);
 			f = false;
 		}
 		return f;
@@ -178,7 +190,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+			log.error("fill", e);
 			res = false;
 		}
 		return res;
@@ -187,7 +199,6 @@ public abstract class DBRowAbstract extends SQLAbstract
 	private String getUpdateStatement()
 	{
 		StringBuffer s = new StringBuffer();
-		
 		try
 		{
     		List<String> columns = new LinkedList<String>();
@@ -223,17 +234,19 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = true;
 		try
 		{
-			Connection con = Settings.getConnection();
-			Statement stmt = con.createStatement();
-			String query = this.getUpdateStatement();
-			log(query);
-			stmt.executeUpdate(query);
-			stmt.close();
-//			con.close();
+			synchronized (AbstractTableDataModel.dbMutex)
+			{
+				Connection con = Settings.getConnection();
+				Statement stmt = con.createStatement();
+				String query = this.getUpdateStatement();
+				log.debug(query);
+				stmt.executeUpdate(query);
+				stmt.close();
+			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("save", e);
 			f = false;
 		}
 		return f;
@@ -245,31 +258,45 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = false;
 		try
 		{
-			Connection con = Settings.getConnection();
-			Statement stmt = con.createStatement();
-			String query = getCreateStatement2();
-			log(query);
-			stmt.executeUpdate(query);
-			stmt.close();
-			query = "SELECT * FROM " + getTableName() + " ORDER BY id desc LIMIT 0,1";
-			log(query);
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			if (rs.next())
+			synchronized (AbstractTableDataModel.dbMutex)
 			{
-				DBRowAbstract newRow = table.getRowClass().newInstance();
-				newRow.fillRow(rs);
-				table.rows.add(newRow);
-				f = true;
+				Connection con = Settings.getConnection();
+				Statement stmt = con.createStatement();
+				String query = getCreateStatement2();
+				log.debug(query);
+				stmt.executeUpdate(query);
+				stmt.close();
+				query = "SELECT * FROM " + getTableName() + " ORDER BY id desc LIMIT 0,1";
+				log.debug(query);
+				stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				if (rs.next())
+				{
+					DBRowAbstract newRow = table.getRowClass().newInstance();
+					newRow.fillRow(rs);
+					table.rows.add(newRow);
+					f = true;
+				}
+				stmt.close();
 			}
-			stmt.close();
 		}
 		catch (Exception e)
 		{
+			log.error("appendTo", e);
 			e.printStackTrace();
 			f = false;
 		}
 		return f;		
 	}
 	
+	@Override
+	public String toString()
+	{
+		String res = "[";
+		for (int i = 0; i < data.length; i++)
+		{
+			res += data[i].toString() + (i == data.length - 1 ? ']' : ", ");
+		}
+		return res;
+	}
 }

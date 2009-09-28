@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import djudge.acmcontester.interfaces.AcmContesterXmlRpcClientInterface;
+import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
@@ -50,11 +50,11 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	
 	JButton jbtnSubmit;
 	
-	AcmContesterXmlRpcClientInterface serverInterface;
+	TeamXmlRpcInterface serverInterface;
 	
 	AuthentificationDataProvider authProvider;
 	
-	public JSubmitPanel(AcmContesterXmlRpcClientInterface serverInterface, AuthentificationDataProvider authProvider)
+	public JSubmitPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
 		this.serverInterface = serverInterface;
 		this.authProvider = authProvider;
