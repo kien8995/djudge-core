@@ -7,8 +7,14 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
+import org.apache.log4j.Logger;
+
+import djudge.dservice.DService;
+
 public class SimpleHttpServer
 {
+	private static final Logger log = Logger.getLogger(SimpleHttpServer.class);
+	
 	final SimpleHttpServerDataProvider dataProvider;
 	
 	public SimpleHttpServer(SimpleHttpServerDataProvider dataProvider, int port)
@@ -35,7 +41,7 @@ public class SimpleHttpServer
 				try
 				{
 					readInputHeaders();
-					writeResponse("<html><body><h1>Hello from Habrahabr</h1></body></html>");
+					writeResponse("");
 				} catch (Throwable t)
 				{
 					/*do nothing*/
@@ -49,13 +55,13 @@ public class SimpleHttpServer
 						/*do nothing*/
 					}
 				}
-				//System.err.println("Client processing finished");
+				log.info("Client processing finished");
 			}
 
 			private void writeResponse(String s) throws Throwable
 			{
 				String response = "HTTP/1.1 200 OK\r\n"
-						+ "Server: YarServer/2009-09-09\r\n"
+						+ "Server: DJudge.http\r\n"
 						+ "Content-Type: text/html\r\n" + "Content-Length: "
 						+ s.length() + "\r\n" + "Connection: close\r\n\r\n";
 				String result = response + dataProvider.getHtmlPage("");
@@ -82,10 +88,11 @@ public class SimpleHttpServer
 		try
 		{
     		ServerSocket ss = new ServerSocket(port);
+    		log.info("HttpServer started as " + port);
     		while (true)
     		{
     			Socket s = ss.accept();
-    			//System.err.println("Client accepted");
+    			log.info("Client accepted");
     			new Thread(new SocketProcessor(s, dataProvider)).start();
     		}
 		}

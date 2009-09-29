@@ -2,8 +2,41 @@ package djudge.dservice;
 
 import java.util.HashMap;
 
-public class DServiceStub implements DServiceClientInterface
+import djudge.common.HashMapSerializer;
+import djudge.dservice.interfaces.DServiceXmlRpcInterface;
+
+public class DServiceStub implements DServiceXmlRpcInterface
 {
+
+	@Override
+	public int submitSolution(String uid, String contestId, String problemId,
+			String languageId, String source, String clientData)
+	{
+		return DService.getCore().submitSolution(uid, contestId, problemId, languageId, source, clientData);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap[] fetchResults(String uid)
+	{
+		return HashMapSerializer.serializeToHashMap(DService.getCore().fetchResults(uid));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap getTask(int judgeID)
+	{
+		DServiceTask task = DService.getCore().getTask(judgeID);
+		return task == null ? null : task.toHashMap();
+	}
+
+	@Override
+	public boolean setTaskResult(int taskID, String judgement, String xmlData)
+	{
+		return DService.getCore().setTaskResult(taskID, judgement, xmlData);
+	}
+	
+	/*
 	@SuppressWarnings("unchecked")
 	public HashMap<String, String>[] fetchResults(String uid)
 	{
@@ -61,6 +94,6 @@ public class DServiceStub implements DServiceClientInterface
 			String languageId, String source, String clientData)
 	{
 		return DService.submitSolution(uid, contestId, problemId, languageId, source, clientData);
-	}
+	}*/
 
 }

@@ -11,14 +11,12 @@ public class XmlRpcServer extends Thread
 	
 	private WebServer webServer;
 	
-	public XmlRpcServer(int port)
+	private String serviceName;
+	
+	public XmlRpcServer(String serviceName, int port)
 	{
 		this.port = port;
-	}
-	
-	public XmlRpcServer()
-	{
-		port = 8001;
+		this.serviceName = serviceName;
 	}
 	
 	@Override
@@ -32,7 +30,7 @@ public class XmlRpcServer extends Thread
 
 			PropertyHandlerMapping phm = new PropertyHandlerMapping();
 
-			phm.addHandler("DService", DServiceStub.class);
+			phm.addHandler(serviceName, DServiceStub.class);
 
 			xmlRpcServer.setHandlerMapping(phm);
 
