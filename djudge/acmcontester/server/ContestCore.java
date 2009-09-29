@@ -12,14 +12,17 @@ import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
 import djudge.acmcontester.AuthentificationData;
+import djudge.acmcontester.interfaces.AdminUsersNativeInterface;
+import djudge.acmcontester.interfaces.AdminUsersXmlRpcInterface;
 import djudge.acmcontester.structures.AbstractRemoteTable;
 import djudge.acmcontester.structures.ContestStatusEnum;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
+import djudge.acmcontester.structures.UserData;
 
-public class ContestCore
+public class ContestCore implements AdminUsersNativeInterface
 {
 	private static final Logger log = Logger.getLogger(ContestCore.class);
 	
@@ -96,16 +99,11 @@ public class ContestCore
 	{
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		log.debug("language change - auth OK");
 		DBRowAbstract rd = languagesModel.getRowByID(id);
 		if (rd == null)
 			return false;
 		LanguageData ld = new LanguageData(id, sid, shortName, fullName, compilationComand, djudgeID);
-		log.debug("language change - find OK");
-		log.info("Language <" + id + "> was changed");
-		log.debug(rd.toString());
 		rd = languagesModel.toRow(ld);
-		log.debug(rd.toString());
 		rd.save();
 		languagesModel.updateData();
 		return true;
@@ -115,12 +113,24 @@ public class ContestCore
 	{
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		log.debug("language delete - auth OK");
 		DBRowAbstract rd = languagesModel.getRowByID(id);
 		if (rd == null)
 			return false;
 		rd.delete(languagesModel);
 		languagesModel.updateData();
+		return true;
+	}
+	
+	public boolean deleteUser(String username, String password, String id)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		log.debug("deleteUser - auth OK");
+		DBRowAbstract rd = usersModel.getRowByID(id);
+		if (rd == null)
+			return false;
+		rd.delete(usersModel);
+		usersModel.updateData();
 		return true;
 	}
 	
@@ -169,6 +179,7 @@ public class ContestCore
 
 	public SubmissionData[] getOwnSubmissions(AuthentificationData userInfo)
 	{
+		//FIXME: != getAllSubmissions
 		return submissionsModel.getRows().toArray(new SubmissionData[0]);
 	}
 
@@ -216,5 +227,25 @@ public class ContestCore
 	public void startContest(long timeLeft)
 	{
 		state.startContest(timeLeft);
+	}
+
+	@Override
+	public boolean addUser(String username, String password,
+			String newUserName, String newPassword, String name, String role)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		UserData ud = new UserData(newUserName, newPassword, name, role);
+		DBRowAbstract rd = usersModel.toRow(ud);
+		rd.appendTo(usersModel);
+		return true;
+	}
+
+	@Override
+	public UserData[] getUsers(String username, String password)
+	{
+		//if (!usersModel.isAdmin(username, password))
+			//return new UserData[0];
+		return usersModel.getRows().toArray(new UserData[0]);
 	}
 }

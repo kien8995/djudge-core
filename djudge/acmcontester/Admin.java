@@ -15,6 +15,7 @@ import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.server.ServerInterfaceStub;
 import djudge.acmcontester.server.ContestCore;
 import djudge.acmcontester.structures.RemoteTableLanguages;
+import djudge.acmcontester.structures.RemoteTableUsers;
 
 import utils.FileWorks;
 
@@ -70,11 +71,11 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 		
 		jtpTabs.add("Start/Stop", new JContestSettingsPanel());
 		
-		//jtpTabs.add("Users", usersPanel = new JTablePanel(ContestCore.getUsersModel()));
+		jtpTabs.add("Users", usersPanel = new JTablePanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
 		
 		//jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
 		
-		jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
+		//jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
 		
 		//jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
 		

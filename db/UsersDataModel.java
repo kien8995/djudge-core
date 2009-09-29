@@ -106,6 +106,7 @@ public class UsersDataModel extends AbstractTableDataModel
 		Vector<UserData> res = new Vector<UserData>();
 		for (int i = 0; i < rows.size(); i++)
 		{
+			log(toUserData(rows.get(i)).toString());
 			res.add(toUserData(rows.get(i)));
 		}
 		return res;

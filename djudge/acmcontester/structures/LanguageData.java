@@ -1,6 +1,5 @@
 package djudge.acmcontester.structures;
 
-
 import java.util.HashMap;
 
 import djudge.acmcontester.AuthentificationData;
@@ -14,19 +13,6 @@ public class LanguageData extends HashMapSerializable
 	public String fullName = "";
 	public String compilationCommand = "";
 	public String djudgeID = "";
-	
-	@Override
-	public HashMap<String, String> toHashMap()
-	{
-		HashMap<String, String> res = new HashMap<String, String>();
-		res.put("id", id);
-		res.put("sid", sid);
-		res.put("short-name", shortName);
-		res.put("full-name", fullName);
-		res.put("compilation-command", compilationCommand);
-		res.put("djudge-id", djudgeID);
-		return res;
-	}
 	
 	public LanguageData()
 	{
@@ -56,6 +42,19 @@ public class LanguageData extends HashMapSerializable
 	{
 		fromHashMap(map);
 	}
+
+	@Override
+	public HashMap<String, String> toHashMap()
+	{
+		HashMap<String, String> res = new HashMap<String, String>();
+		res.put("id", id);
+		res.put("sid", sid);
+		res.put("short-name", shortName);
+		res.put("full-name", fullName);
+		res.put("compilation-command", compilationCommand);
+		res.put("djudge-id", djudgeID);
+		return res;
+	}	
 	
 	@SuppressWarnings("unchecked")
 	@Override
