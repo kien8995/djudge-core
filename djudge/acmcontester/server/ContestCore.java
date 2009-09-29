@@ -1,10 +1,11 @@
 package djudge.acmcontester.server;
 
 
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
-import sun.util.logging.resources.logging;
+import db.AbstractTableDataModel;
 import db.DBRowAbstract;
 import db.LanguagesDataModel;
 import db.MonitorModel;
@@ -12,9 +13,7 @@ import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.interfaces.AdminUsersNativeInterface;
-import djudge.acmcontester.interfaces.AdminUsersXmlRpcInterface;
-import djudge.acmcontester.structures.AbstractRemoteTable;
+import djudge.acmcontester.interfaces.AdminNativeInterface;
 import djudge.acmcontester.structures.ContestStatusEnum;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.MonitorData;
@@ -22,7 +21,7 @@ import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
 
-public class ContestCore implements AdminUsersNativeInterface
+public class ContestCore implements AdminNativeInterface
 {
 	private static final Logger log = Logger.getLogger(ContestCore.class);
 	
@@ -131,27 +130,12 @@ public class ContestCore implements AdminUsersNativeInterface
 	
 	public boolean deleteLanguage(String username, String password, String id)
 	{
-		if (!usersModel.isAdmin(username, password))
-			return false;
-		DBRowAbstract rd = languagesModel.getRowByID(id);
-		if (rd == null)
-			return false;
-		rd.delete(languagesModel);
-		languagesModel.updateData();
-		return true;
+		return deleteAbstract(languagesModel, username, password, id);
 	}
 	
 	public boolean deleteUser(String username, String password, String id)
 	{
-		if (!usersModel.isAdmin(username, password))
-			return false;
-		log.debug("deleteUser - auth OK");
-		DBRowAbstract rd = usersModel.getRowByID(id);
-		if (rd == null)
-			return false;
-		rd.delete(usersModel);
-		usersModel.updateData();
-		return true;
+		return deleteAbstract(usersModel, username, password, id);
 	}
 	
 	public boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
@@ -267,5 +251,98 @@ public class ContestCore implements AdminUsersNativeInterface
 		if (!usersModel.isAdmin(username, password))
 			return new UserData[0];
 		return usersModel.getRows().toArray(new UserData[0]);
+	}
+
+	@Override
+	public boolean addProblem(String username, String password, String sid,
+			String name, String djudgeProblem, String djudgeContest)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		ProblemData pd = new ProblemData(sid, name, djudgeProblem, djudgeContest);
+		DBRowAbstract rd = problemsModel.toRow(pd);
+		rd.appendTo(problemsModel);
+		return true;
+	}
+
+	public boolean deleteAbstract(AbstractTableDataModel model, String username, String password, String id)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		log.debug("delete from table " + model.tableName + " - auth OK");
+		DBRowAbstract rd = model.getRowByID(id);
+		if (rd == null)
+			return false;
+		rd.delete(model);
+		model.updateData();
+		log.debug("delete from table " + model.tableName + " - finished");
+		return true;
+	}
+	
+	@Override
+	public boolean deleteProblem(String username, String password, String id)
+	{
+		return deleteAbstract(problemsModel, username, password, id);
+	}
+
+	@Override
+	public boolean editProblem(String username, String password, String id,
+			String sid, String name, String djudgeProblem, String djudgeContest)
+	{
+		
+		log.debug("Problem editing request");
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		DBRowAbstract rd = problemsModel.getRowByID(id);
+		if (rd == null)
+			return false;
+		ProblemData pd = new ProblemData(id, sid, name, djudgeProblem, djudgeContest);
+		rd = problemsModel.toRow(pd);
+		rd.save();
+		problemsModel.updateData();
+		log.debug("Problem editing finished");
+		return true;
+	}
+
+	@Override
+	public boolean deleteSubmission(String username, String password, String id)
+	{
+		return deleteAbstract(submissionsModel, username, password, id);
+	}
+
+	@Override
+	public SubmissionData[] getSubmissions(String username, String password)
+	{
+		return submissionsModel.getRows().toArray(new SubmissionData[0]);
+	}
+
+	@Override
+	public boolean editSubmission(String username, String password, String id,
+			SubmissionData data)
+	{
+		log.debug("editSubmission request");
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		DBRowAbstract rd = submissionsModel.getRowByID(id);
+		if (rd == null)
+			return false;
+		
+		rd = submissionsModel.toRow(data);
+		rd.save();
+		submissionsModel.updateData();
+		log.debug("editSubmission finished");
+		return true;		
+	}
+
+	@Override
+	public boolean rejudgeSubmissions(String username, String password,
+			String key, String value)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		submissionsModel.rejudgeBy(key, value);
+		return true;
 	}
 }

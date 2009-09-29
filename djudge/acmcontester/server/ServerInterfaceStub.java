@@ -6,6 +6,7 @@ import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
+import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
 import djudge.common.HashMapSerializer;
 
@@ -149,5 +150,54 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 			String newUserName, String newPassword, String name, String role)
 	{
 		return ContestServer.getCore().editUser(username, password, id, newUserName, newPassword, name, role);
+	}
+
+	@Override
+	public boolean addProblem(String username, String password, String sid,
+			String name, String djudgeProblem, String djudgeContest)
+	{
+		return ContestServer.getCore().addProblem(username, password, sid, name, djudgeProblem, djudgeContest);
+	}
+
+	@Override
+	public boolean deleteProblem(String username, String password, String id)
+	{
+		return ContestServer.getCore().deleteProblem(username, password, id);
+	}
+
+	@Override
+	public boolean editProblem(String username, String password, String id,
+			String sid, String name, String djudgeProblem, String djudgeContest)
+	{
+		return ContestServer.getCore().editProblem(username, password, id, sid, name, djudgeProblem, djudgeContest);
+	}
+
+	@Override
+	public boolean deleteSubmission(String username, String password, String id)
+	{
+		return ContestServer.getCore().deleteSubmission(username, password, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap[] getSubmissions(String username, String password)
+	{
+		return HashMapSerializer.serializeToHashMap(ContestServer.getCore().getSubmissions(username, password));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean editSubmission(String username, String password, String id,
+			HashMap data)
+	{
+		SubmissionData sd = new SubmissionData(data); 
+		return ContestServer.getCore().editSubmission(username, password, id, sd);
+	}
+
+	@Override
+	public boolean rejudgeSubmissions(String username, String password,
+			String key, String value)
+	{
+		return ContestServer.getCore().rejudgeSubmissions(username, password, key, value);
 	}
 }

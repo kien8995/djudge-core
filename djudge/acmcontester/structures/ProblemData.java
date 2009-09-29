@@ -2,15 +2,16 @@ package djudge.acmcontester.structures;
 
 import java.util.HashMap;
 
+import djudge.acmcontester.AuthentificationData;
 import djudge.common.HashMapSerializable;
 
 public class ProblemData extends HashMapSerializable
 {
-	public String id;
-	public String sid;
-	public String name;
-	public String djudgeProblem;
-	public String djudgeContest;
+	public String id = "-1";
+	public String sid = "";
+	public String name = "";
+	public String djudgeProblem = "";
+	public String djudgeContest = "";
 	
 	public ProblemData()
 	{
@@ -22,6 +23,23 @@ public class ProblemData extends HashMapSerializable
 		fromHashMap(map);
 	}
 
+	public ProblemData(String sid, String name, String djudgeProblem, String djudgeContest)
+	{
+		this.sid = sid;
+		this.name = name;
+		this.djudgeProblem = djudgeProblem;
+		this.djudgeContest = djudgeContest;
+	}
+
+	public ProblemData(String id, String sid, String name, String djudgeProblem, String djudgeContest)
+	{
+		this.id = id;
+		this.sid = sid;
+		this.name = name;
+		this.djudgeProblem = djudgeProblem;
+		this.djudgeContest = djudgeContest;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromHashMap(HashMap map)
@@ -29,6 +47,8 @@ public class ProblemData extends HashMapSerializable
 		id = (String) map.get("id");
 		sid = (String) map.get("sid");
 		name = (String) map.get("name");
+		djudgeProblem = (String) map.get("djudge-problem");
+		djudgeContest = (String) map.get("djudge-contest");
 	}
 
 	@Override
@@ -38,6 +58,8 @@ public class ProblemData extends HashMapSerializable
 		res.put("id", id);
 		res.put("sid", sid);
 		res.put("name", name);
+		res.put("djudge-problem", djudgeContest);
+		res.put("djudge-contest", djudgeProblem);
 		return res;
 	}
 	
@@ -47,4 +69,75 @@ public class ProblemData extends HashMapSerializable
 		return sid + ": " + name;
 	}
 	
+	@Override
+	int getColumnCount()
+	{
+		return 5;
+	}
+
+	@Override
+	Class<? extends AbstractRemoteTable> getTableClass()
+	{
+		return RemoteTableProblems.class;
+	}
+
+	@Override
+	Object getValueAt(int column)
+	{
+		switch (column)
+		{
+		case 0: return id;
+		case 1: return sid;
+		case 2: return name;
+		case 3: return djudgeProblem;
+		case 4: return djudgeContest;
+
+		default:
+			return id;
+		}
+	}
+	
+	@Override
+	void setValueAt(int column, String value)
+	{
+		switch (column)
+		{
+		case 1: sid = value; break;
+		case 2: name = value; break;
+		case 3: djudgeProblem = value; break;
+		case 4: djudgeContest = value; break;
+		}
+	}
+	
+	@Override
+	boolean save()
+	{
+		if (!fDataChanged)
+			return true;
+		AuthentificationData ad = table.getAuthentificationData();
+		boolean res = table.getConnector().editProblem(
+				ad.getUsername(),
+				ad.getPassword(),
+				id, sid, name, djudgeProblem, djudgeContest);
+		fDataChanged = false;
+		return res;
+	}
+	
+	@Override
+	boolean create()
+	{
+		AuthentificationData ad = table.getAuthentificationData();
+		return table.getConnector().addProblem(
+				ad.getUsername(),
+				ad.getPassword(), sid, name, djudgeProblem, djudgeContest);
+	}
+	
+	@Override
+	boolean delete()
+	{
+		AuthentificationData ad = table.getAuthentificationData();
+		return table.getConnector().deleteProblem(
+				ad.getUsername(),
+				ad.getPassword(), id);
+	}
 }

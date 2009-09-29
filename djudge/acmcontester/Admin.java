@@ -1,23 +1,17 @@
 package djudge.acmcontester;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
-import djudge.acmcontester.server.ServerInterfaceStub;
 import djudge.acmcontester.server.ContestCore;
 import djudge.acmcontester.structures.RemoteTableLanguages;
+import djudge.acmcontester.structures.RemoteTableProblems;
+import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.RemoteTableUsers;
-
-import utils.FileWorks;
 
 public class Admin extends JFrame// implements AuthentificationDataProvider
 {
@@ -73,15 +67,15 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 		
 		jtpTabs.add("Users", usersPanel = new JTablePanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
 		
-		//jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
+		jtpTabs.add("Problems", problemsPanel = new JTablePanel(new RemoteTableProblems(serverXmlRpcInterface, authData)));
 		
 		jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
 		
-		//jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
+		jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(new RemoteTableSubmissions(serverXmlRpcInterface, authData)));
 		
-	//	jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverXmlRpcInterface, this));
+		jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverXmlRpcInterface, authData));
 		
-		//jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, this));
+		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, authData));
 		
 		add(jtpTabs, BorderLayout.CENTER);
 		

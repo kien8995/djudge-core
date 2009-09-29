@@ -1,8 +1,8 @@
 package djudge.acmcontester.interfaces;
 
-import djudge.acmcontester.Admin;
-
-public interface AdminXmlRpcInterface extends AdminLanguagesXmlRpcInterface, AdminUsersXmlRpcInterface
+public interface AdminXmlRpcInterface extends AdminLanguagesInterface,
+		AdminUsersXmlRpcInterface, AdminProblemsInterface,
+		AdminSubmissionsXmlRpcInterface
 {
 	
 }

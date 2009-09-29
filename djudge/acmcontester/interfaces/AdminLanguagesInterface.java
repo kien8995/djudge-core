@@ -1,6 +1,6 @@
 package djudge.acmcontester.interfaces;
 
-public interface AdminLanguagesXmlRpcInterface
+public interface AdminLanguagesInterface
 {
 	public boolean addLanguage(String username, String password, String sid,
 			String shortName, String fullName, String compilationComand,
