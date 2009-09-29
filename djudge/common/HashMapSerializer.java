@@ -32,6 +32,8 @@ public class HashMapSerializer
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, String>[] serializeToHashMap(HashMapSerializable[] data)
 	{
+		if (data == null)
+			return new HashMap[0];
 		HashMap<String, String>[] res = new HashMap[data.length];
 		for (int k = 0; k < data.length; k++)
 		{

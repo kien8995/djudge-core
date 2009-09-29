@@ -2,7 +2,9 @@ package djudge.dservice;
 
 import java.util.HashMap;
 
-public class DServiceTaskResult
+import djudge.common.HashMapSerializable;
+
+public class DServiceTaskResult extends HashMapSerializable
 {
 	int id;
 	String contestId;
@@ -69,16 +71,10 @@ public class DServiceTaskResult
 	
 	public DServiceTaskResult(HashMap<String, String> map)
 	{
-		id = Integer.parseInt(map.get("id"));
-		contestId = map.get("contest");
-		problemId = map.get("problem");
-		languageId = map.get("language");
-		xml = map.get("xml");		
-		dateTime = map.get("time");
-		clientData = map.get("clientData");
-		judgement = map.get("judgement");
+		fromHashMap(map);
 	}
 	
+	@Override
 	public HashMap<String, String> toHashMap()
 	{
 		HashMap<String, String> res = new HashMap<String, String>();
@@ -91,5 +87,19 @@ public class DServiceTaskResult
 		res.put("clientData", clientData);
 		res.put("judgement", judgement);
 		return res;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void fromHashMap(HashMap map)
+	{
+		id = Integer.parseInt((String) map.get("id"));
+		contestId = (String) map.get("contest");
+		problemId = (String) map.get("problem");
+		languageId = (String) map.get("language");
+		xml = (String) map.get("xml");		
+		dateTime = (String) map.get("time");
+		clientData = (String) map.get("clientData");
+		judgement = (String) map.get("judgement");
 	}
 }
