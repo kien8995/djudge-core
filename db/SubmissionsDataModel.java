@@ -1,5 +1,7 @@
 package db;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Vector;
 import org.apache.commons.codec.binary.Base64;
 
@@ -13,6 +15,16 @@ class DBRowSubmissions extends DBRowAbstract
 	{
 		return SubmissionsDataModel.class;
 	}
+	
+	@Override
+	public boolean save()
+	{
+		String msg = "";
+		msg += data[0] + " " + data[6] + " " + data[14];
+		log.debug(msg);
+		return super.save();
+	}
+	
 }
 
 public class SubmissionsDataModel extends AbstractTableDataModel
@@ -179,7 +191,7 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		return res;
 	}
 	
-	public SubmissionData getRow(int index)
+	public SubmissionData getRowT(int index)
 	{
 		return toSubmissionData(rows.get(index));
 	}

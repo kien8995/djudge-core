@@ -245,4 +245,9 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 	{
 		return true;
 	}
+	
+	public DBRowAbstract getRow(int index)
+	{
+		return rows.get(index);
+	}
 }

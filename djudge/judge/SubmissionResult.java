@@ -89,7 +89,6 @@ public class SubmissionResult extends AbstractResult
 	@Override
 	public boolean readXML(Element elem)
 	{
-		//System.out.println(elem.getAttributes().toString());
 		score = Integer.parseInt(elem.getAttribute(scoreAttributeName));
 		maxMemory = Long.parseLong(elem.getAttribute(maxMemoryAttributeName));
 		maxTime = Long.parseLong(elem.getAttribute(maxTimeAttributeName));
