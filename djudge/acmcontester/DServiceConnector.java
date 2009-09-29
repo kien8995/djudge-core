@@ -17,6 +17,7 @@ import utils.XmlWorks;
 import db.LanguagesDataModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
+import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
@@ -125,7 +126,7 @@ public class DServiceConnector extends Thread
 			}
 			if (vsd.size() > 0)
 			{
-				ContestCore.getSubmissionsDataModel().updateData();
+				ContestServer.getCore().getSubmissionsDataModel().updateData();
 			}
 			
 			/* Fetching results from judge */
@@ -143,7 +144,7 @@ public class DServiceConnector extends Thread
 						DServiceTaskResult tr = new DServiceTaskResult(map);
 						updateSubmissionResult(tr);
 					}
-					ContestCore.getSubmissionsDataModel().updateData();
+					ContestServer.getCore().getSubmissionsDataModel().updateData();
 				}
 				sleepTime = 1000;
 			}

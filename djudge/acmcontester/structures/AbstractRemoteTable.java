@@ -85,6 +85,7 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 		{
 			rowsArray[i].setParentTable(this);
 			rows.add(rowsArray[i]);
+			log.debug(rowsArray[i].toString());
 		}
 		return true;
 	}

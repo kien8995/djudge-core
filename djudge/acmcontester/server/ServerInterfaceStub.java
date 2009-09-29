@@ -118,4 +118,23 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 	{
 		return ContestServer.getCore().deleteLanguage(username, password, id);
 	}
+
+	@Override
+	public boolean deleteUser(String username, String password, String id)
+	{
+		return ContestServer.getCore().deleteUser(username, password, id);
+	}
+
+	@Override
+	public boolean addUser(String username, String password,
+			String newUserName, String newPassword, String name, String role)
+	{
+		return ContestServer.getCore().addUser(username, password, newUserName, newPassword, name, role);
+	}
+
+	@Override
+	public HashMap<String, String>[] getUsers(String username, String password)
+	{
+		return serializeToHashMap(ContestServer.getCore().getUsers(username, password));
+	}
 }
