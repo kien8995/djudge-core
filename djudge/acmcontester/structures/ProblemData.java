@@ -58,8 +58,8 @@ public class ProblemData extends HashMapSerializable
 		res.put("id", id);
 		res.put("sid", sid);
 		res.put("name", name);
-		res.put("djudge-problem", djudgeContest);
-		res.put("djudge-contest", djudgeProblem);
+		res.put("djudge-problem", djudgeProblem);
+		res.put("djudge-contest", djudgeContest);
 		return res;
 	}
 	

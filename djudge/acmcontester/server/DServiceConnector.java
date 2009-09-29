@@ -46,7 +46,7 @@ public class DServiceConnector extends Thread
 		SubmissionsDataModel sdm = new SubmissionsDataModel();
 		sdm.setWhere("`id` = " + tr.getClientData());
 		sdm.updateData();
-		sdm.setValueAt(1, 0, SubmissionsDataModel.djudgeFlagFieldIndex);
+		sdm.setValueAt(1, 0, SubmissionsDataModel.getDJudgeFlagIndex());
 		SubmissionData sd = sdm.getRows().get(0);
 		sd.judgement = tr.getJudgement();
 		sd.xml = tr.getXml();
@@ -85,45 +85,53 @@ public class DServiceConnector extends Thread
 			ex.printStackTrace();
 		}
 		
+		
 		while (true)
 		{
 			/* Sending submissions to judge */
+			
 			SubmissionsDataModel sdm = new SubmissionsDataModel();
-			sdm.setWhere("`djudge_flag` = 0");
+			// fetching all not judged submissions
+			sdm.setWhere("`djudge_flag` = 0 AND active > 0");
 			sdm.updateData();
 			Vector<SubmissionData> vsd = sdm.getRows();
 			
+			// for each such submission
 			for (int i = 0; i < vsd.size(); i++)
 			{
 				SubmissionData sd = vsd.get(i);
-    			Vector <Object> t = new Vector<Object>();
-    			t.add("simpleacm");
-    			
+    			// fetching problem's djudge flags
     			ProblemsDataModel pdm = new ProblemsDataModel();
     			pdm.setWhere(" `id` = " + sd.problemID);
     			pdm.updateData();
     			ProblemData pd = pdm.getRows().get(0);
-    			
+    			// fetching language's djudge flags
     			LanguagesDataModel ldm = new LanguagesDataModel();
     			ldm.setWhere(" `id` = " + sd.languageID);
     			ldm.updateData();
     			LanguageData ld = ldm.getRows().get(0);
     			
-    			//FIXME
+    			// building parameters array
+    			Vector <Object> t = new Vector<Object>();
+    			// DService client's ID 
+    			t.add("simpleacm");
+    			// djudge_contets
     			t.add(pd.djudgeContest);
+    			// djudge_problem
     			t.add(pd.djudgeProblem);
+    			// djudge_language
     			t.add(ld.djudgeID);
-    			
+    			// course code (Base64 encoded)
     			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
+    			// user's data
     			t.add(sd.id);
     			try
     			{
-    				System.out.println(t);
+    				log.debug("Sending solution #" + sd.id + " to DService");
     				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
     				if (result > 0)
     				{
-    					//FIXME: Hardcode (#15)
-    					sdm.setValueAt(-1, i, SubmissionsDataModel.djudgeFlagFieldIndex);
+    					sdm.setValueAt(-1, i, SubmissionsDataModel.getDJudgeFlagIndex());
     				}
     				flagConnected = true;
     				currentSleepTime = defaultSleepTime;
@@ -148,7 +156,6 @@ public class DServiceConnector extends Thread
 			}
 			
 			/* Fetching results from judge */
-			
 			try
 			{
 				Object obj = client.execute(serviceName + ".fetchResults", new Object[] {"simpleacm"});

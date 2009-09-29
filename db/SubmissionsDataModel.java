@@ -100,8 +100,6 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		return 12;
 	}
 	
-	public final static int djudgeFlagFieldIndex = 15;
-	
 	@Override
 	protected DBField[] getTableFields()
 	{
