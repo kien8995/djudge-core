@@ -9,12 +9,10 @@ interface AdminUsersCommonInterface
 	public boolean addUser(String username, String password, String newUserName,
 			String newPassword, String name, String role);
 	
-/*	public boolean editLanguage(String username, String password, String id, String sid,
-			String shortName, String fullName, String compilationComand,
-			String djudgeID);*/
+	public boolean editUser(String username, String password, String id, String newUserName,
+			String newPassword, String name, String role);
 	
 	public boolean deleteUser(String username, String password, String id);
-	
 }
 
 public interface AdminUsersXmlRpcInterface extends AdminUsersCommonInterface

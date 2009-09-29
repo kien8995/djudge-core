@@ -6,6 +6,7 @@ import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
+import djudge.acmcontester.structures.UserData;
 import djudge.common.HashMapSerializer;
 
 public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlRpcInterface
@@ -136,5 +137,17 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 	public HashMap<String, String>[] getUsers(String username, String password)
 	{
 		return serializeToHashMap(ContestServer.getCore().getUsers(username, password));
+	}
+	
+	public HashMap<String, String>[] getUsers()
+	{
+		return serializeToHashMap(ContestServer.getCore().getUsers("1", "2"));
+	}
+
+	@Override
+	public boolean editUser(String username, String password, String id,
+			String newUserName, String newPassword, String name, String role)
+	{
+		return ContestServer.getCore().editUser(username, password, id, newUserName, newPassword, name, role);
 	}
 }

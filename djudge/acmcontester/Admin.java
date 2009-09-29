@@ -75,7 +75,7 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 		
 		//jtpTabs.add("Problems", problemsPanel = new JTablePanel(ContestCore.getProblemsModel()));
 		
-		//jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
+		jtpTabs.add("Languages", languagesPanel = new JTablePanel(new RemoteTableLanguages(serverXmlRpcInterface, authData)));
 		
 		//jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(ContestCore.getSubmissionsDataModel()));
 		
@@ -95,22 +95,10 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 		setSize(640, 480);
 		setLocation(250, 200);
 		setupGUI();
-		setData();
 		setVisible(true);
 		new WatchThread().start();
 	}
 
-	private void setData()
-	{
-		//core.getAllSubmissions(new AuthentificationData());
-		//core.submitSolution("alt", "p78", "2", "1", FileWorks.readFile("d:/A-alt.cpp"));
-	}
-
-	public static void log(Object o)
-	{
-		System.out.println(o);
-	}
-	
 	public static void main(String[] args)
 	{
 		new Admin();

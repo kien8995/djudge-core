@@ -48,4 +48,11 @@ public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements Server
 		Object remoteResult = callRemoteMethod(serviceName + ".getUsers", params);
 		return deserializeToHashMapArray(remoteResult);
 	}
+
+	@Override
+	public boolean editUser(String username, String password, String id,
+			String newUserName, String newPassword, String name, String role)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".editUser", username, password, id, newUserName, newPassword, name, role);
+	}
 }
