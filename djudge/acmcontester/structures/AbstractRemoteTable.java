@@ -56,7 +56,6 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 	public void setValueAt(Object arg0, int arg1, int arg2)
 	{
 		AbstractRemoteRow row = rows.get(arg1);
-		//row.data[arg2] = arg0;
 		row.setValueAt(arg0, arg2);
 	}
 	
@@ -66,12 +65,12 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 		this.authData = authData;
 	}
 	
-	ServerXmlRpcInterface getConnector()
+	public ServerXmlRpcInterface getConnector()
 	{
 		return serverConnector;
 	}
 	
-	AuthentificationData getAuthentificationData()
+	public AuthentificationData getAuthentificationData()
 	{
 		return authData;
 	}
@@ -85,7 +84,6 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 		{
 			rowsArray[i].setParentTable(this);
 			rows.add(rowsArray[i]);
-			log.debug(rowsArray[i].toString());
 		}
 		return true;
 	}
@@ -123,5 +121,10 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 		row.delete();
 		updateData();
 		return true;
+	}
+	
+	public AbstractRemoteRow getRow(int index)
+	{
+		return rows.get(index);
 	}
 }

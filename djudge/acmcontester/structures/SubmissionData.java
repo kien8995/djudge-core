@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import djudge.acmcontester.AuthentificationData;
 import djudge.common.HashMapSerializable;
 
 public class SubmissionData extends HashMapSerializable
@@ -123,5 +124,97 @@ public class SubmissionData extends HashMapSerializable
 		res.put("djudge-flag", "" + djudgeFlag);
 		res.put("xml", "" + xml);
 		return res;
+	}
+	
+	@Override
+	int getColumnCount()
+	{
+		return 17;
+	}
+
+	@Override
+	Class<? extends AbstractRemoteTable> getTableClass()
+	{
+		return RemoteTableSubmissions.class;
+	}
+
+	@Override
+	Object getValueAt(int column)
+	{
+		switch (column)
+		{
+		case 0: return id;
+		case 1: return userID;
+		case 2: return problemID;
+		case 3: return languageID;
+		case 4: return contestTime;
+		case 5: return realTime;
+		case 6: return judgement;
+		case 7: return maxTime;
+		case 8: return maxMemory;
+		case 9: return maxOutput;
+		case 10: return failedTest;
+		case 11: return score;
+		case 12: return judged;
+		case 13: return active;
+		case 14: return sourceCode;
+		case 15: return djudgeFlag;
+		case 16: return xml;
+		
+		default:
+			return id;
+		}
+	}
+	
+	@Override
+	void setValueAt(int column, String value)
+	{
+		switch (column)
+		{
+		case 0: id = value; break;
+		case 1: userID = value; break;
+		case 2: problemID = value; break;
+		case 3: languageID = value; break;
+		case 4: contestTime = Integer.parseInt(value); break;
+		case 5: realTime = value; break;
+		case 6: judgement = value; break;
+		case 7: maxTime = Integer.parseInt(value);; break;
+		case 8: maxMemory = Integer.parseInt(value); break;
+		case 9: maxOutput = Integer.parseInt(value); break;
+		case 10: failedTest = Integer.parseInt(value); break;
+		case 11: score = Integer.parseInt(value); break;
+		case 12: judged = Integer.parseInt(value); break;
+		case 13: active = Integer.parseInt(value); break;
+		case 14: sourceCode = value; break;
+		case 15: djudgeFlag = Integer.parseInt(value); break;
+		case 16: xml = value; break;
+		}
+	}
+	
+	@Override
+	boolean save()
+	{
+		if (!fDataChanged)
+			return true;
+		AuthentificationData ad = table.getAuthentificationData();
+		boolean res = table.getConnector().editSubmission(ad.getUsername(),
+				ad.getPassword(), id, toHashMap());
+		fDataChanged = false;
+		return res;
+	}
+	
+	@Override
+	boolean create()
+	{
+		return false;
+	}
+	
+	@Override
+	boolean delete()
+	{
+		AuthentificationData ad = table.getAuthentificationData();
+		return table.getConnector().deleteSubmission(
+				ad.getUsername(),
+				ad.getPassword(), id);
 	}
 }

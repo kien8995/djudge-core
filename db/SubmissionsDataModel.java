@@ -208,11 +208,12 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 			return;
 		for (int i = 0; i < getRowCount(); i++)
 		{
-			if (fieldValue.equals(getValueAt(i, fieldIndex)))
+			if (fieldValue.toString().equals(getValueAt(i, fieldIndex).toString()))
 			{
 				doRejudge(rows.get(i));
 			}
 		}
+		updateData();
 	}
 }
 

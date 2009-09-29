@@ -55,4 +55,53 @@ public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements Server
 	{
 		return (Boolean) callRemoteMethod(serviceName + ".editUser", username, password, id, newUserName, newPassword, name, role);
 	}
+
+	@Override
+	public boolean addProblem(String username, String password, String sid,
+			String name, String djudgeProblem, String djudgeContest)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".addProblem", username, password, sid, name, djudgeProblem, djudgeContest);
+	}
+
+	@Override
+	public boolean deleteProblem(String username, String password, String id)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteProblem", username, password, id);
+	}
+
+	@Override
+	public boolean editProblem(String username, String password, String id,
+			String sid, String name, String djudgeProblem, String djudgeContest)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".editProblem", username, password, id, sid, name, djudgeProblem, djudgeContest);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap[] getSubmissions(String username, String password)
+	{
+		Object remoteResult = callRemoteMethod(serviceName + ".getSubmissions", username, password);
+		return deserializeToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public boolean deleteSubmission(String username, String password, String id)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteSubmission", username, password, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean editSubmission(String username, String password, String id,
+			HashMap data)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".editSubmission", username, password, id, data);
+	}
+
+	@Override
+	public boolean rejudgeSubmissions(String username, String password,
+			String key, String value)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".rejudgeSubmissions", username, password, key, value);
+	}
 }

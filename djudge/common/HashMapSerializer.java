@@ -6,7 +6,7 @@ import java.util.Vector;
 public class HashMapSerializer
 {
 	@SuppressWarnings("unchecked")
-	protected static HashMap<String, String>[] deserializeToHashMapArray(Object obj)
+	public static HashMap<String, String>[] deserializeToHashMapArray(Object obj)
 	{
 		try
 		{
@@ -24,13 +24,13 @@ public class HashMapSerializer
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected static HashMap<String, String> serializeToHashMap(HashMapSerializable data)
+	public static HashMap<String, String> serializeToHashMap(HashMapSerializable data)
 	{
 		return data.toHashMap();
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected static HashMap<String, String>[] serializeToHashMap(HashMapSerializable[] data)
+	public static HashMap<String, String>[] serializeToHashMap(HashMapSerializable[] data)
 	{
 		HashMap<String, String>[] res = new HashMap[data.length];
 		for (int k = 0; k < data.length; k++)

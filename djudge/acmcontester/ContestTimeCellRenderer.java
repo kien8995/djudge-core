@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import db.SubmissionsDataModel;
+import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.gui.Formatter;
 
 import utils.PrintfFormat;
@@ -52,7 +52,7 @@ class DefaultSubmissionsModelCellRenderer extends DefaultCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected SubmissionsDataModel sdm;
+	protected RemoteTableSubmissions sdm;
 	
 	@Override
 	void checkActive(int row, int column)
@@ -60,14 +60,14 @@ class DefaultSubmissionsModelCellRenderer extends DefaultCellRenderer
 		if (sdm == null)
 			return;
 		
-		if (Integer.parseInt(sdm.getValueAt(row, SubmissionsDataModel.getActiveFlagIndex()).toString()) < 1)
+		if (Integer.parseInt(sdm.getValueAt(row, RemoteTableSubmissions.getActiveFlagIndex()).toString()) < 1)
 		{
 			setForeground(Color.LIGHT_GRAY);
 			setBackground(Color.WHITE);
 		}
 	}
 	
-	public DefaultSubmissionsModelCellRenderer(SubmissionsDataModel sdm)
+	public DefaultSubmissionsModelCellRenderer(RemoteTableSubmissions sdm)
 	{
 		this.sdm = sdm;
 	}
@@ -78,14 +78,14 @@ public class ContestTimeCellRenderer extends DefaultSubmissionsModelCellRenderer
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	void setTextAndColor(Object value, int row,int column)
+	void setTextAndColor(Object value, int row, int column)
 	{
 		long data = (Integer) value;
 		setText(Formatter.formatContestTime(data));
 		setHorizontalAlignment(SwingConstants.RIGHT);
 	}
 	
-	public ContestTimeCellRenderer(SubmissionsDataModel sdm)
+	public ContestTimeCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}
@@ -113,7 +113,7 @@ class MemoryCellRenderer extends DefaultSubmissionsModelCellRenderer
 		setHorizontalAlignment(SwingConstants.RIGHT);
 	}
 	
-	public MemoryCellRenderer(SubmissionsDataModel sdm)
+	public MemoryCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}	
@@ -123,7 +123,7 @@ class RuntimeCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public RuntimeCellRenderer(SubmissionsDataModel sdm)
+	public RuntimeCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}	
@@ -140,7 +140,7 @@ class RealTimeCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public RealTimeCellRenderer(SubmissionsDataModel sdm)
+	public RealTimeCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}	
@@ -157,7 +157,7 @@ class JudgementCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public JudgementCellRenderer(SubmissionsDataModel sdm)
+	public JudgementCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}	
@@ -175,7 +175,7 @@ class JudgementCellRenderer extends DefaultSubmissionsModelCellRenderer
 		{
 			setBackground(Color.GREEN);
 		}
-		else if ("WA".equalsIgnoreCase(data) || "TLE".equalsIgnoreCase(data) || "RE".equalsIgnoreCase(data))
+		else if ("WA".equalsIgnoreCase(data) || "TLE".equalsIgnoreCase(data) || "RE".equalsIgnoreCase(data) || "MLE".equalsIgnoreCase(data))
 		{
 			setBackground(Color.RED);
 		}
@@ -199,7 +199,7 @@ class DJudgeStatusCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public DJudgeStatusCellRenderer(SubmissionsDataModel sdm)
+	public DJudgeStatusCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}
@@ -225,7 +225,7 @@ class FailedTestCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 	
-	public FailedTestCellRenderer(SubmissionsDataModel sdm)
+	public FailedTestCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}
@@ -242,7 +242,7 @@ class ScoreCellRenderer extends DefaultSubmissionsModelCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	public ScoreCellRenderer(SubmissionsDataModel sdm)
+	public ScoreCellRenderer(RemoteTableSubmissions sdm)
 	{
 		super(sdm);
 	}

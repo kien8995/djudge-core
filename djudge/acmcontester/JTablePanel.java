@@ -18,12 +18,17 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.log4j.Logger;
+
 import utils.XmlWorks;
 
 import db.AbstractTableDataModel;
 import db.SubmissionsDataModel;
+import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.ContestCore;
 import djudge.acmcontester.structures.AbstractDataTable;
 import djudge.acmcontester.structures.AbstractRemoteTable;
+import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.judge.SubmissionResult;
 import djudge.swing.JSubmissionInfoFrame;
@@ -48,12 +53,12 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			if ("activate".equals(act))
 			{
     			int prev = Integer.parseInt(tableModel.getValueAt(iRow,
-    					SubmissionsDataModel.getActiveFlagIndex()).toString());
+    					RemoteTableSubmissions.getActiveFlagIndex()).toString());
     			if (prev <= 0)
     				prev = 1;
     			else
     				prev = 0;
-    			tableModel.setValueAt(prev, iRow, SubmissionsDataModel
+    			tableModel.setValueAt(prev, iRow, RemoteTableSubmissions
     					.getActiveFlagIndex());
 			}
 			else if (act.startsWith("rejudge"))
@@ -67,39 +72,49 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				}
 				else if (act.equals("rejudge_user"))
 				{
-					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getUserFieldIndex());
+					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getUserFieldIndex());
 					key = "user_id";
 				}
 				else if (act.equals("rejudge_problem"))
 				{
-					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getProblemFieldIndex());
+					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getProblemFieldIndex());
 					key = "problem_id";
 				}
 				else if (act.equals("rejudge_language"))
 				{
-					value = tableModel.getValueAt(iRow, SubmissionsDataModel.getLanguageFieldIndex());
+					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getLanguageFieldIndex());
 					key = "language_id";
 				}
 				else
 				{
 					return;
 				}
-				((SubmissionsDataModel) tableModel).rejudgeBy(key, value);
+				RemoteTableSubmissions rts = (RemoteTableSubmissions) tableModel;
+				AuthentificationData ad = rts.getAuthentificationData();
+				ServerXmlRpcInterface connector = rts.getConnector();
+				connector.rejudgeSubmissions(ad.getUsername(), ad.getPassword(), key, value.toString());
+				rts.updateData();
 			}
 		}
 	}
 	
-	public JAdminSubmissionsPanel(SubmissionsDataModel atdm)
+	public JAdminSubmissionsPanel(RemoteTableSubmissions atdm)
 	{
 		super(atdm);
+		
+		/* Removing buttons */
+		jpButtons.remove(jbtnAddRecord);
+		jpButtons.remove(jbtnDeleteRecord);
+		jpButtons.remove(jbtnSave);
+		
 		TableColumnModel tcm = jtTable.getColumnModel();
-		tcm.getColumn(SubmissionsDataModel.getRuntimeFieldIndex()).setCellRenderer(new ContestTimeCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getJudgementFieldIndex()).setCellRenderer(new JudgementCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getRuntimeFieldIndex()).setCellRenderer(new RuntimeCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getMemoryFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getOutputFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getFailedTestFieldIndex()).setCellRenderer(new FailedTestCellRenderer(atdm));
-		tcm.getColumn(SubmissionsDataModel.getDJudgeFlagIndex()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getRuntimeFieldIndex()).setCellRenderer(new ContestTimeCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getJudgementFieldIndex()).setCellRenderer(new JudgementCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getRuntimeFieldIndex()).setCellRenderer(new RuntimeCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getMemoryFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getOutputFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getFailedTestFieldIndex()).setCellRenderer(new FailedTestCellRenderer(atdm));
+		tcm.getColumn(RemoteTableSubmissions.getDJudgeFlagIndex()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
 		jtTable.addMouseListener(this);
 		// Popup menu
 		PopupMenuHandler listener = new PopupMenuHandler();
@@ -151,8 +166,8 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			int row = target.getSelectedRow();
 			if  (row < 0)
 				return;
-			SubmissionsDataModel sdm = (SubmissionsDataModel) tableModel;
-			SubmissionData sd = sdm.getRow(row);
+			RemoteTableSubmissions sdm = (RemoteTableSubmissions) tableModel;
+			SubmissionData sd = (SubmissionData) sdm.getRow(row);
 			//SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
 			//TODO: debug output
 			System.out.println(sd.xml);
