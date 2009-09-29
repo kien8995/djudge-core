@@ -1,17 +1,14 @@
 package djudge.common;
 
 import java.io.StringWriter;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.Writer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import djudge.exceptions.DJudgeXmlException;
 
@@ -60,34 +57,17 @@ public abstract class XMLSerializable extends Loggable
 	public String getXMLString()
 	{
 		String res = "";
-		try
-		{
-	        //set up a transformer
-	        TransformerFactory transfac = TransformerFactory.newInstance();
-	        Transformer trans = transfac.newTransformer();
-	        trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-	        trans.setOutputProperty(OutputKeys.INDENT, "yes");
-	
-	        //create string from xml tree
-	        StringWriter sw = new StringWriter();
-	        StreamResult result = new StreamResult(sw);
-	        DOMSource source = new DOMSource(this.getXML());
-	        trans.transform(source, result);
-	        String xmlString = sw.toString();
-	        res = xmlString;
-		}
-		catch (TransformerConfigurationException exc)
-		{
-			// FIXME
-			System.out.println("!!![XMLSerializable.saveXmlToFile]: " + exc);
-			exc.printStackTrace();
-		}
-		catch (TransformerException exc)
-		{
-			// FIXME
-			System.out.println("!!![XMLSerializable.saveXmlToFile]: " + exc);
-			exc.printStackTrace();
-		}
+        try {
+        	Document doc = getXML();
+            OutputFormat format = new OutputFormat(doc);
+            Writer out = new StringWriter();
+            XMLSerializer serializer = new XMLSerializer(out, format);
+            serializer.serialize(doc);
+            res = out.toString();
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
 		return res;
 	}
 }

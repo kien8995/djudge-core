@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import utils.FileWorks;
 import utils.XmlWorks;
 
+import db.AbstractTableDataModel;
 import db.LanguagesDataModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
@@ -69,8 +70,8 @@ public class DServiceConnector extends Thread
     		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
     		config.setServerURL(new URL(serverUrl));
     		config.setEnabledForExtensions(true);
-    		config.setConnectionTimeout(1000);
-    		config.setReplyTimeout(1000);
+    		config.setConnectionTimeout(10000);
+    		config.setReplyTimeout(10000);
     
     		client = new XmlRpcClient();
     
@@ -135,6 +136,7 @@ public class DServiceConnector extends Thread
     				}
     				flagConnected = true;
     				currentSleepTime = defaultSleepTime;
+    				sdm.getRow(i).save();
     			}
     			catch (XmlRpcException ex)
     			{

@@ -14,7 +14,7 @@ import djudge.acmcontester.server.ContestServer;
 
 public abstract class DBRowAbstract extends SQLAbstract
 {
-	private static final Logger log = Logger.getLogger(DBRowAbstract.class);
+	static final Logger log = Logger.getLogger(DBRowAbstract.class);
 	
 	public Object[] data;
 	
@@ -235,7 +235,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return s.toString();
 	}
 	
-	public final boolean save()
+	public boolean save()
 	{
 		boolean f = true;
 		try
@@ -245,7 +245,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 				Connection con = Settings.getConnection();
 				Statement stmt = con.createStatement();
 				String query = this.getUpdateStatement();
-				log.debug(query.substring(0, Math.min(query.length(), 80)));
+				//log.debug(query.substring(0, Math.min(query.length(), 80)));
 				stmt.executeUpdate(query);
 				stmt.close();
 			}
