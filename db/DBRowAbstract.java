@@ -70,7 +70,13 @@ public abstract class DBRowAbstract extends SQLAbstract
 			data = new Object[getColumnCount()];
 			String[] columnKeys = getColumnKeys();
 			for (int i = 0; i < getColumnCount(); i++)
+			{
 				data[i] = rs.getObject(columnKeys[i]);
+				if (data[i] == null)
+				{
+					data[i] = getColumnDefaultValues()[i];
+				}
+			}
 		}
 		catch (SQLException e)
 		{
@@ -234,6 +240,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = true;
 		try
 		{
+			log.debug(this);
 			synchronized (AbstractTableDataModel.dbMutex)
 			{
 				Connection con = Settings.getConnection();

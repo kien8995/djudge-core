@@ -108,7 +108,27 @@ public class ContestCore implements AdminUsersNativeInterface
 		languagesModel.updateData();
 		return true;
 	}
-
+	
+	@Override
+	public boolean editUser(String username, String password, String id,
+			String newUserName, String newPassword, String name, String role)
+	{
+		log.debug("User editing request");
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		DBRowAbstract rd = usersModel.getRowByID(id);
+		if (rd == null)
+			return false;
+		UserData ud = new UserData(id, newUserName, newPassword, name, role);
+		rd = usersModel.toRow(ud);
+		rd.save();
+		usersModel.updateData();
+		log.debug("User editing finished");
+		return true;
+	}
+	
+	
 	public boolean deleteLanguage(String username, String password, String id)
 	{
 		if (!usersModel.isAdmin(username, password))
@@ -244,8 +264,8 @@ public class ContestCore implements AdminUsersNativeInterface
 	@Override
 	public UserData[] getUsers(String username, String password)
 	{
-		//if (!usersModel.isAdmin(username, password))
-			//return new UserData[0];
+		if (!usersModel.isAdmin(username, password))
+			return new UserData[0];
 		return usersModel.getRows().toArray(new UserData[0]);
 	}
 }

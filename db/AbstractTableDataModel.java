@@ -13,7 +13,7 @@ import djudge.acmcontester.structures.AbstractDataTable;
 
 public abstract class AbstractTableDataModel extends AbstractDataTable
 {
-	private static final Logger log = Logger.getLogger(AbstractTableDataModel.class);
+	protected static final Logger log = Logger.getLogger(AbstractTableDataModel.class);
 	
 	public final static String dbMutex = "Mutex";
 	
@@ -106,11 +106,6 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 		return res;
 	}
 	
-	protected static void log(Object s)
-	{
-		System.out.println(s);
-	}
-
 	@Override
 	public boolean insertRow()
 	{

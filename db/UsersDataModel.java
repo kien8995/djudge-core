@@ -81,12 +81,12 @@ public class UsersDataModel extends AbstractTableDataModel
 	
 	public DBRowAbstract toRow(UserData ld)
 	{
-		DBRowProblems row = new DBRowProblems();
+		DBRowUsers row = new DBRowUsers();
 		row.data[0] = ld.id;
 		row.data[1] = ld.username;
 		row.data[2] = ld.name;
 		row.data[3] = ld.password;
-		row.data[4] = ld.role;		
+		row.data[4] = ld.role;
 		return row;
 	}
 
@@ -106,7 +106,6 @@ public class UsersDataModel extends AbstractTableDataModel
 		Vector<UserData> res = new Vector<UserData>();
 		for (int i = 0; i < rows.size(); i++)
 		{
-			log(toUserData(rows.get(i)).toString());
 			res.add(toUserData(rows.get(i)));
 		}
 		return res;

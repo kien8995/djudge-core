@@ -26,6 +26,15 @@ public class UserData extends HashMapSerializable
 		this.username = username;
 	}
 	
+	public UserData(String id, String username, String password, String name, String role)
+	{
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.role = role;
+		this.username = username;
+	}
+	
 	public UserData(HashMap<String, String> map)
 	{
 		fromHashMap(map);
@@ -97,16 +106,14 @@ public class UserData extends HashMapSerializable
 	@Override
 	boolean save()
 	{
-/*		if (!fDataChanged)
+		if (!fDataChanged)
 			return true;
 		AuthentificationData ad = table.getAuthentificationData();
-		boolean res = table.getConnector().editLanguage(
+		boolean res = table.getConnector().editUser(
 				ad.getUsername(),
-				ad.getPassword(), id, sid,
-				shortName, fullName, compilationCommand, djudgeID);
+				ad.getPassword(), id, username, password, name, role);
 		fDataChanged = false;
-		return res;*/
-		return false;
+		return res;
 	}
 	
 	@Override

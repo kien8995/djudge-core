@@ -1,10 +1,11 @@
 package djudge.acmcontester.server;
 
-import java.net.URL;
 import java.util.HashMap;
+import java.net.URL;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -24,9 +25,21 @@ import djudge.dservice.DServiceTaskResult;
 
 public class DServiceConnector extends Thread
 {
-	XmlRpcClient client;
+	private static final Logger log = Logger.getLogger(DServiceConnector.class);
 	
-	int sleepTime = 1000;
+	private static final String serviceName = "DService";
+	
+	private static final String serverUrl = "http://127.0.0.1:8001/xmlrpc";
+		
+	private static final int defaultSleepTime = 1000;
+	
+	private static final int failSleepTime = 10000;
+	
+	private boolean flagConnected = false;
+	
+	private int currentSleepTime = defaultSleepTime;
+	
+	XmlRpcClient client;
 	
 	private void updateSubmissionResult(DServiceTaskResult tr)
 	{
@@ -54,7 +67,7 @@ public class DServiceConnector extends Thread
 		try
 		{
     		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-    		config.setServerURL(new URL("http://127.0.0.1:8001/xmlrpc"));
+    		config.setServerURL(new URL(serverUrl));
     		config.setEnabledForExtensions(true);
     		config.setConnectionTimeout(1000);
     		config.setReplyTimeout(1000);
@@ -65,7 +78,7 @@ public class DServiceConnector extends Thread
     		
     		client.setConfig(config);
     		
-    		System.out.println("AcmContester.DService Connector started");
+    		log.info("AcmContester.DService Connector started (" + serviceName + " at " + serverUrl + ")");
 		}
 		catch (Exception ex)
 		{
@@ -106,21 +119,27 @@ public class DServiceConnector extends Thread
     			try
     			{
     				System.out.println(t);
-    				int result = (Integer) client.execute("DService.submitSolution", t.toArray());
+    				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
     				if (result > 0)
     				{
     					//FIXME: Hardcode (#15)
     					sdm.setValueAt(-1, i, SubmissionsDataModel.djudgeFlagFieldIndex);
     				}
+    				flagConnected = true;
+    				currentSleepTime = defaultSleepTime;
     			}
     			catch (XmlRpcException ex)
     			{
-    				System.out.println("Failed to connect to DService");
-    				sleepTime = 10000;
+    				if (flagConnected)
+    				{
+    					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
+    					flagConnected = false;
+    					currentSleepTime = failSleepTime;
+    				}
     			}
     			catch (Exception ex)
     			{
-    				ex.printStackTrace();
+    				log.warn("Error while connecting", ex);
     			}
 			}
 			if (vsd.size() > 0)
@@ -132,7 +151,7 @@ public class DServiceConnector extends Thread
 			
 			try
 			{
-				Object obj = client.execute("DService.fetchResults", new Object[] {"simpleacm"});
+				Object obj = client.execute(serviceName + ".fetchResults", new Object[] {"simpleacm"});
 				Object[] array = (Object[]) obj;
 				if (array != null)
 				{
@@ -145,30 +164,29 @@ public class DServiceConnector extends Thread
 					}
 					ContestServer.getCore().getSubmissionsDataModel().updateData();
 				}
-				sleepTime = 1000;
+				flagConnected = true;
 			}
 			catch (XmlRpcException ex)
 			{
-				System.out.println("Failed to connect to DService");
-				sleepTime = 10000;
+				if (flagConnected)
+				{
+					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
+					flagConnected = false;
+					currentSleepTime = failSleepTime;
+				}
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
+				log.warn("Error while connecting", ex);
 			}
+			
+			// Delay before next connection
 			try
 			{
-				sleep(sleepTime);
+				sleep(currentSleepTime);
 			} catch (InterruptedException e)
 			{
-				e.printStackTrace();
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		new DServiceConnector().start();
-	}
-
 }
