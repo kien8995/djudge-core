@@ -240,13 +240,12 @@ public abstract class DBRowAbstract extends SQLAbstract
 		boolean f = true;
 		try
 		{
-			log.debug(this);
 			synchronized (AbstractTableDataModel.dbMutex)
 			{
 				Connection con = Settings.getConnection();
 				Statement stmt = con.createStatement();
 				String query = this.getUpdateStatement();
-				log.debug(query);
+				log.debug(query.substring(0, Math.min(query.length(), 80)));
 				stmt.executeUpdate(query);
 				stmt.close();
 			}

@@ -11,10 +11,17 @@ import java.util.Vector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.apache.log4j.Logger;
+
+import djudge.acmcontester.server.ContestCore;
 import djudge.filesystem.RemoteFS;
+import djudge.utils.SimpleHttpServer;
+import djudge.utils.SimpleHttpServerDataProvider;
 
 public class DService
 {
+	private static final Logger log = Logger.getLogger(DService.class);
+	
 	static Connection con;
 	
 	static XmlRpcServer xmlRpcServer;
@@ -23,16 +30,26 @@ public class DService
 	
 	static final String dbMutex = "mutex";
 	
+	static final String databasePath = "data/" + serviceName + "/dservice.db3";
+
+	private static SimpleHttpServer simpleHttpServer;
+	
 	static
 	{
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:data/" + serviceName + "/dservice.db3");
+			con = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
 		}
-		catch (Exception ex)
+		catch (ClassNotFoundException ex)
 		{
-			ex.printStackTrace();
+			log.fatal("Cannot find database driver class: org.sqlite.JDBC", ex);
+			System.exit(1);
+		}		
+		catch (SQLException ex)
+		{
+			log.fatal("Database corrupted or does not exists: " + databasePath, ex);
+			System.exit(2);
 		}		
 	}
 
@@ -52,10 +69,10 @@ public class DService
 	
 	private static String generateUID()
 	{
-		final String chars = "123254";
+		final String chars = "123254xyz";
 		
 		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 24; i++)
 			str.append(chars.charAt((Math.abs(new Random().nextInt()))%chars.length()));
 		return str.toString();
 	}
@@ -77,7 +94,7 @@ public class DService
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("Database error", e);
 		}
 		return true;
 	}
@@ -102,7 +119,7 @@ public class DService
     		}
     		catch (Exception e)
     		{
-    			e.printStackTrace();
+    			log.error("Database error", e);
     		}
 		}
 		return 0;		
@@ -128,11 +145,10 @@ public class DService
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				log.error("Database error", e);
 			}
 		}
 		return 0;
-		
 	}
 
 	private static DServiceTask getTaskInternal(int judgeID)
@@ -166,7 +182,7 @@ public class DService
 			}
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("Database error", e);
 		}
 		return res;
 
@@ -189,7 +205,7 @@ public class DService
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				log.error("Database error", e);
 			}
 		}
 		return true;
@@ -202,13 +218,13 @@ public class DService
 			try
 			{
 				Statement st = getStatement();
-				System.out.println(sql);
+				log.info("Executing SQL request:" + sql);
 				st.executeUpdate(sql);
 				st.close();
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
+				log.error("Database error", ex);
 			}
 		}
 	}
@@ -295,7 +311,7 @@ public class DService
 		if (task == null)
 			return null;
 		task.source = RemoteFS.readContent("data/" + serviceName + "/sources/" + formatNumber(task.id) + ".txt");
-		log("" + formatNumber(task.id) + " was sent");
+		log.info("" + formatNumber(task.id) + " was sent");
 		return task;
 	}
 	
@@ -323,7 +339,7 @@ public class DService
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("General error", ex);
 			return null;
 		}
 		return res;
@@ -350,7 +366,7 @@ public class DService
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("General error", e);
 		}
 		return res;
 	}
@@ -374,9 +390,9 @@ public class DService
 			rs.close();
 			st.close();
 		}
-		catch (Exception e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			log.error("General error", ex);
 		}
 		return res.toArray(new DServiceTaskResult[0]);
 	}
@@ -405,9 +421,9 @@ public class DService
 				rs.close();
 				st.close();
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				e.printStackTrace();
+				log.error("General error", ex);
 			}
 		}
 		for (int i = 0; i < resSql.size(); i++)
@@ -417,22 +433,83 @@ public class DService
 		return res.toArray(new DServiceTaskResult[0]);
 	}
 	
-	
-	public static void log(Object o)
-	{
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = new Date();
-		String dateStr = dateFormat.format(date);
-		System.out.println(dateStr + "  " + o.toString());
-	}
-	
 	public static void main(String[] args)
 	{
 		xmlRpcServer = new XmlRpcServer();
-		xmlRpcServer.start();
-		//String src = FileWorks.readFile("E:\\A-alt.cpp");
-		//submitSolution("123", "NEERC-2000", "A", "GCC342", src);
-		//log(getUserTaskResults(4, 2)[0].toHashMap().toString());
+		xmlRpcServer.start();		
+		
+		new SimpleHttpServer(new Temp(), 5555);
 	}
-	
+
+	public static String getHtmlPage(String query)
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<body><h1 align='center'>DService status</h1>");
+
+		sb.append("<table border='1'>");
+		sb.append("<tr>");
+		sb.append("<th>ID</th>");
+		sb.append("<th>Date</th>");
+		sb.append("<th>UserID</th>");
+		sb.append("<th>Problem</th>");
+		sb.append("<th>Contest</th>");
+		sb.append("<th>Language</th>");
+		sb.append("<th>Judgement</th>");
+		sb.append("<th>JudgeStatus</th>");
+		sb.append("<th>Fetched</th>");
+		sb.append("<th>ClientData</th>");
+		sb.append("<th>JudgeID</th>");
+		sb.append("</tr>\n");
+		
+		synchronized (dbMutex)
+		{
+			try
+			{
+				Statement st = getStatement();
+				String sql = "SELECT * FROM submissions ORDER BY id DESC";
+				ResultSet rs = st.executeQuery(sql);
+				while (rs.next())
+				{
+					sb.append("<tr>");
+					sb.append("<th>" + rs.getString("id") + "</th>");
+					sb.append("<th>" + rs.getString("date") + "</th>");
+					sb.append("<th>" + rs.getString("user_id") + "</th>");
+					sb.append("<th>" + rs.getString("problem") + "</th>");
+					sb.append("<th>" + rs.getString("contest") + "</th>");
+					sb.append("<th>" + rs.getString("language") + "</th>");
+					sb.append("<th>" + rs.getString("judgement") + "</th>");
+					sb.append("<th>" + rs.getString("judge_status") + "</th>");
+					sb.append("<th>" + rs.getString("fetched") + "</th>");
+					sb.append("<th>" + rs.getString("client_data") + "</th>");
+					sb.append("<th>" + rs.getString("judge_id") + "</th>");
+					sb.append("</tr>\n");
+				}
+				rs.close();
+				st.close();
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+				log.error("General error", ex);
+			}
+		}
+		
+		sb.append("</table>");
+		sb.append("</body>");
+		
+		//String res = "<body></body>";
+		return sb.toString();
+	}
 }
+
+class Temp implements SimpleHttpServerDataProvider
+{
+
+	@Override
+	public String getHtmlPage(String query)
+	{
+		return DService.getHtmlPage(query);
+	}
+}
+
