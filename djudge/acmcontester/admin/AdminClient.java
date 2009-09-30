@@ -1,18 +1,22 @@
-package djudge.acmcontester;
+package djudge.acmcontester.admin;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.AuthentificationData;
+import djudge.acmcontester.JContestSettingsPanel;
+import djudge.acmcontester.JMonitorPanel;
+import djudge.acmcontester.JStatusPanel;
+import djudge.acmcontester.JSubmitPanel;
 import djudge.acmcontester.structures.RemoteTableLanguages;
 import djudge.acmcontester.structures.RemoteTableProblems;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.RemoteTableUsers;
 
-public class Admin extends JFrame// implements AuthentificationDataProvider
+public class AdminClient extends JFrame// implements AuthentificationDataProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +38,7 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 	
 	private AuthentificationData authData = new AuthentificationData("root", "root");
 	
-	private ServerXmlRpcInterface serverXmlRpcInterface = new ServerXmlRpcConnector();
+	private AdminXmlRpcConnector serverXmlRpcInterface = new AdminXmlRpcConnector();
 	
 	class WatchThread extends Thread
 	{
@@ -75,9 +79,10 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 		add(jtpTabs, BorderLayout.CENTER);
 		
 		add(statusPanel = new JStatusPanel(serverXmlRpcInterface, authData), BorderLayout.NORTH);
+		serverXmlRpcInterface.setVizi(statusPanel);
 	}
 	
-	public Admin()
+	public AdminClient()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(640, 480));
@@ -90,7 +95,7 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 
 /*	@Override

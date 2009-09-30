@@ -2,8 +2,6 @@ package djudge.acmcontester.interfaces;
 
 import java.util.HashMap;
 
-import djudge.acmcontester.structures.UserData;
-
 interface AdminUsersCommonInterface
 {
 	public boolean addUser(String username, String password, String newUserName,

@@ -1,37 +1,38 @@
-package djudge.acmcontester.structures;
+package djudge.utils.xmlrpc;
+
 
 public class RemoteRowStub extends AbstractRemoteRow
 {
 
 	@Override
-	int getColumnCount()
+	protected int getColumnCount()
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	Class<? extends AbstractRemoteTable> getTableClass()
+	protected Class<? extends AbstractRemoteTable> getTableClass()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	Object getValueAt(int column)
+	protected Object getValueAt(int column)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	void setValueAt(int column, String value)
+	protected void setValueAt(int column, String value)
 	{
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	boolean save()
+	protected boolean save()
 	{
 		//table.getConnector().
 		// TODO Auto-generated method stub
@@ -39,14 +40,14 @@ public class RemoteRowStub extends AbstractRemoteRow
 	}
 
 	@Override
-	boolean create()
+	protected boolean create()
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	boolean delete()
+	protected boolean delete()
 	{
 		// TODO Auto-generated method stub
 		return false;

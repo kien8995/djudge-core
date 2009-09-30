@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.ProblemDescription;
 import djudge.judge.ProblemResult;
 import djudge.judge.SubmissionResult;
@@ -120,6 +120,6 @@ public class JTestingResultPanel extends JPanel
 		
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

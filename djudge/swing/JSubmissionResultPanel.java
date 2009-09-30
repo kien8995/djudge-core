@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.SubmissionResult;
 
 public class JSubmissionResultPanel extends JPanel
@@ -33,6 +33,6 @@ public class JSubmissionResultPanel extends JPanel
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

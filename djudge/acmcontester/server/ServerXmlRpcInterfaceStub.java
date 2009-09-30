@@ -1,64 +1,44 @@
 package djudge.acmcontester.server;
 
-import java.util.HashMap;
 
+import java.util.HashMap;
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.SubmissionData;
-import djudge.acmcontester.structures.UserData;
-import djudge.common.HashMapSerializer;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
-public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlRpcInterface
+public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements ServerXmlRpcInterface
 {
 	@Override
-	public HashMap<String, String>[] getProblems(String username, String password)
+	public HashMap<String, String>[] getTeamProblems(String username, String password)
 	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return serializeToHashMap(ContestServer.getCore().getProblems(userInfo));
+		return serializeToHashMapArray(ContestServer.getCore().getTeamProblems(username, password));
 	}
 
 	@Override
-	public boolean enterContest(String username, String password)
+	public boolean enterContestTeam(String username, String password)
 	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return ContestServer.getCore().enterContest(userInfo);
+		return ContestServer.getCore().enterContest(username, password);
 	}
 
 	@Override
-	public String registerUser(String username, String password)
+	public String registerTeam(String username, String password)
 	{
-		return ContestServer.getCore().registerUser(username, password);
-	}
-
-	@Override
-	public HashMap<String, String>[] getAllSubmissions(String username, String password)
-	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return serializeToHashMap(ContestServer.getCore().getAllSubmissions(userInfo));
-	}
-
-	@Override
-	public HashMap<String, String>[] getOwnSubmissions(String username, String password)
-	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return serializeToHashMap(ContestServer.getCore().getOwnSubmissions(userInfo));
+		return ContestServer.getCore().registerTeam(username, password);
 	}
 
 	@Override
 	public boolean submitSolution(String username, String password,
 			String problemID, String languageID, String sourceCode)
 	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return ContestServer.getCore().submitSolution(userInfo, problemID, languageID, sourceCode);
+		return ContestServer.getCore().submitSolution(username, password, problemID, languageID, sourceCode);
 	}
 
 	@Override
-	public HashMap<String, String>[] getLanguages(String username, String password)
+	public HashMap<String, String>[] getTeamLanguages(String username, String password)
 	{
-		AuthentificationData userInfo = new AuthentificationData(username, password);
-		return serializeToHashMap(ContestServer.getCore().getLanguages(userInfo));
+		return serializeToHashMapArray(ContestServer.getCore().getTeamLanguages(username, password));
 	}
 	
 	@Override
@@ -93,9 +73,9 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap getMonitor(String username, String password)
+	public HashMap getTeamMonitor(String username, String password)
 	{
-		MonitorData md = ContestServer.getCore().getMonitor(username, password);
+		MonitorData md = ContestServer.getCore().getTeamMonitor(username, password);
 		return md.toHashMap();
 	}
 
@@ -137,12 +117,12 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 	@Override
 	public HashMap<String, String>[] getUsers(String username, String password)
 	{
-		return serializeToHashMap(ContestServer.getCore().getUsers(username, password));
+		return serializeToHashMapArray(ContestServer.getCore().getUsers(username, password));
 	}
 	
 	public HashMap<String, String>[] getUsers()
 	{
-		return serializeToHashMap(ContestServer.getCore().getUsers("1", "2"));
+		return serializeToHashMapArray(ContestServer.getCore().getUsers("1", "2"));
 	}
 
 	@Override
@@ -180,9 +160,9 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap[] getSubmissions(String username, String password)
+	public HashMap[] getTeamSubmissions(String username, String password)
 	{
-		return HashMapSerializer.serializeToHashMap(ContestServer.getCore().getSubmissions(username, password));
+		return HashMapSerializer.serializeToHashMapArray(ContestServer.getCore().getTeamSubmissions(username, password));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -199,5 +179,12 @@ public class ServerInterfaceStub extends HashMapSerializer implements ServerXmlR
 			String key, String value)
 	{
 		return ContestServer.getCore().rejudgeSubmissions(username, password, key, value);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap[] getSubmissions(String username, String password)
+	{
+		return HashMapSerializer.serializeToHashMapArray(ContestServer.getCore().getSubmissions(username, password));
 	}
 }

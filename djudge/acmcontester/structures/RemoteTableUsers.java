@@ -1,9 +1,10 @@
 package djudge.acmcontester.structures;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.common.HashMapSerializer;
+import djudge.utils.xmlrpc.AbstractRemoteRow;
+import djudge.utils.xmlrpc.AbstractRemoteTable;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class RemoteTableUsers extends AbstractRemoteTable
 {
@@ -15,7 +16,7 @@ public class RemoteTableUsers extends AbstractRemoteTable
 	}
 	
 	@Override
-	AbstractRemoteRow[] getRows()
+	protected AbstractRemoteRow[] getRows()
 	{
 		return HashMapSerializer.deserializeFromHashMapArray(
 				getConnector().getUsers(
@@ -25,7 +26,7 @@ public class RemoteTableUsers extends AbstractRemoteTable
 	}
 
 	@Override
-	Class<? extends AbstractRemoteRow> getRowClass()
+	protected Class<? extends AbstractRemoteRow> getRowClass()
 	{
 		return UserData.class;
 	}

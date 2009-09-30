@@ -4,8 +4,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import djudge.acmcontester.Admin;
-import djudge.judge.dcompiler.CompilationInfo;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.dcompiler.CompilerResult;
 
 public class JCompilationResultPanel extends JPanel
@@ -33,6 +32,6 @@ public class JCompilationResultPanel extends JPanel
 		
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

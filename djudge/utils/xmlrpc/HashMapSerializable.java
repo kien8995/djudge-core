@@ -1,14 +1,14 @@
-package djudge.common;
+package djudge.utils.xmlrpc;
 
 import java.util.HashMap;
 
-import djudge.acmcontester.structures.RemoteRowStub;
 
 public abstract class HashMapSerializable extends RemoteRowStub
 {
 	@SuppressWarnings("unchecked")
 	public abstract HashMap toHashMap();
 	
+	@SuppressWarnings("unchecked")
 	public abstract void fromHashMap(HashMap map);
 
 }

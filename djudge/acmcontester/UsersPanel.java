@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import db.AbstractTableDataModel;
+import djudge.acmcontester.admin.AdminClient;
 
 public class UsersPanel extends JPanel implements ActionListener
 {
@@ -43,7 +44,7 @@ public class UsersPanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 
 	@Override

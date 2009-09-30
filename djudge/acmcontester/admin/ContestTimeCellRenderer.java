@@ -1,4 +1,4 @@
-package djudge.acmcontester;
+package djudge.acmcontester.admin;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -9,8 +9,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.gui.Formatter;
-
-import utils.PrintfFormat;
 
 class DefaultCellRenderer extends DefaultTableCellRenderer
 {
@@ -97,7 +95,7 @@ public class ContestTimeCellRenderer extends DefaultSubmissionsModelCellRenderer
 
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}	
 }
 

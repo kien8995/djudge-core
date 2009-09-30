@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.common.HashMapSerializable;
+import djudge.utils.xmlrpc.AbstractRemoteTable;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class SubmissionData extends HashMapSerializable
 {
@@ -127,19 +128,19 @@ public class SubmissionData extends HashMapSerializable
 	}
 	
 	@Override
-	int getColumnCount()
+	protected int getColumnCount()
 	{
 		return 17;
 	}
 
 	@Override
-	Class<? extends AbstractRemoteTable> getTableClass()
+	protected Class<? extends AbstractRemoteTable> getTableClass()
 	{
 		return RemoteTableSubmissions.class;
 	}
 
 	@Override
-	Object getValueAt(int column)
+	protected Object getValueAt(int column)
 	{
 		switch (column)
 		{
@@ -167,7 +168,7 @@ public class SubmissionData extends HashMapSerializable
 	}
 	
 	@Override
-	void setValueAt(int column, String value)
+	protected void setValueAt(int column, String value)
 	{
 		switch (column)
 		{
@@ -192,7 +193,7 @@ public class SubmissionData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean save()
+	protected boolean save()
 	{
 		if (!fDataChanged)
 			return true;
@@ -204,13 +205,13 @@ public class SubmissionData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean create()
+	protected boolean create()
 	{
 		return false;
 	}
 	
 	@Override
-	boolean delete()
+	protected boolean delete()
 	{
 		AuthentificationData ad = table.getAuthentificationData();
 		return table.getConnector().deleteSubmission(

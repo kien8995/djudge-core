@@ -16,6 +16,11 @@ public class ContestSettings
 		return settings.getInt("max-submits-per-user", INFINITY);
 	}
 	
+	public String getContestName()
+	{
+		return settings.getProperty("name");
+	}
+	
 	public int getMaxSubmitsPerProblemCount()
 	{
 		return settings.getInt("max-submits-per-task", INFINITY);

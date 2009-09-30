@@ -2,6 +2,7 @@ package djudge.acmcontester;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,17 +11,21 @@ import javax.swing.JPanel;
 
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
-public class JStatusPanel extends JPanel implements ActionListener
+public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateVisualizer
 {
-
 	private static final long serialVersionUID = 1L;
 	
 	private JLabel jlTime;
 	private JLabel jlStatus;
+	private JLabel jlConnectionStatus;
 	private JButton jbExit;
 	
+	private ConnectionState state = new ConnectionState();
+	
 	TeamXmlRpcInterface serverInterface;
+	
 	AuthentificationDataProvider authProvider;
 	
 	public JStatusPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
@@ -30,20 +35,33 @@ public class JStatusPanel extends JPanel implements ActionListener
 		
 		jlTime = new JLabel("Time Left");
 		jlStatus = new JLabel("Contest Status");
+		jlConnectionStatus = new JLabel("Connected");
 		jbExit = new JButton("Exit");
 		jbExit.addActionListener(this);
 		
 		add(jlStatus);
 		add(jlTime);
-		add(jbExit);		
+		add(jbExit);
+		add(jlConnectionStatus);
 	}
+	
+	boolean f = false;
 	
 	public void updateData()
 	{
-		String status = serverInterface.getContestStatus(authProvider.getUsername(), authProvider.getPassword());
-		jlStatus.setText(status);
-		long timeLeft = serverInterface.getContestTimeLeft(authProvider.getUsername(), authProvider.getPassword());
-		jlTime.setText("" + (timeLeft / (60 * 1000)));
+		f = true;
+		try
+		{
+    		String status = serverInterface.getContestStatus(authProvider.getUsername(), authProvider.getPassword());
+    		jlStatus.setText(status);
+    		long timeLeft = serverInterface.getContestTimeLeft(authProvider.getUsername(), authProvider.getPassword());
+    		jlTime.setText("" + (timeLeft / (60 * 1000)));
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		f = false;
+		jlConnectionStatus.setText(state.fConnected ? "Connected " + state.lastConnectionTime : "Disconnected. Last connected " + state.lastSuccessTime);
 	}
 
 	@Override
@@ -59,5 +77,29 @@ public class JStatusPanel extends JPanel implements ActionListener
 				System.exit(0);
 			}
 		}
+	}
+
+	@Override
+	public void beforeMethodCall()
+	{
+		state.lastConnectionTime = new Date();
+	}
+
+	@Override
+	public void onFailure()
+	{
+		state.fConnected = false;
+		if (!f)
+			updateData();
+	}
+
+	@Override
+	public void onSuccess()
+	{
+		state.fConnected = true;
+		state.lastConnectionTime = new Date();
+		state.lastSuccessTime = new Date();
+		if (!f)
+			updateData();
 	}
 }

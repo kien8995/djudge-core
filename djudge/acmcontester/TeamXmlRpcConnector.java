@@ -1,20 +1,24 @@
 package djudge.acmcontester;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.w3c.dom.Element;
 
 import utils.XmlWorks;
 
+import djudge.acmcontester.interfaces.ServerCommonInterface;
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
-import djudge.common.HashMapSerializer;
-import djudge.judge.RPCClientFactory;
+import djudge.utils.xmlrpc.XmlRpcConnector;
+import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
-public class TeamXmlRpcConnector extends HashMapSerializer implements TeamXmlRpcInterface
+public class TeamXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpcInterface, ServerCommonInterface
 {
-	protected final static String serviceName = "AcmContester";
+	@SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger(TeamXmlRpcConnector.class);
+	
+	protected static final String serviceName = "AcmContester";
 	
 	XmlRpcClient client;
 	
@@ -29,74 +33,44 @@ public class TeamXmlRpcConnector extends HashMapSerializer implements TeamXmlRpc
 	
 	public TeamXmlRpcConnector()
 	{
-		try
-		{
-			client = RPCClientFactory.getRPCClient(serverURL);
-    		System.out.println("AcmContesterClientXmlRpcConnector is up");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
+		super(serviceName, serverURL);
 	}
 
-	protected Object callRemoteMethod(String methodName, Object... params)
+	public TeamXmlRpcConnector(XmlRpcStateVisualizer vizi)
 	{
-		Object[] paramsArray = new Object[params.length];
-		for (int i = 0; i < paramsArray.length; i++)
-			paramsArray[i] = params[i];
-		Object result = null;
-		try
-		{
-			System.out.println("XML-RPC. Calling " + methodName + " with params " + Arrays.toString(paramsArray));
-			result = client.execute(methodName, paramsArray);
-			System.out.println("Result: " + result.toString());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	@Override
-	public HashMap<String, String>[] getProblems(String username, String password)
-	{
-		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getProblems", params);
-		return deserializeToHashMapArray(remoteResult);
+		super(serviceName, serverURL, vizi);
 	}
 
 	@Override
-	public boolean enterContest(String username, String password)
+	public HashMap<String, String>[] getTeamProblems(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".enterContest", params);
+		Object remoteResult = callRemoteMethod(serviceName + ".getTeamProblems", params);
+		return objectToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public boolean enterContestTeam(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object remoteResult = callRemoteMethod(serviceName + ".enterContestTeam", params);
 		return (Boolean) remoteResult;
 	}
 
 	@Override
-	public String registerUser(String username, String password)
+	public String registerTeam(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".registerUser", params);
+		Object remoteResult = callRemoteMethod(serviceName + ".registerTeam", params);
 		return (String) remoteResult;
 	}
 
 	@Override
-	public HashMap<String, String>[] getAllSubmissions(String username, String password)
+	public HashMap<String, String>[] getTeamSubmissions(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getAllSubmissions", params);
-		return deserializeToHashMapArray(remoteResult);
-	}
-
-	@Override
-	public HashMap<String, String>[] getOwnSubmissions(String username, String password)
-	{
-		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getOwnSubmissions", params);
-		return deserializeToHashMapArray(remoteResult);
+		Object remoteResult = callRemoteMethod(serviceName + ".getTeamSubmissions", params);
+		return objectToHashMapArray(remoteResult);
 	}
 
 	@Override
@@ -108,11 +82,11 @@ public class TeamXmlRpcConnector extends HashMapSerializer implements TeamXmlRpc
 	}
 
 	@Override
-	public HashMap<String, String>[] getLanguages(String username, String password)
+	public HashMap<String, String>[] getTeamLanguages(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object res = callRemoteMethod(serviceName + ".getLanguages", params);
-		return deserializeToHashMapArray(res);
+		Object res = callRemoteMethod(serviceName + ".getTeamLanguages", params);
+		return objectToHashMapArray(res);
 	}
 
 	@Override
@@ -147,9 +121,9 @@ public class TeamXmlRpcConnector extends HashMapSerializer implements TeamXmlRpc
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap getMonitor(String username, String password)
+	public HashMap getTeamMonitor(String username, String password)
 	{
-		return (HashMap) callRemoteMethod(serviceName + ".getMonitor", new Object[] {username, password});
+		return (HashMap) callRemoteMethod(serviceName + ".getTeamMonitor", new Object[] {username, password});
 	}
 
 }

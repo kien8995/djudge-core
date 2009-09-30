@@ -13,7 +13,7 @@ import djudge.dservice.DServiceTask;
 import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
-import djudge.judge.RPCClientFactory;
+import djudge.utils.xmlrpc.RPCClientFactory;
 
 
 public class DServiceConnector extends Thread

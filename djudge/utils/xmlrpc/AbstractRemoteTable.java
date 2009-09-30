@@ -1,15 +1,11 @@
-package djudge.acmcontester.structures;
+package djudge.utils.xmlrpc;
+
 
 import java.util.Vector;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.apache.log4j.Logger;
 
-import db.AbstractTableDataModel;
-import db.DBRowAbstract;
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
 
 public abstract class AbstractRemoteTable extends AbstractDataTable
@@ -24,9 +20,9 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 	
 	private static final long serialVersionUID = 1L;
 
-	abstract AbstractRemoteRow[] getRows();
+	protected abstract AbstractRemoteRow[] getRows();
 	
-	abstract Class<?extends AbstractRemoteRow> getRowClass();
+	protected abstract Class<?extends AbstractRemoteRow> getRowClass();
 	
 	@Override
 	public int getColumnCount()

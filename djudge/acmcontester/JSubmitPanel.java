@@ -20,11 +20,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
-import djudge.common.HashMapSerializer;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 import utils.FileWorks;
 
@@ -65,13 +66,13 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	private void setupGUI()
 	{
 		jcbLanguages = new JComboBox(HashMapSerializer
-				.deserializeFromHashMapArray(serverInterface.getLanguages(
+				.deserializeFromHashMapArray(serverInterface.getTeamLanguages(
 						authProvider.getUsername(), authProvider.getPassword()), LanguageData.class));
 		jcbLanguages.setPreferredSize(new Dimension(30, 30));
 		glblLanguage = new JLabel("Language");
 		
 		jcbProblems = new JComboBox(HashMapSerializer
-				.deserializeFromHashMapArray(serverInterface.getProblems(
+				.deserializeFromHashMapArray(serverInterface.getTeamProblems(
 						authProvider.getUsername(), authProvider.getPassword()), ProblemData.class));
 		jcbProblems.setPreferredSize(new Dimension(30, 30));
 		glblProblem = new JLabel("Problem");
@@ -214,7 +215,7 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 
 }

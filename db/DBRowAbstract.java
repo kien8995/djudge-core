@@ -9,9 +9,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import djudge.acmcontester.server.ContestServer;
-
-
 public abstract class DBRowAbstract extends SQLAbstract
 {
 	static final Logger log = Logger.getLogger(DBRowAbstract.class);

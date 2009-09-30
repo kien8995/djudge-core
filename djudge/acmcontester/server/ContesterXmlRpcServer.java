@@ -5,7 +5,7 @@ import org.apache.xmlrpc.server.XmlRpcStreamServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
-public class AcmContesterXmlRpcServer extends Thread
+public class ContesterXmlRpcServer extends Thread
 {
 	private int port;
 	
@@ -13,7 +13,7 @@ public class AcmContesterXmlRpcServer extends Thread
 	
 	private WebServer webServer;
 	
-	public AcmContesterXmlRpcServer()
+	public ContesterXmlRpcServer()
 	{
 		port = Integer.parseInt(ServerSettings.getProperty("rpc-port"));
 		serviceName = ServerSettings.getProperty("rpc-name");
@@ -30,7 +30,7 @@ public class AcmContesterXmlRpcServer extends Thread
 
 			PropertyHandlerMapping phm = new PropertyHandlerMapping();
 
-			phm.addHandler(serviceName, ServerInterfaceStub.class);
+			phm.addHandler(serviceName, ServerXmlRpcInterfaceStub.class);
 
 			xmlRpcServer.setHandlerMapping(phm);
 

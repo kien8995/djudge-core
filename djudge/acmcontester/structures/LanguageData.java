@@ -3,7 +3,8 @@ package djudge.acmcontester.structures;
 import java.util.HashMap;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.common.HashMapSerializable;
+import djudge.utils.xmlrpc.AbstractRemoteTable;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class LanguageData extends HashMapSerializable
 {
@@ -75,19 +76,19 @@ public class LanguageData extends HashMapSerializable
 	}
 	
 	@Override
-	int getColumnCount()
+	protected int getColumnCount()
 	{
 		return 6;
 	}
 
 	@Override
-	Class<? extends AbstractRemoteTable> getTableClass()
+	protected Class<? extends AbstractRemoteTable> getTableClass()
 	{
 		return RemoteTableLanguages.class;
 	}
 
 	@Override
-	Object getValueAt(int column)
+	protected Object getValueAt(int column)
 	{
 		switch (column)
 		{
@@ -104,7 +105,7 @@ public class LanguageData extends HashMapSerializable
 	}
 	
 	@Override
-	void setValueAt(int column, String value)
+	protected void setValueAt(int column, String value)
 	{
 		switch (column)
 		{
@@ -117,7 +118,7 @@ public class LanguageData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean save()
+	protected boolean save()
 	{
 		if (!fDataChanged)
 			return true;
@@ -131,7 +132,7 @@ public class LanguageData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean create()
+	protected boolean create()
 	{
 		AuthentificationData ad = table.getAuthentificationData();
 		return table.getConnector().addLanguage(
@@ -141,12 +142,11 @@ public class LanguageData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean delete()
+	protected boolean delete()
 	{
 		AuthentificationData ad = table.getAuthentificationData();
 		return table.getConnector().deleteLanguage(
 				ad.getUsername(),
 				ad.getPassword(), id);
 	}
-	
 }
