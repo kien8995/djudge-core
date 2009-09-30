@@ -62,6 +62,8 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 		int userID = getUserID(uid);
 		if (userID <= 0)
 			return -DServiceResult.AUTHORIZATION_FAILED.ordinal();
+		
+		log.info("Submission " + contestId + "-" + problemId + " " + languageId + " [" + clientData + "] received from '" + uid + "'");
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();

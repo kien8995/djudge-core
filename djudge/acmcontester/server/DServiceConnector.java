@@ -74,7 +74,7 @@ public class DServiceConnector extends Thread
     		config.setReplyTimeout(10000);
     
     		client = new XmlRpcClient();
-    
+    		
     		client.setTransportFactory(new XmlRpcCommonsTransportFactory(client));
     		
     		client.setConfig(config);
@@ -83,9 +83,8 @@ public class DServiceConnector extends Thread
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("DServiceConnector start failed", ex);
 		}
-		
 		
 		while (true)
 		{
@@ -93,10 +92,14 @@ public class DServiceConnector extends Thread
 			
 			SubmissionsDataModel sdm = new SubmissionsDataModel();
 			// fetching all not judged submissions
-			sdm.setWhere("`djudge_flag` = 0 AND active > 0");
+			sdm.setWhere("`djudge_flag` = 0");
 			sdm.updateData();
 			Vector<SubmissionData> vsd = sdm.getRows();
 			
+			if (vsd.size() > 0)
+			{
+				log.debug("Non-judged submissions count = " + vsd.size());
+			}
 			// for each such submission
 			for (int i = 0; i < vsd.size(); i++)
 			{
@@ -128,15 +131,20 @@ public class DServiceConnector extends Thread
     			t.add(sd.id);
     			try
     			{
-    				log.debug("Sending solution #" + sd.id + " to DService");
     				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
     				if (result > 0)
     				{
+    					log.debug("OK - Sending solution #" + sd.id + " to DService");
     					sdm.setValueAt(-1, i, SubmissionsDataModel.getDJudgeFlagIndex());
+    				}
+    				else
+    				{
+    					log.debug("Failed - Sending solution #" + sd.id + " to DService: " + result);
     				}
     				flagConnected = true;
     				currentSleepTime = defaultSleepTime;
     				sdm.getRow(i).save();
+    				ContestServer.getCore().getSubmissionsDataModel().updateData();
     			}
     			catch (XmlRpcException ex)
     			{
@@ -151,10 +159,6 @@ public class DServiceConnector extends Thread
     			{
     				log.warn("Error while connecting", ex);
     			}
-			}
-			if (vsd.size() > 0)
-			{
-				ContestServer.getCore().getSubmissionsDataModel().updateData();
 			}
 			
 			/* Fetching results from judge */
@@ -197,5 +201,10 @@ public class DServiceConnector extends Thread
 			{
 			}
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		ContestServer.main(args);
 	}
 }
