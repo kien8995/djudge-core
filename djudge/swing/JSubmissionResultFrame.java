@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.SubmissionResult;
 
 public class JSubmissionResultFrame extends JFrame
@@ -41,6 +41,6 @@ public class JSubmissionResultFrame extends JFrame
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

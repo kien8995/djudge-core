@@ -2,7 +2,7 @@ package djudge.dservice;
 
 import java.util.HashMap;
 
-import djudge.common.HashMapSerializable;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class DServiceTaskResult extends HashMapSerializable
 {

@@ -217,9 +217,4 @@ public class DServiceConnector extends Thread
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		ContestServer.main(args);
-	}
 }

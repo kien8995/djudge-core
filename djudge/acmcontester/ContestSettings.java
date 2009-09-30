@@ -4,6 +4,7 @@ import java.util.Date;
 
 import utils.FileWorks;
 
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.structures.ContestStatusEnum;
 
 public class ContestSettings
@@ -78,7 +79,7 @@ public class ContestSettings
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 	
 	public void saveSettings()

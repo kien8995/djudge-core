@@ -2,17 +2,12 @@ package djudge.acmcontester.server;
 
 import org.apache.log4j.Logger;
 
-import db.LanguagesDataModel;
-import db.ProblemsDataModel;
-import db.SubmissionsDataModel;
-import db.UsersDataModel;
-
 public class ContestServer
 {
 	/*
 	 * XML-RPC server
 	 */
-	private static AcmContesterXmlRpcServer rpcServer;
+	private static ContesterXmlRpcServer rpcServer;
 	
 	private static final Logger log = Logger.getLogger(ContestServer.class);
 	
@@ -25,7 +20,9 @@ public class ContestServer
 	
 	public static void startServer()
 	{
-		rpcServer = new AcmContesterXmlRpcServer();
+		rpcServer = new ContesterXmlRpcServer();
+		core.stopCore();
+		core = new ContestCore(true);
 		rpcServer.start();
 	}
 	

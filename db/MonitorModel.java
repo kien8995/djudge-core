@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.Statement;
 
-import djudge.acmcontester.Admin;
-import djudge.acmcontester.server.ContestCore;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.MonitorRow;
@@ -130,6 +129,6 @@ public class MonitorModel
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

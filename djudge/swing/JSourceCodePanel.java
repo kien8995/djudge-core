@@ -4,14 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Font;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -20,9 +17,7 @@ import javax.swing.JTextArea;
 
 import utils.FileWorks;
 
-import djudge.acmcontester.Admin;
-import djudge.judge.Judge;
-import djudge.judge.SubmissionResult;
+import djudge.acmcontester.admin.AdminClient;
 
 public class JSourceCodePanel extends JPanel
 {
@@ -86,7 +81,7 @@ public class JSourceCodePanel extends JPanel
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 
 }

@@ -3,7 +3,8 @@ package djudge.acmcontester.structures;
 import java.util.HashMap;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.common.HashMapSerializable;
+import djudge.utils.xmlrpc.AbstractRemoteTable;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class ProblemData extends HashMapSerializable
 {
@@ -70,19 +71,19 @@ public class ProblemData extends HashMapSerializable
 	}
 	
 	@Override
-	int getColumnCount()
+	protected int getColumnCount()
 	{
 		return 5;
 	}
 
 	@Override
-	Class<? extends AbstractRemoteTable> getTableClass()
+	protected Class<? extends AbstractRemoteTable> getTableClass()
 	{
 		return RemoteTableProblems.class;
 	}
 
 	@Override
-	Object getValueAt(int column)
+	protected Object getValueAt(int column)
 	{
 		switch (column)
 		{
@@ -98,7 +99,7 @@ public class ProblemData extends HashMapSerializable
 	}
 	
 	@Override
-	void setValueAt(int column, String value)
+	protected void setValueAt(int column, String value)
 	{
 		switch (column)
 		{
@@ -110,7 +111,7 @@ public class ProblemData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean save()
+	protected boolean save()
 	{
 		if (!fDataChanged)
 			return true;
@@ -124,7 +125,7 @@ public class ProblemData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean create()
+	protected boolean create()
 	{
 		AuthentificationData ad = table.getAuthentificationData();
 		return table.getConnector().addProblem(
@@ -133,7 +134,7 @@ public class ProblemData extends HashMapSerializable
 	}
 	
 	@Override
-	boolean delete()
+	protected boolean delete()
 	{
 		AuthentificationData ad = table.getAuthentificationData();
 		return table.getConnector().deleteProblem(

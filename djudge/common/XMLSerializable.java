@@ -60,6 +60,9 @@ public abstract class XMLSerializable extends Loggable
         try {
         	Document doc = getXML();
             OutputFormat format = new OutputFormat(doc);
+            format.setLineWidth(65);
+            format.setIndenting(true);
+            format.setIndent(2);            
             Writer out = new StringWriter();
             XMLSerializer serializer = new XMLSerializer(out, format);
             serializer.serialize(doc);

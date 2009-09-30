@@ -1,9 +1,10 @@
 package djudge.acmcontester.structures;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.common.HashMapSerializer;
+import djudge.utils.xmlrpc.AbstractRemoteRow;
+import djudge.utils.xmlrpc.AbstractRemoteTable;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class RemoteTableLanguages extends AbstractRemoteTable
 {
@@ -16,17 +17,17 @@ public class RemoteTableLanguages extends AbstractRemoteTable
 	}
 	
 	@Override
-	AbstractRemoteRow[] getRows()
+	protected AbstractRemoteRow[] getRows()
 	{
 		return HashMapSerializer.deserializeFromHashMapArray(
-				getConnector().getLanguages(
+				getConnector().getTeamLanguages(
 						getAuthentificationData().getUsername(),
 						getAuthentificationData().getPassword()),
 				LanguageData.class).toArray(new LanguageData[0]);
 	}
 
 	@Override
-	Class<? extends AbstractRemoteRow> getRowClass()
+	protected Class<? extends AbstractRemoteRow> getRowClass()
 	{
 		return LanguageData.class;
 	}

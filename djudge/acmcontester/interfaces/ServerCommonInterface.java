@@ -1,9 +1,6 @@
 package djudge.acmcontester.interfaces;
 
-import java.util.HashMap;
-
-
-public interface AcmContesterXmlRpcClientInterface extends ProblemsInterface, UsersInterface, SubmissionsInterface, LanguagesInterface
+public interface ServerCommonInterface
 {
 	public String getVersion();
 	
@@ -14,7 +11,4 @@ public interface AcmContesterXmlRpcClientInterface extends ProblemsInterface, Us
 	public long getContestTimeLeft(String username, String password);
 	
 	public String getContestStatus(String username, String password);
-	
-	@SuppressWarnings("unchecked")
-	public HashMap getMonitor(String username, String password);
 }

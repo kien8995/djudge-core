@@ -1,15 +1,13 @@
-package djudge.acmcontester;
+package djudge.acmcontester.admin;
 
-import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -18,21 +16,12 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.log4j.Logger;
-
-import utils.XmlWorks;
-
-import db.AbstractTableDataModel;
-import db.SubmissionsDataModel;
+import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.server.ContestCore;
-import djudge.acmcontester.structures.AbstractDataTable;
-import djudge.acmcontester.structures.AbstractRemoteTable;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.SubmissionData;
-import djudge.judge.SubmissionResult;
 import djudge.swing.JSubmissionInfoFrame;
-import djudge.swing.JSubmissionResultFrame;
+import djudge.utils.xmlrpc.AbstractDataTable;
 
 class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 {
@@ -294,7 +283,7 @@ public class JTablePanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 	
 }

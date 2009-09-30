@@ -2,8 +2,8 @@ package djudge.acmcontester.structures;
 
 import java.util.HashMap;
 
-import djudge.acmcontester.Admin;
-import djudge.common.HashMapSerializable;
+import djudge.acmcontester.admin.AdminClient;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class UserProblemStatus extends HashMapSerializable
 {
@@ -40,7 +40,7 @@ public class UserProblemStatus extends HashMapSerializable
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 	
 	public UserProblemStatus()

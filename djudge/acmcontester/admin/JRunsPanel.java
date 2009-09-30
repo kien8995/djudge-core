@@ -1,4 +1,4 @@
-package djudge.acmcontester;
+package djudge.acmcontester.admin;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.structures.SubmissionData;
-import djudge.common.HashMapSerializer;
+import djudge.acmcontester.team.TeamClient;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class JRunsPanel extends JPanel implements ActionListener
 {
@@ -90,8 +91,8 @@ public class JRunsPanel extends JPanel implements ActionListener
 		setupGUI();
 		setVisible(true);
 		data = new Vector<SubmissionData>(
-				HashMapSerializer.deserializeFromHashMapArray(Client.server
-						.getAllSubmissions(Client.username, Client.password),
+				HashMapSerializer.deserializeFromHashMapArray(TeamClient.server
+						.getTeamSubmissions(TeamClient.username, TeamClient.password),
 						SubmissionData.class));
 	}
 
@@ -125,14 +126,14 @@ public class JRunsPanel extends JPanel implements ActionListener
 
 	public static void main(String[] args)
 	{
-		new Client();
+		new TeamClient();
 	}
 	
 	private void doRefreshAction()
 	{
 		Vector<SubmissionData> data = HashMapSerializer.deserializeFromHashMapArray(
-				Client.server.getAllSubmissions(Client.username,
-						Client.password), SubmissionData.class);
+				TeamClient.server.getTeamSubmissions(TeamClient.username,
+						TeamClient.password), SubmissionData.class);
 		setData(data);
 	}
 

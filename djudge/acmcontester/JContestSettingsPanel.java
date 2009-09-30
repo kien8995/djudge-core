@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.server.ContestCore;
 
 
@@ -57,6 +58,6 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

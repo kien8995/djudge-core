@@ -2,8 +2,8 @@ package djudge.dservice;
 
 import java.util.HashMap;
 
-import djudge.common.HashMapSerializer;
 import djudge.dservice.interfaces.DServiceXmlRpcInterface;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class DServiceStub implements DServiceXmlRpcInterface
 {
@@ -19,7 +19,7 @@ public class DServiceStub implements DServiceXmlRpcInterface
 	@Override
 	public HashMap[] fetchResults(String uid)
 	{
-		return HashMapSerializer.serializeToHashMap(DService.getCore().fetchResults(uid));
+		return HashMapSerializer.serializeToHashMapArray(DService.getCore().fetchResults(uid));
 	}
 
 	@SuppressWarnings("unchecked")

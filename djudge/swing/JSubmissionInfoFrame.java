@@ -15,7 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 import sun.misc.BASE64Decoder;
 import utils.XmlWorks;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.gui.Formatter;
 import djudge.judge.SubmissionResult;
@@ -67,6 +67,6 @@ public class JSubmissionInfoFrame extends JFrame
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

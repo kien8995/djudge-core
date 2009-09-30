@@ -1,7 +1,5 @@
 package djudge.acmcontester.interfaces;
 
-import java.util.HashMap;
-
 import djudge.acmcontester.structures.SubmissionData;
 
 public interface AdminSubmissionsNativeInterface extends AdminSubmissionsCommonInterface

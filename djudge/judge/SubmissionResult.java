@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 
 import utils.XmlWorks;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.dcompiler.CompilationInfo;
 import djudge.judge.dcompiler.CompilerResult;
 
@@ -129,6 +129,6 @@ public class SubmissionResult extends AbstractResult
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

@@ -1,4 +1,4 @@
-package djudge.acmcontester.structures;
+package djudge.utils.xmlrpc;
 
 import javax.swing.table.AbstractTableModel;
 

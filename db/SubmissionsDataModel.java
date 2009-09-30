@@ -82,6 +82,11 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		return 15;
 	}
 	
+	public final static int getXmlIndex()
+	{
+		return 16;
+	}
+	
 	public final static int getJudgementFieldIndex()
 	{
 		return 6;
@@ -205,6 +210,7 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		row.data[getScoreFieldIndex()] = -1;
 		row.data[getDJudgeFlagIndex()] = 0;
 		row.data[getRuntimeFieldIndex()] = -1;
+		row.data[getXmlIndex()] = "";
 		row.save();
 	}
 	

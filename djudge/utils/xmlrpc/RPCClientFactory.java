@@ -1,16 +1,16 @@
-package djudge.judge;
+package djudge.utils.xmlrpc;
+
 
 import java.net.URL;
-
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 
 public class RPCClientFactory
 {
-	final static int defaultConnectionTimeout = 5000;
+	final static int defaultConnectionTimeout = 10000;
 	
-	final static int defaultReplyTimeout = 5000; 
+	final static int defaultReplyTimeout = 10000; 
 	
 	XmlRpcClient client;
 	

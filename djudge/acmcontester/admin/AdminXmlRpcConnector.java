@@ -1,11 +1,23 @@
-package djudge.acmcontester;
+package djudge.acmcontester.admin;
 
 import java.util.HashMap;
 
+import djudge.acmcontester.TeamXmlRpcConnector;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
-public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements ServerXmlRpcInterface
+public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerXmlRpcInterface
 {
+	public AdminXmlRpcConnector()
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+	public AdminXmlRpcConnector(XmlRpcStateVisualizer vizi)
+	{
+		super(vizi);
+	}
+	
 	@Override
 	public boolean addLanguage(String username, String password, String sid,
 			String shortName, String fullName, String compilationComand,
@@ -46,7 +58,7 @@ public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements Server
 	{
 		Object[] params = {username, password};
 		Object remoteResult = callRemoteMethod(serviceName + ".getUsers", params);
-		return deserializeToHashMapArray(remoteResult);
+		return objectToHashMapArray(remoteResult);
 	}
 
 	@Override
@@ -76,14 +88,6 @@ public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements Server
 		return (Boolean) callRemoteMethod(serviceName + ".editProblem", username, password, id, sid, name, djudgeProblem, djudgeContest);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public HashMap[] getSubmissions(String username, String password)
-	{
-		Object remoteResult = callRemoteMethod(serviceName + ".getSubmissions", username, password);
-		return deserializeToHashMapArray(remoteResult);
-	}
-
 	@Override
 	public boolean deleteSubmission(String username, String password, String id)
 	{
@@ -103,5 +107,13 @@ public class ServerXmlRpcConnector extends TeamXmlRpcConnector implements Server
 			String key, String value)
 	{
 		return (Boolean) callRemoteMethod(serviceName + ".rejudgeSubmissions", username, password, key, value);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap[] getSubmissions(String username, String password)
+	{
+		Object remoteResult = callRemoteMethod(serviceName + ".getSubmissions", username, password);
+		return objectToHashMapArray(remoteResult);
 	}
 }

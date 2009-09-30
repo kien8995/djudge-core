@@ -1,12 +1,13 @@
-package djudge.common;
+package djudge.utils.xmlrpc;
 
 import java.util.HashMap;
 import java.util.Vector;
 
+
 public class HashMapSerializer
 {
 	@SuppressWarnings("unchecked")
-	public static HashMap<String, String>[] deserializeToHashMapArray(Object obj)
+	public static HashMap<String, String>[] objectToHashMapArray(Object obj)
 	{
 		try
 		{
@@ -24,13 +25,7 @@ public class HashMapSerializer
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static HashMap<String, String> serializeToHashMap(HashMapSerializable data)
-	{
-		return data.toHashMap();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static HashMap<String, String>[] serializeToHashMap(HashMapSerializable[] data)
+	public static HashMap<String, String>[] serializeToHashMapArray(HashMapSerializable[] data)
 	{
 		if (data == null)
 			return new HashMap[0];

@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import utils.FileWorks;
 
-import djudge.acmcontester.Admin;
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.structures.ContestStatusEnum;
 
 public class ContestState

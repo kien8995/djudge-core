@@ -7,22 +7,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.UserProblemStatus;
-import djudge.common.HashMapSerializer;
+import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class JMonitorPanel extends JPanel implements ActionListener
 {
@@ -183,9 +182,9 @@ public class JMonitorPanel extends JPanel implements ActionListener
 	private void setupGUI()
 	{
 		problems = HashMapSerializer.deserializeFromHashMapArray(
-				serverInterface.getProblems(authProvider.getUsername(),
+				serverInterface.getTeamProblems(authProvider.getUsername(),
 						authProvider.getPassword()), ProblemData.class);
-		data = new MonitorData(serverInterface.getMonitor(authProvider.getUsername(), authProvider.getPassword()));
+		data = new MonitorData(serverInterface.getTeamMonitor(authProvider.getUsername(), authProvider.getPassword()));
 		
 		jtMonitor = new JTable(new MonitorDataModel());
 		jtMonitor.setRowHeight(25);
@@ -225,7 +224,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 
 	private void doRefreshAction()
 	{
-		MonitorData data = new MonitorData(serverInterface.getMonitor(
+		MonitorData data = new MonitorData(serverInterface.getTeamMonitor(
 				authProvider.getUsername(), authProvider.getPassword()));
 		setData(data);
 	}
@@ -242,6 +241,6 @@ public class JMonitorPanel extends JPanel implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		new Admin();
+		new AdminClient();
 	}
 }

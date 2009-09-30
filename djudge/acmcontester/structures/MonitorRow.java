@@ -2,9 +2,9 @@ package djudge.acmcontester.structures;
 
 import java.util.HashMap;
 
-import djudge.common.HashMapSerializable;
+import djudge.utils.xmlrpc.HashMapSerializable;
 
-public class MonitorRow  extends HashMapSerializable
+public class MonitorRow extends HashMapSerializable
 {
 	public String userID;
 	public String username;

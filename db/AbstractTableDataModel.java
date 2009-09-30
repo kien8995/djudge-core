@@ -4,12 +4,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.apache.log4j.Logger;
 
-import djudge.acmcontester.server.ContestServer;
-import djudge.acmcontester.structures.AbstractDataTable;
+import djudge.utils.xmlrpc.AbstractDataTable;
 
 public abstract class AbstractTableDataModel extends AbstractDataTable
 {
