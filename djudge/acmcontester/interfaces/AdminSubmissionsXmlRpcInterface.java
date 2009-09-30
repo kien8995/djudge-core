@@ -4,16 +4,18 @@ import java.util.HashMap;
 
 interface AdminSubmissionsCommonInterface
 {
+	public boolean rejudgeSubmissions(String username, String password, String key, String value);
+	
 	public boolean deleteSubmission(String username, String password, String id);
 	
-	public boolean rejudgeSubmissions(String username, String password, String key, String value);
+	public boolean deleteAllSubmissions(String username, String password);
 }
 
+@SuppressWarnings("unchecked")
 public interface AdminSubmissionsXmlRpcInterface extends AdminSubmissionsCommonInterface
 {
-	@SuppressWarnings("unchecked")
+	
 	public HashMap[] getSubmissions(String username, String password);
 	
-	@SuppressWarnings("unchecked")
 	public boolean editSubmission(String username, String password, String id, HashMap data);
 }

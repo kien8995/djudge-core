@@ -1,6 +1,8 @@
 package djudge.acmcontester.structures;
 
+
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 
 import djudge.acmcontester.AuthentificationData;
 import djudge.utils.xmlrpc.AbstractRemoteTable;
@@ -8,6 +10,8 @@ import djudge.utils.xmlrpc.HashMapSerializable;
 
 public class LanguageData extends HashMapSerializable
 {
+	protected static final Logger log = Logger.getLogger(LanguageData.class);
+	
 	public String id = "-1";
 	public String sid = "";
 	public String shortName = "";
@@ -20,6 +24,11 @@ public class LanguageData extends HashMapSerializable
 		// TODO Auto-generated constructor stub
 	}
 
+	public LanguageData(HashMap<String, String> map)
+	{
+		fromHashMap(map);
+	}
+		
 	public LanguageData(String sid, String shortName, String fullName, String compilationCommand, String djudgeID)
 	{
 		this.shortName = shortName;
@@ -39,9 +48,9 @@ public class LanguageData extends HashMapSerializable
 		this.fullName = fullName;
 	}
 
-	public LanguageData(HashMap<String, String> map)
+	public void truncateInternalData()
 	{
-		fromHashMap(map);
+		compilationCommand = djudgeID = "";
 	}
 
 	@Override

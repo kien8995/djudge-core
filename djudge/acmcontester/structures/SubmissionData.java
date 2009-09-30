@@ -63,11 +63,12 @@ public class SubmissionData extends HashMapSerializable
 	}
 	
 	public static final String[] fieldNames = {
-		"id",
-		"contesttime",
-		"problem",
-		"language",
-		"judgement",
+		"ID",
+		"Time",
+		"Team",
+		"Problem",
+		"Language",
+		"Result",
 	};
 	
 	public Object getField(int fieldIndex)
@@ -76,9 +77,10 @@ public class SubmissionData extends HashMapSerializable
 		{
 		case 0: return id;
 		case 1: return contestTime;
-		case 2: return problemID;
-		case 3: return languageID;
-		case 4: return judgement;
+		case 2: return username;
+		case 3: return problemSid;
+		case 4: return languageSid;
+		case 5: return judgement;
 		}
 		return "";
 	}

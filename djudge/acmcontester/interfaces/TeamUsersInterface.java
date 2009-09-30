@@ -6,4 +6,5 @@ public interface TeamUsersInterface
 	
 	public boolean enterContestTeam(String username, String password);
 	
+	public boolean changePasswordTeam(String username, String oldPassword, String newPassword);
 }

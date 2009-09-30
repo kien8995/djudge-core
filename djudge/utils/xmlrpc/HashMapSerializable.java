@@ -11,4 +11,8 @@ public abstract class HashMapSerializable extends RemoteRowStub
 	@SuppressWarnings("unchecked")
 	public abstract void fromHashMap(HashMap map);
 
+	public void truncateInternalData()
+	{
+		
+	}
 }

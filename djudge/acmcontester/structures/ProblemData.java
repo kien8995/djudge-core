@@ -40,6 +40,12 @@ public class ProblemData extends HashMapSerializable
 		this.djudgeProblem = djudgeProblem;
 		this.djudgeContest = djudgeContest;
 	}
+	
+	@Override
+	public void truncateInternalData()
+	{
+		djudgeContest = djudgeProblem = "";
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

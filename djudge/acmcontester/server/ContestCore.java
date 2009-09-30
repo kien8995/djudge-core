@@ -1,16 +1,12 @@
 package djudge.acmcontester.server;
 
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import db.AbstractTableDataModel;
 import db.DBRowAbstract;
-import db.LanguagesDataModel;
-import db.MonitorModel;
-import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
-import db.UsersDataModel;
-import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.AdminNativeInterface;
 import djudge.acmcontester.interfaces.ServerCommonInterface;
 import djudge.acmcontester.interfaces.TeamNativeInterface;
@@ -20,25 +16,9 @@ import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
 
-public class ContestCore implements AdminNativeInterface, TeamNativeInterface, ServerCommonInterface
+public class ContestCore extends ContestCoreInternals implements AdminNativeInterface, TeamNativeInterface, ServerCommonInterface
 {
 	private static final Logger log = Logger.getLogger(ContestCore.class);
-	
-	private UsersDataModel usersModel;
-	
-	private ProblemsDataModel problemsModel;
-	
-	private LanguagesDataModel languagesModel;
-	
-	private SubmissionsDataModel submissionsModel;
-	
-	private MonitorModel monitorModel;
-	
-	private ContestSettings contest = new ContestSettings("contest.xml");
-	
-	private ContestState state = new ContestState(contest);
-	
-	private DServiceConnector djudgeInterface;
 	
 	public ContestCore()
 	{
@@ -50,69 +30,17 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		initCore(startServices);
 	}
 	
-	private void initCore(boolean flagStandalone)
-	{
-		usersModel = new UsersDataModel();
-		usersModel.updateData();
-		
-		problemsModel = new ProblemsDataModel();
-		problemsModel.updateData();
-		
-		languagesModel = new LanguagesDataModel();
-		languagesModel.updateData();
-		
-		submissionsModel = new SubmissionsDataModel();
-		submissionsModel.updateData();
-		
-		if (flagStandalone)
-		{
-			djudgeInterface = new DServiceConnector();
-			djudgeInterface.start();
-		}
-		
-		monitorModel = new MonitorModel();
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void stopCore()
-	{
-		if (djudgeInterface != null)
-		{
-			djudgeInterface.stop();
-		}
-	}
-
-	public UsersDataModel getUsersModel()
-	{
-		return usersModel;
-	}
-	
-	public LanguagesDataModel getLanguagesModel()
-	{
-		return languagesModel;
-	}
-	
-	public ProblemsDataModel getProblemsModel()
-	{
-		return problemsModel;
-	}
-	
-	public SubmissionsDataModel getSubmissionsDataModel()
-	{
-		return submissionsModel;
-	}
 	
 	@Override
 	public boolean addLanguage(String username, String password, String sid,
 			String shortName, String fullName, String compilationComand,
 			String djudgeID)
 	{
+		log.info("addLanguage request from " + username);
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		LanguageData ld = new LanguageData(sid, shortName, fullName, compilationComand, djudgeID);
-		DBRowAbstract rd = languagesModel.toRow(ld);
-		rd.appendTo(languagesModel);
-		return true;
+		
+		return addLanguageCore(sid, shortName, fullName, compilationComand, djudgeID);
 	}
 	
 	@Override
@@ -120,16 +48,11 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 			String shortName, String fullName, String compilationComand,
 			String djudgeID)
 	{
+		log.info("editLanguage request from " + username);
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		DBRowAbstract rd = languagesModel.getRowByID(id);
-		if (rd == null)
-			return false;
-		LanguageData ld = new LanguageData(id, sid, shortName, fullName, compilationComand, djudgeID);
-		rd = languagesModel.toRow(ld);
-		rd.save();
-		languagesModel.updateData();
-		return true;
+		
+		return editLanguageCore(id, sid, shortName, fullName, compilationComand, djudgeID);
 	}
 	
 	@Override
@@ -154,13 +77,21 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	@Override
 	public boolean deleteLanguage(String username, String password, String id)
 	{
-		return deleteAbstract(languagesModel, username, password, id);
+		log.info("deleteLanguage request from " + username);
+		if (!usersModel.isAdmin(username, password))
+			return false;
+
+		return deleteAbstract(languagesModel, id);
 	}
 	
 	@Override
 	public boolean deleteUser(String username, String password, String id)
 	{
-		return deleteAbstract(usersModel, username, password, id);
+		log.info("deleteUser request from " + username);
+		if (!usersModel.isAdmin(username, password))
+			return false;
+
+		return deleteAbstract(usersModel, id);
 	}
 	
 	@Override
@@ -273,6 +204,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	{
 		if (!usersModel.isAdmin(username, password))
 			return false;
+		
 		ProblemData pd = new ProblemData(sid, name, djudgeProblem, djudgeContest);
 		DBRowAbstract rd = problemsModel.toRow(pd);
 		rd.appendTo(problemsModel);
@@ -280,20 +212,6 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return true;
 	}
 
-	public boolean deleteAbstract(AbstractTableDataModel model, String username, String password, String id)
-	{
-		if (!usersModel.isAdmin(username, password))
-			return false;
-		log.debug("delete from table " + model.tableName + " - auth OK");
-		DBRowAbstract rd = model.getRowByID(id);
-		if (rd == null)
-			return false;
-		rd.delete(model);
-		model.updateData();
-		log.debug("delete from table " + model.tableName + " - finished");
-		return true;
-	}
-	
 	@Override
 	public boolean deleteProblem(String username, String password, String id)
 	{
@@ -305,7 +223,6 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 			String sid, String name, String djudgeProblem, String djudgeContest)
 	{
 		
-		log.debug("Problem editing request");
 		if (!usersModel.isAdmin(username, password))
 			return false;
 		
@@ -316,7 +233,6 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		rd = problemsModel.toRow(pd);
 		rd.save();
 		problemsModel.updateData();
-		log.debug("Problem editing finished");
 		return true;
 	}
 
@@ -365,29 +281,48 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	@Override
 	public ProblemData[] getTeamProblems(String username, String password)
 	{
-		// TODO: fixme
-		return getProblems(username, password);
+		String userID = usersModel.getUserID(username, password);
+		if (Integer.parseInt(userID) <= 0)
+			return new ProblemData[0];
+		
+		ProblemData[] res = problemsModel.getRows().toArray(new ProblemData[0]);
+		for (int i = 0; i < res.length; i++)
+			res[i].truncateInternalData();
+		return res;
 	}
 
 	@Override
 	public boolean enterContestTeam(String username, String password)
 	{
-		// TODO: fixme
+		String userID = usersModel.getUserID(username, password);
+		if (Integer.parseInt(userID) <= 0)
+			return false;
 		return true;
 	}
 
 	@Override
 	public SubmissionData[] getTeamSubmissions(String username, String password)
 	{
-		// TODO: fixme
-		return getSubmissions(username, password);
+		String userID = usersModel.getUserID(username, password);
+		if (Integer.parseInt(userID) <= 0)
+			return new SubmissionData[0];
+		SubmissionsDataModel sdm = new SubmissionsDataModel();
+		sdm.setWhere(" `user_id` = " + userID);
+		sdm.updateData();
+		return sdm.getRows().toArray(new SubmissionData[0]);
 	}
 
 	@Override
 	public LanguageData[] getTeamLanguages(String username, String password)
 	{
-		// TODO: fixme
-		return getLanguages(username, password);
+		String userID = usersModel.getUserID(username, password);
+		if (Integer.parseInt(userID) <= 0)
+			return new LanguageData[0];
+		
+		LanguageData[] res = languagesModel.getRows().toArray(new LanguageData[0]);
+		for (int i = 0; i < res.length; i++)
+			res[i].truncateInternalData();
+		return res;
 	}
 
 	@Override
@@ -406,7 +341,96 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	@Override
 	public String registerTeam(String username, String password)
 	{
-		// TODO: fixme
-		return "OK";
+		if (!contest.allowNewUserRegistration() || null != usersModel.getUserByUsername(username))
+			return "-1";
+		
+		UserData ud = new UserData(username, password, "", "TEAM");
+		DBRowAbstract rd = usersModel.toRow(ud);
+		rd.appendTo(usersModel);
+		usersModel.updateData();
+		return usersModel.getUserByUsername(username).getID();
+	}
+
+	@Override
+	public boolean deleteAllLanguages(String username, String password)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean changePassword(String username, String oldPassword,
+			String newPassword)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAllUsers(String username, String password)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAllProblems(String username, String password)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAllSubmissions(String username, String password)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAllData(String username, String password)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setContestFreezeTime(String username, String password,
+			long tillTimeLeft)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setContestRunning(String username, String password,
+			boolean isRunning)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setContestTimeLeft(String username, String password,
+			long timeLeft)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setContestTimePast(String username, String password,
+			long timePast)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean changePasswordTeam(String username, String oldPassword,
+			String newPassword)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

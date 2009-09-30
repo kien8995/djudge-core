@@ -9,4 +9,6 @@ public interface AdminProblemsCommonInterface
 			String name, String djudgeProblem, String djudgeContest);
 	
 	public boolean deleteProblem(String username, String password, String id);
+	
+	public boolean deleteAllProblems(String username, String password);
 }

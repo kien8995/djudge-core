@@ -15,7 +15,7 @@ class DBRowSubmissions extends DBRowAbstract
 	}
 	
 	@Override
-	protected String getTableNameForUpdate()
+	protected String getTableNameForEditing()
 	{
 		return "submissions";
 	}

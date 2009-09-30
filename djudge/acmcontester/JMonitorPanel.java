@@ -157,10 +157,6 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			{
 				setBackground(Color.GRAY);
 			}
-			if (column == 2)
-			{
-				value = ((Long) value) / 1000 / 60;
-			}
 			setText(value.toString());
 			return this;
 		}

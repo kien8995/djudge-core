@@ -4,27 +4,33 @@ import java.util.Vector;
 
 import djudge.acmcontester.structures.UserData;
 
-class DBRowUsers extends DBRowAbstract
-{
-	@Override
-	public Class<? extends AbstractTableDataModel> getTableClass()
-	{
-		return UsersDataModel.class;
-	}
-	
-	public String getPassword()
-	{
-		return data[3].toString();
-	}
-	
-	public String getRole()
-	{
-		return data[4].toString();
-	}
-}
-
 public class UsersDataModel extends AbstractTableDataModel
 {
+	public class DBRowUsers extends DBRowAbstract
+	{
+		@Override
+		public Class<? extends AbstractTableDataModel> getTableClass()
+		{
+			return UsersDataModel.class;
+		}
+		
+		public String getPassword()
+		{
+			return data[3].toString();
+		}
+		
+		public String getRole()
+		{
+			return data[4].toString();
+		}
+		
+		public String getID()
+		{
+			return data[0].toString();
+		}
+	}
+
+	
 	public final static String tableName = "users";
 
 	public final static DBField[] columns = {
