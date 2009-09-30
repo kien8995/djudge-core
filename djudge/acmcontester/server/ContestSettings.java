@@ -75,4 +75,9 @@ public class ContestSettings
 	{
 		return settings.getBoolean("allow-first-test-only-submissions", true);
 	}
+	
+	public boolean allowNewUserRegistration()
+	{
+		return settings.getBoolean("allow-new-user-registration", true);
+	}
 }

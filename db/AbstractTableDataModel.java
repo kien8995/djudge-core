@@ -46,7 +46,8 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 	
 	public AbstractTableDataModel()
 	{
-		
+		//!!!
+		fillSqlQuery = getFillStatement();
 	}
 	
 	@SuppressWarnings("unchecked")

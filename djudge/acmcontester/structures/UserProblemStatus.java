@@ -22,7 +22,7 @@ public class UserProblemStatus extends HashMapSerializable
 		String res = "";
 		if (wasSolved)
 		{
-			res = (wrongTryes + 1) + "/" + lastSubmitTime / 60000;
+			res = (wrongTryes + 1) + "/" + lastSubmitTime;
 		}
 		else if (wrongTryes > 0)
 		{

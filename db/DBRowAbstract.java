@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -99,28 +100,35 @@ public abstract class DBRowAbstract extends SQLAbstract
 		}
 		
 		StringBuffer s = new StringBuffer();
-		setInsert(s, getTableName());
+		setInsert(s, getTableNameForEditing());
 		setValues2(s, columns, values);
 		return s.toString();
 	}
 	
 	private String getCreateStatement2()
 	{
-		String[] columns = new String[getColumnCount() - 1];
-		Object[] values = new Object[getColumnCount() - 1];
-		String[] columnKeys = getColumnKeys();
-		Object[] columnValues = new Object[getColumnCount()];
-		for (int i = 0; i < getColumnCount(); i++)
-			columnValues[i] = data[i];
-		for (int i = 0; i < getColumnCount() - 1; i++)
-		{
-			columns[i] = columnKeys[i+1];
-			values[i] = columnValues[i+1];
-		}
-		
 		StringBuffer s = new StringBuffer();
-		setInsert(s, getTableName());
-		setValues2(s, columns, values);
+		try
+		{
+    		Vector<String> columns = new Vector<String>();
+    		Vector<Object> values = new Vector<Object>();
+    		String[] columnKeys = getColumnKeys();
+    		DBField[] fields = getTableClass().newInstance().columns;
+    		for (int i = 0; i < getColumnCount() - 1; i++)
+    		{
+    			if (fields[i].flagUpdate)
+    			{
+    				columns.add(columnKeys[i]);
+    				values.add(data[i]);
+    			}
+    		}
+    		setInsert(s, getTableNameForEditing());
+    		setValues2(s, columns.toArray(new String[0]), values.toArray());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return s.toString();
 	}
 	
@@ -216,11 +224,9 @@ public abstract class DBRowAbstract extends SQLAbstract
     				values.add(data[i]);
     			}
     		}
-    		
     		String[] where = {"id = "};
     		String[] whereVal = {data[0].toString()};
-    		
-    		setUpdate(s, getTableNameForUpdate());
+    		setUpdate(s, getTableNameForEditing());
     		setValues(s, columns.toArray(new String[0]), values.toArray());
     		setWhere(s, where, whereVal);
 		}
@@ -231,7 +237,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return s.toString();
 	}
 	
-	protected String getTableNameForUpdate()
+	protected String getTableNameForEditing()
 	{
 		return getTableName();
 	}
@@ -289,7 +295,6 @@ public abstract class DBRowAbstract extends SQLAbstract
 		catch (Exception e)
 		{
 			log.error("appendTo", e);
-			e.printStackTrace();
 			f = false;
 		}
 		return f;		

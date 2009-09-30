@@ -11,4 +11,6 @@ public interface AdminLanguagesCommonInterface
 			String djudgeID);
 	
 	public boolean deleteLanguage(String username, String password, String id);
+	
+	public boolean deleteAllLanguages(String username, String password);
 }

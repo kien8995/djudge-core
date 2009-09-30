@@ -46,7 +46,7 @@ public class XmlRpcConnector extends HashMapSerializer
 		{
 			if (vizi != null)
 				vizi.beforeMethodCall();
-			log.info("Calling " + methodName + " with params " + Arrays.toString(params));
+			log.info("Calling " + methodName + " with params " + params);
 			result = client.execute(methodName, params);
 			log.info("Result: " + result.toString());
 			if (vizi != null)
