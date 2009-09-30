@@ -3,16 +3,11 @@ package djudge.swing;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 
 import org.apache.commons.codec.binary.Base64;
 
-import sun.misc.BASE64Decoder;
 import utils.XmlWorks;
 
 import djudge.acmcontester.admin.AdminClient;

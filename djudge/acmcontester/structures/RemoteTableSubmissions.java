@@ -31,27 +31,6 @@ public class RemoteTableSubmissions extends AbstractRemoteTable
 		return SubmissionData.class;
 	}
 
-	/*
-	 	public String id; //0
-	public String userID; //1
-	public String problemID; //2
-	public String languageID; //3
-	public int contestTime;//4
-	public String realTime;//5
-	public String judgement;//6
-	public int maxTime;//7
-	public int maxMemory;//8
-	public int maxOutput;//9
-	public int failedTest;//10
-	public int score;/11
-	public int judged;//12
-	public int active;//13
-	public String sourceCode;//14
-	public int djudgeFlag;//15
-	public String xml;
-
-	 */
-	
 	public final static int getUserFieldIndex()
 	{
 		return 1;

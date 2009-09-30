@@ -199,7 +199,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 		return res;
 	}
 	
-	private String getUpdateStatement()
+	protected String getUpdateStatement()
 	{
 		StringBuffer s = new StringBuffer();
 		try
@@ -220,7 +220,7 @@ public abstract class DBRowAbstract extends SQLAbstract
     		String[] where = {"id = "};
     		String[] whereVal = {data[0].toString()};
     		
-    		setUpdate(s, getTableName());
+    		setUpdate(s, getTableNameForUpdate());
     		setValues(s, columns.toArray(new String[0]), values.toArray());
     		setWhere(s, where, whereVal);
 		}
@@ -228,8 +228,12 @@ public abstract class DBRowAbstract extends SQLAbstract
 		{
 			e.printStackTrace();
 		}
-				
 		return s.toString();
+	}
+	
+	protected String getTableNameForUpdate()
+	{
+		return getTableName();
 	}
 	
 	public boolean save()
@@ -241,8 +245,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 			{
 				Connection con = Settings.getConnection();
 				Statement stmt = con.createStatement();
-				String query = this.getUpdateStatement();
-				//log.debug(query.substring(0, Math.min(query.length(), 80)));
+				String query = getUpdateStatement();
 				stmt.executeUpdate(query);
 				stmt.close();
 			}

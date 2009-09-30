@@ -11,11 +11,11 @@ import djudge.acmcontester.interfaces.ServerNativeInterface;
 import djudge.acmcontester.server.XMLSettings;
 import djudge.utils.HtmlUtils;
 
-public class HttpMirror extends NanoHTTPD implements Runnable
+public class HttpServer extends NanoHTTPD implements Runnable
 {
-	private static final Logger log = Logger.getLogger(HttpMirror.class);
+	private static final Logger log = Logger.getLogger(HttpServer.class);
 
-	private final int port;
+	public static final int defaultPort = 8282;
 	
 	private ServerNativeInterface serverConnector;
 	
@@ -25,10 +25,9 @@ public class HttpMirror extends NanoHTTPD implements Runnable
 	
 	private final String serverEchoString = "Hello from " + this.toString();
 	
-	public HttpMirror(String dataProviderClassName, int port, String username, String password) throws IOException
+	public HttpServer(String dataProviderClassName, int port, String username, String password) throws IOException
 	{
 		super(port);
-		this.port = port;
 		this.password = password;
 		this.username = username;
 		try
@@ -67,9 +66,17 @@ public class HttpMirror extends NanoHTTPD implements Runnable
 		log.info("Request acepted \"" + uri + "\"");
 		String res = "";
 		boolean color = parms.containsKey("color");
-		if (uri.startsWith("/sumatt") || uri.startsWith("/monitor") || uri.startsWith("/standings"))
+		if (uri.startsWith("/sumatt"))
 		{
-			res = HtmlUtils.getMonitor(serverConnector.getTeamMonitor(username, password), color);
+			res = HtmlUtils.getSumatt(serverConnector.getTeamMonitor(username, password), color);
+		}
+		else if (uri.startsWith("/summary"))
+		{
+			res = HtmlUtils.getSummary(serverConnector.getTeamMonitor(username, password), color);
+		}
+		else if (uri.startsWith("/monitor") || uri.startsWith("/standings"))
+		{
+			res = HtmlUtils.getMonitor(serverConnector.getTeamMonitor(username, password), parms);
 		}
 		else if (uri.startsWith("/submissions") || uri.startsWith("/queue"))
 		{
@@ -80,7 +87,12 @@ public class HttpMirror extends NanoHTTPD implements Runnable
 			res = "<html><head><title>Contest index</title></head><body>" +
 				"<li><a href='/sumatt.html?color=true'>Standings</a>" + 
 				"<li><a href='/submissions.html?id=1&contesttime=1&realtime=1&realtime=1&user=1&problem=1&language=1&judgement=1&time=1&memory=1&output=1'>Submissions</a>" + 
-				"<li>Users" + 
+				"<li>Users<br><br><hr>" +
+				"PC^2-style reports" + 
+				"<li><a href='/sumatt.html'>sumatt.html</a>" +
+				"<li><a href='/summary.html'>summary.html</a>" +
+				"<li><a href='/sumatt.html'>sumatt.html</a>" +
+				"<li><a href='/sumatt.html'>sumatt.html</a>" +
 					"</body></html>";
 		}
 /*		System.out.println(method + " '" + uri + "' ");
@@ -120,7 +132,7 @@ public class HttpMirror extends NanoHTTPD implements Runnable
 		XMLSettings settings = new XMLSettings("server-http.xml");
 		try
 		{
-			new HttpMirror(settings.getProperty("data-provider"), settings.getInt(
+			new HttpServer(settings.getProperty("data-provider"), settings.getInt(
 					"port", 8283), settings.getProperty("server-username"),
 					settings.getProperty("server-password")).run();
 		} catch (IOException e)

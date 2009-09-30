@@ -28,6 +28,10 @@ public class SubmissionData extends HashMapSerializable
 	public String sourceCode;
 	public int djudgeFlag;
 	public String xml;
+	public String username;
+	public String problemSid;
+	public String problemName;
+	public String languageSid;
 	
 	public SubmissionData()
 	{
@@ -51,6 +55,11 @@ public class SubmissionData extends HashMapSerializable
 		userID = "-1";
 		djudgeFlag = 0;
 		xml = "";
+		username = "";
+		problemSid = "";
+		problemName = "";
+		languageSid = "";
+		
 	}
 	
 	public static final String[] fieldNames = {
@@ -101,6 +110,10 @@ public class SubmissionData extends HashMapSerializable
 		sourceCode = map.get("source-core");
 		djudgeFlag = Integer.parseInt(map.get("djudge-flag"));
 		xml = map.get("xml");
+		username = map.get("username");
+		problemSid = map.get("problem-sid");
+		problemName = map.get("problem-name");
+		languageSid = map.get("language-sid");
 	}
 
 	@Override
@@ -123,7 +136,11 @@ public class SubmissionData extends HashMapSerializable
 		res.put("active", "" + active);
 		res.put("source-core", sourceCode);
 		res.put("djudge-flag", "" + djudgeFlag);
-		res.put("xml", "" + xml);
+		res.put("xml", xml);
+		res.put("username", username);
+		res.put("problem-sid", problemSid);
+		res.put("problem-name", problemName);
+		res.put("language-sid", languageSid);		
 		return res;
 	}
 	
@@ -145,9 +162,9 @@ public class SubmissionData extends HashMapSerializable
 		switch (column)
 		{
 		case 0: return id;
-		case 1: return userID;
-		case 2: return problemID;
-		case 3: return languageID;
+		case 1: return username;
+		case 2: return problemSid;
+		case 3: return languageSid;
 		case 4: return contestTime;
 		case 5: return realTime;
 		case 6: return judgement;
@@ -161,6 +178,10 @@ public class SubmissionData extends HashMapSerializable
 		case 14: return sourceCode;
 		case 15: return djudgeFlag;
 		case 16: return xml;
+		case 17: return username;
+		case 18: return problemSid;
+		case 19: return problemName;
+		case 20: return languageSid;
 		
 		default:
 			return id;
@@ -173,9 +194,9 @@ public class SubmissionData extends HashMapSerializable
 		switch (column)
 		{
 		case 0: id = value; break;
-		case 1: userID = value; break;
-		case 2: problemID = value; break;
-		case 3: languageID = value; break;
+		case 1: username = value; break;
+		case 2: problemSid = value; break;
+		case 3: languageSid = value; break;
 		case 4: contestTime = Integer.parseInt(value); break;
 		case 5: realTime = value; break;
 		case 6: judgement = value; break;
@@ -189,6 +210,10 @@ public class SubmissionData extends HashMapSerializable
 		case 14: sourceCode = value; break;
 		case 15: djudgeFlag = Integer.parseInt(value); break;
 		case 16: xml = value; break;
+		case 17: username = value; break;
+		case 18: problemSid = value; break;
+		case 19: problemName = value; break;
+		case 20: languageSid = value; break;
 		}
 	}
 	

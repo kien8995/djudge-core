@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 
-import sun.util.logging.resources.logging;
-
 import djudge.acmcontester.server.XMLSettings;
 import djudge.dservice.DServiceTask;
 import djudge.judge.Judge;

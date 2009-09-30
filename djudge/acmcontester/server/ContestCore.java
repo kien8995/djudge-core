@@ -1,7 +1,5 @@
 package djudge.acmcontester.server;
 
-
-import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
@@ -16,7 +14,6 @@ import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.AdminNativeInterface;
 import djudge.acmcontester.interfaces.ServerCommonInterface;
 import djudge.acmcontester.interfaces.TeamNativeInterface;
-import djudge.acmcontester.structures.ContestStatusEnum;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
@@ -105,6 +102,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return submissionsModel;
 	}
 	
+	@Override
 	public boolean addLanguage(String username, String password, String sid,
 			String shortName, String fullName, String compilationComand,
 			String djudgeID)
@@ -117,6 +115,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return true;
 	}
 	
+	@Override
 	public boolean editLanguage(String username, String password, String id, String sid,
 			String shortName, String fullName, String compilationComand,
 			String djudgeID)
@@ -152,17 +151,19 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return true;
 	}
 	
-	
+	@Override
 	public boolean deleteLanguage(String username, String password, String id)
 	{
 		return deleteAbstract(languagesModel, username, password, id);
 	}
 	
+	@Override
 	public boolean deleteUser(String username, String password, String id)
 	{
 		return deleteAbstract(usersModel, username, password, id);
 	}
 	
+	@Override
 	public boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
 	{
 		String userID = usersModel.getUserID(username, password);
@@ -185,8 +186,10 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return true;
 	}
 
+	@Override
 	public ProblemData[] getProblems(String username, String password)
 	{
+		problemsModel.updateData();
 		return problemsModel.getRows().toArray(new ProblemData[0]);
 	}
 
@@ -196,42 +199,37 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		return Integer.parseInt(userID) > 0;
 	}
 
-	public SubmissionData[] getAllSubmissions(AuthentificationData userInfo)
-	{
-		return submissionsModel.getRows().toArray(new SubmissionData[0]);
-	}
-
-	public SubmissionData[] getOwnSubmissions(AuthentificationData userInfo)
-	{
-		//FIXME: != getAllSubmissions
-		return submissionsModel.getRows().toArray(new SubmissionData[0]);
-	}
-
+	@Override
 	public LanguageData[] getLanguages(String username, String passord)
 	{
 		return languagesModel.getRows().toArray(new LanguageData[0]);
 	}
 
+	@Override
 	public String getVersion()
 	{
 		return "v 0.1";
 	}
 
+	@Override
 	public String getContestStatus(String username, String password)
 	{
 		return state.getContestStatus().toString();
 	}
 
+	@Override
 	public long getContestTimeElapsed(String username, String password)
 	{
 		return state.getContestTime();
 	}
 
+	@Override
 	public long getContestTimeLeft(String username, String password)
 	{
 		return state.getContestTimeLeft();
 	}
 	
+	@Override
 	public MonitorData getMonitor(String username, String password)
 	{
 		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
@@ -256,6 +254,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		UserData ud = new UserData(newUserName, newPassword, name, role);
 		DBRowAbstract rd = usersModel.toRow(ud);
 		rd.appendTo(usersModel);
+		usersModel.updateData();
 		return true;
 	}
 
@@ -264,6 +263,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	{
 		if (!usersModel.isAdmin(username, password))
 			return new UserData[0];
+		usersModel.updateData();
 		return usersModel.getRows().toArray(new UserData[0]);
 	}
 
@@ -276,6 +276,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 		ProblemData pd = new ProblemData(sid, name, djudgeProblem, djudgeContest);
 		DBRowAbstract rd = problemsModel.toRow(pd);
 		rd.appendTo(problemsModel);
+		problemsModel.updateData();
 		return true;
 	}
 
@@ -328,6 +329,7 @@ public class ContestCore implements AdminNativeInterface, TeamNativeInterface, S
 	@Override
 	public SubmissionData[] getSubmissions(String username, String password)
 	{
+		submissionsModel.updateData();
 		return submissionsModel.getRows().toArray(new SubmissionData[0]);
 	}
 

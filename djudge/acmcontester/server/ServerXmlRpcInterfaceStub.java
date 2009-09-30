@@ -2,12 +2,12 @@ package djudge.acmcontester.server;
 
 
 import java.util.HashMap;
-import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.utils.xmlrpc.HashMapSerializer;
 
+@SuppressWarnings("unchecked")
 public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements ServerXmlRpcInterface
 {
 	@Override
@@ -186,5 +186,24 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 	public HashMap[] getSubmissions(String username, String password)
 	{
 		return HashMapSerializer.serializeToHashMapArray(ContestServer.getCore().getSubmissions(username, password));
+	}
+
+	@Override
+	public HashMap[] getLanguages(String username, String password)
+	{
+		return serializeToHashMapArray(ContestServer.getCore().getLanguages(username, password));
+	}
+
+	@Override
+	public HashMap[] getProblems(String username, String password)
+	{
+		return serializeToHashMapArray(ContestServer.getCore().getProblems(username, password));
+	}
+
+	@Override
+	public HashMap getMonitor(String username, String password)
+	{
+		MonitorData md = ContestServer.getCore().getMonitor(username, password);
+		return md.toHashMap();
 	}
 }
