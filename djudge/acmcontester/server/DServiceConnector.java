@@ -1,6 +1,8 @@
 package djudge.acmcontester.server;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.net.URL;
 import java.util.Vector;
 
@@ -39,6 +41,8 @@ public class DServiceConnector extends Thread
 	private boolean flagConnected = false;
 	
 	private int currentSleepTime = defaultSleepTime;
+	
+	static final String submitMutex = "mutex";
 	
 	XmlRpcClient client;
 	
@@ -90,77 +94,88 @@ public class DServiceConnector extends Thread
 		{
 			/* Sending submissions to judge */
 			
-			SubmissionsDataModel sdm = new SubmissionsDataModel();
-			// fetching all not judged submissions
-			sdm.setWhere("`djudge_flag` = 0");
-			sdm.updateData();
-			Vector<SubmissionData> vsd = sdm.getRows();
-			
-			if (vsd.size() > 0)
+			synchronized (submitMutex)
 			{
-				log.debug("Non-judged submissions count = " + vsd.size());
+				Set<String> sentIDs = new HashSet<String>();
+				SubmissionsDataModel sdm = new SubmissionsDataModel();
+				// fetching all not judged submissions
+				sdm.setWhere("`djudge_flag` = 0");
+				sdm.updateData();
+				Vector<SubmissionData> vsd = sdm.getRows();
+				
+				if (vsd.size() > 0)
+				{
+					log.debug("Non-judged submissions count = " + vsd.size());
+					String ids = "";
+					for (int i = 0; i < vsd.size(); i++)
+						ids += vsd.get(i).id + " ";
+					log.debug("IDs: " + ids);
+				}
+				// for each such submission
+				for (int i = 0; i < vsd.size(); i++)
+				{
+					SubmissionData sd = vsd.get(i);
+					if (sentIDs.contains(sd.id))
+						continue;
+	    			// fetching problem's djudge flags
+	    			ProblemsDataModel pdm = new ProblemsDataModel();
+	    			pdm.setWhere(" `id` = " + sd.problemID);
+	    			pdm.updateData();
+	    			ProblemData pd = pdm.getRows().get(0);
+	    			// fetching language's djudge flags
+	    			LanguagesDataModel ldm = new LanguagesDataModel();
+	    			ldm.setWhere(" `id` = " + sd.languageID);
+	    			ldm.updateData();
+	    			LanguageData ld = ldm.getRows().get(0);
+	    			
+	    			// building parameters array
+	    			Vector <Object> t = new Vector<Object>();
+	    			// DService client's ID 
+	    			t.add("simpleacm");
+	    			// djudge_contets
+	    			t.add(pd.djudgeContest);
+	    			// djudge_problem
+	    			t.add(pd.djudgeProblem);
+	    			// djudge_language
+	    			t.add(ld.djudgeID);
+	    			// course code (Base64 encoded)
+	    			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
+	    			// user's data
+	    			t.add(sd.id);
+	    			try
+	    			{
+	    				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
+	    				if (result > 0)
+	    				{
+	    					sentIDs.add(sd.id);
+	    					log.debug(getName() + " " + getId());
+	    					log.debug("OK - Sending solution #" + sd.id + " to DService");
+	    					sdm.setValueAt(-1, i, SubmissionsDataModel.getDJudgeFlagIndex());
+	    				}
+	    				else
+	    				{
+	    					log.debug("Failed - Sending solution #" + sd.id + " to DService: " + result);
+	    				}
+	    				flagConnected = true;
+	    				currentSleepTime = defaultSleepTime;
+	    				sdm.getRow(i).save();
+	    				ContestServer.getCore().getSubmissionsDataModel().updateData();
+	    			}
+	    			catch (XmlRpcException ex)
+	    			{
+	    				if (flagConnected)
+	    				{
+	    					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
+	    					flagConnected = false;
+	    					currentSleepTime = failSleepTime;
+	    				}
+	    			}
+	    			catch (Exception ex)
+	    			{
+	    				log.warn("Error while connecting", ex);
+	    			}
+				}
 			}
-			// for each such submission
-			for (int i = 0; i < vsd.size(); i++)
-			{
-				SubmissionData sd = vsd.get(i);
-    			// fetching problem's djudge flags
-    			ProblemsDataModel pdm = new ProblemsDataModel();
-    			pdm.setWhere(" `id` = " + sd.problemID);
-    			pdm.updateData();
-    			ProblemData pd = pdm.getRows().get(0);
-    			// fetching language's djudge flags
-    			LanguagesDataModel ldm = new LanguagesDataModel();
-    			ldm.setWhere(" `id` = " + sd.languageID);
-    			ldm.updateData();
-    			LanguageData ld = ldm.getRows().get(0);
-    			
-    			// building parameters array
-    			Vector <Object> t = new Vector<Object>();
-    			// DService client's ID 
-    			t.add("simpleacm");
-    			// djudge_contets
-    			t.add(pd.djudgeContest);
-    			// djudge_problem
-    			t.add(pd.djudgeProblem);
-    			// djudge_language
-    			t.add(ld.djudgeID);
-    			// course code (Base64 encoded)
-    			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
-    			// user's data
-    			t.add(sd.id);
-    			try
-    			{
-    				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
-    				if (result > 0)
-    				{
-    					log.debug("OK - Sending solution #" + sd.id + " to DService");
-    					sdm.setValueAt(-1, i, SubmissionsDataModel.getDJudgeFlagIndex());
-    				}
-    				else
-    				{
-    					log.debug("Failed - Sending solution #" + sd.id + " to DService: " + result);
-    				}
-    				flagConnected = true;
-    				currentSleepTime = defaultSleepTime;
-    				sdm.getRow(i).save();
-    				ContestServer.getCore().getSubmissionsDataModel().updateData();
-    			}
-    			catch (XmlRpcException ex)
-    			{
-    				if (flagConnected)
-    				{
-    					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
-    					flagConnected = false;
-    					currentSleepTime = failSleepTime;
-    				}
-    			}
-    			catch (Exception ex)
-    			{
-    				log.warn("Error while connecting", ex);
-    			}
-			}
-			
 			/* Fetching results from judge */
 			try
 			{

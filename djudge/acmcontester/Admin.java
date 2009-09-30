@@ -1,13 +1,12 @@
 package djudge.acmcontester;
 
-import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.server.ContestCore;
 import djudge.acmcontester.structures.RemoteTableLanguages;
 import djudge.acmcontester.structures.RemoteTableProblems;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
@@ -33,8 +32,6 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 	
 	private JStatusPanel statusPanel;
 	
-	private ContestCore core;
-	
 	private AuthentificationData authData = new AuthentificationData("root", "root");
 	
 	private ServerXmlRpcInterface serverXmlRpcInterface = new ServerXmlRpcConnector();
@@ -57,8 +54,6 @@ public class Admin extends JFrame// implements AuthentificationDataProvider
 	
 	private void setupGUI()
 	{
-		core = new ContestCore();
-		
 		setTitle("Contest Manager");
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
