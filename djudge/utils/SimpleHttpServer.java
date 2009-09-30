@@ -22,7 +22,6 @@ public class SimpleHttpServer
 		
 		class SocketProcessor implements Runnable
 		{
-
 			private Socket s;
 			private InputStream is;
 			private OutputStream os;
@@ -79,6 +78,7 @@ public class SimpleHttpServer
 					{
 						break;
 					}
+					log.debug(s);
 				}
 			}
 		}
