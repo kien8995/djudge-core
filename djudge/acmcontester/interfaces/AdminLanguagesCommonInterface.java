@@ -1,6 +1,6 @@
 package djudge.acmcontester.interfaces;
 
-public interface AdminLanguagesInterface
+public interface AdminLanguagesCommonInterface
 {
 	public boolean addLanguage(String username, String password, String sid,
 			String shortName, String fullName, String compilationComand,

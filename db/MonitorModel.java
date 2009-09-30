@@ -9,6 +9,7 @@ import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.MonitorRow;
 import djudge.acmcontester.structures.ProblemData;
+import djudge.acmcontester.structures.ProblemStatus;
 import djudge.acmcontester.structures.UserData;
 import djudge.acmcontester.structures.UserProblemStatus;
 
@@ -34,22 +35,19 @@ public class MonitorModel
 				String firstAcId = null;
 				int acTime = -1;
 				st = conn.createStatement();
-				//System.out.println(sqlFirstAc);
 				ResultSet rs = st.executeQuery(sqlFirstAc);
 				if (rs.next())
 				{
 					firstAcId = rs.getString("id");
-					acTime = rs.getInt("contest_time");
-					System.out.println(firstAcId + " " + acTime);
+					acTime = rs.getInt("contest_time") / 60 / 1000;
 				}
 				else
 				{
-					firstAcId = "1000000";
+					firstAcId = "10000000";
 				}
 				rs.close();
 				st.close();
 				String allBeforeAc = "SELECT * FROM `submissions` WHERE `id` < '" + firstAcId + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' AND contest_time <= " + contestTime  + " AND judgement != 'CE' ORDER BY id ASC";
-				//System.out.println(allBeforeAc);
 				st = conn.createStatement();
 				rs = st.executeQuery(allBeforeAc);
 				int waCnt = 0;
@@ -64,7 +62,7 @@ public class MonitorModel
 				if (acTime >= 0)
 				{
 					res.wasSolved = true;
-					res.penaltyTime = acTime + waCnt * 20 * 1000 * 60; 
+					res.penaltyTime = acTime + waCnt * 20; 
 					res.lastSubmitTime = acTime;
 					res.isPending = false;
 				}
@@ -97,15 +95,20 @@ public class MonitorModel
 			}
 			
 		}
-		//System.out.println("User: " + userID + ", Problem: " + problemID + ": " + res.toString());
 		return res;
 	}
 	
 	private MonitorData getMonitor(long contestTime, UserData[] users)
 	{
 		MonitorData md = new MonitorData();
+		md.contestTime = contestTime;
 		md.rows = new MonitorRow[users.length];
 		ProblemData[] pr = ContestServer.getCore().getProblemsModel().getRows().toArray(new ProblemData[0]);
+		md.problemData = new ProblemStatus[pr.length];
+		for (int i = 0; i < pr.length; i++)
+		{
+			md.problemData[i] = new ProblemStatus(pr[i].sid);
+		}
 		for (int i = 0; i < users.length; i++)
 		{
 			MonitorRow mr = new MonitorRow();
@@ -118,13 +121,21 @@ public class MonitorModel
 				mr.problemData[ipr] = stat;
 				if (stat.wasSolved)
 				{
+					mr.totalAttempts++;
 					mr.totalSolved++;
 					mr.totalTime += stat.penaltyTime;
 				}
+				mr.totalAttempts += stat.wrongTryes;
+				md.problemData[ipr].addUser(stat);
 			}
 			md.rows[i] = mr;
 		}
-		return md; 
+		for (int i = 0; i < pr.length; i++)
+		{
+			md.totalAC += md.problemData[i].totalACCount;
+			md.totalSubmitted += md.problemData[i].totalSubmissionsCount;
+		}
+		return md;
 	}
 	
 	public static void main(String[] args)

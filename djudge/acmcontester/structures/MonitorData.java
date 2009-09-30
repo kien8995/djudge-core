@@ -27,10 +27,14 @@ public class MonitorData extends HashMapSerializable
 	 */
 	public long contestTime = 0;
 	
+	public int totalAC = 0;
+	
+	public int totalSubmitted = 0;
+	
 	/*
 	 * Problems IDs
 	 */
-	public String[] problemIDs;
+	public ProblemStatus[] problemData;
 	
 	public MonitorData()
 	{
@@ -43,16 +47,29 @@ public class MonitorData extends HashMapSerializable
 		fromHashMap(map);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void fromHashMap(HashMap map)
 	{
-		Object[] data = (Object[]) map.get("rows");
+		contestName = (String) map.get("contest-name");
+		System.out.println(map.get("last-update-time"));
+		lastUpdateTime = new Date(Long.parseLong((String) map.get("last-update-time")));
+		contestTime = Long.parseLong((String) map.get("contest-time"));
+		totalAC = Integer.parseInt((String) map.get("total-ac"));
+		totalSubmitted = Integer.parseInt((String) map.get("total-count"));
+		Object[] data = (Object[]) map.get("monitor-rows");
 		int n = data.length;
 		rows = new MonitorRow[n];
 		for (int i = 0; i < n; i++)
 		{
 			rows[i] = new MonitorRow((HashMap) data[i]);
+		}
+		data = (Object[]) map.get("problems-status");
+		n = data.length;
+		problemData = new ProblemStatus[n];
+		for (int i = 0; i < n; i++)
+		{
+			problemData[i] = new ProblemStatus((HashMap) data[i]);
 		}
 	}
 
@@ -61,12 +78,23 @@ public class MonitorData extends HashMapSerializable
 	public HashMap toHashMap()
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("contest-name", contestName);
+		map.put("last-update-time", "" + lastUpdateTime.getTime());
+		map.put("contest-time", "" + contestTime);
+		map.put("total-ac", "" + totalAC);
+		map.put("total-count", "" + totalSubmitted);
 		HashMap[] hm = new HashMap[rows.length];
 		for (int i = 0; i < rows.length; i++)
 		{
 			hm[i] = rows[i].toHashMap();
 		}
-		map.put("rows", hm);
+		map.put("monitor-rows", hm);
+		hm = new HashMap[problemData.length];
+		for (int i = 0; i < problemData.length; i++)
+		{
+			hm[i] = problemData[i].toHashMap();
+		}
+		map.put("problems-status", hm);
 		return map;
 	}
 	

@@ -1,7 +1,5 @@
 package djudge.judge.dvalidator;
 
-import djudge.filesystem.RemoteFS;
-
 public class RemoteFile
 {
 	public RemoteFile(String filename2)

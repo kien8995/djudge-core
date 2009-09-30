@@ -37,7 +37,8 @@ public class HashMapSerializer
 		return res;
 	}
 
-	public static <T extends HashMapSerializable> Vector<T> deserializeFromHashMapArray(HashMap<String, String>[] data, Class<T> type)
+	@SuppressWarnings("unchecked")
+	public static <T extends HashMapSerializable> Vector<T> deserializeFromHashMapArray(HashMap[] data, Class<T> type)
 	{
 		Vector<T> res = new Vector<T>();
 		for (int i = 0; i < data.length; i++)

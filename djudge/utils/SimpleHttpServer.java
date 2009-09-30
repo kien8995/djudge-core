@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 
 import org.apache.log4j.Logger;
 
-import djudge.dservice.DService;
-
 public class SimpleHttpServer
 {
 	private static final Logger log = Logger.getLogger(SimpleHttpServer.class);

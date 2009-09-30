@@ -12,13 +12,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.admin.AdminClient;
-import djudge.judge.ProblemDescription;
 import djudge.judge.ProblemResult;
-import djudge.judge.SubmissionResult;
 import djudge.judge.TestResult;
-import djudge.judge.dcompiler.CompilationInfo;
-import djudge.judge.dcompiler.CompilationResult;
-import djudge.judge.dcompiler.CompilerResult;
 
 public class JTestingResultPanel extends JPanel
 {

@@ -41,6 +41,7 @@ import java.net.*;
  * See the end of the source file for distribution license
  * (Modified BSD licence)
  */
+@SuppressWarnings("unchecked")
 public class NanoHTTPD
 {
 	// ==================================================

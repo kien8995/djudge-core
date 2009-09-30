@@ -4,8 +4,10 @@ import java.util.HashMap;
 
 import djudge.acmcontester.TeamXmlRpcConnector;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.structures.MonitorData;
 import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
+@SuppressWarnings("unchecked")
 public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerXmlRpcInterface
 {
 	public AdminXmlRpcConnector()
@@ -115,5 +117,27 @@ public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerX
 	{
 		Object remoteResult = callRemoteMethod(serviceName + ".getSubmissions", username, password);
 		return objectToHashMapArray(remoteResult);
+	}
+
+	
+	@Override
+	public HashMap[] getLanguages(String username, String password)
+	{
+		Object remoteResult = callRemoteMethod(serviceName + ".getLanguages", username, password);
+		return objectToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public HashMap[] getProblems(String username, String password)
+	{
+		Object remoteResult = callRemoteMethod(serviceName + ".getProblems", username, password);
+		return objectToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public HashMap getMonitor(String username, String password)
+	{
+		Object remoteResult = callRemoteMethod(serviceName + ".getMonitor", username, password);
+		return ((MonitorData) remoteResult).toHashMap();
 	}
 }

@@ -52,16 +52,18 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			}
 			else if (act.startsWith("rejudge"))
 			{
+				RemoteTableSubmissions rts = (RemoteTableSubmissions) tableModel;
+				SubmissionData sd = (SubmissionData) rts.getRow(iRow);
 				Object value = null;
 				String key = "";
 				if (act.equals("rejudge_submission"))
 				{
-					value = tableModel.getValueAt(iRow, 0);
+					value = sd.id;
 					key = "id";
 				}
 				else if (act.equals("rejudge_user"))
 				{
-					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getUserFieldIndex());
+					value = sd.userID;//tableModel.getValueAt(iRow, RemoteTableSubmissions.getUserFieldIndex());
 					key = "user_id";
 				}
 				else if (act.equals("rejudge_problem"))
@@ -78,7 +80,6 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				{
 					return;
 				}
-				RemoteTableSubmissions rts = (RemoteTableSubmissions) tableModel;
 				AuthentificationData ad = rts.getAuthentificationData();
 				ServerXmlRpcInterface connector = rts.getConnector();
 				connector.rejudgeSubmissions(ad.getUsername(), ad.getPassword(), key, value.toString());

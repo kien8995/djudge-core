@@ -1,6 +1,6 @@
 package djudge.acmcontester.interfaces;
 
-public interface AdminProblemsInterface
+public interface AdminProblemsCommonInterface
 {
 	public boolean addProblem(String username, String password, String sid,
 			String name, String djudgeProblem, String djudgeContest);

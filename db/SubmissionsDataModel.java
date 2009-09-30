@@ -1,7 +1,5 @@
 package db;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.Vector;
 import org.apache.commons.codec.binary.Base64;
 
@@ -17,19 +15,15 @@ class DBRowSubmissions extends DBRowAbstract
 	}
 	
 	@Override
-	public boolean save()
+	protected String getTableNameForUpdate()
 	{
-		String msg = "";
-		msg += data[0] + " " + data[6] + " " + data[14];
-		log.debug(msg);
-		return super.save();
+		return "submissions";
 	}
-	
 }
 
 public class SubmissionsDataModel extends AbstractTableDataModel
 {
-	public final static String tableName = "submissions";
+	public final static String tableName = "view_submissions";
 
 	public final static DBField[] columns = {
 		new DBField("id", "#"),
@@ -49,6 +43,10 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		new DBField("active", "Active?", Integer.class),
 		new DBField("djudge_flag", "DJudgeStatus", Integer.class),
 		new DBField("xml", "XML", String.class),
+		new DBField("username", "Username", String.class, "", false),
+		new DBField("sid:1", "ProblemSID", String.class, "", false),
+		new DBField("name:1", "ProblemName", String.class, "", false),
+		new DBField("sid", "LanguageID", String.class, "", false),
 	};
 	
 	public final static int getUserFieldIndex()
@@ -157,6 +155,10 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		row.data[14] = sd.active;
 		row.data[15] = sd.djudgeFlag;
 		row.data[16] = new String(Base64.encodeBase64(sd.xml.getBytes()));
+		row.data[17] = sd.username;
+		row.data[18] = sd.problemSid;
+		row.data[19] = sd.problemName;
+		row.data[20] = sd.languageSid;
 		return row;
 	}
 
@@ -180,9 +182,10 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		sd.active = Integer.parseInt(row.data[14].toString());
 		sd.djudgeFlag = Integer.parseInt(row.data[15].toString());
 		sd.xml = new String(Base64.decodeBase64(row.data[16].toString().getBytes()));
-		String sx = row.data[16].toString();
-		//Element elem = (Element) XmlWorks.getDocumentFromString(sx);
-		//System.out.println(elem.getAttribute("max-time"));
+		sd.username = row.data[17].toString();
+		sd.problemSid = row.data[18].toString();
+		sd.problemName = row.data[19].toString();
+		sd.languageSid = row.data[20].toString();
 		return sd;
 	}
 		

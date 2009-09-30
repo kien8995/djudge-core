@@ -4,7 +4,6 @@ package djudge.swing;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 
 import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.SubmissionResult;
