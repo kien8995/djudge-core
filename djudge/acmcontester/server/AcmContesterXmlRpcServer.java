@@ -39,7 +39,7 @@ public class AcmContesterXmlRpcServer extends Thread
 			serverConfig.setContentLengthOptional(false);
 
 			webServer.start();
-			System.out.println(serviceName + " XML-RPC Team interface started on port " + port);
+			System.out.println(serviceName + " XML-RPC interface started on port " + port);
 		}
 		catch (Exception exc)
 		{

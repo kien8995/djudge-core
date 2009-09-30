@@ -13,7 +13,7 @@ public class DServiceDBLayer
 {
 	private static final Logger log = Logger.getLogger(DServiceDBLayer.class);
 	
-	private final String dbMutex = "mutex";
+	protected final String dbMutex = "mutex";
 	
 	private final String databasePath = "data/dservice/dservice.db3";
 	
@@ -39,7 +39,7 @@ public class DServiceDBLayer
 		}		
 	}
 
-	private Statement getStatement()
+	protected Statement getStatement()
 	{
 		try
 		{
@@ -53,7 +53,7 @@ public class DServiceDBLayer
 		return null;
 	}
 	
-	private String generateUID()
+	protected String generateUID()
 	{
 		final String chars = "123254xyz";
 		
@@ -63,7 +63,7 @@ public class DServiceDBLayer
 		return str.toString();
 	}
 	
-	private boolean checkUID(String uid)
+	protected boolean checkUID(String uid)
 	{
 		try
 		{
@@ -85,7 +85,7 @@ public class DServiceDBLayer
 		return true;
 	}
 	
-	private int getUserID(String hash)
+	protected int getUserID(String hash)
 	{
 		synchronized (dbMutex)
 		{
@@ -111,7 +111,7 @@ public class DServiceDBLayer
 		return 0;		
 	}
 	
-	private int getLastSubmissionID()
+	protected int getLastSubmissionID()
 	{
 		synchronized (dbMutex)
 		{
@@ -137,7 +137,7 @@ public class DServiceDBLayer
 		return 0;
 	}
 
-	private DServiceTask getTaskInternal(int judgeID)
+	protected DServiceTask getTaskInternal(int judgeID)
 	{
 		DServiceTask res = null;
 		int submissionID = 0;
@@ -147,6 +147,7 @@ public class DServiceDBLayer
 			{
 				Statement st = getStatement();
 				String sql = "SELECT * FROM submissions WHERE judge_status = 0 ORDER BY id ASC LIMIT 1";
+				log.debug(sql);
 				ResultSet rs = st.executeQuery(sql);
 				if (rs.next())
 				{
@@ -174,7 +175,7 @@ public class DServiceDBLayer
 	}
 	
 	
-	private boolean checkUsername(String username)
+	protected boolean checkUsername(String username)
 	{
 		synchronized (dbMutex)
 		{
@@ -182,6 +183,7 @@ public class DServiceDBLayer
 			{
 				Statement st = getStatement();
 				String sql = "SELECT * FROM users WHERE username = '" + username + "'";
+				log.debug(sql);
 				ResultSet rs = st.executeQuery(sql);
 				boolean res = !rs.next();
 				rs.close();
@@ -196,14 +198,14 @@ public class DServiceDBLayer
 		return true;
 	}
 	
-	public void executeSql(String sql)
+	protected void executeSql(String sql)
 	{
 		synchronized (dbMutex)
 		{
 			try
 			{
 				Statement st = getStatement();
-				log.info("Executing SQL request:" + sql);
+				log.debug("Executing SQL request:" + sql);
 				st.executeUpdate(sql);
 				st.close();
 			}
