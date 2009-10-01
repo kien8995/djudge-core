@@ -59,19 +59,11 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean editUser(String username, String password, String id,
 			String newUserName, String newPassword, String name, String role)
 	{
-		log.debug("User editing request");
+		log.debug("editUser request from " + username);
 		if (!usersModel.isAdmin(username, password))
 			return false;
 		
-		DBRowAbstract rd = usersModel.getRowByID(id);
-		if (rd == null)
-			return false;
-		UserData ud = new UserData(id, newUserName, newPassword, name, role);
-		rd = usersModel.toRow(ud);
-		rd.save();
-		usersModel.updateData();
-		log.debug("User editing finished");
-		return true;
+		return editUserCore(id, newUserName, newPassword, name, role);
 	}
 	
 	@Override
@@ -97,29 +89,20 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
 	{
+		log.info("submitSolution request from " + username);
 		String userID = usersModel.getUserID(username, password);
 		if (!state.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(languageID))
-		{
 			return false;
-		}
-		SubmissionData sd = new SubmissionData();
-		sd.contestTime = (int) state.getContestTime();
-		sd.languageID = languageID;
-		sd.problemID = problemID;
-		sd.sourceCode = new String(Base64.encodeBase64(courceCode.getBytes()));
-		sd.userID = userID;
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		Date date = new Date();
-//		String dateStr = dateFormat.format(date);
 		
-		DBRowAbstract row = submissionsModel.toRow(sd);
-		row.appendTo(submissionsModel);
-		return true;
+		return submitSolutionCore(userID, problemID, languageID, courceCode);
 	}
 
 	@Override
 	public ProblemData[] getProblems(String username, String password)
 	{
+		if (!usersModel.isAdmin(username, password))
+			return new ProblemData[0];
+		
 		problemsModel.updateData();
 		return problemsModel.getRows().toArray(new ProblemData[0]);
 	}
@@ -131,15 +114,18 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	}
 
 	@Override
-	public LanguageData[] getLanguages(String username, String passord)
+	public LanguageData[] getLanguages(String username, String password)
 	{
+		if (!usersModel.isAdmin(username, password))
+			return new LanguageData[0];
+		
 		return languagesModel.getRows().toArray(new LanguageData[0]);
 	}
 
 	@Override
 	public String getVersion()
 	{
-		return "v 0.1";
+		return versionString;
 	}
 
 	@Override
@@ -163,6 +149,9 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public MonitorData getMonitor(String username, String password)
 	{
+		if (!usersModel.isAdmin(username, password))
+			return null;
+		
 		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
 	}
 	
@@ -180,13 +169,11 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean addUser(String username, String password,
 			String newUserName, String newPassword, String name, String role)
 	{
+		log.info("addUser request from " + username);
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		UserData ud = new UserData(newUserName, newPassword, name, role);
-		DBRowAbstract rd = usersModel.toRow(ud);
-		rd.appendTo(usersModel);
-		usersModel.updateData();
-		return true;
+
+		return addUserCore(newUserName, newPassword, name, role);
 	}
 
 	@Override
@@ -194,6 +181,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	{
 		if (!usersModel.isAdmin(username, password))
 			return new UserData[0];
+		
 		usersModel.updateData();
 		return usersModel.getRows().toArray(new UserData[0]);
 	}
@@ -202,20 +190,21 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean addProblem(String username, String password, String sid,
 			String name, String djudgeProblem, String djudgeContest)
 	{
+		log.info("addProblem request from " + username);
 		if (!usersModel.isAdmin(username, password))
 			return false;
-		
-		ProblemData pd = new ProblemData(sid, name, djudgeProblem, djudgeContest);
-		DBRowAbstract rd = problemsModel.toRow(pd);
-		rd.appendTo(problemsModel);
-		problemsModel.updateData();
-		return true;
+
+		return addProblemCore(sid, name, djudgeProblem, djudgeContest);
 	}
 
 	@Override
 	public boolean deleteProblem(String username, String password, String id)
 	{
-		return deleteAbstract(problemsModel, username, password, id);
+		log.info("deleteProblem request from " + username);
+		if (!usersModel.isAdmin(username, password))
+			return false;
+
+		return deleteAbstract(problemsModel, id);
 	}
 
 	@Override
@@ -239,7 +228,11 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public boolean deleteSubmission(String username, String password, String id)
 	{
-		return deleteAbstract(submissionsModel, username, password, id);
+		log.info("deleteSubmission request from " + username);
+		if (!usersModel.isAdmin(username, password))
+			return false;
+
+		return deleteAbstract(submissionsModel, id);
 	}
 
 	@Override
@@ -306,6 +299,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		String userID = usersModel.getUserID(username, password);
 		if (Integer.parseInt(userID) <= 0)
 			return new SubmissionData[0];
+		
 		SubmissionsDataModel sdm = new SubmissionsDataModel();
 		sdm.setWhere(" `user_id` = " + userID);
 		sdm.updateData();
@@ -354,44 +348,58 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public boolean deleteAllLanguages(String username, String password)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return deleteAllAbstract(languagesModel);
 	}
 
 	@Override
 	public boolean changePassword(String username, String oldPassword,
 			String newPassword)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		log.info("deleteSubmission request from " + username);
+		String userID = usersModel.getUserID(username, oldPassword);
+		if (Integer.parseInt(userID) <= 0)
+			return false;
+		
+		return changePasswordCore(userID, newPassword);
 	}
 
 	@Override
 	public boolean deleteAllUsers(String username, String password)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return deleteAllAbstract(usersModel);
 	}
 
 	@Override
 	public boolean deleteAllProblems(String username, String password)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return deleteAllAbstract(problemsModel);
 	}
 
 	@Override
 	public boolean deleteAllSubmissions(String username, String password)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return deleteAllAbstract(submissionsModel);
 	}
 
 	@Override
 	public boolean deleteAllData(String username, String password)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return deleteAllAbstract(submissionsModel)
+				&& deleteAllAbstract(languagesModel)
+				&& deleteAllAbstract(problemsModel)
+				&& deleteAllAbstract(usersModel);
 	}
 
 	@Override
@@ -430,7 +438,6 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean changePasswordTeam(String username, String oldPassword,
 			String newPassword)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return changePassword(username, oldPassword, newPassword);
 	}
 }

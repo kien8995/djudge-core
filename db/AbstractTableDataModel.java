@@ -1,6 +1,7 @@
 package db;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
@@ -47,7 +48,7 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 	public AbstractTableDataModel()
 	{
 		//!!!
-		fillSqlQuery = getFillStatement();
+		//fillSqlQuery = getFillStatement();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -65,7 +66,7 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error("getRows", e);
 		}
 		return res;
 	}
@@ -247,5 +248,31 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 	public DBRowAbstract getRow(int index)
 	{
 		return rows.get(index);
+	}
+	
+	public boolean deleteAllRows()
+	{
+		try
+		{
+			String sql = "DELETE FROM `" + getRowClass().newInstance().getTableNameForEditing() +  "`";
+			synchronized (dbMutex)
+			{
+				Statement stmt = Settings.getConnection().createStatement();
+				stmt.executeUpdate(sql);
+				stmt.close();
+			}
+			updateData();
+			return true;
+		} catch (InstantiationException e)
+		{
+			log.warn("On deleteAllRows", e);			
+		} catch (IllegalAccessException e)
+		{
+			log.warn("On deleteAllRows", e);
+		} catch (SQLException e)
+		{
+			log.warn("On deleteAllRows", e);
+		}
+		return false;
 	}
 }

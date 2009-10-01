@@ -202,4 +202,76 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 	{
 		return new MonitorData(serverConnector.getMonitor(username, password));
 	}
+
+	@Override
+	public boolean changePasswordTeam(String username, String oldPassword,
+			String newPassword)
+	{
+		return serverConnector.changePasswordTeam(username, oldPassword, newPassword);
+	}
+
+	@Override
+	public boolean deleteAllLanguages(String username, String password)
+	{
+		return serverConnector.deleteAllLanguages(username, password);
+	}
+
+	@Override
+	public boolean changePassword(String username, String oldPassword,
+			String newPassword)
+	{
+		return serverConnector.changePassword(username, oldPassword, newPassword);
+	}
+
+	@Override
+	public boolean deleteAllUsers(String username, String password)
+	{
+		return serverConnector.deleteAllUsers(username, password);
+	}
+
+	@Override
+	public boolean deleteAllProblems(String username, String password)
+	{
+		return serverConnector.deleteAllProblems(username, password);
+	}
+
+	@Override
+	public boolean deleteAllSubmissions(String username, String password)
+	{
+		return serverConnector.deleteAllSubmissions(username, password);
+	}
+
+	@Override
+	public boolean deleteAllData(String username, String password)
+	{
+		return serverConnector.deleteAllData(username, password);
+	}
+
+	@Override
+	public boolean setContestFreezeTime(String username, String password,
+			long tillTimeLeft)
+	{
+		return serverConnector.setContestFreezeTime(username, password, tillTimeLeft);
+	}
+
+	@Override
+	public boolean setContestRunning(String username, String password,
+			boolean isRunning)
+	{
+		return serverConnector.setContestRunning(username, password, isRunning);
+	}
+
+	@Override
+	public boolean setContestTimeLeft(String username, String password,
+			long timeLeft)
+	{
+		return serverConnector.setContestTimeLeft(username, password, timeLeft);
+	}
+
+	@Override
+	public boolean setContestTimePast(String username, String password,
+			long timePast)
+	{
+		return serverConnector.setContestTimePast(username, password, timePast);
+	}
 }

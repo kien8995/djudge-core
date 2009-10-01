@@ -6,21 +6,6 @@ import org.apache.commons.codec.binary.Base64;
 import djudge.acmcontester.structures.SubmissionData;
 
 
-class DBRowSubmissions extends DBRowAbstract
-{
-	@Override
-	public Class<? extends AbstractTableDataModel> getTableClass()
-	{
-		return SubmissionsDataModel.class;
-	}
-	
-	@Override
-	protected String getTableNameForEditing()
-	{
-		return "submissions";
-	}
-}
-
 public class SubmissionsDataModel extends AbstractTableDataModel
 {
 	public final static String tableName = "view_submissions";

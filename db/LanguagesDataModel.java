@@ -4,16 +4,6 @@ import java.util.Vector;
 
 import djudge.acmcontester.structures.LanguageData;
 
-
-class DBRowLanguages extends DBRowAbstract
-{
-	@Override
-	public Class<? extends AbstractTableDataModel> getTableClass()
-	{
-		return LanguagesDataModel.class;
-	}
-}
-
 public class LanguagesDataModel extends AbstractTableDataModel
 {
 	public final static String tableName = "languages";

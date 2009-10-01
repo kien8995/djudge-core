@@ -4,16 +4,6 @@ import java.util.Vector;
 
 import djudge.acmcontester.structures.ProblemData;
 
-
-class DBRowProblems extends DBRowAbstract
-{
-	@Override
-	public Class<? extends AbstractTableDataModel> getTableClass()
-	{
-		return ProblemsDataModel.class;
-	}
-}
-
 public class ProblemsDataModel extends AbstractTableDataModel
 {
 	public final static String tableName = "problems";

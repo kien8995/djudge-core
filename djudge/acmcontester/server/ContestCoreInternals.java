@@ -1,15 +1,20 @@
 package djudge.acmcontester.server;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.codec.binary.Base64;
 
 import db.AbstractTableDataModel;
 import db.DBRowAbstract;
+import db.DBRowUsers;
 import db.LanguagesDataModel;
 import db.MonitorModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
 import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.ProblemData;
+import djudge.acmcontester.structures.SubmissionData;
+import djudge.acmcontester.structures.UserData;
 
 
 public class ContestCoreInternals
@@ -90,7 +95,10 @@ public class ContestCoreInternals
 	{
 		DBRowAbstract rd = model.getRowByID(id);
 		if (rd == null)
+		{
+			log.info("Wrong ID: " + id);
 			return false;
+		}
 		
 		boolean res = rd.delete(model);
 		if (res)
@@ -99,6 +107,27 @@ public class ContestCoreInternals
 			log.info("Deleted OK");
 		}
 		return res;
+	}
+	
+	public boolean deleteAllAbstract(AbstractTableDataModel model)
+	{
+		if (model.deleteAllRows())
+		{
+			log.info("Clearing successful");
+			if (model instanceof UsersDataModel)
+			{
+				UsersDataModel um = (UsersDataModel) model;
+				UserData ud = new UserData("root", "root", "root", "ADMIN");
+				um.insertRow(um.toRow(ud));
+				model.updateData();
+			}
+			return true;
+		}
+		else
+		{
+			log.info("Clearing failed");
+			return false;
+		}
 	}
 	
 	protected boolean addLanguageCore(String sid, String shortName,
@@ -117,7 +146,11 @@ public class ContestCoreInternals
 	{
 		DBRowAbstract rd = languagesModel.getRowByID(id);
 		if (rd == null)
+		{
+			log.info("Wrong ID: " + id);
 			return false;
+		}
+		
 		LanguageData ld = new LanguageData(id, sid, shortName, fullName, compilationComand, djudgeID);
 		rd = languagesModel.toRow(ld);
 		boolean res = rd.save();
@@ -127,5 +160,91 @@ public class ContestCoreInternals
 			log.info("Language " + id + " " + sid + " " + shortName + " " + fullName + " " + djudgeID + " changed");
 		}
 		return res;
+	}
+	
+	protected boolean editUserCore(String id, String newUserName,
+			String newPassword, String name, String role)
+	{
+		DBRowAbstract rd = usersModel.getRowByID(id);
+		if (rd == null)
+		{
+			log.info("Wrong ID: " + id);
+			return false;
+		}
+		
+		UserData ud = new UserData(id, newUserName, newPassword, name, role);
+		rd = usersModel.toRow(ud);
+		if (rd.save())
+		{
+			usersModel.updateData();
+			log.debug("User editing finished");
+			return true;
+		}
+		return false;
 	}	
+	
+	protected boolean submitSolutionCore(String userID, String problemID, String languageID, String courceCode)
+	{
+		SubmissionData sd = new SubmissionData();
+		sd.contestTime = (int) state.getContestTime();
+		sd.languageID = languageID;
+		sd.problemID = problemID;
+		sd.sourceCode = new String(Base64.encodeBase64(courceCode.getBytes()));
+		sd.userID = userID;
+		
+		DBRowAbstract row = submissionsModel.toRow(sd);
+		if (row.appendTo(submissionsModel))
+		{
+			log.info("Submissions added");
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean addProblemCore(String sid, String name,
+			String djudgeProblem, String djudgeContest)
+	{
+		ProblemData pd = new ProblemData(sid, name, djudgeProblem, djudgeContest);
+		DBRowAbstract rd = problemsModel.toRow(pd);
+		if (rd.appendTo(problemsModel))
+		{
+			log.info("Problem " + name + " (" + sid + ") added");
+			problemsModel.updateData();
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean addUserCore(String newUserName, String newPassword, String name,
+			String role)
+	{
+		UserData ud = new UserData(newUserName, newPassword, name, role);
+		DBRowAbstract rd = usersModel.toRow(ud);
+		if (rd.appendTo(usersModel))
+		{
+			log.info("User " + newUserName + " like " + role + " added");
+			usersModel.updateData();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean changePasswordCore(String userID,
+			String newPassword)
+	{
+		DBRowUsers row = (DBRowUsers) usersModel.getRowByID(userID);
+		row.setPassword(newPassword);
+		if (row.save())
+		{
+			log.info("Password changed");
+			return true;
+		}
+		else
+		{
+			log.info("Password change failed");
+			usersModel.updateData();
+			return false;
+		}
+		
+	}
 }
