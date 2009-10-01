@@ -9,6 +9,8 @@ public class HashMapSerializer
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, String>[] objectToHashMapArray(Object obj)
 	{
+		if (obj == null)
+			return new HashMap[0];
 		try
 		{
     		Object[] array = (Object[]) obj;

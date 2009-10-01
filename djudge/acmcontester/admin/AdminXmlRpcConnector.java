@@ -140,4 +140,69 @@ public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerX
 		Object remoteResult = callRemoteMethod(serviceName + ".getMonitor", username, password);
 		return ((MonitorData) remoteResult).toHashMap();
 	}
+
+	@Override
+	public boolean deleteAllLanguages(String username, String password)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteAllLanguages", username, password);
+	}
+
+	@Override
+	public boolean changePassword(String username, String oldPassword,
+			String newPassword)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".changePassword", username, oldPassword, newPassword);
+	}
+
+	@Override
+	public boolean deleteAllUsers(String username, String password)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteAllUsers", username, password);
+	}
+
+	@Override
+	public boolean deleteAllProblems(String username, String password)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteAllProblems", username, password);
+	}
+
+	@Override
+	public boolean deleteAllSubmissions(String username, String password)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteAllSubmissions", username, password);
+	}
+
+	@Override
+	public boolean deleteAllData(String username, String password)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".deleteAllData", username, password);
+	}
+
+	@Override
+	public boolean setContestFreezeTime(String username, String password,
+			long tillTimeLeft)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".setContestFreezeTime", username, password, tillTimeLeft);
+	}
+
+	@Override
+	public boolean setContestRunning(String username, String password,
+			boolean isRunning)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".setContestRunning", username, password, isRunning);
+	}
+
+	@Override
+	public boolean setContestTimeLeft(String username, String password,
+			long timeLeft)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".setContestTimeLeft", username, password, timeLeft);
+	}
+
+	@Override
+	public boolean setContestTimePast(String username, String password,
+			long timePast)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".setContestTimePast", username, password, timePast);
+	}
 }

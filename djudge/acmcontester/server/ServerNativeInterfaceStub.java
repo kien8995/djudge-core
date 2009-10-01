@@ -195,4 +195,76 @@ public class ServerNativeInterfaceStub implements ServerNativeInterface
 	{
 		return ContestServer.getCore().getMonitor(username, password);
 	}
+
+	@Override
+	public boolean changePasswordTeam(String username, String oldPassword,
+			String newPassword)
+	{
+		return ContestServer.getCore().changePasswordTeam(username, oldPassword, newPassword);
+	}
+
+	@Override
+	public boolean deleteAllLanguages(String username, String password)
+	{
+		return ContestServer.getCore().deleteAllLanguages(username, password);
+	}
+
+	@Override
+	public boolean changePassword(String username, String oldPassword,
+			String newPassword)
+	{
+		return ContestServer.getCore().changePassword(username, oldPassword, newPassword);
+	}
+
+	@Override
+	public boolean deleteAllUsers(String username, String password)
+	{
+		return ContestServer.getCore().deleteAllUsers(username, password);
+	}
+
+	@Override
+	public boolean deleteAllProblems(String username, String password)
+	{
+		return ContestServer.getCore().deleteAllProblems(username, password);
+	}
+
+	@Override
+	public boolean deleteAllSubmissions(String username, String password)
+	{
+		return ContestServer.getCore().deleteAllSubmissions(username, password);
+	}
+
+	@Override
+	public boolean deleteAllData(String username, String password)
+	{
+		return ContestServer.getCore().deleteAllData(username, password);
+	}
+
+	@Override
+	public boolean setContestFreezeTime(String username, String password,
+			long tillTimeLeft)
+	{
+		return ContestServer.getCore().setContestFreezeTime(username, password, tillTimeLeft);
+	}
+
+	@Override
+	public boolean setContestRunning(String username, String password,
+			boolean isRunning)
+	{
+		return ContestServer.getCore().setContestRunning(username, password, isRunning);
+	}
+
+	@Override
+	public boolean setContestTimeLeft(String username, String password,
+			long timeLeft)
+	{
+		return ContestServer.getCore().setContestTimeLeft(username, password, timeLeft);
+	}
+
+	@Override
+	public boolean setContestTimePast(String username, String password,
+			long timePast)
+	{
+		return ContestServer.getCore().setContestTimePast(username, password, timePast);
+	}
 }

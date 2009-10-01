@@ -126,4 +126,10 @@ public class TeamXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpcIn
 		return (HashMap) callRemoteMethod(serviceName + ".getTeamMonitor", new Object[] {username, password});
 	}
 
+	@Override
+	public boolean changePasswordTeam(String username, String oldPassword,
+			String newPassword)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".changePasswordTeam", username, oldPassword, newPassword);
+	}
 }
