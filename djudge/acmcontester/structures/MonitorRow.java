@@ -1,8 +1,7 @@
 package djudge.acmcontester.structures;
 
-import java.util.HashMap;
 
-import sun.nio.cs.ext.ISCII91;
+import java.util.HashMap;
 
 import djudge.utils.xmlrpc.HashMapSerializable;
 
@@ -15,6 +14,7 @@ public class MonitorRow extends HashMapSerializable implements Comparable<Monito
 	public long totalTime;
 	public int place;
 	public int totalAttempts;
+	public int totalScoredAttempts;
 	
 	public UserProblemStatus[] problemData;
 
@@ -35,6 +35,7 @@ public class MonitorRow extends HashMapSerializable implements Comparable<Monito
 	{
 		userID = (String) map.get("user-id");
 		username = (String) map.get("username");
+		totalScoredAttempts = Integer.parseInt((String) map.get("total-scored-attempts"));
 		totalAttempts = Integer.parseInt((String) map.get("total-attempts"));
 		totalSolved = Integer.parseInt((String) map.get("total-solved"));
 		totalTime = Integer.parseInt((String) map.get("total-time"));
@@ -59,6 +60,7 @@ public class MonitorRow extends HashMapSerializable implements Comparable<Monito
 		map.put("total-solved", "" + totalSolved);
 		map.put("total-time", "" + totalTime);
 		map.put("place", "" + place);
+		map.put("total-scored-attempts", "" + totalScoredAttempts);
 		HashMap[] hm = new HashMap[problemData.length];
 		for (int i = 0; i < problemData.length; i++)
 		{

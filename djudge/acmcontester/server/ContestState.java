@@ -56,9 +56,9 @@ public class ContestState
 		public boolean saveState()
 		{
 			String res = "";
-			res += getContestTimeElapsed() + " ";
-			res += getContestTimeLeft() + " ";
-			res += new Date() + " ";
+			res += getContestTimeElapsed() + "\n";
+			res += getContestTimeLeft() + "\n";
+			res += state + "\n";
 			FileWorks.saveToFile(res, "./data/contest-settings.txt");
 			log.info("Saving contest state");
 			return true;
@@ -68,15 +68,14 @@ public class ContestState
 		{
 			try
 			{
-	            String str[] = FileWorks.readFile("./data/contest-settings.txt").split(" ");
-	            long elapsedTotal = Long.parseLong(str[0]);
-	            long leftTotal = Long.parseLong(str[1]);
-	            lastLeftTime = leftTotal;
+	            String str[] = FileWorks.readFile("./data/contest-settings.txt").split("\n");
+	            contestTimeElapsed = Long.parseLong(str[0]);
+	            lastLeftTime = Long.parseLong(str[1]);
+	            state = ContestStatusEnum.valueOf(str[2]);
 	            lastStartTime = new Date();
-	            contestTimeElapsed = elapsedTotal;
 	            log.info("lastLeftTime = " + lastLeftTime);
 	            log.info("lastStartTime = " + lastStartTime);
-	            log.info("contestTimeElapsed = " + elapsedTotal);
+	            log.info("contestTimeElapsed = " + contestTimeElapsed);
 			}
 			catch (Exception e)
 			{
@@ -94,20 +93,12 @@ public class ContestState
 			saveState();
 			return getContestTimeElapsed();
 		}
-
-		protected void stopContest()
-		{
-			lastLeftTime = -1;
-			saveState();
-		}
-
-		protected void startContest(long timeLeft)
-		{
-			lastLeftTime = timeLeft;
-			lastStartTime = new Date();
-			saveState();
-		}
 		
+		protected void setContestRunning(boolean isRunning)
+		{
+			state = isRunning ? ContestStatusEnum.Running : ContestStatusEnum.Stopped;
+		}
+
 		protected ContestStatusEnum getContestStatus()
 		{
 			if (isRunnning())
@@ -122,7 +113,7 @@ public class ContestState
 			return lastLeftTime - getTimeSinceLastStartNormalized();
 		}
 		
-		protected void setContestTimePassed(long newTimePassed)
+		protected void setContestTime(long newTimePassed)
 		{
 			contestTimeElapsed = newTimePassed;
 			lastStartTime = new Date();
@@ -171,13 +162,22 @@ public class ContestState
 
 	synchronized public boolean setContestTime(long contestTime)
 	{
-		internals.setContestTimePassed(contestTime);
+		log.info("SetContestTime " + contestTime / 1000 / 60 + " min");
+		internals.setContestTime(contestTime);
 		return true;
 	}
 	
 	synchronized public boolean setContestTimeLeft(long contestTimeLeft)
 	{
+		log.info("SetContestTimeLeft " + contestTimeLeft / 1000 / 60 + " min");
 		internals.setContestTimeLeft(contestTimeLeft);
+		return true;
+	}
+
+	synchronized public boolean setContestRunning(boolean isRunning)
+	{
+		log.info("SetRunning: " + isRunning);
+		internals.setContestRunning(isRunning);
 		return true;
 	}	
 }

@@ -2,9 +2,9 @@ package djudge.acmcontester.structures;
 
 public enum ContestStatusEnum
 {
-	NotStarted,
+	//NotStarted,
 	Running,
-	Paused,
+	//Paused,
 	Stopped,
-	Finished,
+	//Finished,
 }

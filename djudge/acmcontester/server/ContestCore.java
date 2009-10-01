@@ -152,16 +152,6 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
 	}
 	
-	/*public void stopContest()
-	{
-		state.stopContest();
-	}
-	
-	public void startContest(long timeLeft)
-	{
-		state.startContest(timeLeft);
-	}*/
-
 	@Override
 	public boolean addUser(String username, String password,
 			String newUserName, String newPassword, String name, String role)
@@ -326,7 +316,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public MonitorData getTeamMonitor(String username, String password)
 	{
 		//TODO: fixme
-		return getMonitor(username, password);
+		return getMonitor("root", "root");
 	}
 
 	@Override
@@ -414,8 +404,10 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean setContestRunning(String username, String password,
 			boolean isRunning)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return state.setContestRunning(isRunning);
 	}
 
 	@Override

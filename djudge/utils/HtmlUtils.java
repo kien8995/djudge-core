@@ -3,6 +3,8 @@ package djudge.utils;
 import java.util.Arrays;
 import java.util.Properties;
 
+import utils.PrintfFormat;
+
 import djudge.acmcontester.server.http.HttpServer;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.SubmissionData;
@@ -15,7 +17,7 @@ public class HtmlUtils
 		sb.append("<html><head><title>" + title + "</title></head><body>");
 	}
 	
-	private static void printFooter(StringBuilder sb)
+	private static void printFooterPC2(StringBuilder sb)
 	{
 		sb.append("<p>Created by <A HREF='http://www.ecs.csus.edu/pc2/'>CSUS PC^2 8.7 20051115 04</A><br/>" +
 				"<A HREF='http://www.ecs.csus.edu/pc2/'>http://www.ecs.csus.edu/pc2/</A><br/>" +
@@ -56,7 +58,7 @@ public class HtmlUtils
 		sb.append("<tr><td>Submitted/1st Yes/Total Yes</td>");
 		appendPC2ProblemsSummary(sb, data);
 		sb.append("</table>\n");
-		printFooter(sb);
+		printFooterPC2(sb);
 		return sb.toString();
 	}
 	
@@ -122,8 +124,42 @@ public class HtmlUtils
 		sb.append("<tr><td></td><td>Submitted/1st Yes/Total Yes</td><td></td><td></td>");
 		appendPC2ProblemsSummary(sb, data);
 		sb.append("</table>\n");
-		printFooter(sb);
+		printFooterPC2(sb);
 		return sb.toString();
+	}
+	
+	private static String getCellStyle(UserProblemStatus ups, Properties params)
+	{
+		String style = "";
+		if (ups.wasSolved) style = " bgcolor='#aaffaa'";
+		else if (ups.wrongTryes > 0) style = " bgcolor='#ffaaaa'";
+		return params.containsKey("color") ? style : "";
+	}
+	
+	private static String formatTime(long time)
+	{
+		return new PrintfFormat("%2d:%02d").sprintf(new Object[] {time / 60, time % 60});
+	}
+	
+	private static String getCellContent(UserProblemStatus ups, Properties params)
+	{
+		String res = "-";
+		if (ups.wasSolved)
+		{
+			res = "+" + (ups.wrongTryes > 0 ? ups.wrongTryes : "") + "<br>" + "<font size=\"1\">" + formatTime(ups.lastSubmitTime) + "</font>";
+		}
+		else if (ups.wrongTryes > 0)
+		{
+			res = "-" + ups.wrongTryes + "<br>" + "<font size=\"1\">" + formatTime(ups.lastSubmitTime) + "</font>";
+		}
+		return res;
+	}
+	
+	private static void addUserProblemCall(StringBuilder sb, UserProblemStatus ups, Properties params)
+	{
+		String cellStyle = getCellStyle(ups, params);
+		String cellContent = getCellContent(ups, params);
+		sb.append("<td align='center' " + cellStyle + ">" + cellContent + "</td>");
 	}
 	
 	public static String getMonitor(MonitorData data, Properties params)
@@ -131,48 +167,38 @@ public class HtmlUtils
 		StringBuilder sb = new StringBuilder();
 		printHeader(sb, "Monitor");
 		sb.append("<table border='1'>\n");
-		sb.append("<tr><th><strong><u>Name</u></strong></th>");
+		sb.append("<tr>");
+		
+		sb.append("<th><strong>Place</strong></th>");
+		sb.append("<th align='center'><strong>Team</strong></th>");
 		for (int i = 0; i < data.rows[0].problemData.length; i++)
 		{
 			sb.append("<th>&#160;&#160;&#160;&#160;<strong><u>");
 			sb.append(data.problemData[i].problemSid);
 			sb.append("</u></strong>&#160;&#160;&#160;&#160;</th>");
 		}
-		sb.append("<th>Total att/solv</th></tr>\n");
+		sb.append("<th>Total</th>\n");
+		sb.append("<th>Time</th>\n");
+		sb.append("<th>Dirt</th>\n");
+		
+		sb.append("</tr>\n");
+		
 		for (int i = 0; i < data.rows.length; i++)
 		{
-			int totalSolved = 0, totalAtt = 0;
 			sb.append("<tr>");
+			sb.append("<td align='center'>" + data.rows[i].place + ". </td>");
 			sb.append("<td>" + data.rows[i].username + " ["+ data.rows[i].userID + "] </td>");
 			for (int j = 0; j < data.rows[i].problemData.length; j++)
 			{
-				String style = "";
 				UserProblemStatus ups = data.rows[i].problemData[j];
-				if (ups.wasSolved)
-					totalSolved++;
-				String flag = ups.wasSolved ? "Y" : "N";
-				int tries = ups.wrongTryes + (ups.wasSolved ? 1 : 0);
-				totalAtt += tries;
-				if (ups.wasSolved) style = " bgcolor='#aaffaa'";
-				else if (ups.wrongTryes > 0) style = " bgcolor='#ffaaaa'";
-				sb.append("<td" + (params.contains("color") ? style : "") + ">" + tries + "/" + flag + "</td>");
+				addUserProblemCall(sb, ups, params);
 			}
-			sb.append("<td>" + totalSolved + "/" + totalAtt + "</td>");
+			sb.append("<td>" + data.rows[i].totalSolved + "</td>");
+			sb.append("<td>" + data.rows[i].totalTime + "</td>");
+			sb.append("<td>" + new PrintfFormat("%.0lf%%").sprintf(100.0 * (data.rows[i].totalScoredAttempts - data.rows[i].totalSolved) / Math.max(data.rows[i].totalScoredAttempts, 1)) + "</td>");
 			sb.append("</tr>\n");
 		}
-		// Summary
-		sb.append("<tr><td cellwith=\"5\"></td></tr>");
-		sb.append("<tr><td>Submitted/1st Yes/Total Yes</td>");
-		for (int i = 0; i < data.problemData.length; i++)
-		{
-			int submitted = data.problemData[i].totalSubmissionsCount;
-			String firstAC = data.problemData[i].firstACTime >= 0 ? "" + (data.problemData[i].firstACTime) : "--";
-			int acCount = data.problemData[i].totalACCount;
-			sb.append("<td>" + submitted + "/" + firstAC + "/" + acCount + "</td>");
-		}
-		sb.append("<td>" + data.totalSubmitted + "/" + data.totalAC + "</td><tr>\n");
 		sb.append("</table>\n");
-		printFooter(sb);
 		return sb.toString();
 	}
 	
@@ -269,7 +295,7 @@ public class HtmlUtils
 			sb.append("</tr>\n");
 		}
 		sb.append("</table>\n");
-		printFooter(sb);
+		printFooterPC2(sb);
 		return sb.toString();
 	}
 	
