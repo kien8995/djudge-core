@@ -33,9 +33,9 @@ public class ContestCoreInternals
 	
 	protected MonitorModel monitorModel;
 	
-	protected ContestSettings contest = new ContestSettings("contest.xml");
+	protected final ContestSettings contest = new ContestSettings("contest.xml");
 	
-	protected ContestState state = new ContestState(contest);
+	protected final ContestState state = new ContestState(contest);
 	
 	protected DServiceConnector djudgeInterface;
 	

@@ -274,4 +274,10 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 	{
 		return serverConnector.setContestTimePast(username, password, timePast);
 	}
+
+	@Override
+	public long getContestFreezeTime(String username, String password)
+	{
+		return serverConnector.getContestFreezeTime(username, password);
+	}
 }

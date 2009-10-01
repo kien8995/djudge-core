@@ -278,4 +278,10 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 	{
 		return ContestServer.getCore().setContestTimePast(username, password, timePast);
 	}
+
+	@Override
+	public long getContestFreezeTime(String username, String password)
+	{
+		return ContestServer.getCore().getContestFreezeTime(username, password);
+	}
 }

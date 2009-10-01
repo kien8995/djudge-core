@@ -5,110 +5,179 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import utils.FileWorks;
-
 import djudge.acmcontester.structures.ContestStatusEnum;
 
 public class ContestState
 {
 	private static final Logger log = Logger.getLogger(ContestState.class);
+
+	private ContestStateInternals internals;
 	
-	private long lastLeftTime = -1;
-	private Date lastStartTime;
-	private long contestTimeElapsed = 0;
-	
-	ContestSettings settings;
+	class ContestStateInternals
+	{
+		private final Logger log = Logger.getLogger(ContestStateInternals.class);
+		
+		private long lastLeftTime = -1;
+		private Date lastStartTime;
+		private long contestTimeElapsed = 0;
+		
+		private ContestStatusEnum state = ContestStatusEnum.Running;
+		
+		private ContestSettings settings;
+		
+		public ContestStateInternals(ContestSettings settings)
+		{
+			this.settings = settings;
+			loadSettings();
+		}
+
+		public long getTimeSinceLastStartAbsolute()
+		{
+			if (lastLeftTime > 0)
+			{
+				return new Date().getTime() - lastStartTime.getTime();
+			}
+			return 0;
+		}
+		
+		public long getTimeSinceLastStartNormalized()
+		{
+			long absTime = getTimeSinceLastStartAbsolute();
+			absTime = Math.min(absTime, lastLeftTime);
+			absTime = Math.max(absTime, 0);
+			return absTime;
+		}
+		
+		public long getContestTimeElapsed()
+		{
+			return contestTimeElapsed + getTimeSinceLastStartNormalized();
+		}
+		
+		public boolean saveState()
+		{
+			String res = "";
+			res += getContestTimeElapsed() + " ";
+			res += getContestTimeLeft() + " ";
+			res += new Date() + " ";
+			FileWorks.saveToFile(res, "./data/contest-settings.txt");
+			log.info("Saving contest state");
+			return true;
+		}
+		
+		private void loadSettings()
+		{
+			try
+			{
+	            String str[] = FileWorks.readFile("./data/contest-settings.txt").split(" ");
+	            long elapsedTotal = Long.parseLong(str[0]);
+	            long leftTotal = Long.parseLong(str[1]);
+	            lastLeftTime = leftTotal;
+	            lastStartTime = new Date();
+	            contestTimeElapsed = elapsedTotal;
+	            log.info("lastLeftTime = " + lastLeftTime);
+	            log.info("lastStartTime = " + lastStartTime);
+	            log.info("contestTimeElapsed = " + elapsedTotal);
+			}
+			catch (Exception e)
+			{
+				log.error("loadSettings", e);
+			}
+		}	
+		
+		protected boolean isRunnning()
+		{
+			return state == ContestStatusEnum.Running &&  lastLeftTime > 0 && getTimeSinceLastStartAbsolute() == getTimeSinceLastStartNormalized();
+		}
+		
+		protected long getContestTime()
+		{
+			saveState();
+			return getContestTimeElapsed();
+		}
+
+		protected void stopContest()
+		{
+			lastLeftTime = -1;
+			saveState();
+		}
+
+		protected void startContest(long timeLeft)
+		{
+			lastLeftTime = timeLeft;
+			lastStartTime = new Date();
+			saveState();
+		}
+		
+		protected ContestStatusEnum getContestStatus()
+		{
+			if (isRunnning())
+			{
+				return ContestStatusEnum.Running;
+			}
+			return ContestStatusEnum.Stopped;
+		}
+
+		protected long getContestTimeLeft()
+		{
+			return lastLeftTime - getTimeSinceLastStartNormalized();
+		}
+		
+		protected void setContestTimePassed(long newTimePassed)
+		{
+			contestTimeElapsed = newTimePassed;
+			lastStartTime = new Date();
+			saveState();
+		}
+		
+		protected void setContestTimeLeft(long newTimeLeft)
+		{
+			lastLeftTime = newTimeLeft;
+			saveState();
+		}	
+	}
+
+	/*
+	 * Default constructor
+	 */
 	
 	public ContestState(ContestSettings settings)
 	{
-		this.settings = settings;
-		loadSettings();
+		internals = new ContestStateInternals(settings);
 	}
 	
-	private long getTimeSinceLastStartAbsolute()
-	{
-		if (lastLeftTime > 0)
-		{
-			return new Date().getTime() - lastStartTime.getTime();
-		}
-		return 0;
-	}
-	
-	private long getTimeSinceLastStartNormalized()
-	{
-		long absTime = getTimeSinceLastStartAbsolute();
-		absTime = Math.min(absTime, lastLeftTime);
-		absTime = Math.max(absTime, 0);
-		return absTime;
-	}
-	
-	private long getContestTimeElapsed()
-	{
-		return contestTimeElapsed + getTimeSinceLastStartNormalized();
-	}
+	/* 
+	 * Interface methods
+	 */
 	
 	synchronized public boolean isRunnning()
 	{
-		return lastLeftTime > 0 && getTimeSinceLastStartAbsolute() == getTimeSinceLastStartNormalized();
+		return internals.isRunnning();
 	}
-
+	
 	synchronized public long getContestTime()
 	{
-		saveSettings();
-		return getContestTimeElapsed();
-	}
-
-	synchronized public void stopContest()
-	{
-		saveSettings();
-		lastLeftTime = -1;
-	}
-
-	synchronized public void startContest(long timeLeft)
-	{
-		saveSettings();
-		lastLeftTime = timeLeft;
-		lastStartTime = new Date();
+		return internals.getContestTime();
 	}
 	
-	synchronized public ContestStatusEnum getContestStatus()
+	synchronized public long getContestTimeLeft()
 	{
-		if (isRunnning())
-		{
-			return ContestStatusEnum.Running;
-		}
-		return ContestStatusEnum.Stopped;
+		return internals.getContestTimeLeft();
+	}
+	
+	synchronized public ContestStatusEnum getContestState()
+	{
+		return internals.getContestStatus();
 	}
 
-	public long getContestTimeLeft()
+	synchronized public boolean setContestTime(long contestTime)
 	{
-		return lastLeftTime - getTimeSinceLastStartNormalized();
+		internals.setContestTimePassed(contestTime);
+		return true;
 	}
 	
-	public void saveSettings()
+	synchronized public boolean setContestTimeLeft(long contestTimeLeft)
 	{
-		long elapsedTotal = getContestTimeElapsed();
-		long leftTotal = getContestTimeLeft();
-		FileWorks.saveToFile(elapsedTotal + " " + leftTotal + " " + getContestStatus(), "./data/contest-settings.txt");
-	}
-	
-	public void loadSettings()
-	{
-		try
-		{
-            String str[] = FileWorks.readFile("./data/contest-settings.txt").split(" ");
-            long elapsedTotal = Long.parseLong(str[0]);
-            long leftTotal = Long.parseLong(str[1]);
-            lastLeftTime = leftTotal;
-            lastStartTime = new Date();
-            contestTimeElapsed = elapsedTotal;
-            log.info("lastLeftTime = " + lastLeftTime);
-            log.info("lastStartTime = " + lastStartTime);
-            log.info("contestTimeElapsed = " + elapsedTotal);
-		}
-		catch (Exception e)
-		{
-			log.error("loadSettings", e);
-		}
-		
-	}
+		internals.setContestTimeLeft(contestTimeLeft);
+		return true;
+	}	
 }

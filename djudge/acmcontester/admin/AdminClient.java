@@ -62,7 +62,7 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
 		
-		jtpTabs.add("Start/Stop", new JContestSettingsPanel());
+		jtpTabs.add("Start/Stop", new JContestSettingsPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Users", usersPanel = new JTablePanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
 		

@@ -205,4 +205,10 @@ public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerX
 	{
 		return (Boolean) callRemoteMethod(serviceName + ".setContestTimePast", username, password, timePast);
 	}
+
+	@Override
+	public long getContestFreezeTime(String username, String password)
+	{
+		return (Long) callRemoteMethod(serviceName + ".getContestFreezeTime", username, password);
+	}
 }
