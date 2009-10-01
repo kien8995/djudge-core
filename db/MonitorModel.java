@@ -3,6 +3,7 @@ package db;
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.Arrays;
 
 import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.server.ContestServer;
@@ -55,7 +56,7 @@ public class MonitorModel
 				while (rs.next())
 				{
 					waCnt++;
-					lastWaTime = rs.getInt("contest_time");
+					lastWaTime = rs.getInt("contest_time") / 60 / 1000;
 				}
 				rs.close();
 				st.close();
@@ -124,6 +125,7 @@ public class MonitorModel
 					mr.totalAttempts++;
 					mr.totalSolved++;
 					mr.totalTime += stat.penaltyTime;
+					mr.totalScoredAttempts += stat.wrongTryes + 1;
 				}
 				mr.totalAttempts += stat.wrongTryes;
 				md.problemData[ipr].addUser(stat);
@@ -134,6 +136,14 @@ public class MonitorModel
 		{
 			md.totalAC += md.problemData[i].totalACCount;
 			md.totalSubmitted += md.problemData[i].totalSubmissionsCount;
+		}
+		Arrays.sort(md.rows);
+		int place = 0;
+		for (int i = 0; i < md.rows.length; i++)
+		{
+			if (i == 0 || md.rows[i].compareTo(md.rows[i-1]) != 0)
+				place++;
+			md.rows[i].place = place;
 		}
 		return md;
 	}

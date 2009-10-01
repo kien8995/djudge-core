@@ -1,14 +1,12 @@
 package djudge.acmcontester;
 
 import java.awt.GridBagConstraints;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -16,10 +14,8 @@ import javax.swing.JTextField;
 import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
 
-
-public class JContestSettingsPanel extends JPanel implements ActionListener
+public class JContestSettingsPanel extends JPanel
 {
 
 	class JSetTimesPanel extends JPanel implements ActionListener
@@ -42,7 +38,6 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 			c.gridwidth = 1;
 			c.gridheight = 1;
 			c.insets = new Insets(2, 5, 2, 5);
-
 			
 			c.gridx = 1;
 			
@@ -68,7 +63,7 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 			
 			tfPassed = new JTextField("0");
 			c.gridy = 1;
-			add(tfPassed, c);
+			add(tfPassed, c);	
 			
 			tfFreeze = new JTextField("240");
 			c.gridy = 2;
@@ -80,19 +75,17 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 		{
 			if (arg0.getSource().equals(btnSetFreeze))
 			{
-				data.freezeTime = Integer.parseInt(tfFreeze.getText());
+				data.freezeTime = Integer.parseInt(tfFreeze.getText()) * 60 * 1000;
 			}
 			else if (arg0.getSource().equals(btnSetLeft))
 			{
-				data.timeLeft = Integer.parseInt(tfLeft.getText());
+				data.timeLeft = Integer.parseInt(tfLeft.getText()) * 60 * 1000;
 			}
 			else if (arg0.getSource().equals(btnSetPast))
 			{
-				data.timePassed = Integer.parseInt(tfPassed.getText());
+				data.timePassed = Integer.parseInt(tfPassed.getText()) * 60 * 1000;
 			}
-			
 		}
-		
 	}
 	
 	class ContestTimes
@@ -120,8 +113,6 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 	
 	private final JButton btnSetTimes;
 	
-	private final JTextField jtfTimeLeft;
-	
 	private final ServerXmlRpcInterface serverInterface;
 	
 	private final AuthentificationDataProvider authProvider;
@@ -131,17 +122,25 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 		this.serverInterface = serverInterface;
 		this.authProvider = authProvider;
 		jbStartContest = new JButton("Start Contest");
-		jbStartContest.addActionListener(this);
+		jbStartContest.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				JContestSettingsPanel.this.serverInterface.setContestRunning(JContestSettingsPanel.this.authProvider.getUsername(), JContestSettingsPanel.this.authProvider.getPassword(), true);
+			}
+		});
 		
 		jbStopContest = new JButton("Stop Contest");
-		jbStopContest.addActionListener(this);
+		jbStopContest.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				JContestSettingsPanel.this.serverInterface.setContestRunning(JContestSettingsPanel.this.authProvider.getUsername(), JContestSettingsPanel.this.authProvider.getPassword(), false);
+			}
+		});
 		
-		jtfTimeLeft = new JTextField("300");
-		jtfTimeLeft.setPreferredSize(new Dimension(80, 25));
-		
-		add(jbStartContest);
-		add(jtfTimeLeft);
-		add(jbStopContest);
 		btnSetTimes = new JButton("Set times");
 		btnSetTimes.addActionListener(new ActionListener()
 		{
@@ -167,23 +166,6 @@ public class JContestSettingsPanel extends JPanel implements ActionListener
 		add(btnSetTimes);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		Object src = arg0.getSource();
-		if (src.equals(jbStartContest))
-		{
-			String timeLeft = jtfTimeLeft.getText();
-			String t[] = timeLeft.split(":");
-			long left = ((Long.parseLong(t[0]) * 60 + Long.parseLong(t[1])) * 60 + Long.parseLong(t[2])) * 1000;
-			//ContestCore.startContest(left);
-		}
-		else if (src.equals(jbStopContest))
-		{
-			//ContestCore.stopContest();
-		}
-	}
-	
 	public static void main(String[] args)
 	{
 		new AdminClient();
