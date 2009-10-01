@@ -22,7 +22,7 @@ public class TeamXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpcIn
 	
 	XmlRpcClient client;
 	
-	static final String serverURL; 
+	static final String serverURL;
 	
 	static
 	{

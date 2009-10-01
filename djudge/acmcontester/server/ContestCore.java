@@ -1,10 +1,8 @@
 package djudge.acmcontester.server;
 
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
-import db.AbstractTableDataModel;
 import db.DBRowAbstract;
 import db.SubmissionsDataModel;
 import djudge.acmcontester.interfaces.AdminNativeInterface;
@@ -29,7 +27,6 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	{
 		initCore(startServices);
 	}
-	
 	
 	@Override
 	public boolean addLanguage(String username, String password, String sid,
@@ -131,7 +128,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public String getContestStatus(String username, String password)
 	{
-		return state.getContestStatus().toString();
+		return state.getContestState().toString();
 	}
 
 	@Override
@@ -155,7 +152,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		return monitorModel.getMonitor(getContestTimeElapsed(username, password));
 	}
 	
-	public void stopContest()
+	/*public void stopContest()
 	{
 		state.stopContest();
 	}
@@ -163,7 +160,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public void startContest(long timeLeft)
 	{
 		state.startContest(timeLeft);
-	}
+	}*/
 
 	@Override
 	public boolean addUser(String username, String password,
@@ -406,8 +403,11 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean setContestFreezeTime(String username, String password,
 			long tillTimeLeft)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		// state.setFreezeTime(tillTimeLeft);
+		return true;
 	}
 
 	@Override
@@ -422,16 +422,22 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public boolean setContestTimeLeft(String username, String password,
 			long timeLeft)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		state.setContestTimeLeft(timeLeft);
+		return true;
 	}
 
 	@Override
 	public boolean setContestTimePast(String username, String password,
 			long timePast)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		state.setContestTime(timePast);
+		return true;
 	}
 
 	@Override
@@ -439,5 +445,11 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 			String newPassword)
 	{
 		return changePassword(username, oldPassword, newPassword);
+	}
+
+	@Override
+	public long getContestFreezeTime(String username, String password)
+	{
+		return 60 * 1000 * 60;
 	}
 }

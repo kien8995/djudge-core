@@ -267,4 +267,10 @@ public class ServerNativeInterfaceStub implements ServerNativeInterface
 	{
 		return ContestServer.getCore().setContestTimePast(username, password, timePast);
 	}
+
+	@Override
+	public long getContestFreezeTime(String username, String password)
+	{
+		return ContestServer.getCore().getContestFreezeTime(username, password);
+	}
 }

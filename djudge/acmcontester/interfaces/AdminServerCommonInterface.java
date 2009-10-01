@@ -10,5 +10,7 @@ public interface AdminServerCommonInterface
 	
 	public boolean setContestFreezeTime(String username, String password, long tillTimeLeft); // milliseconds
 	
+	public long getContestFreezeTime(String username, String password); // milliseconds
+	
 	public boolean deleteAllData(String username, String password);
 }
