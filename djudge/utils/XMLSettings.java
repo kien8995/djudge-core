@@ -1,4 +1,4 @@
-package djudge.acmcontester.server;
+package djudge.utils;
 
 import java.util.Properties;
 

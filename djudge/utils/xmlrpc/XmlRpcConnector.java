@@ -1,7 +1,5 @@
 package djudge.utils.xmlrpc;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.client.XmlRpcClient;
 

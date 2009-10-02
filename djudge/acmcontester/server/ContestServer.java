@@ -9,6 +9,7 @@ public class ContestServer
 	 */
 	private static ContesterXmlRpcServer rpcServer;
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ContestServer.class);
 	
 	private static ContestCore core = new ContestCore();
@@ -33,6 +34,6 @@ public class ContestServer
 	
 	public static void stopServer()
 	{
-		
+		core.stopCore();
 	}
 }

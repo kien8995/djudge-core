@@ -1,5 +1,7 @@
 package djudge.acmcontester.server;
 
+import djudge.utils.XMLSettings;
+
 public class ContestSettings
 {
 	private final static int INFINITY = Integer.MAX_VALUE;

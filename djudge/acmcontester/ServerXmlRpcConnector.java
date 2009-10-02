@@ -1,23 +1,135 @@
-package djudge.acmcontester.admin;
+package djudge.acmcontester;
 
 import java.util.HashMap;
 
-import djudge.acmcontester.TeamXmlRpcConnector;
+import djudge.acmcontester.server.interfaces.ServerCommonInterface;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
+import djudge.utils.XMLSettings;
+import djudge.utils.xmlrpc.XmlRpcConnector;
 import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
 @SuppressWarnings("unchecked")
-public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerXmlRpcInterface
+public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpcInterface, ServerCommonInterface, ServerXmlRpcInterface
 {
-	public AdminXmlRpcConnector()
+	//private static final Logger log = Logger.getLogger(TeamXmlRpcConnector.class);
+	
+	private static final String defaultServiceName = "AcmContester";
+	
+	private static final String defaultServiceUrl = "http://127.0.0.1:8202/xmlrpc"; 
+	
+	private static final String serviceName;
+	
+	private static final String serverURL;
+	
+	static
 	{
-		// TODO Auto-generated constructor stub
+		XMLSettings settings = new XMLSettings(ServerXmlRpcConnector.class);
+		serviceName = settings.getString("server-service", defaultServiceName);
+		serverURL = settings.getString("server-url", defaultServiceUrl);
 	}
 	
-	public AdminXmlRpcConnector(XmlRpcStateVisualizer vizi)
+	public ServerXmlRpcConnector()
 	{
-		super(vizi);
+		super(serviceName, serverURL);
+	}
+
+	public ServerXmlRpcConnector(XmlRpcStateVisualizer vizi)
+	{
+		super(serviceName, serverURL, vizi);
+	}
+	
+	@Override
+	public HashMap<String, String>[] getTeamProblems(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object remoteResult = callRemoteMethod(serviceName + ".getTeamProblems", params);
+		return objectToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public boolean enterContestTeam(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object remoteResult = callRemoteMethod(serviceName + ".enterContestTeam", params);
+		return (Boolean) remoteResult;
+	}
+
+	@Override
+	public String registerTeam(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object remoteResult = callRemoteMethod(serviceName + ".registerTeam", params);
+		return (String) remoteResult;
+	}
+
+	@Override
+	public HashMap<String, String>[] getTeamSubmissions(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object remoteResult = callRemoteMethod(serviceName + ".getTeamSubmissions", params);
+		return objectToHashMapArray(remoteResult);
+	}
+
+	@Override
+	public boolean submitSolution(String username, String password,
+			String problemID, String languageID, String sourceCode)
+	{
+		Object[] params = {username, password, problemID, languageID, sourceCode};
+		return (Boolean) callRemoteMethod(serviceName + ".submitSolution", params);
+	}
+
+	@Override
+	public HashMap<String, String>[] getTeamLanguages(String username, String password)
+	{
+		Object[] params = {username, password};
+		Object res = callRemoteMethod(serviceName + ".getTeamLanguages", params);
+		return objectToHashMapArray(res);
+	}
+
+	@Override
+	public String getVersion()
+	{
+		return (String) callRemoteMethod(serviceName + ".getVersion", new Object[] {});
+	}
+	
+	@Override
+	public String echo(String what)
+	{
+		return (String) callRemoteMethod(serviceName + ".echo", new Object[] {what});
+	}
+
+	@Override
+	public String getContestStatus(String username, String password)
+	{
+		return (String) callRemoteMethod(serviceName + ".getContestStatus", new Object[] {username, password});
+	}
+
+	@Override
+	public long getContestTimeElapsed(String username, String password)
+	{
+		return (Long) callRemoteMethod(serviceName + ".getContestTimeElapsed", new Object[] {username, password});
+	}
+
+	@Override
+	public long getContestTimeLeft(String username, String password)
+	{
+		return (Long) callRemoteMethod(serviceName + ".getContestTimeLeft", new Object[] {username, password});
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap getTeamMonitor(String username, String password)
+	{
+		return (HashMap) callRemoteMethod(serviceName + ".getTeamMonitor", new Object[] {username, password});
+	}
+
+	@Override
+	public boolean changePasswordTeam(String username, String oldPassword,
+			String newPassword)
+	{
+		return (Boolean) callRemoteMethod(serviceName + ".changePasswordTeam", username, oldPassword, newPassword);
 	}
 	
 	@Override
@@ -119,7 +231,6 @@ public class AdminXmlRpcConnector extends TeamXmlRpcConnector implements ServerX
 		return objectToHashMapArray(remoteResult);
 	}
 
-	
 	@Override
 	public HashMap[] getLanguages(String username, String password)
 	{

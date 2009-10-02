@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import djudge.acmcontester.admin.AdminLoginWindow;
-import djudge.acmcontester.admin.AdminXmlRpcConnector;
 
 public abstract class LoginWindow extends JDialog implements ActionListener
 {
@@ -159,7 +158,7 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 	public static void main(String[] args)
 	{
 		AuthentificationData ad = new AuthentificationData();
-		AdminLoginWindow wnd = new AdminLoginWindow(new AdminXmlRpcConnector(), ad);
+		AdminLoginWindow wnd = new AdminLoginWindow(new ServerXmlRpcConnector(), ad);
 		wnd.setModal(true);
 		wnd.setVisible(true);
 		System.out.println(ad.username + " " + ad.password + " " + ad.isLoggedIn);

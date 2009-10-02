@@ -39,6 +39,7 @@ public class JTestingResultPanel extends JPanel
 			
 	};	
 	
+	@SuppressWarnings("unused")
 	private void init()
 	{
 		
