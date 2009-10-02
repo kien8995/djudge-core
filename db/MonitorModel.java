@@ -283,12 +283,8 @@ public class MonitorModel
 		{
 			if (t.totalSolved != a.totalSolved)
 				return t.totalSolved - a.totalSolved;
-			if (a.totalTime != t.totalTime)
-			{
-				long diff = a.totalTime - t.totalTime;
-				return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
-			}
-			return 0;
+			long diff = a.totalTime - t.totalTime;
+			return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
 		}		
 	}
 	
@@ -302,10 +298,10 @@ public class MonitorModel
 			if (a.totalTime != t.totalTime)
 			{
 				long diff = a.totalTime - t.totalTime;
-				return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
+				return diff > 0 ? 1 : -1; 
 			}
 			long diff = t.totalAttempts - a.totalAttempts;
-			return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
+			return diff > 0 ? 1 : diff < 0 ? -1 : 0;
 		}		
 	}
 	

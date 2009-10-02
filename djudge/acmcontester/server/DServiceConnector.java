@@ -30,13 +30,13 @@ public class DServiceConnector extends Thread
 {
 	private static final Logger log = Logger.getLogger(DServiceConnector.class);
 	
-	private static final String serviceName = "DService";
+	private final String serviceName;
 	
-	private static final String serverUrl = "http://127.0.0.1:8001/xmlrpc";
+	private final String serverUrl;
 		
-	private static final int defaultSleepTime = 1000;
+	private final int defaultSleepTime = 1000;
 	
-	private static final int failSleepTime = 10000;
+	private final int failSleepTime = 10000;
 	
 	private boolean flagConnected = false;
 	
@@ -45,6 +45,8 @@ public class DServiceConnector extends Thread
 	static final String submitMutex = "mutex";
 	
 	XmlRpcClient client;
+	
+	
 	
 	private void updateSubmissionResult(DServiceTaskResult tr)
 	{
@@ -69,15 +71,20 @@ public class DServiceConnector extends Thread
 		sdm.setRowData(0, sdm.toRow(sd).data);
 	}
 	
-	public void run()
+	public DServiceConnector()
 	{
+		XMLSettings settings = new XMLSettings(this.getClass());
+		serverUrl = settings.getProperty("dservice-url");
+		serviceName = settings.getProperty("dservice-name");
+		int connectionTimeout = settings.getInt("connnection-timeout", 5000);
+		int replyTimeout = settings.getInt("reply-timeout", 5000);
 		try
 		{
     		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
     		config.setServerURL(new URL(serverUrl));
     		config.setEnabledForExtensions(true);
-    		config.setConnectionTimeout(10000);
-    		config.setReplyTimeout(10000);
+    		config.setConnectionTimeout(connectionTimeout);
+    		config.setReplyTimeout(replyTimeout);
     
     		client = new XmlRpcClient();
     		
@@ -91,7 +98,10 @@ public class DServiceConnector extends Thread
 		{
 			log.error("DServiceConnector start failed", ex);
 		}
-		
+	}
+	
+	public void run()
+	{
 		while (true)
 		{
 			/* Sending submissions to judge */

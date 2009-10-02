@@ -12,6 +12,11 @@ public class XMLSettings
 	
 	private Properties properties;
 	
+	public XMLSettings(Class className)
+	{
+		this(className.getName() + ".xml");
+	}
+	
 	public XMLSettings(String configFile)
 	{
 		try
