@@ -85,7 +85,7 @@ public class HttpServer extends NanoHTTPD implements Runnable
 		else
 		{
 			res = "<html><head><title>Contest index</title></head><body>" +
-				"<li><a href='/sumatt.html?color=true'>Standings</a>" + 
+				"<li><a href='/standings?bgcolor=true&txcolor=true&rowcolor=1&info=tt'>Standings</a>" + 
 				"<li><a href='/submissions.html?id=1&contesttime=1&realtime=1&realtime=1&user=1&problem=1&language=1&judgement=1&time=1&memory=1&output=1'>Submissions</a>" + 
 				"<li>Users<br><br><hr>" +
 				"PC^2-style reports" + 

@@ -17,6 +17,10 @@ public class UserProblemStatus extends HashMapSerializable
 	
 	public boolean isPending;
 	
+	public int score;
+	
+	public boolean fFullScore;
+	
 	public String toString()
 	{
 		String res = "";
