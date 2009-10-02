@@ -16,11 +16,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.admin.AdminClient;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
-import djudge.acmcontester.structures.UserProblemStatus;
+import djudge.acmcontester.structures.UserProblemStatusACM;
 import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class JMonitorPanel extends JPanel implements ActionListener
@@ -69,7 +69,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		{
 			if (data.rows.length > 0)
 			{
-				return data.rows[0].problemData.length + 3;
+				return data.rows[0].acmData.length + 3;
 			}
 			return 0;
 		}
@@ -97,7 +97,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			}
 			else
 			{
-				return data.rows[arg0].problemData[arg1 - 3];
+				return data.rows[arg0].acmData[arg1 - 3];
 			}
 		}
 	}
@@ -110,7 +110,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column)
 		{
-			UserProblemStatus data = (UserProblemStatus) value;
+			UserProblemStatusACM data = (UserProblemStatusACM) value;
 			if (data.wasSolved)
 			{
 				setBackground(Color.GREEN);

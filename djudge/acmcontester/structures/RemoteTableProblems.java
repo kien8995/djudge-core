@@ -1,7 +1,7 @@
 package djudge.acmcontester.structures;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.utils.xmlrpc.AbstractRemoteRow;
 import djudge.utils.xmlrpc.AbstractRemoteTable;
 import djudge.utils.xmlrpc.HashMapSerializer;

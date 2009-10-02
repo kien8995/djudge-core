@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import djudge.acmcontester.admin.AdminClient;
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
-import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 
 public class JContestSettingsPanel extends JPanel
 {

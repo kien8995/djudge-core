@@ -17,7 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.AuthentificationData;
-import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.swing.JSubmissionInfoFrame;

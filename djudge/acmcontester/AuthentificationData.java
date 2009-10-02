@@ -1,6 +1,6 @@
 package djudge.acmcontester;
 
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
 
 public class AuthentificationData implements AuthentificationDataProvider
 {
@@ -15,8 +15,9 @@ public class AuthentificationData implements AuthentificationDataProvider
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String username;
-	public String password;
+	public String username = "";
+	public String password = "";
+	public boolean isLoggedIn = false;
 	
 	@Override
 	public String getPassword()
