@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import djudge.utils.xmlrpc.HashMapSerializable;
 
-public class MonitorUserStatus extends HashMapSerializable implements Comparable<MonitorUserStatus>
+public class MonitorUserStatus extends HashMapSerializable// implements Comparable<MonitorUserStatus>
 {
 	public String userID;
 	
@@ -94,7 +94,7 @@ public class MonitorUserStatus extends HashMapSerializable implements Comparable
 		return map;
 	}
 	
-	@Override
+/*	@Override
 	public int compareTo(MonitorUserStatus t)
 	{
 		if (t.totalSolved != totalSolved)
@@ -105,5 +105,5 @@ public class MonitorUserStatus extends HashMapSerializable implements Comparable
 			return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
 		}
 		return 0;
-	}
+	}*/
 }
