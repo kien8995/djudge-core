@@ -128,12 +128,30 @@ public class HtmlUtils
 		return sb.toString();
 	}
 	
-	private static String getCellStyle(UserProblemStatus ups, Properties params)
+	private static String getCellBrColor(UserProblemStatus ups, Properties params)
 	{
-		String style = "";
-		if (ups.wasSolved) style = " bgcolor='#aaffaa'";
-		else if (ups.wrongTryes > 0) style = " bgcolor='#ffaaaa'";
-		return params.containsKey("color") ? style : "";
+		String cellClass = "null";
+		boolean flagBg = params.containsKey("bgcolor");
+		boolean flagTx = params.containsKey("txcolor");
+		if (ups.wasSolved)
+		{
+			if (flagTx)
+				cellClass = "ac_t";
+			else if (flagBg)
+				cellClass = "ac_b";
+		}
+		else if (ups.wrongTryes > 0)
+		{
+			if (flagTx)
+				cellClass = "wa_t";
+			else if (flagBg)
+				cellClass = "wa_b";
+		}
+		else
+		{
+			cellClass = "no";
+		}
+		return "class=\"" + cellClass + "\"";
 	}
 	
 	private static String formatTime(long time)
@@ -141,7 +159,7 @@ public class HtmlUtils
 		return new PrintfFormat("%2d:%02d").sprintf(new Object[] {time / 60, time % 60});
 	}
 	
-	private static String getCellContent(UserProblemStatus ups, Properties params)
+	private static String getCellContentTriesTime(UserProblemStatus ups, Properties params)
 	{
 		String res = "-";
 		if (ups.wasSolved)
@@ -155,19 +173,118 @@ public class HtmlUtils
 		return res;
 	}
 	
+	private static String getCellContentTries(UserProblemStatus ups, Properties params)
+	{
+		String res = "-";
+		if (ups.wasSolved)
+		{
+			res = "+" + (ups.wrongTryes > 0 ? ups.wrongTryes : "");
+		}
+		else if (ups.wrongTryes > 0)
+		{
+			res = "-" + ups.wrongTryes;
+		}
+		return res;
+	}
+	
+	private static String getCellContentScoreTime(UserProblemStatus ups, Properties params)
+	{
+		String res = "-";
+		if (ups.wasSolved || ups.wrongTryes > 0)
+		{
+			res = "" + ups.score + "<br>" + "<font size=\"1\">" + formatTime(ups.lastSubmitTime) + "</font>";
+		}
+		return res;
+	}	
+	
+	private static String getCellContentPC2TT(UserProblemStatus ups, Properties params)
+	{
+		int tries = ups.wrongTryes + (ups.wasSolved ? 1 : 0);
+		String time = ups.wasSolved ? "" + (ups.lastSubmitTime) : "--";
+		return "" + tries + "/" + time;
+	}
+	
+	private static String getCellContentScore(UserProblemStatus ups, Properties params)
+	{
+		if (ups.wasSolved || ups.wrongTryes > 0)
+			return "" + ups.score;
+		return "-";
+	}
+	
+	private static String getCellContentPC2YN(UserProblemStatus ups, Properties params)
+	{
+		String res = "-";
+		if (ups.wasSolved)
+		{
+			res = "" + (ups.wrongTryes + 1) + "/Y";
+		}
+		else if (ups.wrongTryes > 0)
+		{
+			res = "" + ups.wrongTryes + "/N";
+		}
+		return res;
+	}
+	
+	private static String getCellContent(UserProblemStatus ups, Properties params)
+	{
+		String contentStyle = params.getProperty("info");
+		if ("t".equalsIgnoreCase(contentStyle))
+		{
+			return getCellContentTries(ups, params);
+		}
+		else if ("pc2yn".equalsIgnoreCase(contentStyle))
+		{
+			return getCellContentPC2YN(ups, params);
+		}
+		else if ("pc2tt".equalsIgnoreCase(contentStyle))
+		{
+			return getCellContentPC2TT(ups, params);
+		}
+		else if ("st".equalsIgnoreCase(contentStyle))
+		{
+			return getCellContentScoreTime(ups, params);
+		}
+		else if ("s".equalsIgnoreCase(contentStyle))
+		{
+			return getCellContentScore(ups, params);
+		}
+		else
+		{
+			return getCellContentTriesTime(ups, params);
+		}
+	}
+	
 	private static void addUserProblemCall(StringBuilder sb, UserProblemStatus ups, Properties params)
 	{
-		String cellStyle = getCellStyle(ups, params);
+		String cellStyle = getCellBrColor(ups, params);
 		String cellContent = getCellContent(ups, params);
 		sb.append("<td align='center' " + cellStyle + ">" + cellContent + "</td>");
 	}
 	
 	public static String getMonitor(MonitorData data, Properties params)
 	{
+		boolean flagEvenOdd = params.containsKey("rowcolor");
+		String colorNum = params.getProperty("rowcolor");		
+		
 		StringBuilder sb = new StringBuilder();
 		printHeader(sb, "Monitor");
+		sb.append("\n<style type='text/css'>"
+						+ "tr.color       { background-color: #EEE } "
+						+ "tr  { font-size: 12pt } "
+						+ "tr.odd1  { background-color: #FFB } "
+						+ "tr.even1 { background-color: #DEF } "
+						+ "tr.odd2  { background-color: #c8e8f8 } "
+						+ "tr.even2 { background-color: #d0f0ff } "
+						+ "tr.odd3   { background-color: #ffffff } "
+						+ "tr.even3  { background-color: #f8f8f8 } "
+						+ "td.ac_b  { text-align: center; background-color: #aaffaa } "
+						+ "td.ac_t  { text-align: center; color: #0A0 } "
+						+ "td.wa_b  { text-align: center; background-color: #ffaaaa } "
+						+ "td.wa_t  { text-align: center; color: #F00 } "
+						+ "td.no    { text-align: center; color: #000 } "
+						+ "</style>\n");
 		sb.append("<table border='1'>\n");
-		sb.append("<tr>");
+		sb.append("<tr class=\"" + (flagEvenOdd ? "color" : "none") + "\">");
 		
 		sb.append("<th><strong>Place</strong></th>");
 		sb.append("<th align='center'><strong>Team</strong></th>");
@@ -185,7 +302,7 @@ public class HtmlUtils
 		
 		for (int i = 0; i < data.rows.length; i++)
 		{
-			sb.append("<tr>");
+			sb.append("<tr class=\"" + (flagEvenOdd ? (i%2==0 ? "even" : "odd") + colorNum : "null") + "\">");
 			sb.append("<td align='center'>" + data.rows[i].place + ". </td>");
 			sb.append("<td>" + data.rows[i].username + " ["+ data.rows[i].userID + "] </td>");
 			for (int j = 0; j < data.rows[i].problemData.length; j++)

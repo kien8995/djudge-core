@@ -16,6 +16,8 @@ public class MonitorRow extends HashMapSerializable implements Comparable<Monito
 	public int totalAttempts;
 	public int totalScoredAttempts;
 	
+	public int totalScore;
+	
 	public UserProblemStatus[] problemData;
 
 	public MonitorRow()
