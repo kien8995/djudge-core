@@ -12,9 +12,9 @@ public class XMLSettings
 	
 	private Properties properties;
 	
-	public XMLSettings(Class className)
+	public XMLSettings(Class<? extends Object> className)
 	{
-		this(className.getName() + ".xml");
+		this(className.getName().toLowerCase() + ".xml");
 	}
 	
 	public XMLSettings(String configFile)
@@ -51,6 +51,18 @@ public class XMLSettings
 		return defaultValue;
 	}
 	
+	public long getLong(String propertyName, long defaultValue)
+	{
+		String value = properties.getProperty(propertyName);
+		try
+		{
+			return Long.parseLong(value);
+		}
+		catch (Exception e) {
+		}
+		return defaultValue;
+	}
+	
 	public boolean getBoolean(String propertyName, boolean defaultValue)
 	{
 		String value = properties.getProperty(propertyName);
@@ -62,5 +74,11 @@ public class XMLSettings
 			// TODO: handle exception
 		}
 		return defaultValue;
+	}
+	
+	public String getString(String propertyName, String defaultValue)
+	{
+		String value = properties.getProperty(propertyName);
+		return null == value ? defaultValue : value;
 	}
 }

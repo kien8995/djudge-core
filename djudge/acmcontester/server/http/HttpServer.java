@@ -1,11 +1,7 @@
 package djudge.acmcontester.server.http;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -24,6 +20,10 @@ public class HttpServer extends NanoHTTPD implements Runnable
 
 	public static final int defaultPort = 8282;
 	
+	public static final String defaultUsername = "board";
+	
+	public static final String defaultPassword = "board";
+	
 	private ServerNativeInterface serverConnector;
 	
 	private final String username;
@@ -32,43 +32,42 @@ public class HttpServer extends NanoHTTPD implements Runnable
 	
 	private final String serverEchoString = "Hello from " + this.toString();
 	
-	private final CachedMonitor monitor = new CachedMonitor();
+	private final CachedMonitor monitor;
+	
+	private final static long defaultCacheUpdateInterval = 10; // 10 seconds
 	
 	private class CachedMonitor extends CachedObject
 	{
-		public CachedMonitor()
+		public CachedMonitor(long cacheUpdateInterval)
 		{
-			super(1000 * 100); // 10 seconds
-		}
-		
-		@Override
-		protected boolean updateCache()
-		{
-			try
-			{
-				MonitorData newMonitor = serverConnector.getTeamMonitor(username, password);
-				cachedData = newMonitor;
-				log.info("Cache updated");
-				return true;
-			}
-			catch (Exception e)
-			{
-				log.info("Cache update failed");
-			}
-			return false;
+			super(cacheUpdateInterval);
 		}
 		
 		public MonitorData getMonitor()
 		{
 			return (MonitorData) getData();
 		}
+
+		@Override
+		protected Object updateData() throws Exception
+		{
+			return serverConnector.getTeamMonitor(username, password);
+		}
 	}
 	
-	public HttpServer(String dataProviderClassName, int port, String username, String password) throws IOException
+	public HttpServer() throws Exception
 	{
-		super(port);
-		this.password = password;
-		this.username = username;
+		super(new XMLSettings(HttpServer.class).getInt("http-port", defaultPort));
+		XMLSettings settings = new XMLSettings(this.getClass());
+		this.username = settings.getString("server-username", defaultUsername);
+		this.password = settings.getString("server-password", defaultPassword);
+		monitor = new CachedMonitor(settings.getLong("cache-update-monitor-interval", defaultCacheUpdateInterval) * 1000);
+		initConnector(settings.getString("server-data-provider", "wefdwerf"));
+		printInfo(settings.getString("server-data-provider", "wefdwerf"), settings.getInt("http-port", defaultPort));
+	}
+	
+	private void initConnector(String dataProviderClassName)
+	{
 		try
 		{
 			serverConnector = (ServerNativeInterface) Class.forName(dataProviderClassName).newInstance();
@@ -95,6 +94,20 @@ public class HttpServer extends NanoHTTPD implements Runnable
 			log.fatal("Cannot connect to server: ", ex);
 			System.exit(2);
 		}
+	}
+	
+	public HttpServer(String dataProviderClassName, int port, String username, String password) throws Exception
+	{
+		super(port);
+		monitor = new CachedMonitor(defaultCacheUpdateInterval * 1000);
+		this.password = password;
+		this.username = username;
+		initConnector(dataProviderClassName);
+		printInfo(dataProviderClassName, port);
+	}
+	
+	private void printInfo(String dataProviderClassName, int port)
+	{
 		log.info("");
 		log.info("");
 		log.info("");
@@ -174,13 +187,10 @@ public class HttpServer extends NanoHTTPD implements Runnable
 	
 	public static void main(String[] args)
 	{
-		XMLSettings settings = new XMLSettings("server-http.xml");
 		try
 		{
-			new HttpServer(settings.getProperty("data-provider"), settings.getInt(
-					"port", 8283), settings.getProperty("server-username"),
-					settings.getProperty("server-password")).run();
-		} catch (IOException e)
+			new HttpServer().run();
+		} catch (Exception e)
 		{
 			log.fatal("HTTP Server failed", e);
 		}
