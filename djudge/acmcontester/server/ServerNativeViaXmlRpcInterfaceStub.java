@@ -1,7 +1,7 @@
 package djudge.acmcontester.server;
 
 
-import djudge.acmcontester.admin.AdminXmlRpcConnector;
+import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.server.interfaces.ServerNativeInterface;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.LanguageData;
@@ -13,7 +13,7 @@ import djudge.utils.xmlrpc.HashMapSerializer;
 
 public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 {
-	ServerXmlRpcInterface serverConnector = new AdminXmlRpcConnector();
+	ServerXmlRpcInterface serverConnector = new ServerXmlRpcConnector();
 	
 	@Override
 	public boolean enterContestTeam(String username, String password)

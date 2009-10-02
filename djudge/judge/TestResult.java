@@ -4,9 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import utils.StringWorks;
 import utils.XmlWorks;
-
 
 import djudge.judge.dexecutor.ExecutionResult;
 import djudge.judge.dexecutor.ExecutionResultEnum;

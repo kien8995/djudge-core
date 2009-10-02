@@ -11,6 +11,7 @@ import djudge.acmcontester.JContestSettingsPanel;
 import djudge.acmcontester.JMonitorPanel;
 import djudge.acmcontester.JStatusPanel;
 import djudge.acmcontester.JSubmitPanel;
+import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.structures.RemoteTableLanguages;
 import djudge.acmcontester.structures.RemoteTableProblems;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
@@ -38,7 +39,7 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 	
 	private AuthentificationData authData = new AuthentificationData("root", "root");
 	
-	private AdminXmlRpcConnector serverXmlRpcInterface = new AdminXmlRpcConnector();
+	private ServerXmlRpcConnector serverXmlRpcInterface = new ServerXmlRpcConnector();
 	
 	class WatchThread extends Thread
 	{

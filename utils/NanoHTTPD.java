@@ -481,6 +481,7 @@ public class NanoHTTPD
 	 * URL-encodes everything between "/"-characters.
 	 * Encodes spaces as '%20' instead of '+'.
 	 */
+	@SuppressWarnings("deprecation")
 	private String encodeUri( String uri )
 	{
 		String newUri = "";

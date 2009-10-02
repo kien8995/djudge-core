@@ -9,6 +9,7 @@ public class RpcViziThread extends JFrame  implements XmlRpcStateVisualizer, Run
 {
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("unused")
 	private boolean flagVisible = false;
 	
 	public RpcViziThread()

@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 
 import utils.NanoHTTPD;
 
-import djudge.acmcontester.server.XMLSettings;
 import djudge.acmcontester.server.interfaces.ServerNativeInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.utils.CachedObject;
 import djudge.utils.HtmlUtils;
+import djudge.utils.XMLSettings;
 
 public class HttpServer extends NanoHTTPD implements Runnable
 {

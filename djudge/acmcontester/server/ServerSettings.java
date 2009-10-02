@@ -1,5 +1,7 @@
 package djudge.acmcontester.server;
 
+import djudge.utils.XMLSettings;
+
 public class ServerSettings
 {
 	private static final String configFile = "server.xml";

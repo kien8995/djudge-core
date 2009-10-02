@@ -17,7 +17,6 @@ import org.w3c.dom.Element;
 import utils.FileWorks;
 import utils.XmlWorks;
 
-import db.AbstractTableDataModel;
 import db.LanguagesDataModel;
 import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
@@ -25,6 +24,7 @@ import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.dservice.DServiceTaskResult;
+import djudge.utils.XMLSettings;
 
 public class DServiceConnector extends Thread
 {

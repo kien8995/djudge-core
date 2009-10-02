@@ -6,11 +6,11 @@ import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 
-import djudge.acmcontester.server.XMLSettings;
 import djudge.dservice.DServiceTask;
 import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
+import djudge.utils.XMLSettings;
 import djudge.utils.xmlrpc.RPCClientFactory;
 
 
@@ -33,7 +33,7 @@ public class DServiceConnector extends Thread
 	
 	public DServiceConnector()
 	{
-		XMLSettings settings = new XMLSettings("judge.xml");
+		XMLSettings settings = new XMLSettings(this.getClass());
 		serviceUrl = settings.getProperty("dservice-url");
 		serviceName = settings.getProperty("dservice-name");
 		connectionTimeout = settings.getInt("connnection-timeout", 5000);
@@ -108,5 +108,4 @@ public class DServiceConnector extends Thread
 	{
 		new DServiceConnector().start();
 	}
-
 }
