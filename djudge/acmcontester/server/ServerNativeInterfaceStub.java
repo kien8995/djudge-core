@@ -1,7 +1,7 @@
 package djudge.acmcontester.server;
 
 
-import djudge.acmcontester.interfaces.ServerNativeInterface;
+import djudge.acmcontester.server.interfaces.ServerNativeInterface;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;

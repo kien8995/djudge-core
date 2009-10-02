@@ -3,7 +3,7 @@ package djudge.acmcontester.admin;
 import java.util.HashMap;
 
 import djudge.acmcontester.TeamXmlRpcConnector;
-import djudge.acmcontester.interfaces.ServerXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 

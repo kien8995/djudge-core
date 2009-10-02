@@ -61,9 +61,11 @@ public class DServiceConnector extends Thread
 		int maxMemory = Integer.parseInt(elem.getAttribute("max-memory"));
 		int maxTime = Integer.parseInt(elem.getAttribute("max-time"));
 		int wrongTest = Integer.parseInt(elem.getAttribute("wrong-test"));
+		int score = Integer.parseInt(elem.getAttribute("score"));
 		sd.maxMemory = maxMemory;
 		sd.maxTime = maxTime;
 		sd.failedTest = wrongTest;
+		sd.score = score;
 		sdm.setRowData(0, sdm.toRow(sd).data);
 	}
 	

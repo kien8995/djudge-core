@@ -1,41 +1,56 @@
 package db;
 
-import java.sql.ResultSet;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.MonitorData;
-import djudge.acmcontester.structures.MonitorRow;
+import djudge.acmcontester.structures.MonitorUserStatus;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.ProblemStatus;
 import djudge.acmcontester.structures.UserData;
-import djudge.acmcontester.structures.UserProblemStatus;
+import djudge.acmcontester.structures.UserProblemStatusACM;
+import djudge.acmcontester.structures.UserProblemStatusIOI;
 
 public class MonitorModel
-{	
-	public MonitorData getMonitor(long contestTime)
+{
+	private void sortMonitor(MonitorData monitor, Comparator<MonitorUserStatus> viewComparator, Comparator<MonitorUserStatus> placesComparator)
+	{
+		Arrays.sort(monitor.rows, viewComparator);
+		int place = 0;
+		for (int i = 0; i < monitor.rows.length; i++)
+		{
+			if (i == 0 || placesComparator.compare(monitor.rows[i], monitor.rows[i-1]) != 0)
+				place++;
+			monitor.rows[i].place = place;
+		}
+	}
+	
+	public MonitorData getMonitorACM(long contestTime)
 	{
 		UsersDataModel udm = new UsersDataModel();
 		udm.updateData();
-		return getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
+		MonitorData monitor = getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
+		sortMonitor(monitor, new ACMViewComparator(), new ACMPlacesComparator());
+		return monitor;
 	}
 	
 	public MonitorData getMonitorIOI(long contestTime)
 	{
 		UsersDataModel udm = new UsersDataModel();
 		udm.updateData();
-		return getMonitorIOI(contestTime, udm.getRows().toArray(new UserData[0]));
+		MonitorData monitor = getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
+		sortMonitor(monitor, new IOIViewComparator(), new IOIPlacesComparator());
+		return monitor;
 	}
 	
-	private UserProblemStatus getUserProblemStatistics(long contestTime, String userID, String problemID)
+	private UserProblemStatusACM getUserProblemStatisticsACM(long contestTime, String userID, String problemID)
 	{
-		UserProblemStatus res = new UserProblemStatus();
+		UserProblemStatusACM res = new UserProblemStatusACM();
 		String sqlFirstAc = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND judgement = 'AC' ORDER BY id asc LIMIT 1";
 		Connection conn = Settings.getConnection();
 		Statement st;
@@ -136,9 +151,9 @@ public class MonitorModel
 		return res;
 	}
 	
-	private UserProblemStatus getUserProblemStatisticsIOI(long contestTime, String userID, String problemID)
+	private UserProblemStatusIOI getUserProblemStatisticsIOI(long contestTime, String userID, String problemID)
 	{
-		UserProblemStatus res = new UserProblemStatus();
+		UserProblemStatusIOI res = new UserProblemStatusIOI();
 		Statement st;
 		Connection conn = Settings.getConnection();
 		ResultSet rs;
@@ -156,17 +171,24 @@ public class MonitorModel
 					int maxScore = rs.getInt("score");
 					long maxScoreTime = rs.getLong("contest_time");
 					String judgement = rs.getString("judgement");
-					res.lastSubmitTime = maxScoreTime / 60 / 1000;
+					res.maxScoreFirstTime = maxScoreTime / 60 / 1000;
 					res.score = maxScore;
 					if ("AC".equalsIgnoreCase(judgement))
 					{
-						res.fFullScore = true;
-						res.wasSolved = true;
+						res.isFullScore = true;
+					}
+					rs.close();
+					st.close();
+					String sqlTotalCount = "SELECT COUNT(*), MAX(contest_time) FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0";
+					st = conn.createStatement();
+					rs = st.executeQuery(sqlTotalCount);
+					if (rs.next())
+					{
+						res.lastSubmitTime = rs.getLong("MAX(contest_time)") / 60 / 1000;
+						res.submissionsTotal = rs.getInt("COUNT(*)");
 					}
 					else
-					{
-						res.wrongTryes = 1;
-					}
+						throw new Exception("Shit happens");
 					rs.close();
 					st.close();
 				}
@@ -183,7 +205,7 @@ public class MonitorModel
 	{
 		MonitorData md = new MonitorData();
 		md.contestTime = contestTime;
-		md.rows = new MonitorRow[users.length];
+		md.rows = new MonitorUserStatus[users.length];
 		ProblemData[] pr = ContestServer.getCore().getProblemsModel().getRows().toArray(new ProblemData[0]);
 		md.problemData = new ProblemStatus[pr.length];
 		for (int i = 0; i < pr.length; i++)
@@ -192,23 +214,27 @@ public class MonitorModel
 		}
 		for (int i = 0; i < users.length; i++)
 		{
-			MonitorRow mr = new MonitorRow();
+			MonitorUserStatus mr = new MonitorUserStatus();
 			mr.userID = users[i].id;
 			mr.username = users[i].username;
-			mr.problemData = new UserProblemStatus[pr.length];
+			mr.acmData = new UserProblemStatusACM[pr.length];
+			mr.ioiData = new UserProblemStatusIOI[pr.length];
 			for (int ipr = 0; ipr < pr.length; ipr++)
 			{
-				UserProblemStatus stat = getUserProblemStatistics(contestTime, users[i].id, pr[ipr].id);
-				mr.problemData[ipr] = stat;
-				if (stat.wasSolved)
+				UserProblemStatusACM acmStat = getUserProblemStatisticsACM(contestTime, users[i].id, pr[ipr].id);
+				UserProblemStatusIOI ioiStat = getUserProblemStatisticsIOI(contestTime, users[i].id, pr[ipr].id);
+				mr.acmData[ipr] = acmStat;
+				mr.ioiData[ipr] = ioiStat;
+				if (acmStat.wasSolved)
 				{
 					mr.totalAttempts++;
 					mr.totalSolved++;
-					mr.totalTime += stat.penaltyTime;
-					mr.totalScoredAttempts += stat.wrongTryes + 1;
+					mr.totalTime += acmStat.penaltyTime;
+					mr.totalScoredAttempts += acmStat.wrongTryes + 1;
 				}
-				mr.totalAttempts += stat.wrongTryes;
-				md.problemData[ipr].addUser(stat);
+				mr.totalScore += ioiStat.score;
+				mr.totalAttempts += acmStat.wrongTryes;
+				md.problemData[ipr].addUser(acmStat);
 			}
 			md.rows[i] = mr;
 		}
@@ -228,65 +254,59 @@ public class MonitorModel
 		return md;
 	}
 	
-	class IOIComparatorScoreOnly implements Comparator<MonitorRow>
+	class IOIPlacesComparator implements Comparator<MonitorUserStatus>
 	{
 		@Override
-		public int compare(MonitorRow a, MonitorRow t)
+		public int compare(MonitorUserStatus a, MonitorUserStatus t)
 		{
-			return a.totalScore - t.totalScore;
+			return t.totalScore - a.totalScore;
 		}		
 	}
 	
-	private MonitorData getMonitorIOI(long contestTime, UserData[] users)
+	class IOIViewComparator implements Comparator<MonitorUserStatus>
 	{
-		MonitorData md = new MonitorData();
-		md.contestTime = contestTime;
-		md.rows = new MonitorRow[users.length];
-		ProblemData[] pr = ContestServer.getCore().getProblemsModel().getRows().toArray(new ProblemData[0]);
-		md.problemData = new ProblemStatus[pr.length];
-		for (int i = 0; i < pr.length; i++)
+		@Override
+		public int compare(MonitorUserStatus a, MonitorUserStatus t)
 		{
-			md.problemData[i] = new ProblemStatus(pr[i].sid);
-		}
-		for (int i = 0; i < users.length; i++)
+			if (a.totalScore != t.totalScore)
+				return t.totalScore - a.totalScore;
+			if (a.totalSolved != t.totalSolved)
+				return t.totalSolved - a.totalSolved;
+			return t.totalAttempts - a.totalAttempts; 
+		}		
+	}
+	
+	class ACMPlacesComparator implements Comparator<MonitorUserStatus>
+	{
+		@Override
+		public int compare(MonitorUserStatus a, MonitorUserStatus t)
 		{
-			MonitorRow mr = new MonitorRow();
-			mr.userID = users[i].id;
-			mr.username = users[i].username;
-			mr.problemData = new UserProblemStatus[pr.length];
-			for (int ipr = 0; ipr < pr.length; ipr++)
+			if (t.totalSolved != a.totalSolved)
+				return t.totalSolved - a.totalSolved;
+			if (a.totalTime != t.totalTime)
 			{
-				UserProblemStatus stat = getUserProblemStatisticsIOI(contestTime, users[i].id, pr[ipr].id);
-				if (!stat.wasSolved)
-					stat.isPending = getUserProblemStatusPending(contestTime, users[i].id, pr[ipr].id);
-				mr.problemData[ipr] = stat;
-				if (stat.wasSolved)
-				{
-					mr.totalAttempts++;
-					mr.totalSolved++;
-					mr.totalTime += stat.penaltyTime;
-					mr.totalScoredAttempts += stat.wrongTryes + 1;
-				}
-				mr.totalScore += stat.score;
-				mr.totalAttempts += stat.wrongTryes;
-				md.problemData[ipr].addUser(stat);
+				long diff = a.totalTime - t.totalTime;
+				return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
 			}
-			md.rows[i] = mr;
-		}
-		for (int i = 0; i < pr.length; i++)
+			return 0;
+		}		
+	}
+	
+	class ACMViewComparator implements Comparator<MonitorUserStatus>
+	{
+		@Override
+		public int compare(MonitorUserStatus a, MonitorUserStatus t)
 		{
-			md.totalAC += md.problemData[i].totalACCount;
-			md.totalSubmitted += md.problemData[i].totalSubmissionsCount;
-		}
-		Arrays.sort(md.rows, new IOIComparatorScoreOnly());
-		int place = 0;
-		for (int i = 0; i < md.rows.length; i++)
-		{
-			if (i == 0 || md.rows[i].compareTo(md.rows[i-1]) != 0)
-				place++;
-			md.rows[i].place = place;
-		}
-		return md;
+			if (t.totalSolved != a.totalSolved)
+				return t.totalSolved - a.totalSolved;
+			if (a.totalTime != t.totalTime)
+			{
+				long diff = a.totalTime - t.totalTime;
+				return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
+			}
+			long diff = t.totalAttempts - a.totalAttempts;
+			return diff > 0 ? 1 : diff < 0 ? -1 : 0; 
+		}		
 	}
 	
 	public static void main(String[] args)

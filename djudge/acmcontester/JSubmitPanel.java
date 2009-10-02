@@ -21,8 +21,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import djudge.acmcontester.admin.AdminClient;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.utils.xmlrpc.HashMapSerializer;

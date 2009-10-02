@@ -5,9 +5,9 @@ import org.apache.log4j.Logger;
 
 import db.DBRowAbstract;
 import db.SubmissionsDataModel;
-import djudge.acmcontester.interfaces.AdminNativeInterface;
-import djudge.acmcontester.interfaces.ServerCommonInterface;
-import djudge.acmcontester.interfaces.TeamNativeInterface;
+import djudge.acmcontester.server.interfaces.AdminNativeInterface;
+import djudge.acmcontester.server.interfaces.ServerCommonInterface;
+import djudge.acmcontester.server.interfaces.TeamNativeInterface;
 import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;

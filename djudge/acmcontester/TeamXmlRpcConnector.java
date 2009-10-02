@@ -8,8 +8,8 @@ import org.w3c.dom.Element;
 
 import utils.XmlWorks;
 
-import djudge.acmcontester.interfaces.ServerCommonInterface;
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
+import djudge.acmcontester.server.interfaces.ServerCommonInterface;
+import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.utils.xmlrpc.XmlRpcConnector;
 import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 

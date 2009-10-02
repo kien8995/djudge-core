@@ -10,7 +10,7 @@ public class MonitorData extends HashMapSerializable
 	/*
 	 * User scores
 	 */
-	public MonitorRow[] rows;
+	public MonitorUserStatus[] rows;
 	
 	/*
 	 * Contest's nbame
@@ -38,7 +38,7 @@ public class MonitorData extends HashMapSerializable
 	
 	public MonitorData()
 	{
-		rows = new MonitorRow[0];
+		rows = new MonitorUserStatus[0];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,10 +59,10 @@ public class MonitorData extends HashMapSerializable
 		totalSubmitted = Integer.parseInt((String) map.get("total-count"));
 		Object[] data = (Object[]) map.get("monitor-rows");
 		int n = data.length;
-		rows = new MonitorRow[n];
+		rows = new MonitorUserStatus[n];
 		for (int i = 0; i < n; i++)
 		{
-			rows[i] = new MonitorRow((HashMap) data[i]);
+			rows[i] = new MonitorUserStatus((HashMap) data[i]);
 		}
 		data = (Object[]) map.get("problems-status");
 		n = data.length;
@@ -98,11 +98,11 @@ public class MonitorData extends HashMapSerializable
 		return map;
 	}
 	
-	UserProblemStatus getUserProblemStatus(String userID, int problemIndex)
+	UserProblemStatusACM getUserProblemStatus(String userID, int problemIndex)
 	{
 		for (int i = 0; i < rows.length; i++)
 			if (rows[i].userID.equalsIgnoreCase(userID))
-				return rows[i].problemData[problemIndex];
+				return rows[i].acmData[problemIndex];
 		return null;
 	}
 }

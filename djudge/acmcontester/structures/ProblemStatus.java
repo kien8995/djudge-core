@@ -56,7 +56,7 @@ public class ProblemStatus extends HashMapSerializable
 		return map;
 	}	
 	
-	public void addUser(UserProblemStatus ups)
+	public void addUser(UserProblemStatusACM ups)
 	{
 		if (ups.wasSolved)
 		{

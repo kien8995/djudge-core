@@ -9,8 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import djudge.acmcontester.interfaces.TeamXmlRpcInterface;
-import djudge.acmcontester.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
+import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 
 public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateVisualizer
