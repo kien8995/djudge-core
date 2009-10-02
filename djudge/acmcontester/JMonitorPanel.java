@@ -67,9 +67,9 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		@Override
 		public int getColumnCount()
 		{
-			if (data.rows.length > 0)
+			if (data.teams.length > 0)
 			{
-				return data.rows[0].acmData.length + 3;
+				return data.teams[0].acmData.length + 3;
 			}
 			return 0;
 		}
@@ -77,7 +77,7 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		@Override
 		public int getRowCount()
 		{
-			return data.rows.length;
+			return data.teams.length;
 		}
 
 		@Override
@@ -85,19 +85,19 @@ public class JMonitorPanel extends JPanel implements ActionListener
 		{
 			if (arg1 == 0)
 			{
-				return data.rows[arg0].username;
+				return data.teams[arg0].username;
 			}
 			else if (arg1 == 1)
 			{
-				return data.rows[arg0].totalSolved;
+				return data.teams[arg0].totalSolved;
 			}
 			else if (arg1 == 2)
 			{
-				return data.rows[arg0].totalTime;
+				return data.teams[arg0].totalTime;
 			}
 			else
 			{
-				return data.rows[arg0].acmData[arg1 - 3];
+				return data.teams[arg0].acmData[arg1 - 3];
 			}
 		}
 	}

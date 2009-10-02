@@ -149,6 +149,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		if (!usersModel.isAdmin(username, password))
 			return null;
 		
+		//FIXME
 		return monitorModel.getMonitorIOI(getContestTimeElapsed(username, password));
 	}
 	

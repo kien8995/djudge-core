@@ -20,13 +20,13 @@ public class MonitorModel
 {
 	private void sortMonitor(MonitorData monitor, Comparator<MonitorUserStatus> viewComparator, Comparator<MonitorUserStatus> placesComparator)
 	{
-		Arrays.sort(monitor.rows, viewComparator);
+		Arrays.sort(monitor.teams, viewComparator);
 		int place = 0;
-		for (int i = 0; i < monitor.rows.length; i++)
+		for (int i = 0; i < monitor.teams.length; i++)
 		{
-			if (i == 0 || placesComparator.compare(monitor.rows[i], monitor.rows[i-1]) != 0)
+			if (i == 0 || placesComparator.compare(monitor.teams[i], monitor.teams[i-1]) != 0)
 				place++;
-			monitor.rows[i].place = place;
+			monitor.teams[i].place = place;
 		}
 	}
 	
@@ -102,7 +102,6 @@ public class MonitorModel
 					rs = st.executeQuery(pending);
 					if (rs.next())
 					{
-						System.out.println(rs.getString(1));
 						res.isPending = true;
 					}
 					else
@@ -118,12 +117,11 @@ public class MonitorModel
 			{
 				e.printStackTrace();
 			}
-			
 		}
 		return res;
 	}
 	
-	private boolean getUserProblemStatusPending(long contestTime, String userID, String problemID)
+	private boolean getUserProblemStatusPendingIOI(long contestTime, String userID, String problemID)
 	{
 		Connection conn = Settings.getConnection();
 		Statement st;
@@ -205,12 +203,12 @@ public class MonitorModel
 	{
 		MonitorData md = new MonitorData();
 		md.contestTime = contestTime;
-		md.rows = new MonitorUserStatus[users.length];
+		md.teams = new MonitorUserStatus[users.length];
 		ProblemData[] pr = ContestServer.getCore().getProblemsModel().getRows().toArray(new ProblemData[0]);
-		md.problemData = new ProblemStatus[pr.length];
+		md.problems = new ProblemStatus[pr.length];
 		for (int i = 0; i < pr.length; i++)
 		{
-			md.problemData[i] = new ProblemStatus(pr[i].sid);
+			md.problems[i] = new ProblemStatus(pr[i].sid);
 		}
 		for (int i = 0; i < users.length; i++)
 		{
@@ -223,6 +221,7 @@ public class MonitorModel
 			{
 				UserProblemStatusACM acmStat = getUserProblemStatisticsACM(contestTime, users[i].id, pr[ipr].id);
 				UserProblemStatusIOI ioiStat = getUserProblemStatisticsIOI(contestTime, users[i].id, pr[ipr].id);
+				ioiStat.isPending = getUserProblemStatusPendingIOI(contestTime, users[i].id, pr[ipr].id);
 				mr.acmData[ipr] = acmStat;
 				mr.ioiData[ipr] = ioiStat;
 				if (acmStat.wasSolved)
@@ -234,22 +233,14 @@ public class MonitorModel
 				}
 				mr.totalScore += ioiStat.score;
 				mr.totalAttempts += acmStat.wrongTryes;
-				md.problemData[ipr].addUser(acmStat);
+				md.problems[ipr].addUser(acmStat);
 			}
-			md.rows[i] = mr;
+			md.teams[i] = mr;
 		}
 		for (int i = 0; i < pr.length; i++)
 		{
-			md.totalAC += md.problemData[i].totalACCount;
-			md.totalSubmitted += md.problemData[i].totalSubmissionsCount;
-		}
-		Arrays.sort(md.rows);
-		int place = 0;
-		for (int i = 0; i < md.rows.length; i++)
-		{
-			if (i == 0 || md.rows[i].compareTo(md.rows[i-1]) != 0)
-				place++;
-			md.rows[i].place = place;
+			md.totalAC += md.problems[i].totalACCount;
+			md.totalSubmitted += md.problems[i].totalSubmissionsCount;
 		}
 		return md;
 	}

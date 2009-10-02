@@ -19,7 +19,7 @@ public class RemoteTableSubmissions extends AbstractRemoteTable
 	protected AbstractRemoteRow[] getRows()
 	{
 		return HashMapSerializer.deserializeFromHashMapArray(
-				getConnector().getTeamSubmissions(
+				getConnector().getSubmissions(
 						getAuthentificationData().getUsername(),
 						getAuthentificationData().getPassword()),
 				SubmissionData.class).toArray(new SubmissionData[0]);

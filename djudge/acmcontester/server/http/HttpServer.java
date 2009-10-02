@@ -1,6 +1,11 @@
 package djudge.acmcontester.server.http;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -9,6 +14,8 @@ import utils.NanoHTTPD;
 
 import djudge.acmcontester.server.XMLSettings;
 import djudge.acmcontester.server.interfaces.ServerNativeInterface;
+import djudge.acmcontester.structures.MonitorData;
+import djudge.utils.CachedObject;
 import djudge.utils.HtmlUtils;
 
 public class HttpServer extends NanoHTTPD implements Runnable
@@ -24,6 +31,38 @@ public class HttpServer extends NanoHTTPD implements Runnable
 	private final String password;
 	
 	private final String serverEchoString = "Hello from " + this.toString();
+	
+	private final CachedMonitor monitor = new CachedMonitor();
+	
+	private class CachedMonitor extends CachedObject
+	{
+		public CachedMonitor()
+		{
+			super(1000 * 100); // 10 seconds
+		}
+		
+		@Override
+		protected boolean updateCache()
+		{
+			try
+			{
+				MonitorData newMonitor = serverConnector.getTeamMonitor(username, password);
+				cachedData = newMonitor;
+				log.info("Cache updated");
+				return true;
+			}
+			catch (Exception e)
+			{
+				log.info("Cache update failed");
+			}
+			return false;
+		}
+		
+		public MonitorData getMonitor()
+		{
+			return (MonitorData) getData();
+		}
+	}
 	
 	public HttpServer(String dataProviderClassName, int port, String username, String password) throws IOException
 	{
@@ -56,6 +95,10 @@ public class HttpServer extends NanoHTTPD implements Runnable
 			log.fatal("Cannot connect to server: ", ex);
 			System.exit(2);
 		}
+		log.info("");
+		log.info("");
+		log.info("");
+		log.info("***********************************");
 		log.info("HttpMirror started at port " + port);
 		log.info("ServerConnector: " + dataProviderClassName + " {" + username + ", " + password + "}");
 	}
@@ -63,52 +106,56 @@ public class HttpServer extends NanoHTTPD implements Runnable
 	public Response serve(String uri, String method, Properties header,
 			Properties parms)
 	{
-		log.info("Request acepted \"" + uri + "\"");
-		String res = "";
-		boolean color = parms.containsKey("color");
-		if (uri.startsWith("/sumatt"))
+		try
 		{
-			res = HtmlUtils.getSumatt(serverConnector.getTeamMonitor(username, password), color);
+    		log.info("Request acepted \"" + uri + "\"");
+    		String res = "";
+    		boolean color = parms.containsKey("color");
+    		if (uri.startsWith("/sumatt"))
+    		{
+    			res = HtmlUtils.getSumatt(monitor.getMonitor(), color);
+    		}
+    		else if (uri.startsWith("/summary"))
+    		{
+    			res = HtmlUtils.getSummary(monitor.getMonitor(), color);
+    		}
+    		else if (uri.startsWith("/monitor") || uri.startsWith("/standings"))
+    		{
+    			res = HtmlUtils.getMonitorACM(monitor.getMonitor(), parms);
+    		}
+    		else if (uri.startsWith("/school_monitor") || uri.startsWith("/school_standings"))
+    		{
+    			res = HtmlUtils.getMonitorIOI(monitor.getMonitor(), parms);
+    		}
+    		else if (uri.startsWith("/submissions") || uri.startsWith("/queue"))
+    		{
+    			res = HtmlUtils.getSubmissions(serverConnector.getTeamSubmissions(username, password), parms);
+    		}
+    		else
+    		{
+    			res = "<html><head><title>Contest index</title></head><body>" +
+    				"<li><a href='/standings?bgcolor=true&txcolor=true&rowcolor=1&info=tt'>ACM-standings</a>" + 
+    				"<li><a href='/school_standings?bgcolor=true&txcolor=true&rowcolor=1&info=tt'>IOI-standings</a> (<a href='/school_standings?bgcolor=true&txcolor=true&rowcolor=1&info=st'>w/time</a>)" + 
+    				"<li><a href='/submissions.html?id=1&contesttime=1&realtime=1&realtime=1&user=1&problem=1&language=1&judgement=1&time=1&memory=1&output=1'>Submissions</a>" + 
+    				"<li>Users<br><br><hr>" +
+    				"PC^2-style reports" + 
+    				"<li><a href='/sumatt.html'>sumatt.html</a>" +
+    				"<li><a href='/summary.html'>summary.html</a>" +
+    				"<li><a href='/sumatt.html'>sumatt.html</a>" +
+    				"<li><a href='/sumatt.html'>sumatt.html</a>" +
+    					"</body></html>";
+    		}
+    		return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, res);
 		}
-		else if (uri.startsWith("/summary"))
+		catch (Exception e)
 		{
-			res = HtmlUtils.getSummary(serverConnector.getTeamMonitor(username, password), color);
+			log.debug("Exceprion while processing request");
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(os);
+			e.printStackTrace(ps);
+			return new NanoHTTPD.Response(HTTP_INTERNALERROR, MIME_HTML, "<html><body><h1>Internal server error</h1><font color='red'>" + new String(os.toByteArray()) + "</font></body></html>");
 		}
-		else if (uri.startsWith("/monitor") || uri.startsWith("/standings"))
-		{
-			res = HtmlUtils.getMonitor(serverConnector.getTeamMonitor(username, password), parms);
-		}
-		else if (uri.startsWith("/submissions") || uri.startsWith("/queue"))
-		{
-			res = HtmlUtils.getSubmissions(serverConnector.getTeamSubmissions(username, password), parms);
-		}
-		else
-		{
-			res = "<html><head><title>Contest index</title></head><body>" +
-				"<li><a href='/standings?bgcolor=true&txcolor=true&rowcolor=1&info=tt'>Standings</a>" + 
-				"<li><a href='/submissions.html?id=1&contesttime=1&realtime=1&realtime=1&user=1&problem=1&language=1&judgement=1&time=1&memory=1&output=1'>Submissions</a>" + 
-				"<li>Users<br><br><hr>" +
-				"PC^2-style reports" + 
-				"<li><a href='/sumatt.html'>sumatt.html</a>" +
-				"<li><a href='/summary.html'>summary.html</a>" +
-				"<li><a href='/sumatt.html'>sumatt.html</a>" +
-				"<li><a href='/sumatt.html'>sumatt.html</a>" +
-					"</body></html>";
-		}
-/*		System.out.println(method + " '" + uri + "' ");
-		String msg = "<html><body><h1>Hello server</h1>\n";
-		if (parms.getProperty("username") == null)
-			msg += "<form action='?' method='get'>\n"
-					+ "  <p>Your name: <input type='text' name='username'></p>\n"
-					+ "</form>\n";
-		else
-			msg += "<p>Hello, " + parms.getProperty("username") + "!</p>";
-
-		msg += "</body></html>\n";*/
-		return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, res);
 	}
-
-	
 	
 	@Override
 	public void run()
@@ -117,14 +164,12 @@ public class HttpServer extends NanoHTTPD implements Runnable
 		{
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 			} catch (InterruptedException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("Error while Thread.sleep", e);
 			}
 		}
-		
 	}	
 	
 	public static void main(String[] args)
