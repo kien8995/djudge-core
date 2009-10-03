@@ -10,7 +10,7 @@ import org.xml.sax.SAXParseException;
 import utils.PrintfFormat;
 import utils.StringWorks;
 import utils.XmlWorks;
-import djudge.common.settings;
+import djudge.common.Settings;
 import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
@@ -44,7 +44,7 @@ public class ProblemDescription extends AbstractDescription
 	{
 		try
 		{
-			problemRoot = settings.getProblemsDir() + contestID + "/" + problemID + "/";
+			problemRoot = Settings.getProblemsDir() + contestID + "/" + problemID + "/";
 			String problemXML = problemRoot + "problem.xml";
 			readXML(XmlWorks.getDocumentE(problemXML).getDocumentElement());
 		} catch (SAXParseException e)
@@ -322,7 +322,7 @@ public class ProblemDescription extends AbstractDescription
 	
 	public boolean save()
 	{
-		String problemRoot = settings.getProblemsDir() + problemInfo.contestID + "/" + problemInfo.problemID + "/";
+		String problemRoot = Settings.getProblemsDir() + problemInfo.contestID + "/" + problemInfo.problemID + "/";
 		String problemXML = problemRoot + "problem.xml";
 		saveXML(problemXML);
 		return true;

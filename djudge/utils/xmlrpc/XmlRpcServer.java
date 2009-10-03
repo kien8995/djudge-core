@@ -1,4 +1,4 @@
-package djudge.dservice;
+package djudge.utils.xmlrpc;
 
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 import org.apache.xmlrpc.server.XmlRpcStreamServer;
@@ -7,42 +7,42 @@ import org.apache.xmlrpc.webserver.WebServer;
 
 public class XmlRpcServer extends Thread
 {
-	private int port;
+	private final WebServer webServer;
 	
-	private WebServer webServer;
-	
-	private String serviceName;
-	
-	public XmlRpcServer(String serviceName, int port)
+	public XmlRpcServer(String serviceName, int port, Class<? extends Object> stubClass) 
 	{
-		this.port = port;
-		this.serviceName = serviceName;
-	}
-	
-	@Override
-	public void run()
-	{	
+		webServer = new WebServer(port);
 		try
 		{
-			webServer = new WebServer(port);
-
 			XmlRpcStreamServer xmlRpcServer = webServer.getXmlRpcServer();
 
 			PropertyHandlerMapping phm = new PropertyHandlerMapping();
 
-			phm.addHandler(serviceName, DServiceStub.class);
+			phm.addHandler(serviceName, stubClass);
 
 			xmlRpcServer.setHandlerMapping(phm);
 
 			XmlRpcServerConfigImpl serverConfig = (XmlRpcServerConfigImpl) xmlRpcServer.getConfig();
 			serverConfig.setEnabledForExtensions(true);
 			serverConfig.setContentLengthOptional(false);
-
-			webServer.start();
 		}
 		catch (Exception exc)
 		{
 			exc.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void run()
+	{
+		try
+		{
+			webServer.start();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }
+

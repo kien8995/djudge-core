@@ -8,35 +8,55 @@ public class XmlRpcConnector extends HashMapSerializer
 {
 	private static final Logger log = Logger.getLogger(XmlRpcConnector.class);
 	
-	protected final String serviceName;
+	private final int defaultConnectionTimeout = 2000;
 	
-	protected final String serviceURL;
+	private final int defaultReplyTimeout = 2000;
+	
+	private final String serviceName;
+	
+	private final String serviceURL;
 	
 	private XmlRpcStateVisualizer vizi;
 	
-	protected XmlRpcClient client;
+	private XmlRpcClient client;
 	
 	public XmlRpcConnector(String serviceName, String serviceUrl)
 	{
-		this(serviceName, serviceUrl, null);
+		this.serviceURL = serviceUrl;
+		this.serviceName = serviceName;
+		initConnector(serviceName, serviceUrl, defaultConnectionTimeout, defaultReplyTimeout);
 	}
 	
 	public XmlRpcConnector(String serviceName, String serviceUrl, XmlRpcStateVisualizer vizi)
 	{
-		this.vizi = vizi;
 		this.serviceURL = serviceUrl;
 		this.serviceName = serviceName;
+		initConnector(serviceName, serviceUrl, defaultConnectionTimeout, defaultReplyTimeout);
+		setVizi(vizi);
+	}
+	
+	public XmlRpcConnector(String serviceName, String serviceUrl, int connectionTimeout, int replyTimeout)
+	{
+		this.serviceURL = serviceUrl;
+		this.serviceName = serviceName;
+		initConnector(serviceName, serviceUrl, connectionTimeout, replyTimeout);
+	}	
+	
+	private void initConnector(String serviceName, String serviceUrl, int connectionTimeout, int replyTimeout)
+	{
 		try
 		{
-			client = RPCClientFactory.getRPCClient(serviceURL);
-			log.info("XmlRpcConnector connected to " + serviceName + " @ " + serviceURL);
+			client = RPCClientFactory.getRPCClient(serviceURL, connectionTimeout, replyTimeout);
+			log.info("XmlRpcConnector connected to " + serviceName + " @ "
+					+ serviceURL + "; timeouts: " + connectionTimeout + ", "
+					+ replyTimeout);
 		}
 		catch (Exception ex)
 		{
 			log.fatal("Connection to " + serviceName + " @ " + serviceURL + " failed", ex);
 		}
 	}
-
+	
 	protected Object callRemoteMethod(String methodName, Object... params)
 	{
 		Object result = null;
@@ -44,9 +64,9 @@ public class XmlRpcConnector extends HashMapSerializer
 		{
 			if (vizi != null)
 				vizi.beforeMethodCall();
-			log.info("Calling " + methodName + " with params " + params);
-			result = client.execute(methodName, params);
-			log.info("Result: " + result.toString());
+			log.debug("Calling " + serviceName + "." + methodName + " with params " + params);
+			result = client.execute(serviceName + "." + methodName, params);
+			log.debug("Result: " + (result != null ? result.toString() : "<null>"));
 			if (vizi != null)
 				vizi.onSuccess();
 		}

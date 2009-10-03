@@ -16,6 +16,8 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 {
 	private static final Logger log = Logger.getLogger(DServiceCore.class);
 	
+	private static final String dataPath = "data/dservice";
+	
 	/*
 	public static String createUser(String username, String password)
 	{
@@ -81,7 +83,7 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 				
 		executeSql(sql);
 		int id = getLastSubmissionID();
-		RemoteFS.writeContent(source, "data/" + DService.serviceName + "/sources/" + formatNumber(id) + ".txt");
+		RemoteFS.writeContent(source, dataPath + "/sources/" + formatNumber(id) + ".txt");
 		
 		return id;
 	}
@@ -99,14 +101,14 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 		DServiceTask task = getTaskInternal(judgeID);
 		if (task == null)
 			return null;
-		task.source = RemoteFS.readContent("data/" + DService.serviceName + "/sources/" + formatNumber(task.id) + ".txt");
+		task.source = RemoteFS.readContent(dataPath + "/sources/" + formatNumber(task.id) + ".txt");
 		log.info("" + formatNumber(task.id) + " was sent");
 		return task;
 	}
 	
 	public boolean setTaskResult(int taskID, String judgement, String xmlData)
 	{
-		RemoteFS.writeContent(xmlData, "data/" + DService.serviceName + "/sources/" + formatNumber(taskID) + ".xml");
+		RemoteFS.writeContent(xmlData, dataPath + "/sources/" + formatNumber(taskID) + ".xml");
 		String sql = "UPDATE submissions SET judgement = '" + judgement + "', judge_status = 1 WHERE id = " + taskID;
 		executeSql(sql);
 		return true;
@@ -125,7 +127,7 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
     		res.languageId = rs.getString("language");
     		res.dateTime = rs.getString("date");
     		res.judgement = rs.getString("judgement");
-    		res.xml = RemoteFS.readContent("data/" + DService.serviceName + "/sources/" + formatNumber(submissionId) + ".xml");
+    		res.xml = RemoteFS.readContent(dataPath + "/sources/" + formatNumber(submissionId) + ".xml");
 		}
 		catch (Exception ex)
 		{
