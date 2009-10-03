@@ -1,17 +1,12 @@
 package djudge.utils.xmlrpc;
 
-
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
 
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 
 public abstract class AbstractRemoteTable extends AbstractDataTable
 {
-	private static final Logger log = Logger.getLogger(AbstractRemoteTable.class);
-	
 	private ServerXmlRpcInterface serverConnector;
 	
 	private AuthentificationData authData;

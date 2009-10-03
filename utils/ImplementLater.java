@@ -1,4 +1,4 @@
-package djudge.common;
+package utils;
 
 public @interface ImplementLater
 {

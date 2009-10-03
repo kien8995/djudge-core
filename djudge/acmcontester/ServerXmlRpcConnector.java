@@ -1,7 +1,7 @@
 package djudge.acmcontester;
 
-import java.util.HashMap;
 
+import java.util.HashMap;
 import djudge.acmcontester.server.interfaces.ServerCommonInterface;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
@@ -26,8 +26,8 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	static
 	{
 		XMLSettings settings = new XMLSettings(ServerXmlRpcConnector.class);
-		serviceName = settings.getString("server-service", defaultServiceName);
-		serverURL = settings.getString("server-url", defaultServiceUrl);
+		serviceName = settings.getString("service-name", defaultServiceName);
+		serverURL = settings.getString("service-url", defaultServiceUrl);
 	}
 	
 	public ServerXmlRpcConnector()
@@ -44,7 +44,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public HashMap<String, String>[] getTeamProblems(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getTeamProblems", params);
+		Object remoteResult = callRemoteMethod("getTeamProblems", params);
 		return objectToHashMapArray(remoteResult);
 	}
 
@@ -52,7 +52,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public boolean enterContestTeam(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".enterContestTeam", params);
+		Object remoteResult = callRemoteMethod("enterContestTeam", params);
 		return (Boolean) remoteResult;
 	}
 
@@ -60,7 +60,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public String registerTeam(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".registerTeam", params);
+		Object remoteResult = callRemoteMethod("registerTeam", params);
 		return (String) remoteResult;
 	}
 
@@ -68,7 +68,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public HashMap<String, String>[] getTeamSubmissions(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getTeamSubmissions", params);
+		Object remoteResult = callRemoteMethod("getTeamSubmissions", params);
 		return objectToHashMapArray(remoteResult);
 	}
 
@@ -77,59 +77,59 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 			String problemID, String languageID, String sourceCode)
 	{
 		Object[] params = {username, password, problemID, languageID, sourceCode};
-		return (Boolean) callRemoteMethod(serviceName + ".submitSolution", params);
+		return (Boolean) callRemoteMethod("submitSolution", params);
 	}
 
 	@Override
 	public HashMap<String, String>[] getTeamLanguages(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object res = callRemoteMethod(serviceName + ".getTeamLanguages", params);
+		Object res = callRemoteMethod("getTeamLanguages", params);
 		return objectToHashMapArray(res);
 	}
 
 	@Override
 	public String getVersion()
 	{
-		return (String) callRemoteMethod(serviceName + ".getVersion", new Object[] {});
+		return (String) callRemoteMethod("getVersion", new Object[] {});
 	}
 	
 	@Override
 	public String echo(String what)
 	{
-		return (String) callRemoteMethod(serviceName + ".echo", new Object[] {what});
+		return (String) callRemoteMethod("echo", new Object[] {what});
 	}
 
 	@Override
 	public String getContestStatus(String username, String password)
 	{
-		return (String) callRemoteMethod(serviceName + ".getContestStatus", new Object[] {username, password});
+		return (String) callRemoteMethod("getContestStatus", new Object[] {username, password});
 	}
 
 	@Override
 	public long getContestTimeElapsed(String username, String password)
 	{
-		return (Long) callRemoteMethod(serviceName + ".getContestTimeElapsed", new Object[] {username, password});
+		return (Long) callRemoteMethod("getContestTimeElapsed", new Object[] {username, password});
 	}
 
 	@Override
 	public long getContestTimeLeft(String username, String password)
 	{
-		return (Long) callRemoteMethod(serviceName + ".getContestTimeLeft", new Object[] {username, password});
+		return (Long) callRemoteMethod("getContestTimeLeft", new Object[] {username, password});
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap getTeamMonitor(String username, String password)
 	{
-		return (HashMap) callRemoteMethod(serviceName + ".getTeamMonitor", new Object[] {username, password});
+		return (HashMap) callRemoteMethod("getTeamMonitor", new Object[] {username, password});
 	}
 
 	@Override
 	public boolean changePasswordTeam(String username, String oldPassword,
 			String newPassword)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".changePasswordTeam", username, oldPassword, newPassword);
+		return (Boolean) callRemoteMethod("changePasswordTeam", username, oldPassword, newPassword);
 	}
 	
 	@Override
@@ -137,7 +137,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 			String shortName, String fullName, String compilationComand,
 			String djudgeID)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".addLanguage", username, password, sid, shortName, fullName, compilationComand, djudgeID);
+		return (Boolean) callRemoteMethod("addLanguage", username, password, sid, shortName, fullName, compilationComand, djudgeID);
 	}
 
 	@Override
@@ -145,33 +145,33 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 			String sid, String shortName, String fullName,
 			String compilationComand, String djudgeID)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".editLanguage", username, password, id, sid, shortName, fullName, compilationComand, djudgeID);
+		return (Boolean) callRemoteMethod("editLanguage", username, password, id, sid, shortName, fullName, compilationComand, djudgeID);
 	}
 
 	@Override
 	public boolean deleteLanguage(String username, String password, String id)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteLanguage", username, password, id);	
+		return (Boolean) callRemoteMethod("deleteLanguage", username, password, id);	
 	}
 
 	@Override
 	public boolean addUser(String username, String password,
 			String newUserName, String newPassword, String name, String role)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".addUser", username, password, newUserName, newPassword, name, role);
+		return (Boolean) callRemoteMethod("addUser", username, password, newUserName, newPassword, name, role);
 	}
 
 	@Override
 	public boolean deleteUser(String username, String password, String id)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteUser", username, password, id);
+		return (Boolean) callRemoteMethod("deleteUser", username, password, id);
 	}
 
 	@Override
 	public HashMap<String, String>[] getUsers(String username, String password)
 	{
 		Object[] params = {username, password};
-		Object remoteResult = callRemoteMethod(serviceName + ".getUsers", params);
+		Object remoteResult = callRemoteMethod("getUsers", params);
 		return objectToHashMapArray(remoteResult);
 	}
 
@@ -179,33 +179,33 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public boolean editUser(String username, String password, String id,
 			String newUserName, String newPassword, String name, String role)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".editUser", username, password, id, newUserName, newPassword, name, role);
+		return (Boolean) callRemoteMethod("editUser", username, password, id, newUserName, newPassword, name, role);
 	}
 
 	@Override
 	public boolean addProblem(String username, String password, String sid,
 			String name, String djudgeProblem, String djudgeContest)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".addProblem", username, password, sid, name, djudgeProblem, djudgeContest);
+		return (Boolean) callRemoteMethod("addProblem", username, password, sid, name, djudgeProblem, djudgeContest);
 	}
 
 	@Override
 	public boolean deleteProblem(String username, String password, String id)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteProblem", username, password, id);
+		return (Boolean) callRemoteMethod("deleteProblem", username, password, id);
 	}
 
 	@Override
 	public boolean editProblem(String username, String password, String id,
 			String sid, String name, String djudgeProblem, String djudgeContest)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".editProblem", username, password, id, sid, name, djudgeProblem, djudgeContest);
+		return (Boolean) callRemoteMethod("editProblem", username, password, id, sid, name, djudgeProblem, djudgeContest);
 	}
 
 	@Override
 	public boolean deleteSubmission(String username, String password, String id)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteSubmission", username, password, id);
+		return (Boolean) callRemoteMethod("deleteSubmission", username, password, id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -213,113 +213,113 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	public boolean editSubmission(String username, String password, String id,
 			HashMap data)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".editSubmission", username, password, id, data);
+		return (Boolean) callRemoteMethod("editSubmission", username, password, id, data);
 	}
 
 	@Override
 	public boolean rejudgeSubmissions(String username, String password,
 			String key, String value)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".rejudgeSubmissions", username, password, key, value);
+		return (Boolean) callRemoteMethod("rejudgeSubmissions", username, password, key, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap[] getSubmissions(String username, String password)
 	{
-		Object remoteResult = callRemoteMethod(serviceName + ".getSubmissions", username, password);
+		Object remoteResult = callRemoteMethod("getSubmissions", username, password);
 		return objectToHashMapArray(remoteResult);
 	}
 
 	@Override
 	public HashMap[] getLanguages(String username, String password)
 	{
-		Object remoteResult = callRemoteMethod(serviceName + ".getLanguages", username, password);
+		Object remoteResult = callRemoteMethod("getLanguages", username, password);
 		return objectToHashMapArray(remoteResult);
 	}
 
 	@Override
 	public HashMap[] getProblems(String username, String password)
 	{
-		Object remoteResult = callRemoteMethod(serviceName + ".getProblems", username, password);
+		Object remoteResult = callRemoteMethod("getProblems", username, password);
 		return objectToHashMapArray(remoteResult);
 	}
 
 	@Override
 	public HashMap getMonitor(String username, String password)
 	{
-		Object remoteResult = callRemoteMethod(serviceName + ".getMonitor", username, password);
+		Object remoteResult = callRemoteMethod("getMonitor", username, password);
 		return ((MonitorData) remoteResult).toHashMap();
 	}
 
 	@Override
 	public boolean deleteAllLanguages(String username, String password)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteAllLanguages", username, password);
+		return (Boolean) callRemoteMethod("deleteAllLanguages", username, password);
 	}
 
 	@Override
 	public boolean changePassword(String username, String oldPassword,
 			String newPassword)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".changePassword", username, oldPassword, newPassword);
+		return (Boolean) callRemoteMethod("changePassword", username, oldPassword, newPassword);
 	}
 
 	@Override
 	public boolean deleteAllUsers(String username, String password)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteAllUsers", username, password);
+		return (Boolean) callRemoteMethod("deleteAllUsers", username, password);
 	}
 
 	@Override
 	public boolean deleteAllProblems(String username, String password)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteAllProblems", username, password);
+		return (Boolean) callRemoteMethod("deleteAllProblems", username, password);
 	}
 
 	@Override
 	public boolean deleteAllSubmissions(String username, String password)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteAllSubmissions", username, password);
+		return (Boolean) callRemoteMethod("deleteAllSubmissions", username, password);
 	}
 
 	@Override
 	public boolean deleteAllData(String username, String password)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".deleteAllData", username, password);
+		return (Boolean) callRemoteMethod("deleteAllData", username, password);
 	}
 
 	@Override
 	public boolean setContestFreezeTime(String username, String password,
 			long tillTimeLeft)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".setContestFreezeTime", username, password, tillTimeLeft);
+		return (Boolean) callRemoteMethod("setContestFreezeTime", username, password, tillTimeLeft);
 	}
 
 	@Override
 	public boolean setContestRunning(String username, String password,
 			boolean isRunning)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".setContestRunning", username, password, isRunning);
+		return (Boolean) callRemoteMethod("setContestRunning", username, password, isRunning);
 	}
 
 	@Override
 	public boolean setContestTimeLeft(String username, String password,
 			long timeLeft)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".setContestTimeLeft", username, password, timeLeft);
+		return (Boolean) callRemoteMethod("setContestTimeLeft", username, password, timeLeft);
 	}
 
 	@Override
 	public boolean setContestTimePast(String username, String password,
 			long timePast)
 	{
-		return (Boolean) callRemoteMethod(serviceName + ".setContestTimePast", username, password, timePast);
+		return (Boolean) callRemoteMethod("setContestTimePast", username, password, timePast);
 	}
 
 	@Override
 	public long getContestFreezeTime(String username, String password)
 	{
-		return (Long) callRemoteMethod(serviceName + ".getContestFreezeTime", username, password);
+		return (Long) callRemoteMethod("getContestFreezeTime", username, password);
 	}
 }

@@ -1,17 +1,12 @@
 package djudge.acmcontester.server;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Set;
-import java.net.URL;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 import org.w3c.dom.Element;
 
 import utils.FileWorks;
@@ -24,16 +19,13 @@ import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.dservice.DServiceTaskResult;
-import djudge.utils.XMLSettings;
+import djudge.dservice.DServiceXmlRpcConnector;
+import djudge.dservice.interfaces.DServiceXmlRpcInterface;
 
-public class DServiceConnector extends Thread
+public class ContesterServer2DServiceLink extends Thread
 {
-	private static final Logger log = Logger.getLogger(DServiceConnector.class);
+	private static final Logger log = Logger.getLogger(ContesterServer2DServiceLink.class);
 	
-	private final String serviceName;
-	
-	private final String serverUrl;
-		
 	private final int defaultSleepTime = 1000;
 	
 	private final int failSleepTime = 10000;
@@ -44,9 +36,7 @@ public class DServiceConnector extends Thread
 	
 	static final String submitMutex = "mutex";
 	
-	XmlRpcClient client;
-	
-	
+	static final DServiceXmlRpcInterface serverConnector = new DServiceXmlRpcConnector();
 	
 	private void updateSubmissionResult(DServiceTaskResult tr)
 	{
@@ -69,35 +59,6 @@ public class DServiceConnector extends Thread
 		sd.failedTest = wrongTest;
 		sd.score = score;
 		sdm.setRowData(0, sdm.toRow(sd).data);
-	}
-	
-	public DServiceConnector()
-	{
-		XMLSettings settings = new XMLSettings(this.getClass());
-		serverUrl = settings.getProperty("dservice-url");
-		serviceName = settings.getProperty("dservice-name");
-		int connectionTimeout = settings.getInt("connnection-timeout", 5000);
-		int replyTimeout = settings.getInt("reply-timeout", 5000);
-		try
-		{
-    		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-    		config.setServerURL(new URL(serverUrl));
-    		config.setEnabledForExtensions(true);
-    		config.setConnectionTimeout(connectionTimeout);
-    		config.setReplyTimeout(replyTimeout);
-    
-    		client = new XmlRpcClient();
-    		
-    		client.setTransportFactory(new XmlRpcCommonsTransportFactory(client));
-    		
-    		client.setConfig(config);
-    		
-    		log.info("AcmContester.DService Connector started (" + serviceName + " at " + serverUrl + ")");
-		}
-		catch (Exception ex)
-		{
-			log.error("DServiceConnector start failed", ex);
-		}
 	}
 	
 	public void run()
@@ -140,23 +101,9 @@ public class DServiceConnector extends Thread
 	    			ldm.updateData();
 	    			LanguageData ld = ldm.getRows().get(0);
 	    			
-	    			// building parameters array
-	    			Vector <Object> t = new Vector<Object>();
-	    			// DService client's ID 
-	    			t.add("simpleacm");
-	    			// djudge_contets
-	    			t.add(pd.djudgeContest);
-	    			// djudge_problem
-	    			t.add(pd.djudgeProblem);
-	    			// djudge_language
-	    			t.add(ld.djudgeID);
-	    			// course code (Base64 encoded)
-	    			t.add(new String(Base64.decodeBase64(sd.sourceCode.getBytes())));
-	    			// user's data
-	    			t.add(sd.id);
 	    			try
 	    			{
-	    				int result = (Integer) client.execute(serviceName + ".submitSolution", t.toArray());
+	    				Integer result = serverConnector.submitSolution("simpleacm", pd.djudgeContest, pd.djudgeProblem, ld.id, new String(Base64.decodeBase64(sd.sourceCode.getBytes())), sd.id);
 	    				if (result > 0)
 	    				{
 	    					sentIDs.add(sd.id);
@@ -173,17 +120,15 @@ public class DServiceConnector extends Thread
 	    				sdm.getRow(i).save();
 	    				ContestServer.getCore().getSubmissionsDataModel().updateData();
 	    			}
-	    			catch (XmlRpcException ex)
+	    			catch (Exception ex)
 	    			{
+	    				///Change to vizi
 	    				if (flagConnected)
 	    				{
-	    					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
+	    					//log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
 	    					flagConnected = false;
 	    					currentSleepTime = failSleepTime;
 	    				}
-	    			}
-	    			catch (Exception ex)
-	    			{
 	    				log.warn("Error while connecting", ex);
 	    			}
 				}
@@ -191,7 +136,7 @@ public class DServiceConnector extends Thread
 			/* Fetching results from judge */
 			try
 			{
-				Object obj = client.execute(serviceName + ".fetchResults", new Object[] {"simpleacm"});
+				Object obj = serverConnector.fetchResults("simpleacm");
 				Object[] array = (Object[]) obj;
 				if (array != null)
 				{
@@ -206,20 +151,17 @@ public class DServiceConnector extends Thread
 				}
 				flagConnected = true;
 			}
-			catch (XmlRpcException ex)
+			catch (Exception ex)
 			{
 				if (flagConnected)
 				{
-					log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
+					// TODO: vizi
+					//log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
 					flagConnected = false;
 					currentSleepTime = failSleepTime;
 				}
-			}
-			catch (Exception ex)
-			{
 				log.warn("Error while connecting", ex);
 			}
-			
 			// Delay before next connection
 			try
 			{

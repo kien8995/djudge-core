@@ -5,35 +5,35 @@ import java.util.HashMap;
 import djudge.dservice.interfaces.DServiceXmlRpcInterface;
 import djudge.utils.xmlrpc.HashMapSerializer;
 
-public class DServiceStub implements DServiceXmlRpcInterface
+public class DServiceXmlRpcStub implements DServiceXmlRpcInterface
 {
 
 	@Override
 	public int submitSolution(String uid, String contestId, String problemId,
 			String languageId, String source, String clientData)
 	{
-		return DService.getCore().submitSolution(uid, contestId, problemId, languageId, source, clientData);
+		return DServiceServer.getCore().submitSolution(uid, contestId, problemId, languageId, source, clientData);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap[] fetchResults(String uid)
 	{
-		return HashMapSerializer.serializeToHashMapArray(DService.getCore().fetchResults(uid));
+		return HashMapSerializer.serializeToHashMapArray(DServiceServer.getCore().fetchResults(uid));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap getTask(int judgeID)
 	{
-		DServiceTask task = DService.getCore().getTask(judgeID);
+		DServiceTask task = DServiceServer.getCore().getTask(judgeID);
 		return task == null ? null : task.toHashMap();
 	}
 
 	@Override
 	public boolean setTaskResult(int taskID, String judgement, String xmlData)
 	{
-		return DService.getCore().setTaskResult(taskID, judgement, xmlData);
+		return DServiceServer.getCore().setTaskResult(taskID, judgement, xmlData);
 	}
 	
 	/*

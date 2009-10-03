@@ -16,7 +16,7 @@ import utils.FileWorks;
 
 
 import djudge.common.Loggable;
-import djudge.common.settings;
+import djudge.common.Settings;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.dexecutor.ExecutorProgram;
@@ -61,7 +61,7 @@ public class Language extends Loggable
 		CompilerResult res = new CompilerResult();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         String id = dateFormat.format(new Date());
-		String tempDir = settings.getWorkDir() + id + "/";
+		String tempDir = Settings.getWorkDir() + id + "/";
 		try
 		{
 			task.files.unpack(tempDir);

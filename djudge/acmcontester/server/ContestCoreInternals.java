@@ -37,7 +37,7 @@ public class ContestCoreInternals
 	
 	protected final ContestState state = new ContestState(contest);
 	
-	protected DServiceConnector djudgeInterface;
+	protected ContesterServer2DServiceLink djudgeInterface;
 	
 	protected void initCore(boolean flagStandalone)
 	{
@@ -55,7 +55,7 @@ public class ContestCoreInternals
 		
 		if (flagStandalone)
 		{
-			djudgeInterface = new DServiceConnector();
+			djudgeInterface = new ContesterServer2DServiceLink();
 			djudgeInterface.start();
 		}
 		
