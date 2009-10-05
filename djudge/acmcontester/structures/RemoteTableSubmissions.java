@@ -36,9 +36,9 @@ public class RemoteTableSubmissions extends AbstractRemoteTable
 		return 1;
 	}
 	
-	public final static int getProblemFieldIndex()
+	public final static int getProblemIDFieldIndex()
 	{
-		return 2;
+		return 18;
 	}
 	
 	public final static int getLanguageFieldIndex()
@@ -90,5 +90,11 @@ public class RemoteTableSubmissions extends AbstractRemoteTable
 	public final static int getScoreFieldIndex()
 	{
 		return 11;
-	}	
+	}
+	
+	@Override
+	public boolean isCellEditable(int arg0, int arg1)
+	{
+		return false;
+	}
 }

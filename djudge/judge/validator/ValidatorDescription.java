@@ -59,6 +59,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 		else if (s.equals("@INT64")) res = ValidatorType.InternalInt64;
 		else if (s.equals("@FLOAT")) res = ValidatorType.InternalFloatAbs;
 		else if (s.equals("@FLOAT2")) res = ValidatorType.InternalFloatAbsRel;
+		else if (s.equals("@FLOAT_SKIP")) res = ValidatorType.InternalFloatOther;
 		else if (s.equals("%STDLIB")) res = ValidatorType.ExternalTestLib;
 		else if (s.equals("%PC2")) res = ValidatorType.ExternalPC2;
 		else if (s.equals("%EXITCODE")) res = ValidatorType.ExternalExitCode;

@@ -74,7 +74,7 @@ public class XmlRpcConnector extends HashMapSerializer
 		{
 			if (vizi != null)
 				vizi.onFailure();
-			log.warn("Call failed", ex);
+			log.debug("Call failed", ex);
 		}
 		return result;
 	}

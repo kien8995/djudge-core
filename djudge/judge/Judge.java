@@ -1,9 +1,12 @@
 package djudge.judge;
 
+import org.apache.log4j.Logger;
+
 import utils.DirectoryResult;
 import utils.FileWorks;
 import utils.HtmlWorks;
 import utils.JudgeDirectory;
+import utils.Scripts;
 
 
 import djudge.common.Settings;
@@ -25,6 +28,8 @@ import djudge.judge.validator.ValidationResult;
 
 public class Judge
 {
+	private static final Logger log = Logger.getLogger(Judge.class);
+	
 	/*
 	public static void checkProblem(String contestId, String problemId)
 	{
@@ -399,6 +404,7 @@ public class Judge
 	
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem)
 	{
+		log.info("Judging file " + file);
 		RemoteFS.startSession();
 		SubmissionResult res = new SubmissionResult(problem);
 		res.comment = file;
@@ -418,6 +424,7 @@ public class Judge
 			res.setProblemResult(pres);
 		}
 		RemoteFS.clearSession();
+		log.info("Judgement: " + res.result);
 		return res;
 	}
 

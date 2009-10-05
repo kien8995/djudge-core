@@ -181,7 +181,7 @@ public class SubmissionData extends HashMapSerializable
 		case 15: return djudgeFlag;
 		case 16: return xml;
 		case 17: return username;
-		case 18: return problemSid;
+		case 18: return problemID;
 		case 19: return problemName;
 		case 20: return languageSid;
 		

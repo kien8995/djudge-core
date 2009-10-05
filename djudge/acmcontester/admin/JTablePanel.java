@@ -68,7 +68,7 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				}
 				else if (act.equals("rejudge_problem"))
 				{
-					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getProblemFieldIndex());
+					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getProblemIDFieldIndex());
 					key = "problem_id";
 				}
 				else if (act.equals("rejudge_language"))

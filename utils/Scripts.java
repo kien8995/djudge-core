@@ -19,16 +19,18 @@ package utils;
 import java.io.File;
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
+
 
 import djudge.judge.ProblemDescription;
 import djudge.judge.SubmissionResult;
 import djudge.judge.common_data_structures.ExecutorLimits;
 
 
-
-
 public class Scripts 
 {
+	private static final Logger log = Logger.getLogger(Scripts.class);
+	
 	// TODO Hadrcode
 	public static final String problemsRoot = ".\\problems\\";
 
@@ -39,6 +41,7 @@ public class Scripts
 	
 	public static DirectoryResult generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
 	{
+		log.info("Generating report for problem " + contestId + "-" + problemId);
 		try
 		{
     		ProblemDescription desc = new ProblemDescription(contestId, problemId);

@@ -20,7 +20,7 @@ public class RemoteTableProblems extends AbstractRemoteTable
 	protected AbstractRemoteRow[] getRows()
 	{
 		return HashMapSerializer.deserializeFromHashMapArray(
-				getConnector().getTeamProblems(
+				getConnector().getProblems(
 						getAuthentificationData().getUsername(),
 						getAuthentificationData().getPassword()),
 				ProblemData.class).toArray(new ProblemData[0]);

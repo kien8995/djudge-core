@@ -103,7 +103,7 @@ public class ContesterServer2DServiceLink extends Thread
 	    			
 	    			try
 	    			{
-	    				Integer result = serverConnector.submitSolution("simpleacm", pd.djudgeContest, pd.djudgeProblem, ld.id, new String(Base64.decodeBase64(sd.sourceCode.getBytes())), sd.id);
+	    				Integer result = serverConnector.submitSolution("simpleacm", pd.djudgeContest, pd.djudgeProblem, ld.djudgeID, new String(Base64.decodeBase64(sd.sourceCode.getBytes())), sd.id);
 	    				if (result > 0)
 	    				{
 	    					sentIDs.add(sd.id);
@@ -129,7 +129,7 @@ public class ContesterServer2DServiceLink extends Thread
 	    					flagConnected = false;
 	    					currentSleepTime = failSleepTime;
 	    				}
-	    				log.warn("Error while connecting", ex);
+	    				log.info("Error while connecting", ex);
 	    			}
 				}
 			}
