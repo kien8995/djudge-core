@@ -1,10 +1,16 @@
 package djudge.dservice;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import utils.NanoHTTPD;
+import utils.NanoHTTPD.Response;
 
+import djudge.utils.HtmlUtils;
 import djudge.utils.XMLSettings;
 import djudge.utils.xmlrpc.XmlRpcServer;
 
@@ -48,6 +54,34 @@ public class DServiceServer extends NanoHTTPD
 		return core;
 	}
 	
+	
+	public Response serve(String uri, String method, Properties header,
+			Properties parms)
+	{
+		try
+		{
+    		log.info("Request acepted \"" + uri + "\"");
+    		String res = "";
+    		if (uri.startsWith("/clients"))
+    		{
+    			
+    		}
+    		else
+    		{
+    			res = core.getHtmlPage(uri);
+    		}
+    		return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, res);
+		}
+		catch (Exception e)
+		{
+			log.debug("Exceprion while processing request");
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(os);
+			e.printStackTrace(ps);
+			return new NanoHTTPD.Response(HTTP_INTERNALERROR, MIME_HTML, "<html><body><h1>Internal server error</h1><font color='red'>" + new String(os.toByteArray()) + "</font></body></html>");
+		}
+	}
+		
 	public static void main(String[] args)
 	{
 		try

@@ -41,6 +41,7 @@ public enum ValidatorType
 	InternalFloatAbs,
 	InternalFloatRel,
 	InternalFloatAbsRel,
+	InternalFloatOther,
 	ExternalTestLib,
 	ExternalPC2,
 	ExternalCustom,

@@ -21,9 +21,9 @@ public class ContestServer
 	
 	public static void startServer()
 	{
-		rpcServer = new ContesterXmlRpcServer();
 		core.stopCore();
 		core = new ContestCore(true);
+		rpcServer = new ContesterXmlRpcServer();
 		rpcServer.start();
 	}
 	

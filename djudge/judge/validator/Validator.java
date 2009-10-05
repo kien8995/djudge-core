@@ -67,6 +67,11 @@ public class Validator
 			res = (new Validator_FloatRel(eps3).Validate(input, output, answer));
 			break;
 		
+		case InternalFloatOther:
+			double eps4 = Double.parseDouble(desc.param);
+			res = (new Validator_FloatOther(eps4).Validate(input, output, answer));
+			break;
+		
 		case InternalFloatAbsRel:
 			double eps2 = Double.parseDouble(desc.param);
 			res = (new Validator_FloatAbsRel(eps2).Validate(input, output, answer));

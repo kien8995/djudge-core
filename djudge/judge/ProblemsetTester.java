@@ -32,11 +32,24 @@ import utils.XmlWorks;
 
 
 @SuppressWarnings("unused")
-public class Temp
+public class ProblemsetTester
 {	
+	
 	public static void main(String arg[])
 	{
-		Scripts.generateProblemReport("NCPC-2009", "D");
+		if (arg.length == 1)
+		{
+			Scripts.generateContestReport(arg[0].toString());
+		}
+		else if (arg.length == 2)
+		{
+			Scripts.generateProblemReport(arg[0].toString(), arg[1].toString());
+		}
+		else
+		{
+			System.out.println("Wrong arguments");
+		}
+		
 		
 		//Scripts.generateContestReport("Yokohama-2006");
 	}

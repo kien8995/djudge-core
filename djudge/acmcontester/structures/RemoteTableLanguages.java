@@ -20,7 +20,7 @@ public class RemoteTableLanguages extends AbstractRemoteTable
 	protected AbstractRemoteRow[] getRows()
 	{
 		return HashMapSerializer.deserializeFromHashMapArray(
-				getConnector().getTeamLanguages(
+				getConnector().getLanguages(
 						getAuthentificationData().getUsername(),
 						getAuthentificationData().getPassword()),
 				LanguageData.class).toArray(new LanguageData[0]);

@@ -18,17 +18,21 @@ package djudge.judge.dcompiler;
 
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.*;
 
 import utils.FileWorks;
 
 
 import djudge.common.Loggable;
+import djudge.judge.Judge;
 
 import javax.xml.parsers.*;
 
 public class Compiler extends Loggable
 {
+	private static final Logger log = Logger.getLogger(Compiler.class);
+	
 	private static TreeMap<String, Language> languages = new TreeMap<String, Language>();
 	
 	private static boolean fSetUp = false; 
@@ -49,6 +53,7 @@ public class Compiler extends Loggable
 		fSetUp = true;
 		try
 		{
+			log.info("Setting up compiler");
 	        DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
 	        Document doc = docBuilder.parse(filename);
@@ -57,11 +62,12 @@ public class Compiler extends Loggable
 	        {
 	        	Language l = new Language((Element)lang.item(i));
 	        	languages.put(l.getID(), l);
+	        	log.info("Language added: " + l.getID());
 	        }
 		}
 		catch(Exception exc)
 		{
-			exc.printStackTrace();
+			log.error("Error", exc);
 		}
 	}
 	
@@ -84,6 +90,7 @@ public class Compiler extends Loggable
 		String LanguageID = task.languageId;
 		CompilerResult res = new CompilerResult();
 		String file = task.files.map.keySet().toArray(new String[0])[0];
+		log.info("Compiling file " + file + ", language " + task.languageId);
 		
 		// Empty ID
 		if (LanguageID == null || LanguageID == "")

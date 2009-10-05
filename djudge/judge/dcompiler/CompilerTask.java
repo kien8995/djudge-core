@@ -12,7 +12,7 @@ public class CompilerTask
 	 */
 	String languageId;
 	
-	String mainFile;
+	//String mainFile;
 	
 	public CompilerTask()
 	{
