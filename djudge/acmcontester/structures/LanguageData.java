@@ -87,7 +87,7 @@ public class LanguageData extends HashMapSerializable
 	@Override
 	protected int getColumnCount()
 	{
-		return 6;
+		return 4;
 	}
 
 	@Override
@@ -103,10 +103,10 @@ public class LanguageData extends HashMapSerializable
 		{
 		case 0: return id;
 		case 1: return sid;
-		case 2: return shortName;
-		case 3: return fullName;
-		case 4: return compilationCommand;
-		case 5: return djudgeID;
+		//case 2: return shortName;
+		case 2: return fullName;
+		//case 4: return compilationCommand;
+		case 3: return djudgeID;
 
 		default:
 			return id;
@@ -119,10 +119,10 @@ public class LanguageData extends HashMapSerializable
 		switch (column)
 		{
 		case 1: sid = value; break;
-		case 2: shortName = value; break;
-		case 3: fullName = value; break;
-		case 4: compilationCommand = value; break;
-		case 5: djudgeID = value; break;
+		//case 2: shortName = value; break;
+		case 2: fullName = value; break;
+		//case 4: compilationCommand = value; break;
+		case 3: djudgeID = value; break;
 		}
 	}
 	

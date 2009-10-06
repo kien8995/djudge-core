@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import djudge.acmcontester.structures.RemoteTableSubmissions;
+import djudge.acmcontester.structures.SubmissionData.SubmissionDataColumnsEnum;
 import djudge.gui.Formatter;
 
 class DefaultCellRenderer extends DefaultTableCellRenderer
@@ -58,7 +59,7 @@ class DefaultSubmissionsModelCellRenderer extends DefaultCellRenderer
 		if (sdm == null)
 			return;
 		
-		if (Integer.parseInt(sdm.getValueAt(row, RemoteTableSubmissions.getActiveFlagIndex()).toString()) < 1)
+		if (Integer.parseInt(sdm.getValueAt(row, SubmissionDataColumnsEnum.Active.ordinal()).toString()) < 1)
 		{
 			setForeground(Color.LIGHT_GRAY);
 			setBackground(Color.WHITE);

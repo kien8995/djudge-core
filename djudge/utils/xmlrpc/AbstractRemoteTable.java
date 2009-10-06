@@ -50,6 +50,20 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 		row.setValueAt(arg0, arg2);
 	}
 	
+	@Override
+	public String getColumnName(int arg0)
+	{
+		String[] names = getColumnNames();
+		if (names == null)
+			return "" + arg0;
+		return names[arg0];
+	}
+	
+	protected String[] getColumnNames()
+	{
+		return null;
+	}
+	
 	public AbstractRemoteTable(ServerXmlRpcInterface serverConnector, AuthentificationData authData)
 	{
 		this.serverConnector = serverConnector;

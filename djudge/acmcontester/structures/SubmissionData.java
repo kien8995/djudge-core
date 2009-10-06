@@ -149,7 +149,7 @@ public class SubmissionData extends HashMapSerializable
 	@Override
 	protected int getColumnCount()
 	{
-		return 17;
+		return 12;
 	}
 
 	@Override
@@ -158,6 +158,31 @@ public class SubmissionData extends HashMapSerializable
 		return RemoteTableSubmissions.class;
 	}
 
+	public enum SubmissionDataColumnsEnum
+	{
+		ID,
+		Username,
+		ProblemSID,
+		LanguageSID,
+		ContestTime,
+		RealTime,
+		Judgement,
+		MaxTime,
+		MaxMemory,
+		FailedTest,
+		Score,
+		DJudgeFlag,
+		MaxOutput,
+		Judged,
+		Active,
+		SourceCode,
+		Xml,
+		ProblemID,
+		ProblemName,
+		LanguageID,
+		UserID,
+	}
+	
 	@Override
 	protected Object getValueAt(int column)
 	{
@@ -172,25 +197,32 @@ public class SubmissionData extends HashMapSerializable
 		case 6: return judgement;
 		case 7: return maxTime;
 		case 8: return maxMemory;
-		case 9: return maxOutput;
-		case 10: return failedTest;
-		case 11: return score;
-		case 12: return judged;
-		case 13: return active;
-		case 14: return sourceCode;
-		case 15: return djudgeFlag;
+		case 9: return failedTest;
+		case 10: return score;
+		case 11: return djudgeFlag;
+		case 12: return maxOutput;
+		case 13: return judged;
+		case 14: return active;
+		case 15: return sourceCode;
 		case 16: return xml;
 		case 17: return username;
 		case 18: return problemID;
 		case 19: return problemName;
-		case 20: return languageSid;
+		case 20: return languageID;
+		case 21: return userID;
 		
 		default:
 			return id;
 		}
 	}
+
+	protected void setValueAt(int column, String value)
+	{
+		log.fatal("Cannot directly change table Submissions");
+	}
+
 	
-	@Override
+/*	@Override
 	protected void setValueAt(int column, String value)
 	{
 		switch (column)
@@ -217,7 +249,7 @@ public class SubmissionData extends HashMapSerializable
 		case 19: problemName = value; break;
 		case 20: languageSid = value; break;
 		}
-	}
+	}*/
 	
 	@Override
 	protected boolean save()
