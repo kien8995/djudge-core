@@ -114,13 +114,15 @@ public abstract class DBRowAbstract extends SQLAbstract
     		Vector<Object> values = new Vector<Object>();
     		String[] columnKeys = getColumnKeys();
     		DBField[] fields = getTableClass().newInstance().columns;
-    		for (int i = 0; i < getColumnCount() - 1; i++)
+    		for (int i = 0; i < getColumnCount(); i++)
     		{
     			if (fields[i].flagUpdate)
     			{
     				columns.add(columnKeys[i]);
     				values.add(data[i]);
     			}
+    			else
+    				System.out.println("Field "  + fields[i].key + " is not updatable");
     		}
     		setInsert(s, getTableNameForEditing());
     		setValues2(s, columns.toArray(new String[0]), values.toArray());
