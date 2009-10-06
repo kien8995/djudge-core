@@ -18,7 +18,7 @@ import djudge.acmcontester.structures.RemoteTableProblems;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.RemoteTableUsers;
 
-public class AdminClient extends JFrame// implements AuthentificationDataProvider
+public class AdminClient extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 		
 		jtpTabs.add("Start/Stop", new JContestSettingsPanel(serverXmlRpcInterface, authData));
 		
-		jtpTabs.add("Users", usersPanel = new JTablePanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
+		jtpTabs.add("Users", usersPanel = new JUsersPanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
 		
 		jtpTabs.add("Problems", problemsPanel = new JTablePanel(new RemoteTableProblems(serverXmlRpcInterface, authData)));
 		
@@ -101,16 +101,4 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 	{
 		new AdminClient();
 	}
-
-/*	@Override
-	public String getPassword()
-	{
-		return password;
-	}
-
-	@Override
-	public String getUsername()
-	{
-		return username;
-	}*/
 }

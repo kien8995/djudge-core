@@ -9,6 +9,8 @@ interface AdminSubmissionsCommonInterface
 	public boolean deleteSubmission(String username, String password, String id);
 	
 	public boolean deleteAllSubmissions(String username, String password);
+	
+	public boolean activateSubmission(String username, String password, String id, int fActive); 
 }
 
 @SuppressWarnings("unchecked")

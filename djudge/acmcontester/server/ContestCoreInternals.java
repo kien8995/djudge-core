@@ -1,10 +1,13 @@
 package djudge.acmcontester.server;
 
+import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 import org.apache.commons.codec.binary.Base64;
 
 import db.AbstractTableDataModel;
 import db.DBRowAbstract;
+import db.DBRowSubmissions;
 import db.DBRowUsers;
 import db.LanguagesDataModel;
 import db.MonitorModel;
@@ -229,7 +232,7 @@ public class ContestCoreInternals
 		return false;
 	}
 	
-	public boolean changePasswordCore(String userID,
+	protected boolean changePasswordCore(String userID,
 			String newPassword)
 	{
 		DBRowUsers row = (DBRowUsers) usersModel.getRowByID(userID);
@@ -244,7 +247,50 @@ public class ContestCoreInternals
 			log.info("Password change failed");
 			usersModel.updateData();
 			return false;
-		}
+		}	
+	}
+	
+	protected boolean activateSubmissionInternal(String id, int active)
+	{
+		DBRowSubmissions rd = (DBRowSubmissions) submissionsModel.getRowByID(id);
+		if (rd == null)
+			return false;
 		
+		rd.data[SubmissionsDataModel.getActiveFlagIndex()] = active;
+		rd.save();
+		submissionsModel.updateData();
+		return true;
+	}
+	
+
+	protected boolean generateLoginsInternal(int count, String loginType)
+	{
+		log.info("Genarating logins: " + count + " of " + loginType);
+		int counter = 1;
+		HashSet<String> hs = new HashSet<String>();
+		for (int i = 0; i < usersModel.getRowCount(); i++)
+			// FIXME: Hardcode
+			hs.add(usersModel.getRow(i).data[1].toString());
+		for (int i = 0; i < count; i++)
+		{
+			String t = "";
+			while (true)
+			{
+				t = loginType.toLowerCase() + counter;
+				if (!hs.contains(t))
+				{
+					hs.add(t);
+					break;
+				}
+				counter++;
+			}
+			UserData ud = new UserData();
+			ud.name = ud.password = ud.username = t;
+			ud.role = loginType;
+			usersModel.insertRow(usersModel.toRow(ud));
+			counter++;
+		}
+		usersModel.updateData();
+		return true;
 	}
 }

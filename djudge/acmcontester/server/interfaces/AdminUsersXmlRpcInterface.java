@@ -15,6 +15,8 @@ interface AdminUsersCommonInterface
 	public boolean deleteAllUsers(String username, String password);
 	
 	public boolean changePassword(String username, String oldPassword, String newPassword);
+	
+	public boolean generateLogins(String username, String password, int count, String loginType);
 }
 
 public interface AdminUsersXmlRpcInterface extends AdminUsersCommonInterface

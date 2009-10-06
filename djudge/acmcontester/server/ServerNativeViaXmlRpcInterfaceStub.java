@@ -280,4 +280,18 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 	{
 		return serverConnector.getContestFreezeTime(username, password);
 	}
+
+	@Override
+	public boolean activateSubmission(String username, String password,
+			String id, int active)
+	{
+		return serverConnector.activateSubmission(username, password, id, active);
+	}
+
+	@Override
+	public boolean generateLogins(String username, String password, int count,
+			String loginType)
+	{
+		return serverConnector.generateLogins(username, password, count, loginType);
+	}
 }
