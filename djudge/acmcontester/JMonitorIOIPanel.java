@@ -1,7 +1,7 @@
 package djudge.acmcontester;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,10 +20,10 @@ import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
-import djudge.acmcontester.structures.UserProblemStatusACM;
+import djudge.acmcontester.structures.UserProblemStatusIOI;
 import djudge.utils.xmlrpc.HashMapSerializer;
 
-public class JMonitorPanel extends JPanel implements ActionListener
+public class JMonitorIOIPanel extends JPanel implements ActionListener
 {
 
 	private static final long serialVersionUID = 1L;
@@ -55,11 +55,11 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			}
 			else if (colNum == 1)
 			{
-				return "Solved";
+				return "Score";
 			}
 			else if (colNum == 2)
 			{
-				return "Time";
+				return "Attempts";
 			}
 			return problems.get(colNum-3).sid; 
 		}
@@ -89,15 +89,15 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			}
 			else if (arg1 == 1)
 			{
-				return data.teams[arg0].totalSolved;
+				return data.teams[arg0].totalScore;
 			}
 			else if (arg1 == 2)
 			{
-				return data.teams[arg0].totalTime;
+				return data.teams[arg0].totalScoredAttempts;
 			}
 			else
 			{
-				return data.teams[arg0].acmData[arg1 - 3];
+				return data.teams[arg0].ioiData[arg1 - 3];
 			}
 		}
 	}
@@ -110,8 +110,8 @@ public class JMonitorPanel extends JPanel implements ActionListener
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column)
 		{
-			UserProblemStatusACM data = (UserProblemStatusACM) value;
-			if (data.wasSolved)
+			UserProblemStatusIOI data = (UserProblemStatusIOI) value;
+			if (data.isFullScore)
 			{
 				setBackground(Color.GREEN);
 			}
@@ -119,9 +119,9 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			{
 				setBackground(Color.YELLOW);
 			}
-			else if (data.wrongTryes > 0)
+			else if (data.submissionsTotal > 0)
 			{
-				setBackground(Color.RED);
+				setBackground(new Color(0xFF, 0x66, 0x00));
 			}
 			else
 			{
@@ -130,11 +130,6 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			setText(value.toString());
 			return this;
 		}
-
-	/*	public void setValue(Object value)
-		{
-			setText(value.toString());
-		}*/
 	}
 	
 	class InfoCellRenderer extends DefaultTableCellRenderer
@@ -149,25 +144,16 @@ public class JMonitorPanel extends JPanel implements ActionListener
 			{
 				setBackground(Color.CYAN);
 			}
-			else if (getBackground() == Color.WHITE || getBackground() == Color.GRAY)
-			{
-				setBackground(Color.LIGHT_GRAY);
-			}
 			else
 			{
-				setBackground(Color.GRAY);
+				setBackground(Color.WHITE);
 			}
 			setText(value.toString());
 			return this;
 		}
-
-	/*	public void setValue(Object value)
-		{
-			setText(value.toString());
-		}*/
 	}
 	
-	public JMonitorPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
+	public JMonitorIOIPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
 		this.serverInterface = serverInterface;
 		this.authProvider = authProvider;
@@ -181,6 +167,10 @@ public class JMonitorPanel extends JPanel implements ActionListener
 				serverInterface.getTeamProblems(authProvider.getUsername(),
 						authProvider.getPassword()), ProblemData.class);
 		data = new MonitorData(serverInterface.getTeamMonitor(authProvider.getUsername(), authProvider.getPassword()));
+		/// FIXME: add comparator
+		//MonitorModel mm = new MonitorModel();
+		//MonitorModel.sortMonitor(data, new MonitorModel().IOIViewComparator(), new MonitorModel.IOIPlacesComparator());
+		//new MonitorModel.IOIPlacesComparator();
 		
 		jtMonitor = new JTable(new MonitorDataModel());
 		jtMonitor.setRowHeight(25);

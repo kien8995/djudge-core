@@ -113,6 +113,8 @@ public class JContestSettingsPanel extends JPanel
 	
 	private final JButton btnSetTimes;
 	
+	private final JButton btnClearSubmissions = new JButton("Clear submissions");
+	
 	private final ServerXmlRpcInterface serverInterface;
 	
 	private final AuthentificationDataProvider authProvider;
@@ -164,6 +166,22 @@ public class JContestSettingsPanel extends JPanel
 			}
 		});
 		add(btnSetTimes);
+		
+		btnClearSubmissions.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				JContestSettingsPanel.this.serverInterface
+						.deleteAllSubmissions(
+								JContestSettingsPanel.this.authProvider
+										.getUsername(),
+								JContestSettingsPanel.this.authProvider
+										.getPassword());
+			}
+			
+		});
+		add(btnClearSubmissions);
 	}
 
 	public static void main(String[] args)

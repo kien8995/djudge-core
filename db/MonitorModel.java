@@ -18,7 +18,7 @@ import djudge.acmcontester.structures.UserProblemStatusIOI;
 
 public class MonitorModel
 {
-	private void sortMonitor(MonitorData monitor, Comparator<MonitorUserStatus> viewComparator, Comparator<MonitorUserStatus> placesComparator)
+	public static void sortMonitor(MonitorData monitor, Comparator<MonitorUserStatus> viewComparator, Comparator<MonitorUserStatus> placesComparator)
 	{
 		Arrays.sort(monitor.teams, viewComparator);
 		int place = 0;
@@ -33,6 +33,7 @@ public class MonitorModel
 	public MonitorData getMonitorACM(long contestTime)
 	{
 		UsersDataModel udm = new UsersDataModel();
+		udm.setWhere(" `role` = 'TEAM'");
 		udm.updateData();
 		MonitorData monitor = getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
 		sortMonitor(monitor, new ACMViewComparator(), new ACMPlacesComparator());
@@ -42,6 +43,7 @@ public class MonitorModel
 	public MonitorData getMonitorIOI(long contestTime)
 	{
 		UsersDataModel udm = new UsersDataModel();
+		udm.setWhere(" `role` = 'TEAM'");
 		udm.updateData();
 		MonitorData monitor = getMonitor(contestTime, udm.getRows().toArray(new UserData[0]));
 		sortMonitor(monitor, new IOIViewComparator(), new IOIPlacesComparator());
@@ -245,7 +247,7 @@ public class MonitorModel
 		return md;
 	}
 	
-	class IOIPlacesComparator implements Comparator<MonitorUserStatus>
+	public class IOIPlacesComparator implements Comparator<MonitorUserStatus>
 	{
 		@Override
 		public int compare(MonitorUserStatus a, MonitorUserStatus t)
@@ -254,7 +256,7 @@ public class MonitorModel
 		}		
 	}
 	
-	class IOIViewComparator implements Comparator<MonitorUserStatus>
+	public class IOIViewComparator implements Comparator<MonitorUserStatus>
 	{
 		@Override
 		public int compare(MonitorUserStatus a, MonitorUserStatus t)
@@ -267,7 +269,7 @@ public class MonitorModel
 		}		
 	}
 	
-	class ACMPlacesComparator implements Comparator<MonitorUserStatus>
+	public class ACMPlacesComparator implements Comparator<MonitorUserStatus>
 	{
 		@Override
 		public int compare(MonitorUserStatus a, MonitorUserStatus t)
@@ -279,7 +281,7 @@ public class MonitorModel
 		}		
 	}
 	
-	class ACMViewComparator implements Comparator<MonitorUserStatus>
+	public class ACMViewComparator implements Comparator<MonitorUserStatus>
 	{
 		@Override
 		public int compare(MonitorUserStatus a, MonitorUserStatus t)

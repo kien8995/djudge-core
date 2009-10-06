@@ -253,3 +253,18 @@ class ScoreCellRenderer extends DefaultSubmissionsModelCellRenderer
 		setText(Formatter.formatScore(data));
 	}
 }
+
+class PasswordCellRenderer extends DefaultCellRenderer
+{
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	void setTextAndColor(Object value, int row,int column)
+	{
+		String s = value.toString();
+		String r = "";
+		for (int i = 0; i < s.length(); i++)
+			r += "*";
+		setText(r);
+	}
+}

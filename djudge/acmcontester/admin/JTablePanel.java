@@ -19,6 +19,7 @@ import javax.swing.table.TableColumnModel;
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
+import djudge.acmcontester.structures.RemoteTableUsers;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.SubmissionData.SubmissionDataColumnsEnum;
 import djudge.swing.JSubmissionInfoFrame;
@@ -235,6 +236,11 @@ public class JTablePanel extends JPanel implements ActionListener
 		jtTable.setRowHeight(20);
 		jtTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		if (tableModel instanceof RemoteTableUsers)
+		{
+			jtTable.getColumnModel().getColumn(2).setCellRenderer(new PasswordCellRenderer());
+		}
+		
 		jpButtons = new JPanel();
 		jpButtons.add(jbtnAddRecord);
 		jpButtons.add(jbtnDeleteRecord);
