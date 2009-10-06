@@ -1,8 +1,7 @@
 package djudge.acmcontester.structures;
 
-import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
-import djudge.acmcontester.structures.SubmissionData.SubmissionDataColumnsEnum;
+import djudge.acmcontester.AuthentificationData;
 import djudge.utils.xmlrpc.AbstractRemoteRow;
 import djudge.utils.xmlrpc.AbstractRemoteTable;
 import djudge.utils.xmlrpc.HashMapSerializer;

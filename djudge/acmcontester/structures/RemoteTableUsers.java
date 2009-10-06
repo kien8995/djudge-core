@@ -31,4 +31,15 @@ public class RemoteTableUsers extends AbstractRemoteTable
 		return UserData.class;
 	}
 
+	protected String[] getColumnNames()
+	{
+		final String[] names = {
+				"ID",
+				"Username",
+				"Password",
+				"Info",
+				"Role",
+			};	
+		return names;
+	}	
 }

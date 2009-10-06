@@ -8,7 +8,8 @@ import javax.swing.JTabbedPane;
 
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.JContestSettingsPanel;
-import djudge.acmcontester.JMonitorPanel;
+import djudge.acmcontester.JMonitorACMPanel;
+import djudge.acmcontester.JMonitorIOIPanel;
 import djudge.acmcontester.JStatusPanel;
 import djudge.acmcontester.JSubmitPanel;
 import djudge.acmcontester.ServerXmlRpcConnector;
@@ -31,7 +32,7 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 	
 	private JTablePanel submissionsPanel;
 	
-	private JMonitorPanel monitorPanel;
+	private JMonitorACMPanel monitorPanel;
 	
 	private JSubmitPanel submitPanel;
 	
@@ -73,7 +74,9 @@ public class AdminClient extends JFrame// implements AuthentificationDataProvide
 		
 		jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(new RemoteTableSubmissions(serverXmlRpcInterface, authData)));
 		
-		jtpTabs.add("Monitor", monitorPanel = new JMonitorPanel(serverXmlRpcInterface, authData));
+		jtpTabs.add("Monitor", monitorPanel = new JMonitorACMPanel(serverXmlRpcInterface, authData));
+		
+		jtpTabs.add("Monitor", new JMonitorIOIPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, authData));
 		

@@ -54,4 +54,16 @@ public class UserProblemStatusIOI extends HashMapSerializable
 		map.put("full-score", "" + isFullScore);
 		return map;
 	}
+	
+	@Override
+	public String toString()
+	{
+		String res = "";
+		if (submissionsTotal > 0)
+		{
+			res = "" + score + "/" + maxScoreFirstTime;
+			//res = (wrongTryes + 1) + "/" + lastSubmitTime;
+		}
+		return res;
+	}	
 }

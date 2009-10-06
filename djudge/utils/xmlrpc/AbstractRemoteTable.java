@@ -22,7 +22,15 @@ public abstract class AbstractRemoteTable extends AbstractDataTable
 	@Override
 	public int getColumnCount()
 	{
-		return rows.size() != 0 ? rows.get(0).getColumnCount() : 0;
+		int res = 0;
+		try
+		{
+			res = ((AbstractRemoteRow)(getRowClass().newInstance())).getColumnCount();
+		}
+		catch (Exception e)
+		{
+		}
+		return res;
 	}
 
 	@Override
