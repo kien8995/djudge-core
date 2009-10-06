@@ -32,4 +32,14 @@ public class RemoteTableLanguages extends AbstractRemoteTable
 		return LanguageData.class;
 	}
 
+	protected String[] getColumnNames()
+	{
+		final String[] names = {
+			"ID",
+			"SID",
+			"Name",
+			"DJudgeID",
+		};
+		return names;
+	}	
 }

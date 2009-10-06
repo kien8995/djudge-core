@@ -18,7 +18,7 @@ public class Formatter
 	public static String formatContestTime(long miliseconds)
 	{
 		if (miliseconds < 0)
-			return "n/a";
+			return "-";
 		long seconds = miliseconds / 1000;
 		return new PrintfFormat("%02d:%02d:%02d").sprintf(new Object[] {seconds / 60 / 60, (seconds / 60) % 60, seconds % 60});
 	}
@@ -36,14 +36,14 @@ public class Formatter
 	public static String formatFailedTest(int number)
 	{
 		if (number < 0)
-			return "n/a";
+			return "-";
 		return "" + (number + 1);
 	}
 	
 	public static String formatMemory(long bytes)
 	{
-		if (bytes < 0)
-			return "n/a";
+		if (bytes <= 0)
+			return "-";
 		if (bytes < 1000)
 			return "" + bytes + " B";
 		long kb = bytes / 1000;
@@ -55,14 +55,14 @@ public class Formatter
 	public static String formatRuntime(long ms)
 	{
 		if (ms < 0)
-			return "n/a";
+			return "-";
 		return "" + ms + " ms";
 	}
 
 	public static String formatScore(long score)
 	{
 		if (score < 0)
-			return "n/a";
+			return "-";
 		return "" + score;
 	}
 	

@@ -20,6 +20,7 @@ import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.SubmissionData;
+import djudge.acmcontester.structures.SubmissionData.SubmissionDataColumnsEnum;
 import djudge.swing.JSubmissionInfoFrame;
 import djudge.utils.xmlrpc.AbstractDataTable;
 
@@ -42,13 +43,12 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 			if ("activate".equals(act))
 			{
     			int prev = Integer.parseInt(tableModel.getValueAt(iRow,
-    					RemoteTableSubmissions.getActiveFlagIndex()).toString());
+    					SubmissionDataColumnsEnum.Active.ordinal()).toString());
     			if (prev <= 0)
     				prev = 1;
     			else
     				prev = 0;
-    			tableModel.setValueAt(prev, iRow, RemoteTableSubmissions
-    					.getActiveFlagIndex());
+    			tableModel.setValueAt(prev, iRow, SubmissionDataColumnsEnum.Active.ordinal());
 			}
 			else if (act.startsWith("rejudge"))
 			{
@@ -63,17 +63,17 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				}
 				else if (act.equals("rejudge_user"))
 				{
-					value = sd.userID;//tableModel.getValueAt(iRow, RemoteTableSubmissions.getUserFieldIndex());
+					value = sd.userID;
 					key = "user_id";
 				}
 				else if (act.equals("rejudge_problem"))
 				{
-					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getProblemIDFieldIndex());
+					value = tableModel.getValueAt(iRow, SubmissionDataColumnsEnum.ProblemID.ordinal());
 					key = "problem_id";
 				}
 				else if (act.equals("rejudge_language"))
 				{
-					value = tableModel.getValueAt(iRow, RemoteTableSubmissions.getLanguageFieldIndex());
+					value = tableModel.getValueAt(iRow, SubmissionDataColumnsEnum.LanguageID.ordinal());
 					key = "language_id";
 				}
 				else
@@ -98,13 +98,12 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 		jpButtons.remove(jbtnSave);
 		
 		TableColumnModel tcm = jtTable.getColumnModel();
-		tcm.getColumn(RemoteTableSubmissions.getRuntimeFieldIndex()).setCellRenderer(new ContestTimeCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getJudgementFieldIndex()).setCellRenderer(new JudgementCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getRuntimeFieldIndex()).setCellRenderer(new RuntimeCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getMemoryFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getOutputFieldIndex()).setCellRenderer(new MemoryCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getFailedTestFieldIndex()).setCellRenderer(new FailedTestCellRenderer(atdm));
-		tcm.getColumn(RemoteTableSubmissions.getDJudgeFlagIndex()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.ContestTime.ordinal()).setCellRenderer(new ContestTimeCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.Judgement.ordinal()).setCellRenderer(new JudgementCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.MaxTime.ordinal()).setCellRenderer(new RuntimeCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.MaxMemory.ordinal()).setCellRenderer(new MemoryCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.FailedTest.ordinal()).setCellRenderer(new FailedTestCellRenderer(atdm));
+		tcm.getColumn(SubmissionDataColumnsEnum.DJudgeFlag.ordinal()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
 		jtTable.addMouseListener(this);
 		// Popup menu
 		PopupMenuHandler listener = new PopupMenuHandler();
@@ -158,11 +157,7 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				return;
 			RemoteTableSubmissions sdm = (RemoteTableSubmissions) tableModel;
 			SubmissionData sd = (SubmissionData) sdm.getRow(row);
-			//SubmissionResult sr = new SubmissionResult(XmlWorks.getDocumentFromString(sd.xml));
-			//TODO: debug output
-			System.out.println(sd.xml);
 			new JSubmissionInfoFrame(sd);
-			//new JSubmissionResultFrame(sr, "Testing submission #" + sd.id + " details");
 		}
 	}
 
@@ -190,9 +185,8 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 				popupMenu.show(arg0.getComponent(), arg0.getX(), arg0.getY());
 			}
 		}
-		
 	}
-
+	
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{

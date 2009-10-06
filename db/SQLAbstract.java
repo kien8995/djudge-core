@@ -2,11 +2,6 @@ package db;
 
 public class SQLAbstract
 {
-	public final static void log(Object o)
-	{
-		System.out.println(o);
-	}
-	
 	protected final static void setInsert(StringBuffer s, String table)
 	{
 		s.append("INSERT INTO `" + table + "`");

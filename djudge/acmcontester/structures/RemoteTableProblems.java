@@ -32,4 +32,15 @@ public class RemoteTableProblems extends AbstractRemoteTable
 		return ProblemData.class;
 	}
 
+	protected String[] getColumnNames()
+	{
+		final String[] names = {
+			"ID",
+			"SID",
+			"Name",
+			"DJudge.Problem",
+			"DJudge.Contest",
+		};
+		return names;
+	}	
 }
