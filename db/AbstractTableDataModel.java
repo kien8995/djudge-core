@@ -87,13 +87,6 @@ public abstract class AbstractTableDataModel extends AbstractDataTable
 				Statement stmt = Settings.getConnection().createStatement();
 				ResultSet rs = stmt.executeQuery(query);
 				rows = getRows(rs);
-				if (log.isDebugEnabled() && false)
-				{
-					for (int i = 0; i < rows.size(); i++)
-					{
-						log.debug(rows.get(i).toString());
-					}
-				}
 				stmt.close();
 			}
 		}

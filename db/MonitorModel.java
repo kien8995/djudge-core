@@ -53,7 +53,13 @@ public class MonitorModel
 	private UserProblemStatusACM getUserProblemStatisticsACM(long contestTime, String userID, String problemID)
 	{
 		UserProblemStatusACM res = new UserProblemStatusACM();
-		String sqlFirstAc = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND judgement = 'AC' ORDER BY id asc LIMIT 1";
+		String sqlFirstAc = "SELECT * FROM `submissions` WHERE active > 0 AND `contest_time` <= '"
+				+ contestTime
+				+ "' AND `user_id` = '"
+				+ userID
+				+ "' AND `problem_id` = '"
+				+ problemID
+				+ "' AND djudge_flag > 0 AND judgement = 'AC' ORDER BY id asc LIMIT 1";
 		Connection conn = Settings.getConnection();
 		Statement st;
 		synchronized (AbstractTableDataModel.dbMutex)
@@ -75,7 +81,17 @@ public class MonitorModel
 				}
 				rs.close();
 				st.close();
-				String allBeforeAc = "SELECT * FROM `submissions` WHERE `id` < '" + firstAcId + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 AND id < '" + firstAcId + "' AND contest_time <= " + contestTime  + " AND judgement != 'CE' ORDER BY id ASC";
+				String allBeforeAc = "SELECT * FROM `submissions` WHERE active > 0 AND `id` < '"
+						+ firstAcId
+						+ "' AND `user_id` = '"
+						+ userID
+						+ "' AND `problem_id` = '"
+						+ problemID
+						+ "' AND djudge_flag > 0 AND id < '"
+						+ firstAcId
+						+ "' AND contest_time <= "
+						+ contestTime
+						+ " AND judgement != 'CE' ORDER BY id ASC";
 				st = conn.createStatement();
 				rs = st.executeQuery(allBeforeAc);
 				int waCnt = 0;
@@ -99,7 +115,12 @@ public class MonitorModel
 					res.wasSolved = false;
 					res.lastSubmitTime = lastWaTime;
 					res.penaltyTime = 0;
-					String pending = "SELECT id FROM `submissions` WHERE `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag <= 0 AND contest_time <= " + contestTime  + " LIMIT 1";
+					String pending = "SELECT id FROM `submissions` WHERE active > 0 AND `user_id` = '"
+							+ userID
+							+ "' AND `problem_id` = '"
+							+ problemID
+							+ "' AND djudge_flag <= 0 AND contest_time <= "
+							+ contestTime + " LIMIT 1";
 					st = conn.createStatement();
 					rs = st.executeQuery(pending);
 					if (rs.next())
@@ -133,7 +154,12 @@ public class MonitorModel
 		{
 			try
 			{
-				String sqtPending = "SELECT id FROM `submissions` WHERE `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag <= 0 AND contest_time <= " + contestTime  + " LIMIT 1";
+				String sqtPending = "SELECT id FROM `submissions` WHERE active > 0 AND `user_id` = '"
+						+ userID
+						+ "' AND `problem_id` = '"
+						+ problemID
+						+ "' AND djudge_flag <= 0 AND contest_time <= "
+						+ contestTime + " LIMIT 1";
 				st = conn.createStatement();
 				rs = st.executeQuery(sqtPending);
 				if (rs.next())
@@ -162,7 +188,7 @@ public class MonitorModel
 			try
 			{
 				// searching for max score
-				String sqlMaxScore = "SELECT * FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 ORDER BY score DESC, contest_time ASC LIMIT 1";
+				String sqlMaxScore = "SELECT * FROM `submissions` WHERE active > 0 AND `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0 ORDER BY score DESC, contest_time ASC LIMIT 1";
 				st = conn.createStatement();
 				rs = st.executeQuery(sqlMaxScore);
 				// some score present
@@ -179,7 +205,7 @@ public class MonitorModel
 					}
 					rs.close();
 					st.close();
-					String sqlTotalCount = "SELECT COUNT(*), MAX(contest_time) FROM `submissions` WHERE `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0";
+					String sqlTotalCount = "SELECT COUNT(*), MAX(contest_time) FROM `submissions` WHERE active > 0 AND `contest_time` <= '" + contestTime + "' AND `user_id` = '" + userID + "' AND `problem_id` = '" + problemID + "' AND djudge_flag > 0";
 					st = conn.createStatement();
 					rs = st.executeQuery(sqlTotalCount);
 					if (rs.next())

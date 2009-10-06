@@ -285,4 +285,18 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 	{
 		return ContestServer.getCore().getContestFreezeTime(username, password);
 	}
+
+	@Override
+	public boolean activateSubmission(String username, String password,
+			String id, int active)
+	{
+		return ContestServer.getCore().activateSubmission(username, password, id, active);
+	}
+
+	@Override
+	public boolean generateLogins(String username, String password, int count,
+			String loginType)
+	{
+		return ContestServer.getCore().generateLogins(username, password, count, loginType);
+	}
 }

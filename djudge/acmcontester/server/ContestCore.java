@@ -35,7 +35,10 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	{
 		log.info("addLanguage request from " + username);
 		if (!usersModel.isAdmin(username, password))
+		{
+			log.info("addLanguage failed " + username);
 			return false;
+		}
 		
 		return addLanguageCore(sid, shortName, fullName, compilationComand, djudgeID);
 	}
@@ -114,7 +117,10 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public LanguageData[] getLanguages(String username, String password)
 	{
 		if (!usersModel.isAdmin(username, password))
+		{
+			log.info("getLanguages failed " + username + password);
 			return new LanguageData[0];
+		}
 		
 		return languagesModel.getRows().toArray(new LanguageData[0]);
 	}
@@ -168,7 +174,10 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public UserData[] getUsers(String username, String password)
 	{
 		if (!usersModel.isAdmin(username, password))
+		{
+			log.info("getUsers failed " + username + password);
 			return new UserData[0];
+		}
 		
 		usersModel.updateData();
 		return usersModel.getRows().toArray(new UserData[0]);
@@ -444,5 +453,25 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	public long getContestFreezeTime(String username, String password)
 	{
 		return 60 * 1000 * 60;
+	}
+
+	@Override
+	public boolean activateSubmission(String username, String password,
+			String id, int active)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return activateSubmissionInternal(id, active);
+	}
+
+	@Override
+	public boolean generateLogins(String username, String password, int count,
+			String loginType)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		return generateLoginsInternal(count, loginType);
 	}
 }

@@ -8,7 +8,7 @@ import org.apache.xmlrpc.webserver.WebServer;
 
 public class ContesterXmlRpcServer extends Thread
 {
-	private static final Logger log = Logger.getLogger(ContesterXmlRpcServer.class);
+//	private static final Logger log = Logger.getLogger(ContesterXmlRpcServer.class);
 	
 	private int port;
 	

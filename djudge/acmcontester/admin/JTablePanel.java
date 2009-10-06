@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -49,7 +50,12 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
     				prev = 1;
     			else
     				prev = 0;
-    			tableModel.setValueAt(prev, iRow, SubmissionDataColumnsEnum.Active.ordinal());
+    			RemoteTableSubmissions rts = (RemoteTableSubmissions) tableModel;
+				AuthentificationData ad = rts.getAuthentificationData();
+				ServerXmlRpcInterface connector = rts.getConnector();
+				connector.activateSubmission(ad.getUsername(),
+						ad.getPassword(), tableModel.getValueAt(iRow, 0)
+								.toString(), prev);
 			}
 			else if (act.startsWith("rejudge"))
 			{
@@ -196,9 +202,51 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 	}
 }
 
+class JUsersPanel extends JTablePanel implements ActionListener
+{
+	private static final long serialVersionUID = 1L;
+
+	private JButton btnGenerate;
+	
+	public JUsersPanel(RemoteTableUsers udm)
+	{
+		super(udm);
+		
+		btnGenerate = new JButton("Generate logins");
+		btnGenerate.addActionListener(this);
+		jpButtons.add(btnGenerate);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		super.actionPerformed(arg0);
+		Object src = arg0.getSource();
+		if (src.equals(btnGenerate))
+		{
+			String str = JOptionPane.showInputDialog(null, "Number of team logins to generate:", "5");
+			if (null != str)
+			{
+				int number = 0;
+				try
+				{
+					number = Integer.parseInt(str);
+				}
+				catch (Exception e) {
+				}
+				if (number > 0)
+				{
+					RemoteTableUsers udm = (RemoteTableUsers) tableModel;
+					AuthentificationData ad = udm.getAuthentificationData();
+					udm.getConnector().generateLogins(ad.getUsername(), ad.getPassword(), number, "TEAM");
+				}
+			}
+		}
+	}
+}
+
 public class JTablePanel extends JPanel implements ActionListener
 {
-
 	private static final long serialVersionUID = 1L;
 	
 	protected JTable jtTable;

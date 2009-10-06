@@ -322,4 +322,18 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	{
 		return (Long) callRemoteMethod("getContestFreezeTime", username, password);
 	}
+
+	@Override
+	public boolean activateSubmission(String username, String password,
+			String id, int active)
+	{
+		return (Boolean) callRemoteMethod("activateSubmission", username, password, id, active);
+	}
+
+	@Override
+	public boolean generateLogins(String username, String password, int count,
+			String loginType)
+	{
+		return (Boolean) callRemoteMethod("generateLogins", username, password, count, loginType);
+	}
 }
