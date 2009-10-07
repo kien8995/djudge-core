@@ -6,7 +6,7 @@ import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 
-public class JMonitorACMPanel extends JMonitorPanelAbstract
+public class JMonitorACMPanel extends JMonitorPanelAbstract implements Updateble
 {
 	private static final long serialVersionUID = 1L;
 
@@ -35,5 +35,12 @@ public class JMonitorACMPanel extends JMonitorPanelAbstract
 		{
 			cm.getColumn(i).setCellRenderer(new ProblemCellRenderer());
 		}
+	}
+
+	@Override
+	public boolean updateState()
+	{
+		doRefreshAction();
+		return true;
 	}
 }

@@ -3,6 +3,7 @@ package djudge.acmcontester;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.HashSet;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,6 +28,8 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 	TeamXmlRpcInterface serverInterface;
 	
 	AuthentificationDataProvider authProvider;
+	
+	HashSet<Updateble> objectsToUpdate = new HashSet<Updateble>();
 	
 	public JStatusPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
@@ -57,8 +60,13 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
     		long timeLeft = serverInterface.getContestTimeLeft(authProvider.getUsername(), authProvider.getPassword());
     		jlTime.setText("" + (timeLeft / (60 * 1000)));
 		}
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			// TODO: handle exception
+		}
+		for (Updateble object : objectsToUpdate)
+		{
+			object.updateState();
 		}
 		f = false;
 		jlConnectionStatus.setText(state.fConnected ? "Connected " + state.lastConnectionTime : "Disconnected. Last connected " + state.lastSuccessTime);
@@ -101,5 +109,10 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 		state.lastSuccessTime = new Date();
 		if (!f)
 			updateData();
+	}
+	
+	public void addUpdatetableObject(Updateble object)
+	{
+		objectsToUpdate.add(object);
 	}
 }

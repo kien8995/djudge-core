@@ -10,7 +10,7 @@ import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.UserProblemStatusIOI;
 
-public class JMonitorIOIPanel extends JMonitorPanelAbstract
+public class JMonitorIOIPanel extends JMonitorPanelAbstract implements Updateble
 {
 	private static final long serialVersionUID = 1L;
 
@@ -72,5 +72,12 @@ public class JMonitorIOIPanel extends JMonitorPanelAbstract
 		MonitorData data = new MonitorData(serverInterface.getTeamMonitor(
 				authProvider.getUsername(), authProvider.getPassword()));
 		setData(data);
+	}
+
+	@Override
+	public boolean updateState()
+	{
+		doRefreshAction();
+		return true;
 	}
 }
