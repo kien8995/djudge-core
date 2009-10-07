@@ -6,8 +6,6 @@ import utils.DirectoryResult;
 import utils.FileWorks;
 import utils.HtmlWorks;
 import utils.JudgeDirectory;
-import utils.Scripts;
-
 
 import djudge.common.Settings;
 import djudge.filesystem.RemoteFS;

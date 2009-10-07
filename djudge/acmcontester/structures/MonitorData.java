@@ -52,7 +52,6 @@ public class MonitorData extends HashMapSerializable
 	public void fromHashMap(HashMap map)
 	{
 		contestName = (String) map.get("contest-name");
-		System.out.println(map.get("last-update-time"));
 		lastUpdateTime = new Date(Long.parseLong((String) map.get("last-update-time")));
 		contestTime = Long.parseLong((String) map.get("contest-time"));
 		totalAC = Integer.parseInt((String) map.get("total-ac"));

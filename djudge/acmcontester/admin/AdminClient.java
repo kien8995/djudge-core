@@ -24,15 +24,20 @@ public class AdminClient extends JFrame
 
 	private JTabbedPane jtpTabs;
 	
+	@SuppressWarnings("unused")
 	private JTablePanel usersPanel;
 
+	@SuppressWarnings("unused")
 	private JTablePanel problemsPanel;
 	
+	@SuppressWarnings("unused")
 	private JTablePanel languagesPanel;
 	
-	private JTablePanel submissionsPanel;
+	private JAdminSubmissionsPanel submissionsPanel;
 	
-	private JMonitorACMPanel monitorPanel;
+	private JMonitorACMPanel monitorPanelACM;
+	
+	private JMonitorIOIPanel monitorPanelIOI;
 	
 	private JSubmitPanel submitPanel;
 	
@@ -74,9 +79,9 @@ public class AdminClient extends JFrame
 		
 		jtpTabs.add("Runs", submissionsPanel = new JAdminSubmissionsPanel(new RemoteTableSubmissions(serverXmlRpcInterface, authData)));
 		
-		jtpTabs.add("Monitor", monitorPanel = new JMonitorACMPanel(serverXmlRpcInterface, authData));
+		jtpTabs.add("Monitor-ACM", monitorPanelACM = new JMonitorACMPanel(serverXmlRpcInterface, authData));
 		
-		jtpTabs.add("Monitor", new JMonitorIOIPanel(serverXmlRpcInterface, authData));
+		jtpTabs.add("Monitor-IOI", monitorPanelIOI = new JMonitorIOIPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, authData));
 		
@@ -84,6 +89,10 @@ public class AdminClient extends JFrame
 		
 		add(statusPanel = new JStatusPanel(serverXmlRpcInterface, authData), BorderLayout.NORTH);
 		serverXmlRpcInterface.setVizi(statusPanel);
+		statusPanel.addUpdatetableObject(submissionsPanel);
+		statusPanel.addUpdatetableObject(monitorPanelACM);
+		statusPanel.addUpdatetableObject(monitorPanelIOI);
+		statusPanel.addUpdatetableObject(submitPanel);
 	}
 	
 	public AdminClient()

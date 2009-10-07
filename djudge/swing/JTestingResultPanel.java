@@ -47,8 +47,10 @@ public class JTestingResultPanel extends JPanel
 	
 	private JTable table;
 
+	@SuppressWarnings("unused")
 	private ProblemResult pd;
 	
+	@SuppressWarnings("unused")
 	private JScrollPane spTable;
 	
 	class ColorRenderer extends DefaultTableCellRenderer
