@@ -88,6 +88,13 @@ public class AdminClient extends JFrame
 	
 	public AdminClient()
 	{
+		this("root", "root");
+	}
+	
+	public AdminClient(String username, String password)
+	{
+		authData.password = password;
+		authData.username = username;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(640, 480));
 		setSize(640, 480);
@@ -99,6 +106,14 @@ public class AdminClient extends JFrame
 
 	public static void main(String[] args)
 	{
+/*		AuthentificationData ad = new AuthentificationData();
+		AdminLoginWindow wnd = new AdminLoginWindow(new ServerXmlRpcConnector(), ad);
+		wnd.setModal(true);
+		wnd.setVisible(true);
+		if (ad.isLoggedIn)
+		{
+			new AdminClient(ad.getUsername(), ad.getPassword());
+		}*/
 		new AdminClient();
 	}
 }

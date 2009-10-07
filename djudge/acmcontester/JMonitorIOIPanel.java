@@ -1,114 +1,25 @@
 package djudge.acmcontester;
 
 import java.awt.Color;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import djudge.acmcontester.admin.AdminClient;
+import djudge.acmcontester.admin.DefaultCellRenderer;
 import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
 import djudge.acmcontester.server.interfaces.TeamXmlRpcInterface;
 import djudge.acmcontester.structures.MonitorData;
-import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.UserProblemStatusIOI;
-import djudge.utils.xmlrpc.HashMapSerializer;
 
-public class JMonitorIOIPanel extends JPanel implements ActionListener
+public class JMonitorIOIPanel extends JMonitorPanelAbstract
 {
-
 	private static final long serialVersionUID = 1L;
 
-	JTable jtMonitor;
-	
-	JPanel jpButtons;
-	
-	JButton jbtnRefresh;
-
-	MonitorData data = new MonitorData();
-	
-	Vector<ProblemData> problems;
-
-	TeamXmlRpcInterface serverInterface;
-	
-	AuthentificationDataProvider authProvider;
-	
-	class MonitorDataModel extends AbstractTableModel
+	class ProblemIOICellRenderer extends DefaultCellRenderer
 	{
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public String getColumnName(int colNum)
-		{
-			if (colNum == 0)
-			{
-				return "User";
-			}
-			else if (colNum == 1)
-			{
-				return "Score";
-			}
-			else if (colNum == 2)
-			{
-				return "Attempts";
-			}
-			return problems.get(colNum-3).sid; 
-		}
-		
-		@Override
-		public int getColumnCount()
-		{
-			if (data.teams.length > 0)
-			{
-				return data.teams[0].acmData.length + 3;
-			}
-			return 0;
-		}
-
-		@Override
-		public int getRowCount()
-		{
-			return data.teams.length;
-		}
-
-		@Override
-		public Object getValueAt(int arg0, int arg1)
-		{
-			if (arg1 == 0)
-			{
-				return data.teams[arg0].username;
-			}
-			else if (arg1 == 1)
-			{
-				return data.teams[arg0].totalScore;
-			}
-			else if (arg1 == 2)
-			{
-				return data.teams[arg0].totalScoredAttempts;
-			}
-			else
-			{
-				return data.teams[arg0].ioiData[arg1 - 3];
-			}
-		}
-	}
-
-	class ProblemCellRenderer extends DefaultTableCellRenderer
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column)
+		protected void setTextAndColor(Object value, int row, int column)
 		{
 			UserProblemStatusIOI data = (UserProblemStatusIOI) value;
 			if (data.isFullScore)
@@ -123,110 +34,43 @@ public class JMonitorIOIPanel extends JPanel implements ActionListener
 			{
 				setBackground(new Color(0xFF, 0x66, 0x00));
 			}
+			else if (isSelected)
+			{
+				setBackground(super.getBackground());
+			}
 			else
 			{
 				setBackground(Color.WHITE);
 			}
 			setText(value.toString());
-			return this;
+			setText(value.toString());
 		}
 	}
 	
-	class InfoCellRenderer extends DefaultTableCellRenderer
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column)
-		{
-			if (table.getModel().getValueAt(row, 0).toString().equals(authProvider.getUsername()))
-			{
-				setBackground(Color.CYAN);
-			}
-			else
-			{
-				setBackground(Color.WHITE);
-			}
-			setText(value.toString());
-			return this;
-		}
-	}
 	
 	public JMonitorIOIPanel(TeamXmlRpcInterface serverInterface, AuthentificationDataProvider authProvider)
 	{
-		this.serverInterface = serverInterface;
-		this.authProvider = authProvider;
-		setupGUI();
-		setVisible(true);
+		super(serverInterface, authProvider);
 	}
 
-	private void setupGUI()
+	@Override
+	protected void setTableRenderers()
 	{
-		problems = HashMapSerializer.deserializeFromHashMapArray(
-				serverInterface.getTeamProblems(authProvider.getUsername(),
-						authProvider.getPassword()), ProblemData.class);
-		data = new MonitorData(serverInterface.getTeamMonitor(authProvider.getUsername(), authProvider.getPassword()));
-		/// FIXME: add comparator
-		//MonitorModel mm = new MonitorModel();
-		//MonitorModel.sortMonitor(data, new MonitorModel().IOIViewComparator(), new MonitorModel.IOIPlacesComparator());
-		//new MonitorModel.IOIPlacesComparator();
-		
-		jtMonitor = new JTable(new MonitorDataModel());
-		jtMonitor.setRowHeight(25);
-		jtMonitor.setAutoCreateRowSorter(true);
-		
 		TableColumnModel cm = jtMonitor.getColumnModel();
-		cm.getColumn(0).setCellRenderer(new InfoCellRenderer());
-		cm.getColumn(1).setCellRenderer(new InfoCellRenderer());
-		cm.getColumn(2).setCellRenderer(new InfoCellRenderer());
-		for (int i = 3; i < jtMonitor.getColumnCount(); i++)
-		{
-			cm.getColumn(i).setCellRenderer(new ProblemCellRenderer());
-		}
-		
-		jbtnRefresh = new JButton("Update");
-		jbtnRefresh.addActionListener(this);
-		
-		jpButtons = new JPanel();
-		jpButtons.add(jbtnRefresh);
-		
-		setLayout(new BorderLayout());
-		
-		add(new JScrollPane(jtMonitor), BorderLayout.CENTER);
-		add(jpButtons, BorderLayout.SOUTH);
+		cm.getColumn(0).setCellRenderer(new UserInfoCellRenderer());
+		cm.getColumn(1).setCellRenderer(new UserInfoCellRenderer());
+		cm.getColumn(2).setCellRenderer(new UserInfoCellRenderer());
+		//for (int i = 3; i < jtMonitor.getColumnCount(); i++)
+		//{
+//			cm.getColumn(i).setCellRenderer(new ProblemIOICellRenderer());
+	//	}
 	}
 	
-	public void updateData()
-	{
-		doRefreshAction();
-	}
-	
-	private void setData(MonitorData monitorData)
-	{
-		data = monitorData;
-		jtMonitor.updateUI();
-	}
-
-	private void doRefreshAction()
+	@Override
+	protected void doRefreshAction()
 	{
 		MonitorData data = new MonitorData(serverInterface.getTeamMonitor(
 				authProvider.getUsername(), authProvider.getPassword()));
 		setData(data);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		Object src = arg0.getSource();
-		if (src.equals(jbtnRefresh))
-		{
-			doRefreshAction();
-		}
-	}
-	
-	public static void main(String[] args)
-	{
-		new AdminClient();
 	}
 }
