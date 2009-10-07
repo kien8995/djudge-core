@@ -1,10 +1,9 @@
 package djudge.acmcontester.admin;
 
-import javax.swing.JOptionPane;
 
+import javax.swing.JOptionPane;
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.LoginWindow;
-import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 
 public class AdminLoginWindow extends LoginWindow
@@ -27,6 +26,7 @@ public class AdminLoginWindow extends LoginWindow
 		authData.username = tfLogin.getText();
 		try
 		{
+			// TODO: Fixme
 			if (serverConnector.enterContestTeam(authData.username, authData.password))
 				authData.isLoggedIn = true;
 		}
@@ -42,14 +42,5 @@ public class AdminLoginWindow extends LoginWindow
 	protected boolean doConnect()
 	{
 		return echoString.equals(serverConnector.echo(echoString));
-	}
-
-	public static void main(String[] args)
-	{
-		AuthentificationData ad = new AuthentificationData();
-		AdminLoginWindow wnd = new AdminLoginWindow(new ServerXmlRpcConnector(), ad);
-		wnd.setModal(true);
-		wnd.setVisible(true);
-		System.out.println(ad.username + " " + ad.password + " " + ad.isLoggedIn);
 	}
 }

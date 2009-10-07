@@ -1,16 +1,14 @@
 package djudge.dservice;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 import utils.NanoHTTPD;
-import utils.NanoHTTPD.Response;
 
-import djudge.utils.HtmlUtils;
 import djudge.utils.XMLSettings;
 import djudge.utils.xmlrpc.XmlRpcServer;
 

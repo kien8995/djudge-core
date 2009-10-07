@@ -105,6 +105,8 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 		jpButtons.remove(jbtnSave);
 		
 		TableColumnModel tcm = jtTable.getColumnModel();
+		for (int i = 0; i < tcm.getColumnCount(); i++)
+			tcm.getColumn(i).setCellRenderer(new DefaultSubmissionsModelCellRenderer(atdm));
 		tcm.getColumn(SubmissionDataColumnsEnum.ContestTime.ordinal()).setCellRenderer(new ContestTimeCellRenderer(atdm));
 		tcm.getColumn(SubmissionDataColumnsEnum.Judgement.ordinal()).setCellRenderer(new JudgementCellRenderer(atdm));
 		tcm.getColumn(SubmissionDataColumnsEnum.MaxTime.ordinal()).setCellRenderer(new RuntimeCellRenderer(atdm));

@@ -13,31 +13,40 @@ import djudge.utils.xmlrpc.XmlRpcStateVisualizer;
 @SuppressWarnings("unchecked")
 public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpcInterface, ServerCommonInterface, ServerXmlRpcInterface
 {
-	//private static final Logger log = Logger.getLogger(TeamXmlRpcConnector.class);
-	
 	private static final String defaultServiceName = "AcmContester";
 	
 	private static final String defaultServiceUrl = "http://127.0.0.1:8202/xmlrpc"; 
 	
+	private static final int defaultReplyTimeout = 2000;
+	
+	private static final int defaultConnectionTimeout = 2000;
+	
 	private static final String serviceName;
 	
 	private static final String serverURL;
+	
+	private static final int replyTimeout;
+	
+	private static final int connectionTimeout;
 	
 	static
 	{
 		XMLSettings settings = new XMLSettings(ServerXmlRpcConnector.class);
 		serviceName = settings.getString("service-name", defaultServiceName);
 		serverURL = settings.getString("service-url", defaultServiceUrl);
+		connectionTimeout = settings.getInt("connnection-timeout", defaultConnectionTimeout);
+		replyTimeout = settings.getInt("reply-timeout", defaultReplyTimeout);
 	}
 	
 	public ServerXmlRpcConnector()
 	{
-		super(serviceName, serverURL);
+		super(serviceName, serverURL, connectionTimeout, replyTimeout);
 	}
 
 	public ServerXmlRpcConnector(XmlRpcStateVisualizer vizi)
 	{
-		super(serviceName, serverURL, vizi);
+		super(serviceName, serverURL, connectionTimeout, replyTimeout);
+		setVizi(vizi);
 	}
 	
 	@Override
