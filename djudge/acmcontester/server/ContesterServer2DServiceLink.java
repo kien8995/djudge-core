@@ -122,14 +122,12 @@ public class ContesterServer2DServiceLink extends Thread
 	    			}
 	    			catch (Exception ex)
 	    			{
-	    				///Change to vizi
 	    				if (flagConnected)
 	    				{
-	    					//log.info("Could not connect " + serviceName + " @ " + " " + serverUrl, ex);
 	    					flagConnected = false;
 	    					currentSleepTime = failSleepTime;
 	    				}
-	    				log.info("Error while connecting", ex);
+	    				log.debug("Error while connecting", ex);
 	    			}
 				}
 			}
