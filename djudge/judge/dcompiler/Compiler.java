@@ -23,9 +23,7 @@ import org.w3c.dom.*;
 
 import utils.FileWorks;
 
-
 import djudge.common.Loggable;
-import djudge.judge.Judge;
 
 import javax.xml.parsers.*;
 

@@ -3,8 +3,8 @@ package djudge.acmcontester.admin;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JMenu;
@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
 import djudge.acmcontester.AuthentificationData;
+import djudge.acmcontester.Updateble;
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;
 import djudge.acmcontester.structures.RemoteTableSubmissions;
 import djudge.acmcontester.structures.RemoteTableUsers;
@@ -26,7 +27,7 @@ import djudge.acmcontester.structures.SubmissionData.SubmissionDataColumnsEnum;
 import djudge.swing.JSubmissionInfoFrame;
 import djudge.utils.xmlrpc.AbstractDataTable;
 
-class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
+class JAdminSubmissionsPanel extends JTablePanel implements Updateble
 {
 	private static final long serialVersionUID = 1L;
 
@@ -104,6 +105,7 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 		jpButtons.remove(jbtnDeleteRecord);
 		jpButtons.remove(jbtnSave);
 		
+		/* TableCellRenderers */
 		TableColumnModel tcm = jtTable.getColumnModel();
 		for (int i = 0; i < tcm.getColumnCount(); i++)
 			tcm.getColumn(i).setCellRenderer(new DefaultSubmissionsModelCellRenderer(atdm));
@@ -113,7 +115,25 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 		tcm.getColumn(SubmissionDataColumnsEnum.MaxMemory.ordinal()).setCellRenderer(new MemoryCellRenderer(atdm));
 		tcm.getColumn(SubmissionDataColumnsEnum.FailedTest.ordinal()).setCellRenderer(new FailedTestCellRenderer(atdm));
 		tcm.getColumn(SubmissionDataColumnsEnum.DJudgeFlag.ordinal()).setCellRenderer(new DJudgeStatusCellRenderer(atdm));
-		jtTable.addMouseListener(this);
+		
+		/* Submission details window on double click on some row */ 
+		jtTable.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+				{
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();
+					if  (row < 0)
+						return;
+					RemoteTableSubmissions sdm = (RemoteTableSubmissions) tableModel;
+					SubmissionData sd = (SubmissionData) sdm.getRow(row);
+					new JSubmissionInfoFrame(sd);
+				}
+			}
+		});
+		
 		// Popup menu
 		PopupMenuHandler listener = new PopupMenuHandler();
 		JMenuItem item;
@@ -156,51 +176,11 @@ class JAdminSubmissionsPanel extends JTablePanel implements MouseListener
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e)
+	public boolean updateState()
 	{
-		if (e.getClickCount() == 2)
-		{
-			JTable target = (JTable) e.getSource();
-			int row = target.getSelectedRow();
-			if  (row < 0)
-				return;
-			RemoteTableSubmissions sdm = (RemoteTableSubmissions) tableModel;
-			SubmissionData sd = (SubmissionData) sdm.getRow(row);
-			new JSubmissionInfoFrame(sd);
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0)
-	{
-		if (arg0.getButton() == MouseEvent.BUTTON3)
-		{
-			int row = jtTable.getSelectedRow();
-			if (row != -1)
-			{
-				popupMenu.show(arg0.getComponent(), arg0.getX(), arg0.getY());
-			}
-		}
-	}
-	
-	@Override
-	public void mouseReleased(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-		
+		boolean res = tableModel.updateData();
+		jtTable.updateUI();
+		return res;
 	}
 }
 

@@ -1,7 +1,7 @@
 package djudge.acmcontester;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -12,8 +12,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import djudge.acmcontester.admin.AdminLoginWindow;
 
 public abstract class LoginWindow extends JDialog implements ActionListener
 {
@@ -40,31 +38,6 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 	protected abstract boolean doLogin();
 	
 	protected abstract boolean doConnect();
-	
-//	private boolean wasShown = false;
-	
-//	@Override
-/*	public void setVisible(boolean visible)
-	{
-		super.setVisible(visible);
-		System.out.println(visible);
-		if (visible && !wasShown)
-		{
-			wasShown = true;
-			new Thread(){
-				@Override
-				public void run()
-				{					
-					System.out.println("2");
-					if (!doConnect())
-					{
-						JOptionPane.showMessageDialog(LoginWindow.this, "Failed connect to server", "Error", JOptionPane.ERROR_MESSAGE);
-						System.exit(1);
-					}
-				}
-			}.start();
-		}
-	}*/
 	
 	private void setupUI()
 	{
@@ -154,13 +127,4 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		AuthentificationData ad = new AuthentificationData();
-		AdminLoginWindow wnd = new AdminLoginWindow(new ServerXmlRpcConnector(), ad);
-		wnd.setModal(true);
-		wnd.setVisible(true);
-		System.out.println(ad.username + " " + ad.password + " " + ad.isLoggedIn);
-	}	
 }

@@ -1,5 +1,6 @@
 package djudge.acmcontester;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -50,26 +51,39 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 	
 	boolean f = false;
 	
-	public void updateData()
+	public void updateView()
 	{
 		f = true;
 		try
 		{
-    		String status = serverInterface.getContestStatus(authProvider.getUsername(), authProvider.getPassword());
-    		jlStatus.setText(status);
     		long timeLeft = serverInterface.getContestTimeLeft(authProvider.getUsername(), authProvider.getPassword());
     		jlTime.setText("" + (timeLeft / (60 * 1000)));
+    		if (timeLeft / (60 * 1000) > 5)
+    			jlTime.setForeground(Color.BLUE);
+    		else
+    			jlTime.setForeground(Color.RED);
+    		String status = serverInterface.getContestStatus(authProvider.getUsername(), authProvider.getPassword());
+    		jlStatus.setText(status);
+    		if (status.equalsIgnoreCase("running"))
+    			jlStatus.setForeground(Color.green);
+    		else
+    			jlStatus.setForeground(Color.RED);
 		}
 		catch (Exception e)
 		{
 			// TODO: handle exception
 		}
+		f = false;
+		jlConnectionStatus.setText(state.fConnected ? "Connected " + state.lastConnectionTime : "Disconnected. Last connected " + state.lastSuccessTime);
+	}
+	
+	public void updateData()
+	{
 		for (Updateble object : objectsToUpdate)
 		{
 			object.updateState();
 		}
-		f = false;
-		jlConnectionStatus.setText(state.fConnected ? "Connected " + state.lastConnectionTime : "Disconnected. Last connected " + state.lastSuccessTime);
+		updateView();
 	}
 
 	@Override
@@ -98,7 +112,7 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 	{
 		state.fConnected = false;
 		if (!f)
-			updateData();
+			updateView();
 	}
 
 	@Override
@@ -108,7 +122,7 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 		state.lastConnectionTime = new Date();
 		state.lastSuccessTime = new Date();
 		if (!f)
-			updateData();
+			updateView();
 	}
 	
 	public void addUpdatetableObject(Updateble object)
