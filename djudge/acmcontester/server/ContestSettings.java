@@ -8,6 +8,11 @@ public class ContestSettings
 	
 	private XMLSettings settings;
 	
+	public ContestSettings()
+	{
+		this("contest.xml");
+	}
+	
 	public ContestSettings(String configFile)
 	{
 		settings = new XMLSettings(configFile);

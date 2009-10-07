@@ -1,5 +1,6 @@
 package djudge.acmcontester.server;
 
+import java.util.Date;
 import java.util.HashSet;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import db.ProblemsDataModel;
 import db.SubmissionsDataModel;
 import db.UsersDataModel;
 import djudge.acmcontester.structures.LanguageData;
+import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
@@ -36,9 +38,9 @@ public class ContestCoreInternals
 	
 	protected MonitorModel monitorModel;
 	
-	protected final ContestSettings contest = new ContestSettings("contest.xml");
+	protected final ContestSettings settings = new ContestSettings("contest.xml");
 	
-	protected final ContestState state = new ContestState(contest);
+	protected final ContestState state = new ContestState(settings);
 	
 	protected ContesterServer2DServiceLink djudgeInterface;
 	
@@ -292,5 +294,15 @@ public class ContestCoreInternals
 		}
 		usersModel.updateData();
 		return true;
+	}
+	
+	protected MonitorData getMonitorInternal(boolean frozenFlag)
+	{
+		// TODO: fixme
+		MonitorData res = monitorModel.getMonitorIOI(state.getContestTime());
+		res.lastUpdateTime = new Date();
+		res.contestTime = state.getContestTime();
+		res.contestName = settings.getContestName();
+		return res;
 	}
 }

@@ -155,8 +155,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		if (!usersModel.isAdmin(username, password))
 			return null;
 		
-		//FIXME
-		return monitorModel.getMonitorIOI(getContestTimeElapsed(username, password));
+		return getMonitorInternal(false);
 	}
 	
 	@Override
@@ -332,7 +331,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public String registerTeam(String username, String password)
 	{
-		if (!contest.allowNewUserRegistration() || null != usersModel.getUserByUsername(username))
+		if (!settings.allowNewUserRegistration() || null != usersModel.getUserByUsername(username))
 			return "-1";
 		
 		UserData ud = new UserData(username, password, "", "TEAM");

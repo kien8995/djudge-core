@@ -28,7 +28,7 @@ public class ContestState
 		public ContestStateInternals(ContestSettings settings)
 		{
 			this.settings = settings;
-			loadSettings();
+			loadState();
 		}
 
 		public long getTimeSinceLastStartAbsolute()
@@ -60,11 +60,10 @@ public class ContestState
 			res += getContestTimeLeft() + "\n";
 			res += state + "\n";
 			FileWorks.saveToFile(res, "./data/contest-settings.txt");
-			log.info("Saving contest state");
 			return true;
 		}
 		
-		private void loadSettings()
+		private void loadState()
 		{
 			try
 			{
