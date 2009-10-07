@@ -13,7 +13,7 @@ public class MonitorData extends HashMapSerializable
 	public MonitorUserStatus[] teams;
 	
 	/*
-	 * Contest's nbame
+	 * Contest's name
 	 */
 	public String contestName = "";
 	

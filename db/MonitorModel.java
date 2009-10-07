@@ -1,12 +1,11 @@
 package db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.server.ContestServer;
 import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.MonitorUserStatus;
@@ -322,10 +321,5 @@ public class MonitorModel
 			long diff = t.totalAttempts - a.totalAttempts;
 			return diff > 0 ? 1 : diff < 0 ? -1 : 0;
 		}		
-	}
-	
-	public static void main(String[] args)
-	{
-		new AdminClient();
 	}
 }
