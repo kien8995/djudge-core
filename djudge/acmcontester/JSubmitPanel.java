@@ -29,7 +29,7 @@ import djudge.utils.xmlrpc.HashMapSerializer;
 
 import utils.FileWorks;
 
-public class JSubmitPanel extends JPanel implements ActionListener
+public class JSubmitPanel extends JPanel implements ActionListener, Updateble
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -216,6 +216,13 @@ public class JSubmitPanel extends JPanel implements ActionListener
 	public static void main(String[] args)
 	{
 		new AdminClient();
+	}
+
+	@Override
+	public boolean updateState()
+	{
+		// TODO implement me
+		return false;
 	}
 
 }
