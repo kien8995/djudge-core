@@ -26,8 +26,6 @@ import utils.StringWorks;
 
 public abstract class ValidatorInternalAbstract extends ValidatorAbstract implements ValidatorLimits 
 {
-//	String param;
-	
 	BufferedReader in, out, ans;
 	
 	public ValidationResult Validate(String input, String output, String answer)
@@ -141,6 +139,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		}
 		catch (Exception exc)
 		{
+			exc.printStackTrace();
 			res.fail = ValidationFailEnum.ValidatorFail;
 			res.result = ValidationResultEnum.InternalError;
 			return;

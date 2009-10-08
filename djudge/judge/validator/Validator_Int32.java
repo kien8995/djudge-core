@@ -39,7 +39,7 @@ public class Validator_Int32 extends ValidatorInternalAbstract
 
 	protected boolean compareTokens(String a, String b)
 	{
-		return a.equals(b);
+		return Integer.parseInt(a) == Integer.parseInt(b);
 	}
 
 }

@@ -84,7 +84,8 @@ public class Validator
 //			break;
 
 		case InternalToken:
-//			break;
+			res = (new Validator_Token()).Validate(input, output, answer);
+			break;
 
 		case ExternalCustom:
 //			break;
