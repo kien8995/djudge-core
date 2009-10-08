@@ -87,7 +87,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		Runner2 runner = new Runner2(limits, files);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
-		String cmd = exeFile + " " + input + " " + output + " " + answer;
+		String cmd = exeFile + " " + input + " " + answer + " " + output;
 		
 		//System.out.println("VOF: " + ValidatorOutputFile);
 		
