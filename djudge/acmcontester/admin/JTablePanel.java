@@ -131,9 +131,14 @@ class JAdminSubmissionsPanel extends JTablePanel implements Updateble
 					SubmissionData sd = (SubmissionData) sdm.getRow(row);
 					new JSubmissionInfoFrame(sd);
 				}
+				else if (e.getButton() == 3)
+				{
+					popupMenu.show(e.getComponent(), e.getX(), e.getY());
+				}
 			}
 		});
 		
+		//jtTable.add
 		// Popup menu
 		PopupMenuHandler listener = new PopupMenuHandler();
 		JMenuItem item;

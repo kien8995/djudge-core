@@ -14,7 +14,7 @@ public class Validator_String extends ValidatorInternalAbstract
 	}
 	
 	@Override
-	protected boolean compareTokens(String a, String b)
+	protected boolean compareTokens(Object a, Object b)
 	{
 		return a.equals(b);
 	}

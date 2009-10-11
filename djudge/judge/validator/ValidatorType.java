@@ -27,6 +27,8 @@ public enum ValidatorType
 	 * Token-by-token comparing  
 	 */
 	InternalToken,
+
+	InternalSortedToken,
 	
 	/**
 	 * Same as 'InternalToken', but each token must present valid 32-bit signed integer value

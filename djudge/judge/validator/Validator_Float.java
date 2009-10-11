@@ -23,8 +23,10 @@ public class Validator_Float extends Validator_Token
 	}
 	
 	@Override
-	protected boolean compareTokens(String answer, String output)
+	protected boolean compareTokens(Object answerO, Object outputO)
 	{
+		String answer = answerO.toString();
+		String output = outputO.toString();
 		try
 		{
 			double j, a;

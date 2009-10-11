@@ -9,7 +9,7 @@ public class Validator_Token extends ValidatorInternalAbstract
 {
 	@Override
 	//TODO: review code
-	protected String getToken(BufferedReader rd) throws IOException
+	protected Object getToken(BufferedReader rd) throws IOException
 	{
 		StringBuffer res = new StringBuffer();
 		int t = rd.read();
@@ -17,21 +17,24 @@ public class Validator_Token extends ValidatorInternalAbstract
 		while (t == 32 || t == 10 || t == 9 || t == 13)
 		{
 			t = rd.read();
+			//System.out.println("1 " + t + " " + (char)t);
 		}
 		// if EOF reached
-		if (t == -1) return null;
+		if (t == -1)
+			return null;
 		
 		// reading till next whitespace character
 		while (!(t == 32 || t == 10 || t == 9 || t == 13 || t == -1))
 		{
 			res.append((char) t);
+			//System.out.println("2 " + t + " " + (char)t);
 			t = rd.read();
 		}
 		return res.toString();
 	}
 
 	@Override
-	protected boolean compareTokens(String a, String b)
+	protected boolean compareTokens(Object a, Object b)
 	{
 		return a.equals(b);
 	}

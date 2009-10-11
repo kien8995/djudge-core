@@ -122,6 +122,7 @@ public class ContestCoreInternals
 			if (model instanceof UsersDataModel)
 			{
 				UsersDataModel um = (UsersDataModel) model;
+				um.updateData();
 				UserData ud = new UserData("root", "root", "root", "ADMIN");
 				um.insertRow(um.toRow(ud));
 				model.updateData();
