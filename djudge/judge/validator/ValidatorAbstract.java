@@ -17,9 +17,8 @@
 package djudge.judge.validator;
 
 /**
- * Basic class for all types of validators
+ * Base class for all validators
  * @author alt
- *
  */
 public abstract class ValidatorAbstract 
 {
@@ -40,6 +39,6 @@ public abstract class ValidatorAbstract
 	 * @param answer Program output file
 	 * @return object of type ValidationResult 
 	 */
-	public abstract ValidationResult Validate(String input, String output, String answer);
+	public abstract ValidationResult validateOutput(String input, String output, String answer);
 	
 }

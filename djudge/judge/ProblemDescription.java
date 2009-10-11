@@ -134,7 +134,7 @@ public class ProblemDescription extends AbstractDescription
 				problemInfo.problemID, ValidatorDescription.StringToType(checker), checkerParam, checkerExe);
 		
 		groups = new GroupDescription[1];
-		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask);
+		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, elem.getAttribute("score"));
 	}
 	
 	@Override

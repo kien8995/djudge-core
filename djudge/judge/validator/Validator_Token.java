@@ -2,19 +2,35 @@
 
 package djudge.judge.validator;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.BufferedReader;
 
 public class Validator_Token extends ValidatorInternalAbstract 
 {
-
+	@Override
+	//TODO: review code
 	protected String getToken(BufferedReader rd) throws IOException
 	{
-		Scanner sc = new Scanner(rd);
-		return sc.next();
+		StringBuffer res = new StringBuffer();
+		int t = rd.read();
+		// skipping whitespace
+		while (t == 32 || t == 10 || t == 9 || t == 13)
+		{
+			t = rd.read();
+		}
+		// if EOF reached
+		if (t == -1) return null;
+		
+		// reading till next whitespace character
+		while (!(t == 32 || t == 10 || t == 9 || t == 13 || t == -1))
+		{
+			res.append((char) t);
+			t = rd.read();
+		}
+		return res.toString();
 	}
 
+	@Override
 	protected boolean compareTokens(String a, String b)
 	{
 		return a.equals(b);

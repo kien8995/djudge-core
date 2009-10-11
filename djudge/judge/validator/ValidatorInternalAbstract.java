@@ -22,37 +22,38 @@ import utils.StringWorks;
 
 public abstract class ValidatorInternalAbstract extends ValidatorAbstract implements ValidatorLimits 
 {
-	BufferedReader in, out, ans;
+	BufferedReader judgeInput, judgeAnswer, programOutput;
 	
-	public ValidationResult Validate(String input, String output, String answer)
+	@Override
+	public ValidationResult validateOutput(String judgeInputFile, String judgeAnswerFile, String programOutputFile)
 	{
 		res = new ValidationResult(this.toString());
 		
 		// Checking whether input file exists		
-		File f = new File(input);
+		File f = new File(judgeInputFile);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoInputFileError;
-			res.validatorOutput = new String[]{"Cannot find input file: " + input};
+			res.validatorOutput = new String[]{"Cannot find input file: " + judgeInputFile};
 		}
 		
 		// Checking whether output file exists 
-		f = new File(output);
+		f = new File(judgeAnswerFile);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoOutputFileError;
-			res.validatorOutput = new String[]{"Cannot find output file: " + output};
+			res.validatorOutput = new String[]{"Cannot find answer file: " + judgeAnswerFile};
 		}
 		
 		// Checking whether answer file exists 
-		f = new File(answer);
+		f = new File(programOutputFile);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
 			res.result = ValidationResultEnum.WrongAnswer;
 			res.fail = ValidationFailEnum.OK;
-			res.validatorOutput = new String[]{"Cannot find answer file: " + answer};
+			res.validatorOutput = new String[]{"Cannot find program output file: " + programOutputFile};
 		}
 		
 		if (res.result != ValidationResultEnum.Undefined)
@@ -64,9 +65,9 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		try
 		{
 			res.fail = ValidationFailEnum.OK;			
-			in = new BufferedReader(new FileReader(input));
-			out = new BufferedReader(new FileReader(output));
-			ans = new BufferedReader(new FileReader(answer));
+			judgeInput = new BufferedReader(new FileReader(judgeInputFile));
+			judgeAnswer = new BufferedReader(new FileReader(judgeAnswerFile));
+			programOutput = new BufferedReader(new FileReader(programOutputFile));
 			processData();
 		}
 		catch (Exception exc)
@@ -88,18 +89,18 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		
 		try
 		{
-			while ((line = getToken(out)) != null)
+			while ((line = getToken(judgeAnswer)) != null)
 			{
 				cTokens++;
 				try
 				{
-					str = getToken(ans);
+					str = getToken(programOutput);
 					if (str == null)
 					{
 						res.validatorOutput[0] = "Wrong Answer";
 						res.validatorOutput[1] = "Answer too short: token #" + cTokens + " not founded";
 						res.result = ValidationResultEnum.WrongAnswer;
-						return;						
+						return;
 					}
 					try
 					{
@@ -127,7 +128,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 					return;				
 				}
 			}
-			if ((line = getToken(ans)) != null)
+			if ((line = getToken(programOutput)) != null)
 			{
 				res.validatorOutput[0] = "Wrong Answer";
 				res.validatorOutput[1] = "Extra token: '" + StringWorks.truncate(line) + "'";				

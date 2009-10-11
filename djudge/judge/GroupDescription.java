@@ -27,7 +27,7 @@ public class GroupDescription extends AbstractDescription
 	}
 	
 	public GroupDescription(ProblemDescription problemDescription, int number, int testsCount, GlobalProblemInfo problemInfo,
-			String inputFileMask, String outputFileMask)
+			String inputFileMask, String outputFileMask, String score)
 	{
 		this.problemDescription = problemDescription;
 		inputMask = inputFileMask;
@@ -39,6 +39,12 @@ public class GroupDescription extends AbstractDescription
 		{
 			tests.add(new TestDescription(this, i, problemInfo));
 		}
+        if (score != null && score.length() > 0)
+        {
+        	String[] scoreA = score.split(" ");
+        	for (int i = 0; i < scoreA.length; i++)
+        		tests.get(i).score = Integer.parseInt(scoreA[i]);
+        }
 	}
 
 	public GroupDescription(ProblemDescription problemDescription, int number, GlobalProblemInfo problem, Element item)
@@ -78,7 +84,14 @@ public class GroupDescription extends AbstractDescription
         {
         	tests.add(new TestDescription(this, i, problemInfo, (Element)list.item(i)));
         }
-        
+        String score = elem.getAttribute("score");
+//        System.out.print(score + "\n");
+        if (score != null && score.length() > 0)
+        {
+        	String[] scoreA = score.split(" ");
+        	for (int i = 0; i < scoreA.length; i++)
+        		tests.get(i).score = Integer.parseInt(scoreA[i]);
+        }
 		return true;
 	}
 

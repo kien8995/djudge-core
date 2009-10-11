@@ -32,49 +32,53 @@ public class Validator
 		this.desc = desc;
 	}
 	
-	public ValidationResult Validate(String input, String output, String answer)
+	public ValidationResult validateOutput(String input, String output, String answer)
 	{
 		ValidationResult res = new ValidationResult("" + desc.type);
 		switch (desc.type)
 		{
 		case ExternalExitCode:
-			res = (new ValidatorExitCode(desc.getCheckerPath())).Validate(input, output, answer);
+			res = (new ValidatorExitCode(desc.getCheckerPath())).validateOutput(input, output, answer);
 			break;
 
 		case ExternalExitCodeExtended:
-			res = (new ValidatorExitCodeExtended(desc.getCheckerPath())).Validate(input, output, answer);
+			res = (new ValidatorExitCodeExtended(desc.getCheckerPath())).validateOutput(input, output, answer);
 			break;
 
 		case ExternalTestLib:
-			res = (new ValidatorTestLib(desc.getCheckerPath())).Validate(input, output, answer);
+			res = (new ValidatorTestLib(desc.getCheckerPath())).validateOutput(input, output, answer);
 			break;
 
 		case InternalExact:	
-			res = (new Validator_String()).Validate(input, output, answer);
+			res = (new Validator_String()).validateOutput(input, output, answer);
 			break;
 
 		case InternalInt32:
-			res = (new Validator_Int32()).Validate(input, output, answer);
+			res = (new Validator_Int32()).validateOutput(input, output, answer);
 			break;
 
 		case InternalFloatAbs:
 			double eps = Double.parseDouble(desc.param);
-			res = (new Validator_FloatAbs(eps).Validate(input, output, answer));
+			res = (new Validator_Float(eps, false, true).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatRel:
 			double eps3 = Double.parseDouble(desc.param);
-			res = (new Validator_FloatRel(eps3).Validate(input, output, answer));
+			res = (new Validator_Float(eps3, true, false).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatOther:
 			double eps4 = Double.parseDouble(desc.param);
-			res = (new Validator_FloatOther(eps4).Validate(input, output, answer));
+			res = (new Validator_Float(eps4).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatAbsRel:
 			double eps2 = Double.parseDouble(desc.param);
-			res = (new Validator_FloatAbsRel(eps2).Validate(input, output, answer));
+			res = (new Validator_Float(eps2, true, true).validateOutput(input, output, answer));
+			break;
+
+		case InternalToken:
+			res = (new Validator_Token()).validateOutput(input, output, answer);
 			break;
 
 		case ExternalPC2:
@@ -82,10 +86,6 @@ public class Validator
 
 		case InternalInt64:
 //			break;
-
-		case InternalToken:
-			res = (new Validator_Token()).Validate(input, output, answer);
-			break;
 
 		case ExternalCustom:
 //			break;
