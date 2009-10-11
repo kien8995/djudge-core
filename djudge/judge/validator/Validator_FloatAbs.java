@@ -52,9 +52,9 @@ public class Validator_FloatAbs extends ValidatorInternalAbstract
 		return Math.abs(aa-bb) <= epsilon;
 	}
 	
+	@Override
 	public String toString()
 	{
-		return "Validator.FloatAbs (eps=" + epsilon + ")";
+		return "Validator_FloatAbs ["  + epsilon + "]";
 	}
-
 }

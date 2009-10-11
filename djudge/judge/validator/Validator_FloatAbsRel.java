@@ -45,5 +45,9 @@ public class Validator_FloatAbsRel extends ValidatorInternalAbstract
 		a = Double.parseDouble(answer);
 		return Math.abs((a-j)/j) <= epsilon || Math.abs(a-j) <= epsilon;
 	}
-
+	@Override
+	public String toString()
+	{
+		return "Validator_FloatAbsRel ["  + epsilon + "]";
+	}
 }

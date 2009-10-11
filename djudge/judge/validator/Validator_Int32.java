@@ -42,4 +42,9 @@ public class Validator_Int32 extends ValidatorInternalAbstract
 		return Integer.parseInt(a) == Integer.parseInt(b);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Validator_Int32";
+	}
 }

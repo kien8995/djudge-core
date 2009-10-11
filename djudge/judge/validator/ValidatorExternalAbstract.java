@@ -124,9 +124,10 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			}
 			finally
 			{
-				res.validatorOutput = new String[tmp.size()];
+				res.validatorOutput = new String[tmp.size()+1];
 				for (int i = 0; i < tmp.size(); i++)
 					res.validatorOutput[i] = tmp.get(i);
+				res.validatorOutput[tmp.size()] = "[" + this.toString() + "]";
 			}
 			
 			if (res.runInfo.state != RunnerResultEnum.OK && res.runInfo.state != RunnerResultEnum.NonZeroExitCode)
