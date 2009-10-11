@@ -85,7 +85,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 	{
 		int cTokens = 0;
 		
-		String line = "", str = "";
+		Object line = "", str = "";
 		
 		try
 		{
@@ -107,7 +107,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
     					if (!compareTokens(line, str))
     					{
     						res.validatorOutput[0] = "Wrong Answer";
-    						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line) + "' != '" + StringWorks.truncate(str) + "' [answer] [" + this.toString()+"]";
+    						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "' [answer] [" + this.toString()+"]";
     						res.result = ValidationResultEnum.WrongAnswer;
     						return;
     					}
@@ -115,7 +115,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 					catch (Exception e)
 					{
 						res.validatorOutput[0] = "Wrong Answer [" + e + "]";
-						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line) + "' != '" + StringWorks.truncate(str) + "' [answer] [" + this.toString()+"]";
+						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "' [answer] [" + this.toString()+"]";
 						res.result = ValidationResultEnum.WrongAnswer;
 						return;
 					}
@@ -123,7 +123,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 				catch (Exception exc)
 				{
 					res.validatorOutput[0] = "Don't know:" + exc;
-					res.validatorOutput[1] = "Token '" + StringWorks.truncate(line) + "' != '" + StringWorks.truncate(str) + "'";
+					res.validatorOutput[1] = "Token '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "'";
 					res.result = ValidationResultEnum.WrongAnswer;
 					return;				
 				}
@@ -131,7 +131,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			if ((line = getToken(programOutput)) != null)
 			{
 				res.validatorOutput[0] = "Wrong Answer";
-				res.validatorOutput[1] = "Extra token: '" + StringWorks.truncate(line) + "'";				
+				res.validatorOutput[1] = "Extra token: '" + StringWorks.truncate(line.toString()) + "'";				
 				res.result = ValidationResultEnum.WrongAnswer;
 				return;
 			}				
@@ -143,7 +143,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			res.result = ValidationResultEnum.InternalError;
 			return;
 		}
-		res.validatorOutput[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(str) + "\"" : "");
+		res.validatorOutput[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(str.toString()) + "\"" : "");
 		res.validatorOutput[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
 		res.result = ValidationResultEnum.OK;
 	}
@@ -154,7 +154,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 	 * @return Next token if available, null otherwise
 	 * @throws IOException
 	 */
-	protected abstract String getToken(BufferedReader rd) throws IOException;
+	protected abstract Object getToken(BufferedReader rd) throws IOException;
 
 	/**
 	 * Compares two tokens for equality
@@ -163,7 +163,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 	 * @param b Second token
 	 * @return (a == b)
 	 */
-	protected abstract boolean compareTokens(String a, String b);
+	protected abstract boolean compareTokens(Object a, Object b);
 
 	
 }

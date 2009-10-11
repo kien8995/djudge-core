@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public abstract class LoginWindow extends JDialog implements ActionListener
@@ -71,13 +72,13 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 		c.gridwidth = 2;
 		add(new JLabel("Password"), c);
 		
-		tfPassword = new JTextField();
+		tfPassword = new JPasswordField();
 		tfPassword.setPreferredSize(tfSize);
 		c.gridy = 10;
 		c.gridwidth = 4;
 		add(tfPassword, c);
 		
-		btnLogon = new JButton("Logon");
+		btnLogon = new JButton("Enter");
 		btnLogon.setPreferredSize(btnSize);
 		btnLogon.addActionListener(this);
 		c.gridy = 12;

@@ -235,6 +235,7 @@ public class ProblemManager extends JFrame implements MouseListener
 	public ProblemManager()
 	{
 		problems = ProblemScanner.scanProblems();
+		System.out.println(problems.length);
 		setSize(640, 480);
 		setLayout(new BorderLayout());
 		

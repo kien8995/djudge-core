@@ -81,6 +81,10 @@ public class Validator
 			res = (new Validator_Token()).validateOutput(input, output, answer);
 			break;
 
+		case InternalSortedToken:
+			res = (new Validator_SortedToken()).validateOutput(input, output, answer);
+			break;
+
 		case ExternalPC2:
 //			break;
 

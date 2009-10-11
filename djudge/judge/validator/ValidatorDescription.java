@@ -45,25 +45,27 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 	{
 		s = s.toUpperCase();
 		ValidatorType res = ValidatorType.Unknown;
-		if (s.equals("%STR%")) res = ValidatorType.InternalExact;
-		else if (s.equals("%INT32%")) res = ValidatorType.InternalInt32;
-		else if (s.equals("%INT64%")) res = ValidatorType.InternalInt64;
-		else if (s.equals("%FLOAT%")) res = ValidatorType.InternalFloatAbs;
-		else if (s.equals("%TESTLIB%")) res = ValidatorType.ExternalTestLib;
-		else if (s.equals("%PC2%")) res = ValidatorType.ExternalPC2;
-		else if (s.equals("%RET_VAL%")) res = ValidatorType.ExternalExitCode;
-		else if (s.equals("%RET_VAL_EXTENDED%")) res = ValidatorType.ExternalExitCodeExtended;
-		else if (s.equals("@STR")) res = ValidatorType.InternalExact;
-		else if (s.equals("@TOKEN")) res = ValidatorType.InternalToken;
-		else if (s.equals("@INT32")) res = ValidatorType.InternalInt32;
-		else if (s.equals("@INT64")) res = ValidatorType.InternalInt64;
-		else if (s.equals("@FLOAT")) res = ValidatorType.InternalFloatAbs;
-		else if (s.equals("@FLOAT2")) res = ValidatorType.InternalFloatAbsRel;
-		else if (s.equals("@FLOAT_SKIP")) res = ValidatorType.InternalFloatOther;
-		else if (s.equals("%STDLIB")) res = ValidatorType.ExternalTestLib;
-		else if (s.equals("%PC2")) res = ValidatorType.ExternalPC2;
-		else if (s.equals("%EXITCODE")) res = ValidatorType.ExternalExitCode;
-		else if (s.equals("%EXITCODE_EXTENDED")) res = ValidatorType.ExternalExitCodeExtended;
+		if (s.equalsIgnoreCase("%STR%")) res = ValidatorType.InternalExact;
+		else if (s.equalsIgnoreCase("%INT32%")) res = ValidatorType.InternalInt32;
+		else if (s.equalsIgnoreCase("%INT64%")) res = ValidatorType.InternalInt64;
+		else if (s.equalsIgnoreCase("%FLOAT%")) res = ValidatorType.InternalFloatAbs;
+		else if (s.equalsIgnoreCase("%TESTLIB%")) res = ValidatorType.ExternalTestLib;
+		else if (s.equalsIgnoreCase("%TESTLIB")) res = ValidatorType.ExternalTestLib;
+		else if (s.equalsIgnoreCase("%PC2%")) res = ValidatorType.ExternalPC2;
+		else if (s.equalsIgnoreCase("%RET_VAL%")) res = ValidatorType.ExternalExitCode;
+		else if (s.equalsIgnoreCase("%RET_VAL_EXTENDED%")) res = ValidatorType.ExternalExitCodeExtended;
+		else if (s.equalsIgnoreCase("@STR")) res = ValidatorType.InternalExact;
+		else if (s.equalsIgnoreCase("@TOKEN")) res = ValidatorType.InternalToken;
+		else if (s.equalsIgnoreCase("@TOKEN_SORTED")) res = ValidatorType.InternalSortedToken;
+		else if (s.equalsIgnoreCase("@INT32")) res = ValidatorType.InternalInt32;
+		else if (s.equalsIgnoreCase("@INT64")) res = ValidatorType.InternalInt64;
+		else if (s.equalsIgnoreCase("@FLOAT")) res = ValidatorType.InternalFloatAbs;
+		else if (s.equalsIgnoreCase("@FLOAT2")) res = ValidatorType.InternalFloatAbsRel;
+		else if (s.equalsIgnoreCase("@FLOAT_SKIP")) res = ValidatorType.InternalFloatOther;
+		else if (s.equalsIgnoreCase("%STDLIB")) res = ValidatorType.ExternalTestLib;
+		else if (s.equalsIgnoreCase("%PC2")) res = ValidatorType.ExternalPC2;
+		else if (s.equalsIgnoreCase("%EXITCODE")) res = ValidatorType.ExternalExitCode;
+		else if (s.equalsIgnoreCase("%EXITCODE_EXTENDED")) res = ValidatorType.ExternalExitCodeExtended;
 		else
 		{
 			
