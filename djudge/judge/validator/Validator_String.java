@@ -17,5 +17,11 @@ public class Validator_String extends ValidatorInternalAbstract
 	{
 		return a.equals(b);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Validator_String";
+	}
 
 }

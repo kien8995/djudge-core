@@ -48,4 +48,9 @@ public class Validator_FloatRel extends ValidatorInternalAbstract
 		return Math.abs((a-j)/j) <= epsilon;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Validator_FloatRel ["  + epsilon + "]";
+	}
 }

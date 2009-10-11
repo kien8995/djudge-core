@@ -58,5 +58,10 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 			res.result = ValidationResultEnum.InternalError;
 		}
 	}
-		
+	
+	@Override
+	public String toString()
+	{
+		return "Validator.TestLib";
+	}
 }

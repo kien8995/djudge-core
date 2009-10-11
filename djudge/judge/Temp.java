@@ -36,7 +36,7 @@ public class Temp
 {	
 	public static void main(String arg[])
 	{
-		Scripts.generateProblemReport("NCPC-2009", "D");
+		Scripts.generateProblemReport("COCI-2009", "3C");
 		
 		//Scripts.generateContestReport("Yokohama-2006");
 	}

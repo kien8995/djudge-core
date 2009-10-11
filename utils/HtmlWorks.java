@@ -128,12 +128,12 @@ public class HtmlWorks
 	public static String testGroupToHtml(GroupResult res)
 	{
 		StringBuffer s = new StringBuffer();
-		s.append("<table border=1>");
+/*		s.append("<table border=1>");
 		s.append("<tr><td>Group#</td><td>" + (res.getGroupNumber() + 1) + "</td></tr>");
 		s.append("<tr><td>Status</td><td>" + res.getJudgement() + "</td></tr>");
-		s.append("<tr><td>MaxTime</td><td>" + formatRuntime(res.getMaxTime()) + " ms</td></tr>");
+		s.append("<tr><td>MaxTime</td><td>" + formatRuntime(res.getMaxTime()) + "</td></tr>");
 		s.append("<tr><td>MaxMemory</td><td>" + formatMemorySize(res.getMaxMemory()) + " K</td></tr>");
-		s.append("<table>");
+		s.append("</table>");*/
 		s.append("<table border=1>");
 		s.append("<tr><th>Test</th><th>Time</th><th>Memory</th><th>OutputSize</th><th>Judgement</th><th>Validator</th></tr>");
 		try

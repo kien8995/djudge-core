@@ -53,4 +53,9 @@ public class Validator_FloatOther extends ValidatorInternalAbstract
 		}
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Validator_FloatOther ["  + epsilon + "]";
+	}
 }

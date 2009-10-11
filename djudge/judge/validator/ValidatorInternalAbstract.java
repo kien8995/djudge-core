@@ -20,10 +20,6 @@ import java.io.*;
 
 import utils.StringWorks;
 
-
-
-
-
 public abstract class ValidatorInternalAbstract extends ValidatorAbstract implements ValidatorLimits 
 {
 	BufferedReader in, out, ans;
@@ -38,6 +34,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		{
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoInputFileError;
+			res.validatorOutput = new String[]{"Cannot find input file: " + input};
 		}
 		
 		// Checking whether output file exists 
@@ -46,6 +43,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		{
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoOutputFileError;
+			res.validatorOutput = new String[]{"Cannot find output file: " + output};
 		}
 		
 		// Checking whether answer file exists 
@@ -54,13 +52,13 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		{
 			res.result = ValidationResultEnum.WrongAnswer;
 			res.fail = ValidationFailEnum.OK;
+			res.validatorOutput = new String[]{"Cannot find answer file: " + answer};
 		}
 		
 		if (res.result != ValidationResultEnum.Undefined)
 			return res;
 		
 		// All files are present, validating data
-
 		res.validatorOutput = new String[2];
 		
 		try
@@ -145,7 +143,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			return;
 		}
 		res.validatorOutput[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(str) + "\"" : "");
-		res.validatorOutput[1] = "" + cTokens + " tokens compared [" + this.toString() +  "]";				
+		res.validatorOutput[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
 		res.result = ValidationResultEnum.OK;
 	}
 
