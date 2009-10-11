@@ -36,7 +36,8 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		exeFile = ExeName;
 	}
 	
-	public ValidationResult Validate(String input, String output, String answer)
+	@Override
+	public ValidationResult validateOutput(String input, String output, String answer)
 	{
 		res = new ValidationResult(this.toString());
 		File f = new File(exeFile);

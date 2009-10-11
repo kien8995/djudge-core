@@ -30,14 +30,12 @@ import utils.FileWorks;
 import utils.Scripts;
 import utils.XmlWorks;
 
-
 @SuppressWarnings("unused")
 public class Temp
-{	
+{
 	public static void main(String arg[])
 	{
-		Scripts.generateProblemReport("COCI-2009", "3C");
-		
+		Scripts.generateProblemReport("uzhnu-2009", "A");
 		//Scripts.generateContestReport("Yokohama-2006");
 	}
 }

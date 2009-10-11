@@ -24,7 +24,7 @@ class ValidatorTest
 	boolean runTest(Validator val, ValidationResultEnum expectedResult)
 	{
 		boolean res = false;
-		ValidationResult rres = val.Validate(inputFile, outputFile, answerFile);
+		ValidationResult rres = val.validateOutput(inputFile, outputFile, answerFile);
 		ValidationResultEnum tres = rres.result;
 		System.out.println("Test [" + inputFile + ", " + outputFile + ", " + answerFile + "]");
 		if (tres != expectedResult)

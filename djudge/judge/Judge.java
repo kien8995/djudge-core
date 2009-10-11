@@ -336,6 +336,7 @@ public class Judge
 		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
 		
 		String inputTestFilename = test.getInputFilename();
+		//System.out.println(inputTestFilename);
 		if ((inputTestFilename == null) || ("".equals(inputTestFilename)))
 		{
 			inputTestFilename = "input.txt";

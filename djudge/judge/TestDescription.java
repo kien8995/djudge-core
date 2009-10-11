@@ -87,8 +87,12 @@ public class TestDescription extends AbstractDescription
 	{
 		ExecutorFiles res = new ExecutorFiles();
 		res.errorFilename = "error.txt";
-		res.inputFilename = "input.txt";
-		res.outputFilename = "output.txt";
+		String inputTestFilename = getInputFilename();
+		if (inputTestFilename == null || inputTestFilename.length() == 0)
+			res.inputFilename = "input.txt";
+		String outputTestFilename = getAnswerFilename();
+		if (outputTestFilename == null || outputTestFilename.length() == 0)
+			res.outputFilename = "output.txt";
 		return res;
 	}
 	

@@ -22,7 +22,7 @@ public class LocalValidator
         try
         {
         	ProblemDescription pd = new ProblemDescription(task.contestId, task.problemId);
-        	ValidationResult res = new Validator(pd.getTestValidator(task.groupNumber, task.testNumber)).Validate(task.testInput.filename, task.testOutput.filename, workDir + "answer.txt");
+        	ValidationResult res = new Validator(pd.getTestValidator(task.groupNumber, task.testNumber)).validateOutput(task.testInput.filename, task.testOutput.filename, workDir + "answer.txt");
         	return res;
         }
         catch (Exception e)
