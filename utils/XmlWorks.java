@@ -16,8 +16,6 @@
 
 package utils;
 
-
-
 import java.io.*;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
@@ -51,6 +49,7 @@ public class XmlWorks
 	public static Document getDocumentFromString(String xmlString)
 	{
 		Document doc = null;
+		System.out.println(xmlString);
 		try
 		{
 			DOMParser parser = new DOMParser();

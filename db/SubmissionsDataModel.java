@@ -32,6 +32,7 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		new DBField("sid:1", "ProblemSID", String.class, "", false),
 		new DBField("name:1", "ProblemName", String.class, "", false),
 		new DBField("sid", "LanguageID", String.class, "", false),
+		new DBField("first_test_flag", "fFirstTest", Integer.class, "", true),
 	};
 	
 	public final static int getUserFieldIndex()
@@ -144,6 +145,7 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		row.data[18] = sd.problemSid;
 		row.data[19] = sd.problemName;
 		row.data[20] = sd.languageSid;
+		row.data[21] = sd.fFirstTestOnly;
 		return row;
 	}
 
@@ -171,6 +173,7 @@ public class SubmissionsDataModel extends AbstractTableDataModel
 		sd.problemSid = row.data[18].toString();
 		sd.problemName = row.data[19].toString();
 		sd.languageSid = row.data[20].toString();
+		sd.fFirstTestOnly = Integer.parseInt(row.data[21].toString());
 		return sd;
 	}
 		

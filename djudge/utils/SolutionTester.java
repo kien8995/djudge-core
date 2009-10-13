@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import djudge.judge.CheckParams;
 import djudge.judge.Judge;
 import djudge.judge.ProblemDescription;
 import djudge.judge.SubmissionResult;
@@ -169,7 +170,7 @@ public class SolutionTester extends JFrame implements ActionListener
 			if (fd.getFile() != null)
 			{
 				String filename = fd.getDirectory() + fd.getFile();
-				SubmissionResult sRes = Judge.judgeSourceFile(filename, "%AUTO%", pd);
+				SubmissionResult sRes = Judge.judgeSourceFile(filename, "%AUTO%", pd, new CheckParams());
 				System.out.println(sRes.getResult());
 				makeTable(sRes);
 			}			

@@ -294,4 +294,11 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 	{
 		return serverConnector.generateLogins(username, password, count, loginType);
 	}
+
+	@Override
+	public boolean testSolution(String username, String password,
+			String problemID, String languageID, String sourceCode)
+	{
+		return serverConnector.testSolution(username, password, problemID, languageID, sourceCode);
+	}
 }

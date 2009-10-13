@@ -157,6 +157,7 @@ public class DServiceDBLayer
 					res.problemId = rs.getString("problem");
 					res.languageId = rs.getString("language");
 					res.id = submissionID = rs.getInt("id");
+					res.params = rs.getString("check_params");
 				}
 				rs.close();
 				st.close();

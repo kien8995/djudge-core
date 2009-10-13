@@ -1,7 +1,7 @@
 package djudge.judge;
 
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import utils.DirectoryResult;
 import utils.FileWorks;
 import utils.HtmlWorks;
@@ -124,198 +124,33 @@ public class Judge
 		
 		return res;
 	}
-	
-	public static GroupResult judgeGroup(CompilationInfo cinfo, GroupDescription group, boolean fFullTesting, boolean fFullResults)
-	{
-		GroupResult res = new GroupResult(group);
-		
-		for (int i = 0; i < group.testsCount; i++)
-		{
-			TestResult t = res.testResults[i] = judgeTest(cinfo, group.tests[i], fFullResults);
-			if (!fFullTesting && t.result != TestResultEnum.AC)
-				break;
-		}
-		res.updateResult();
-		
-		return res;
-	}
-	
-	public static TestResult judgeTest(CompilationInfo cinfo, TestDescription test, boolean fFullResults)
-	{
-		TestResult res = new TestResult(test);
-		
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date());
-		
-        try
-        {
-        	String input = (test.judgeInput != null && test.judgeInput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeInput : "";
-        	String output = (test.judgeOutput != null && test.judgeOutput != "") ? test.problemInfo.problemRoot + "\\tests\\" + test.judgeOutput : "";
-        	res = judgeTest(id, cinfo, input, output, test, fFullResults);
-        }
-        catch (Exception exc)
-        {
-        	res.systemMessage = exc.toString();
-        	System.out.println(exc);
-        }
-		
-		return res;
-	}
-	
-	public static RunnerResult generateTestAnswer(TestDescription desc, String command)
-	{
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date());
-        
-        RunnerResult res = null;
-        
-        try
-        {
-        	res = generateOutput(id, command,
-        			FileWorks.ConcatPaths(desc.problemInfo.problemRoot + "tests", desc.judgeInput), 
-        			FileWorks.ConcatPaths(desc.problemInfo.problemRoot + "tests", desc.judgeOutput), 
-        			desc);
-        }
-        catch (Exception e)
-        {
-        	e.printStackTrace();
-		}
-		return res;
-	}
-	
-	public static RunnerResult generateOutput(String solutionID, String command, String inputFile, String answerFile, TestDescription desc) throws JudgeException
-	{
-		File f;
-		
-		String globalTempDir = settings.getWorkDir();
-		String tempDir = globalTempDir + solutionID + "/";
-		
-		FileWorks.CopyFile(tempDir + FileWorks.getFileName(command), command);
-		
-		System.out.println("Input: " + inputFile);
-        f = new File(inputFile);
-        if (!f.exists())
-        	throw new JudgeException(JudgeExceptionType.FileNotFound, inputFile, "global input test #" + desc.getTestNumber());
-
-        desc.getFiles().print();
-        
-		String inputFileLocal = tempDir + (desc.getInputFilename() != null ? desc.getInputFilename() : "input.txt");
-		String answerFileLocal = tempDir + (desc.getAnswerFilename() != null ? desc.getAnswerFilename() : "output.txt");
-		
-    	System.out.println("Input: " + inputFileLocal);
-		
-        f = new File(inputFileLocal);
-        FileWorks.CopyFile(inputFileLocal, inputFile);
-        if (!f.exists())
-        	throw new JudgeException(JudgeExceptionType.FileNotCreated, inputFileLocal, "local input test #" + desc.getTestNumber());                
-        
-        // now all files are present, we can running 'command'
-        
-        f = new File(command);
-        if (f.exists())
-        {
-        	String cexename = FileWorks.getFileName(command);
-        	String new_commad = tempDir + cexename;
-        	FileWorks.CopyFile(new_commad, command);
-        	f = new File(new_commad);
-        	if (f.exists())
-        		command = cexename;
-        }
-    	
-        ExecutorFiles files = desc.getFiles();
-        files.rootDirectory = tempDir;
-        Runner run = new Runner(desc.getLimits(), files);
-        
-        run.saveOutputTo(tempDir + "runner.out");
-    	RunnerResult res = run.run(command);
-    	
-    	if (res.state == RunnerResultEnum.OK)
-    		FileWorks.CopyFile(answerFile, answerFileLocal);
-    	
-		return res;		
-	}
-	
-	public static TestResult judgeTest(String solutionID, CompilationInfo cinfo, String inputGlobalFile, String etalonGlobalFile, TestDescription desc, boolean fFullResults) throws JudgeException
-	{
-		TestResult res = new TestResult(desc);
-		File f;
-		
-		String globalTempDir = settings.getWorkDir();
-		String tempDir = globalTempDir + solutionID + "/";
-		
-		
-		
-        // global input & etalon files checking 
-        f = new File(inputGlobalFile);
-        if (!f.exists())
-        	throw new JudgeException(JudgeExceptionType.FileNotFound, inputGlobalFile, "global input test #" + desc.getTestNumber());
-
-        f = new File(etalonGlobalFile);
-        if (!f.exists())
-        	throw new JudgeException(JudgeExceptionType.FileNotFound, etalonGlobalFile, "etalon test #" + desc.getTestNumber());
-
-        // local answer & input files
-        
-        desc.getFiles().print();
-        
-		String inputFile = tempDir + (desc.getInputFilename() != null ? desc.getInputFilename() : "input.txt");
-		String answerFile = tempDir + (desc.getAnswerFilename() != null ? desc.getAnswerFilename() : "output.txt");
-        
-    	System.out.println("Input: " + inputFile);
-		
-        f = new File(inputFile);
-        FileWorks.CopyFile(inputFile, inputGlobalFile);
-        if (!f.exists())
-        	throw new JudgeException(JudgeExceptionType.FileNotCreated, inputFile, "local input test #" + desc.getTestNumber());                
-        
-        // now all files are present, we can running 'command'
-        
-        if (f.exists())
-        {
-        	String cexename = FileWorks.getFileName(command);
-        	String new_commad = tempDir + cexename;
-        	FileWorks.CopyFile(new_commad, command);
-        	f = new File(new_commad);
-        	if (f.exists())
-        		command = cexename;
-        }
-    	
-        ExecutorFiles files = desc.getFiles();
-        
-        files.rootDirectory = tempDir;
-        
-        Runner run = new Runner(desc.getLimits(), files);
-        run.saveOutputTo(tempDir + "runner.out");
-    	ValidationResult validationInfo = new ValidationResult("No_validator");
-    	RunnerResult runtimeInfo = run.run(command);
-		runtimeInfo.output = (int)new File(answerFile).length();
-    	
-    	if (runtimeInfo.state == RunnerResultEnum.OK)
-    		validationInfo = desc.getValidator().Validate(inputGlobalFile, etalonGlobalFile, answerFile);
-    		
-    	res.setRuntimeInfo(runtimeInfo);
-    	res.setValidationInfo(validationInfo);
-        
-    	FileWorks.deleteFile(inputFile);
-    	//FileWorks.deleteFile(command);
-    	
-		return res;
 	}*/
 	
-	public static ProblemResult judgeProblem(ProblemDescription desc, ParamsOverride params, ExecutorProgram program)
+	public static ProblemResult judgeProblem(ProblemDescription desc, CheckParams params, ExecutorProgram program)
 	{
 		ProblemResult res = new ProblemResult(desc);
 
-		for (int i = 0; i < desc.groupsCount; i++)
+		if (params.fFirstTestOnly)
 		{
-			res.groupResults[i] = judgeGroup(desc.groups[i], params, program);
+			System.out.println("First only");
+			res.groupCount = 1;
+			res.groupResults = new GroupResult[1];
+			res.groupResults[0] = judgeGroup(desc.groups[0], params, program);
+		}
+		else
+		{
+			System.out.println("All tests");
+    		for (int i = 0; i < desc.groupsCount; i++)
+    		{
+    			res.groupResults[i] = judgeGroup(desc.groups[i], params, program);
+    		}
 		}
 		res.updateResult();
 		
 		return res;
 	}
 	
-	public static GroupResult judgeGroup(GroupDescription desc, ParamsOverride params, ExecutorProgram program)
+	public static GroupResult judgeGroup(GroupDescription desc, CheckParams params, ExecutorProgram program)
 	{
 		GroupResult res = new GroupResult(desc);
 		
@@ -328,7 +163,7 @@ public class Judge
 		return res;		
 	}
 	
-	public static TestResult judgeTest(TestDescription test, ParamsOverride params, ExecutorProgram program)
+	public static TestResult judgeTest(TestDescription test, CheckParams params, ExecutorProgram program)
 	{
 		TestResult res = new TestResult(test);
 		String contestId = test.problemInfo.contestID;
@@ -381,7 +216,6 @@ public class Judge
 		{
 			res.setValidationInfo(new ValidationResult(""));
 		}
-		//FileWorks.deleteDirectory(exRes.tempDir);
 		return res;
 	}
 	
@@ -401,7 +235,7 @@ public class Judge
 		}
 	}
 	
-	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem)
+	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, CheckParams params)
 	{
 		log.info("Judging file " + file);
 		RemoteFS.startSession();
@@ -419,7 +253,7 @@ public class Judge
 			ExecutorProgram pr = new ExecutorProgram();
 			pr.command = ci.program.getRunCommand();
 			pr.files = ci.program.files;
-			ProblemResult pres = judgeProblem(problem, new ParamsOverride(), pr);
+			ProblemResult pres = judgeProblem(problem, params, pr);
 			res.setProblemResult(pres);
 		}
 		RemoteFS.clearSession();
@@ -427,7 +261,7 @@ public class Judge
 		return res;
 	}
 
-	public static JudgeTaskResult judgeTask(JudgeTaskDescription task)
+	public static JudgeTaskResult judgeTask(JudgeTaskDescription task, CheckParams params)
 	{
 		JudgeTaskResult res = new JudgeTaskResult();
 		res.desc = task;
@@ -439,7 +273,7 @@ public class Judge
 		}
 		catch (Exception e)
 		{
-			e.getStackTrace();
+			log.error("While creating problem description", e);
 			return res;
 		}
 		
@@ -451,17 +285,12 @@ public class Judge
 		
 		try
 		{
-			res.res = judgeSourceFile(filesrc, task.tlanguage, pd);
+			res.res = judgeSourceFile(filesrc, task.tlanguage, pd, params);
 		}
 		catch (Exception e)
 		{
 			e.getStackTrace();
 		}
 		return res;
-	}
-	
-	public static void main(String[] args)
-	{
-		checkProblem("NEERC-1998", "G");
 	}
 }

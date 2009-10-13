@@ -10,9 +10,9 @@ public class DServiceXmlRpcStub implements DServiceXmlRpcInterface
 
 	@Override
 	public int submitSolution(String uid, String contestId, String problemId,
-			String languageId, String source, String clientData)
+			String languageId, String source, String clientData, String params)
 	{
-		return DServiceServer.getCore().submitSolution(uid, contestId, problemId, languageId, source, clientData);
+		return DServiceServer.getCore().submitSolution(uid, contestId, problemId, languageId, source, clientData, params);
 	}
 
 	@SuppressWarnings("unchecked")

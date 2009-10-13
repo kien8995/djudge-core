@@ -189,7 +189,7 @@ public class ContestCoreInternals
 		return false;
 	}	
 	
-	protected boolean submitSolutionCore(String userID, String problemID, String languageID, String courceCode)
+	protected boolean submitSolutionCore(String userID, String problemID, String languageID, String courceCode, boolean fFirstTestOnly)
 	{
 		SubmissionData sd = new SubmissionData();
 		sd.contestTime = (int) state.getContestTime();
@@ -197,6 +197,8 @@ public class ContestCoreInternals
 		sd.problemID = problemID;
 		sd.sourceCode = new String(Base64.encodeBase64(courceCode.getBytes()));
 		sd.userID = userID;
+		sd.fFirstTestOnly = fFirstTestOnly ? 1 : 0;
+		sd.active = fFirstTestOnly ? 0 : 1;
 		
 		DBRowAbstract row = submissionsModel.toRow(sd);
 		if (row.appendTo(submissionsModel))

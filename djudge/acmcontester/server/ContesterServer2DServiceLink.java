@@ -21,6 +21,7 @@ import djudge.acmcontester.structures.SubmissionData;
 import djudge.dservice.DServiceTaskResult;
 import djudge.dservice.DServiceXmlRpcConnector;
 import djudge.dservice.interfaces.DServiceXmlRpcInterface;
+import djudge.judge.CheckParams;
 
 public class ContesterServer2DServiceLink extends Thread
 {
@@ -58,6 +59,8 @@ public class ContesterServer2DServiceLink extends Thread
 		sd.maxTime = maxTime;
 		sd.failedTest = wrongTest;
 		sd.score = score;
+		if (sd.judgement.equalsIgnoreCase("CE") || sd.fFirstTestOnly > 0)
+			sd.active = 0;
 		sdm.setRowData(0, sdm.toRow(sd).data);
 	}
 	
@@ -103,7 +106,12 @@ public class ContesterServer2DServiceLink extends Thread
 	    			
 	    			try
 	    			{
-	    				Integer result = serverConnector.submitSolution("simpleacm", pd.djudgeContest, pd.djudgeProblem, ld.djudgeID, new String(Base64.decodeBase64(sd.sourceCode.getBytes())), sd.id);
+	    				Integer result = serverConnector.submitSolution(
+								"simpleacm", pd.djudgeContest,
+								pd.djudgeProblem, ld.djudgeID, new String(
+										Base64.decodeBase64(sd.sourceCode
+												.getBytes())), sd.id,
+								"" + new CheckParams(sd).fFirstTestOnly);
 	    				if (result > 0)
 	    				{
 	    					sentIDs.add(sd.id);
