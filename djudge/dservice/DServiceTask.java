@@ -10,10 +10,11 @@ public class DServiceTask
 	String languageId;
 	String source;
 	String clientData;
+	String params;
 	
 	public DServiceTask()
 	{
-		clientData = contestId = problemId = languageId = source = "";
+		params = clientData = contestId = problemId = languageId = source = "";
 	}
 	
 	public int getID()
@@ -54,6 +55,7 @@ public class DServiceTask
 		languageId = map.get("language");
 		source = map.get("source");
 		clientData = map.get("clientData");
+		params = map.get("param");
 	}
 	
 	public HashMap<String, String> toHashMap()
@@ -65,6 +67,12 @@ public class DServiceTask
 		res.put("language", languageId);
 		res.put("source", source);
 		res.put("clientData", clientData);
+		res.put("param", params);
 		return res;
+	}
+	
+	public String getParams()
+	{
+		return params;
 	}
 }

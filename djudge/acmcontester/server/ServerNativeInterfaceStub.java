@@ -287,4 +287,11 @@ public class ServerNativeInterfaceStub implements ServerNativeInterface
 	{
 		return ContestServer.getCore().generateLogins(username, password, count, loginType);
 	}
+
+	@Override
+	public boolean testSolution(String username, String password,
+			String problemID, String languageID, String sourceCode)
+	{
+		return ContestServer.getCore().testSolution(username, password, problemID, languageID, sourceCode);
+	}
 }

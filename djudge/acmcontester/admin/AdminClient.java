@@ -12,6 +12,7 @@ import djudge.acmcontester.JMonitorACMPanel;
 import djudge.acmcontester.JMonitorIOIPanel;
 import djudge.acmcontester.JStatusPanel;
 import djudge.acmcontester.JSubmitPanel;
+import djudge.acmcontester.JTestPanel;
 import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.structures.RemoteTableLanguages;
 import djudge.acmcontester.structures.RemoteTableProblems;
@@ -84,6 +85,8 @@ public class AdminClient extends JFrame
 		jtpTabs.add("Monitor-IOI", monitorPanelIOI = new JMonitorIOIPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, authData));
+		
+		jtpTabs.add("Test", new JTestPanel(serverXmlRpcInterface, authData));
 		
 		add(jtpTabs, BorderLayout.CENTER);
 		

@@ -57,7 +57,6 @@ public class ProblemDescription extends AbstractDescription
 		{
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private void parseXML20(Element elem) throws DJudgeXmlException
@@ -107,7 +106,7 @@ public class ProblemDescription extends AbstractDescription
 		int testsCount = Integer.parseInt(elem.getAttribute("test-count"));
 		String inputFileMask = elem.getAttribute("input-mask");
 		String outputFileMask = elem.getAttribute("output-mask");		
-		
+
 		String in = problemInfo.programInputFilename = elem.getAttribute("input-file");
 		String out = problemInfo.programOutputFilename = elem.getAttribute("output-file");
 		

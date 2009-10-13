@@ -1,7 +1,7 @@
 package djudge.judge.interfaces;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -9,11 +9,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
-
-
 
 class ThreadSubmitter extends Thread implements Submitter
 {
@@ -137,9 +134,11 @@ class ThreadTester extends Thread
     		if (desc == null) continue;
     		
     		System.out.println("Tester.judging: " + desc.tid);
-    		JudgeTaskResult res = Judge.judgeTask(desc);
-    		System.out.println("Tester.judged: " + desc.tid);
-    		submitter.submitResult(res);
+    		
+    		//TODO: Fix This
+    		//JudgeTaskResult res = Judge.judgeTask(desc);
+    		//System.out.println("Tester.judged: " + desc.tid);
+    		//submitter.submitResult(res);
 		}
 	}
 	

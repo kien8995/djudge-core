@@ -44,10 +44,10 @@ public class DServiceXmlRpcConnector extends XmlRpcConnector implements DService
 
 	@Override
 	public int submitSolution(String uid, String contestId, String problemId,
-			String languageId, String source, String clientData)
+			String languageId, String source, String clientData, String params)
 	{
 		return (Integer) callRemoteMethod("submitSolution", uid,
-				contestId, problemId, languageId, source, clientData);
+				contestId, problemId, languageId, source, clientData, params);
 	}
 
 	@SuppressWarnings("unchecked")

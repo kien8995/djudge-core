@@ -345,4 +345,12 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 	{
 		return (Boolean) callRemoteMethod("generateLogins", username, password, count, loginType);
 	}
+
+	@Override
+	public boolean testSolution(String username, String password,
+			String problemID, String languageID, String sourceCode)
+	{
+		return (Boolean) callRemoteMethod("testSolution", username, password,
+				problemID, languageID, sourceCode);
+	}
 }

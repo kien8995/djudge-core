@@ -54,20 +54,21 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 		return getUserTaskResults2(userID);
 	}
 	
+	@Override
 	public int submitSolution(String uid, String contestId, String problemId, 
-			String languageId, String source, String clientData)
+			String languageId, String source, String clientData, String paramsXML)
 	{
 		int userID = getUserID(uid);
 		if (userID <= 0)
 			return -DServiceResult.AUTHORIZATION_FAILED.ordinal();
 		
-		log.info("Submission " + contestId + "-" + problemId + " " + languageId + " [" + clientData + "] received from '" + uid + "'");
-
+		log.info("Submission " + contestId + "-" + problemId + " " + languageId + " [" + clientData + "]  received from '" + uid + "'");
+		log.info(paramsXML);
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		String dateStr = dateFormat.format(date);
 		
-		String sql = "INSERT INTO submissions(user_id, judgement, judge_id, judge_status, contest, problem, language, date, fetched, client_data)" +
+		String sql = "INSERT INTO submissions(user_id, judgement, judge_id, judge_status, contest, problem, language, date, fetched, client_data, check_params)" +
 				"VALUES(" +
 				"" + userID + "," + 
 				"''," +
@@ -78,7 +79,8 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 				"'" + languageId + "'," + 
 				"'" + dateStr + "'," +
 				"0," +
-				"'" + clientData + "'" +
+				"'" + clientData + "'," +
+				"'" + paramsXML +  "'" + 
 				")";
 				
 		executeSql(sql);
@@ -244,6 +246,7 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 		sb.append("<th>Fetched</th>");
 		sb.append("<th>ClientData</th>");
 		sb.append("<th>JudgeID</th>");
+		sb.append("<th>Details</th>");
 		sb.append("</tr>\n");
 		
 		synchronized (dbMutex)
@@ -267,6 +270,7 @@ public class DServiceCore extends DServiceDBLayer implements DServiceNativeInter
 					sb.append("<th>" + rs.getString("fetched") + "</th>");
 					sb.append("<th>" + rs.getString("client_data") + "</th>");
 					sb.append("<th>" + rs.getString("judge_id") + "</th>");
+					sb.append("<th>" + rs.getString("check_params") + "</th>");
 					sb.append("</tr>\n");
 				}
 				rs.close();

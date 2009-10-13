@@ -32,6 +32,7 @@ public class SubmissionData extends HashMapSerializable
 	public String problemSid;
 	public String problemName;
 	public String languageSid;
+	public int fFirstTestOnly;
 	
 	public SubmissionData()
 	{
@@ -59,7 +60,7 @@ public class SubmissionData extends HashMapSerializable
 		problemSid = "";
 		problemName = "";
 		languageSid = "";
-		
+		fFirstTestOnly = 0;
 	}
 	
 	public static final String[] fieldNames = {
@@ -116,6 +117,7 @@ public class SubmissionData extends HashMapSerializable
 		problemSid = map.get("problem-sid");
 		problemName = map.get("problem-name");
 		languageSid = map.get("language-sid");
+		fFirstTestOnly = Integer.parseInt(map.get("first-test-only"));
 	}
 
 	@Override
@@ -142,7 +144,8 @@ public class SubmissionData extends HashMapSerializable
 		res.put("username", username);
 		res.put("problem-sid", problemSid);
 		res.put("problem-name", problemName);
-		res.put("language-sid", languageSid);		
+		res.put("language-sid", languageSid);
+		res.put("first-test-only", "" + fFirstTestOnly);
 		return res;
 	}
 	

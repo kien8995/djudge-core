@@ -1,11 +1,12 @@
 package djudge.judge.interfaces;
 
-import java.util.HashMap;
 import org.apache.log4j.Logger;
+import java.util.HashMap;
 
 import djudge.dservice.DServiceTask;
 import djudge.dservice.DServiceXmlRpcConnector;
 import djudge.dservice.interfaces.DServiceXmlRpcInterface;
+import djudge.judge.CheckParams;
 import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
@@ -42,10 +43,17 @@ public class Judge2DServiceLink extends Thread
 				try
 				{
     				DServiceTask task = new DServiceTask(map);
-    				String msg = "Accepted task: " + task.getID() + " " + task.getContest() + "-" + task.getProblem() + " " + task.getLanguage() + " " + task.getClientData(); 
+    				String msg = "Accepted task: " + task.getID() + " "
+							+ task.getContest() + "-" + task.getProblem() + " "
+							+ task.getLanguage()
+							+ /* " " + task.getParams() + */" "
+							+ task.getClientData(); 
     				log.info(msg);
-    				JudgeTaskResult res = Judge.judgeTask(new JudgeTaskDescription(task));
-   					if (serverConnector.setTaskResult(task.getID(), res.res.getJudgement().toString(), res.res.getXMLString()))
+    				JudgeTaskResult res = Judge.judgeTask(
+							new JudgeTaskDescription(task), new CheckParams(
+									task.getParams()));
+   					if (serverConnector.setTaskResult(task.getID(), res.res
+							.getJudgement().toString(), res.res.getXMLString()))
    					{
    						log.info("Report delivered" + res.res.getJudgement());
    					}

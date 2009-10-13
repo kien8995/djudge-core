@@ -87,14 +87,14 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	}
 	
 	@Override
-	public boolean submitSolution(String username, String password, String problemID, String languageID, String courceCode)
+	public boolean submitSolution(String username, String password, String problemID, String languageID, String sourceCode)
 	{
 		log.info("submitSolution request from " + username);
 		String userID = usersModel.getUserID(username, password);
 		if (!state.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(languageID))
 			return false;
 		
-		return submitSolutionCore(userID, problemID, languageID, courceCode);
+		return submitSolutionCore(userID, problemID, languageID, sourceCode, false);
 	}
 
 	@Override
@@ -472,5 +472,17 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 			return false;
 		
 		return generateLoginsInternal(count, loginType);
+	}
+
+	@Override
+	public boolean testSolution(String username, String password,
+			String problemID, String languageID, String sourceCode)
+	{
+		log.info("submitSolution request from " + username);
+		String userID = usersModel.getUserID(username, password);
+		if (!state.isRunnning() || Integer.parseInt(userID) <= 0 || !problemsModel.isValidID(problemID) || !languagesModel.isValidID(languageID))
+			return false;
+		
+		return submitSolutionCore(userID, problemID, languageID, sourceCode, true);
 	}
 }
