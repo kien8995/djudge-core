@@ -1,6 +1,6 @@
 package djudge.common;
 
-public class Settings
+public class JudgeDirs
 {
 	private final static String rootDir = "./";
 	

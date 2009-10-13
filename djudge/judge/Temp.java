@@ -19,7 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import djudge.common.Settings;
+import djudge.common.JudgeDirs;
 
 
 //import com.sun.org.apache.bcel.internal.util.ByteSequence;

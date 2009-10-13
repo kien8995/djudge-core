@@ -7,7 +7,7 @@ import utils.FileWorks;
 import utils.HtmlWorks;
 import utils.JudgeDirectory;
 
-import djudge.common.Settings;
+import djudge.common.JudgeDirs;
 import djudge.filesystem.RemoteFS;
 import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.CompilerResult;
@@ -443,8 +443,8 @@ public class Judge
 			return res;
 		}
 		
-		String filesrc = Settings.getTempDir() + "Main" + ".xml";
-		String filesrc2 = Settings.getTempDir() + task.tid + ".xml";
+		String filesrc = JudgeDirs.getTempDir() + "Main" + ".xml";
+		String filesrc2 = JudgeDirs.getTempDir() + task.tid + ".xml";
 		
 		FileWorks.saveToFile(task.tsourcecode, filesrc);
 		FileWorks.saveToFile(task.tsourcecode, filesrc2);
