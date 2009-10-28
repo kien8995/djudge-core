@@ -24,7 +24,7 @@ public class TestResult extends AbstractResult
 	
 	int testScore;
 	
-	String systemMessage;
+	//String systemMessage;
 	
 	{
 		testNumber = 0;

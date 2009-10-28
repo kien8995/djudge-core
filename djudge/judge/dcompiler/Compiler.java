@@ -58,7 +58,7 @@ public class Compiler extends Loggable
 	        NodeList lang = doc.getElementsByTagName("language");
 	        for (int i = 0; i < lang.getLength(); i++)
 	        {
-	        	Language l = new Language((Element)lang.item(i));
+	        	Language l = new Language((Element) lang.item(i));
 	        	languages.put(l.getID(), l);
 	        	log.info("Language added: " + l.getID());
 	        }

@@ -48,6 +48,7 @@ public class LanguageInfoInternal
 		FullName = lang.getAttribute("compiler-name");
 		ShortName = lang.getAttribute("compiler-name");
 		Extension = lang.getAttribute("file-extension");
+		//System.out.println(compileCommand);
 	}
 	
 	public String getID()

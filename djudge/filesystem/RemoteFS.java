@@ -40,7 +40,6 @@ public class RemoteFS
 		{
 			name = getUID();
 		}
-		//System.out.println("Saving " + file.filename + " to " + "./temp/" + name);
 		FileWorks.saveToFile(file, "./temp/" + name);
 		files.add("./temp/" + name);
 		return "./temp/" + name;

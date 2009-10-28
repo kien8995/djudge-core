@@ -6,7 +6,7 @@ public class Temp
 {
 	public static void main(String arg[])
 	{
-		Scripts.generateProblemReport("uzhnu-2009", "A");
-		//Scripts.generateContestReport("Yokohama-2006");
+		//Scripts.generateProblemReport("ANARC-2005", "B");
+		Scripts.generateContestReport("@TEST");
 	}
 }

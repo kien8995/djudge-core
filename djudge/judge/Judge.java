@@ -1,6 +1,8 @@
 package djudge.judge;
 
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import utils.DirectoryResult;
 import utils.FileWorks;
@@ -170,9 +172,15 @@ public class Judge
 		String problemId = test.problemInfo.problemID;
 		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
 		
+		File f = new File(testsDir + test.getInputMask());
+		if (!f.exists())
+		{
+			res.result = TestResultEnum.IE;
+			return res;
+		}
+		
 		String inputTestFilename = test.getInputFilename();
-		//System.out.println(inputTestFilename);
-		if ((inputTestFilename == null) || ("".equals(inputTestFilename)))
+		if (inputTestFilename == null || "".equals(inputTestFilename) || "stdin".equals(inputTestFilename))
 		{
 			inputTestFilename = "input.txt";
 		}
@@ -195,7 +203,7 @@ public class Judge
 			task.testNumber = test.testNumber;
 			task.problemId = problemId;
 			String filename = test.getAnswerFilename();			
-			if ((filename == null) || ("".equals(filename)))
+			if (filename == null || "".equals(filename) || "stdout".equals(filename))
 			{
 				filename = "output.txt";
 			}
@@ -227,7 +235,7 @@ public class Judge
 			JudgeDirectory jd = new JudgeDirectory(desc);
 			DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
 			String s = HtmlWorks.directoryResultToHtml(res);
-			FileWorks.saveToFile(s, desc.problemRoot + "rep.html");			
+			FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
 		}
 		catch (Exception e)
 		{
