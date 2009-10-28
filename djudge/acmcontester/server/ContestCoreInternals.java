@@ -306,6 +306,7 @@ public class ContestCoreInternals
 		res.lastUpdateTime = new Date();
 		res.contestTime = state.getContestTime();
 		res.contestName = settings.getContestName();
+		//res.
 		return res;
 	}
 }

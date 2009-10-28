@@ -13,10 +13,29 @@ import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
+import djudge.utils.CachedObject;
 
 public class ContestCore extends ContestCoreInternals implements AdminNativeInterface, TeamNativeInterface, ServerCommonInterface
 {
 	private static final Logger log = Logger.getLogger(ContestCore.class);
+	
+	private CachedObject cachedTeamMonitor = new CachedObject(60000){
+		@Override
+		protected Object updateData() throws Exception
+		{
+			return getMonitorInternal(true);
+		}
+		
+	};
+	
+/*	private CachedObject cachedTeam = new CachedObject(60000){
+		@Override
+		protected Object updateData() throws Exception
+		{
+			return getMonitorInternal(true);
+		}
+		
+	};*/
 	
 	public ContestCore()
 	{
@@ -324,8 +343,8 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public MonitorData getTeamMonitor(String username, String password)
 	{
-		//TODO: fixme
-		return getMonitor("root", "root");
+		//return getMonitor("root", "root");
+		return (MonitorData) cachedTeamMonitor.getData();
 	}
 
 	@Override

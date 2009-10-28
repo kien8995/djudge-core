@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -221,8 +222,37 @@ public class JSubmitPanel extends JPanel implements ActionListener, Updateble
 	@Override
 	public boolean updateState()
 	{
-		// TODO implement me
-		return false;
+		try
+		{
+    		Vector<LanguageData> ldata = HashMapSerializer.deserializeFromHashMapArray(serverInterface.getTeamLanguages(
+    				authProvider.getUsername(), authProvider.getPassword()), LanguageData.class);
+    		jcbLanguages.removeAllItems();
+    		for (LanguageData languageData : ldata)
+    		{
+    			jcbLanguages.addItem(languageData);
+    		}
+		}
+		catch (Exception e)
+		{
+			
+		}
+		
+		try
+		{
+    		Vector<ProblemData> pdata = HashMapSerializer
+    				.deserializeFromHashMapArray(serverInterface.getTeamProblems(
+    						authProvider.getUsername(), authProvider.getPassword()), ProblemData.class);
+    		jcbProblems.removeAllItems();
+    		for (ProblemData problemData : pdata)
+    		{
+    			jcbProblems.addItem(problemData);
+    		}
+		}
+		catch (Exception e)
+		{
+			// TODO: handle exception
+		}
+		return true;
 	}
 
 }

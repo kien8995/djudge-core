@@ -22,6 +22,9 @@ import java.util.Calendar;
 import org.apache.log4j.Logger;
 
 
+import djudge.exceptions.DJudgeXmlCorruptedException;
+import djudge.exceptions.DJudgeXmlException;
+import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.ProblemDescription;
 import djudge.judge.SubmissionResult;
 import djudge.judge.common_data_structures.ExecutorLimits;
@@ -41,10 +44,10 @@ public class Scripts
 	
 	public static DirectoryResult generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
 	{
-		log.info("Generating report for problem " + contestId + "-" + problemId);
 		try
 		{
     		ProblemDescription desc = new ProblemDescription(contestId, problemId);
+    		log.info("Generating report for problem " + contestId + "-" + problemId);
     		
     		JudgeDirectory j = new JudgeDirectory(desc);
     		
@@ -53,6 +56,16 @@ public class Scripts
     						+ HtmlWorks.directoryResultToHtml(res);
     		FileWorks.saveToFile(html, problemsRoot + contestId + "\\" + problemId +"\\report.html");
     		return res;
+		}
+		catch (DJudgeXmlCorruptedException e)
+		{
+			DirectoryResult res = new DirectoryResult(problemsRoot + contestId + "\\" + problemId +"\\solutions");
+			return res;
+		}
+		catch (DJudgeXmlNotFoundException e)
+		{
+			DirectoryResult res = new DirectoryResult(problemsRoot + contestId + "\\" + problemId +"\\solutions");
+			return res;
 		}
 		catch (Exception e)
 		{

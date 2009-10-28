@@ -53,7 +53,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		{
 			res.result = ValidationResultEnum.WrongAnswer;
 			res.fail = ValidationFailEnum.OK;
-			res.validatorOutput = new String[]{"Cannot find program output file: " + programOutputFile};
+			res.validatorOutput = new String[]{"Cannot find program's output file: " + programOutputFile};
 		}
 		
 		if (res.result != ValidationResultEnum.Undefined)

@@ -81,7 +81,7 @@ public class LanguageData extends HashMapSerializable
 	@Override
 	public String toString()
 	{
-		return sid + "(" + fullName +  ")";
+		return sid + " (" + fullName +  ")";
 	}
 	
 	@Override

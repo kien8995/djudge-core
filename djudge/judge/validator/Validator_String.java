@@ -5,7 +5,7 @@ package djudge.judge.validator;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class Validator_String extends ValidatorInternalAbstract 
+public class Validator_String extends ValidatorInternalAbstract
 {
 	@Override
 	protected String getToken(BufferedReader rd) throws IOException

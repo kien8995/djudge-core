@@ -24,8 +24,6 @@ public class DistributedFile
 	{
 		String name = FileWorks.getFileName(addAs);
 		this.filename = name;
-		//content = FileWorks.readFileContent(filename);
-		//System.out.println("Creating DFile from " + filename +  " ");
 		fsName = RemoteFS.saveToRemoteStorage(new RemoteFile(filename));
 		return true;
 	}
