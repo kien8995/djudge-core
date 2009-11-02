@@ -71,7 +71,7 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 		}
 		catch (Exception e)
 		{
-			// TODO: handle exception
+			//e.printStackTrace();
 		}
 		f = false;
 		jlConnectionStatus.setText(state.fConnected ? "Connected " + state.lastConnectionTime : "Disconnected. Last connected " + state.lastSuccessTime);
@@ -81,7 +81,14 @@ public class JStatusPanel extends JPanel implements ActionListener, XmlRpcStateV
 	{
 		for (Updateble object : objectsToUpdate)
 		{
-			object.updateState();
+			try
+			{
+				object.updateState();
+			}
+			catch (Exception e)
+			{
+				// TODO: handle exception
+			}
 		}
 		updateView();
 	}

@@ -226,11 +226,13 @@ public class JSubmitPanel extends JPanel implements ActionListener, Updateble
 		{
     		Vector<LanguageData> ldata = HashMapSerializer.deserializeFromHashMapArray(serverInterface.getTeamLanguages(
     				authProvider.getUsername(), authProvider.getPassword()), LanguageData.class);
+    		int selectedIndex = jcbLanguages.getSelectedIndex();
     		jcbLanguages.removeAllItems();
     		for (LanguageData languageData : ldata)
     		{
     			jcbLanguages.addItem(languageData);
     		}
+    		jcbLanguages.setSelectedIndex(selectedIndex);
 		}
 		catch (Exception e)
 		{
@@ -242,11 +244,13 @@ public class JSubmitPanel extends JPanel implements ActionListener, Updateble
     		Vector<ProblemData> pdata = HashMapSerializer
     				.deserializeFromHashMapArray(serverInterface.getTeamProblems(
     						authProvider.getUsername(), authProvider.getPassword()), ProblemData.class);
+    		int selectedIndex = jcbProblems.getSelectedIndex();
     		jcbProblems.removeAllItems();
     		for (ProblemData problemData : pdata)
     		{
     			jcbProblems.addItem(problemData);
     		}
+    		jcbProblems.setSelectedIndex(selectedIndex);
 		}
 		catch (Exception e)
 		{

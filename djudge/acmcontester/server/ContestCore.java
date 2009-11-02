@@ -14,28 +14,73 @@ import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
 import djudge.utils.CachedObject;
+import djudge.utils.CachedObjectsSet;
 
 public class ContestCore extends ContestCoreInternals implements AdminNativeInterface, TeamNativeInterface, ServerCommonInterface
 {
 	private static final Logger log = Logger.getLogger(ContestCore.class);
 	
-	private CachedObject cachedTeamMonitor = new CachedObject(60000){
+	/* TeamMonitor cache */
+	private CachedObject<MonitorData> cachedTeamMonitor = new CachedObject<MonitorData>(60000){
 		@Override
-		protected Object updateData() throws Exception
+		protected MonitorData updateData() throws Exception
 		{
 			return getMonitorInternal(true);
+		}
+	};
+	
+	/* TeamLanguages cache */
+	private CachedObject<LanguageData[]> cachedTeamLanguages = new CachedObject<LanguageData[]>(60000){
+		@Override
+		protected LanguageData[] updateData() throws Exception
+		{
+			LanguageData[] res = languagesModel.getRows().toArray(new LanguageData[0]);
+			for (int i = 0; i < res.length; i++)
+				res[i].truncateInternalData();
+			return res;
+		}
+	};
+
+	/* TeamProblems cache */
+	private CachedObject<ProblemData[]> cachedTeamProblems = new CachedObject<ProblemData[]>(60000){
+		@Override
+		protected ProblemData[] updateData() throws Exception
+		{
+	 		ProblemData[] res = problemsModel.getRows().toArray(new ProblemData[0]);
+			for (int i = 0; i < res.length; i++)
+				res[i].truncateInternalData();
+			return res;
+		}
+	};
+	
+	/* TeamSubmissions cache */
+	private CachedObjectsSet<String, SubmissionData[]> cachedSubmission = new CachedObjectsSet<String, SubmissionData[]>(10000){
+
+		@Override
+		public CachedObject<SubmissionData[]> getObjectForKey(final String key)
+		{
+			return new CachedObject<SubmissionData[]>(updateInterval){
+				
+				private String keyStr = key;
+				
+				{
+					log.info("Creating CO for " + key);
+				}
+				
+				@Override
+				protected SubmissionData[] updateData() throws Exception
+				{
+					SubmissionsDataModel sdm = new SubmissionsDataModel();
+					sdm.setWhere(" `user_id` = " + keyStr);
+					sdm.updateData();
+					return sdm.getRows().toArray(new SubmissionData[0]);
+				}
+				
+			};
 		}
 		
 	};
 	
-/*	private CachedObject cachedTeam = new CachedObject(60000){
-		@Override
-		protected Object updateData() throws Exception
-		{
-			return getMonitorInternal(true);
-		}
-		
-	};*/
 	
 	public ContestCore()
 	{
@@ -282,6 +327,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	{
 		if (!usersModel.isAdmin(username, password))
 			return false;
+		
 		submissionsModel.rejudgeBy(key, value);
 		return true;
 	}
@@ -293,10 +339,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		if (Integer.parseInt(userID) <= 0)
 			return new ProblemData[0];
 		
-		ProblemData[] res = problemsModel.getRows().toArray(new ProblemData[0]);
-		for (int i = 0; i < res.length; i++)
-			res[i].truncateInternalData();
-		return res;
+		return (ProblemData[]) cachedTeamProblems.getData();
 	}
 
 	@Override
@@ -305,6 +348,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		String userID = usersModel.getUserID(username, password);
 		if (Integer.parseInt(userID) <= 0)
 			return false;
+		
 		return true;
 	}
 
@@ -315,10 +359,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		if (Integer.parseInt(userID) <= 0)
 			return new SubmissionData[0];
 		
-		SubmissionsDataModel sdm = new SubmissionsDataModel();
-		sdm.setWhere(" `user_id` = " + userID);
-		sdm.updateData();
-		return sdm.getRows().toArray(new SubmissionData[0]);
+		return cachedSubmission.getData(userID);
 	}
 
 	@Override
@@ -328,10 +369,7 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 		if (Integer.parseInt(userID) <= 0)
 			return new LanguageData[0];
 		
-		LanguageData[] res = languagesModel.getRows().toArray(new LanguageData[0]);
-		for (int i = 0; i < res.length; i++)
-			res[i].truncateInternalData();
-		return res;
+		return (LanguageData[]) cachedTeamLanguages.getData();
 	}
 
 	@Override
@@ -343,8 +381,12 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 	@Override
 	public MonitorData getTeamMonitor(String username, String password)
 	{
-		//return getMonitor("root", "root");
-		return (MonitorData) cachedTeamMonitor.getData();
+		String userID = usersModel.getUserID(username, password);
+		if (Integer.parseInt(userID) <= 0)
+			return new MonitorData();
+		
+		MonitorData data = (MonitorData) cachedTeamMonitor.getData();
+		return data;
 	}
 
 	@Override

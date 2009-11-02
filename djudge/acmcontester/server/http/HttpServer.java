@@ -36,7 +36,7 @@ public class HttpServer extends NanoHTTPD implements Runnable
 	
 	private final static long defaultCacheUpdateInterval = 10; // 10 seconds
 	
-	private class CachedMonitor extends CachedObject
+	private class CachedMonitor extends CachedObject<MonitorData>
 	{
 		public CachedMonitor(long cacheUpdateInterval)
 		{
@@ -49,7 +49,7 @@ public class HttpServer extends NanoHTTPD implements Runnable
 		}
 
 		@Override
-		protected Object updateData() throws Exception
+		protected MonitorData updateData() throws Exception
 		{
 			return serverConnector.getTeamMonitor(username, password);
 		}
