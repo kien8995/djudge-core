@@ -133,6 +133,8 @@ public class JContestSettingsPanel extends JPanel
 	
 	private final JButton btnSetTimes;
 	
+	private final JButton btnIncrementTimeLeft;
+	
 	private final JButton btnClearSubmissions = new JButton("Delete all submissions");
 	
 	private final JButton btnClearProblems = new JButton("Delete all problems");
@@ -194,6 +196,30 @@ public class JContestSettingsPanel extends JPanel
 			}
 		});
 		add(btnSetTimes);
+		
+		btnIncrementTimeLeft = new JButton("Add extra time");
+		btnIncrementTimeLeft.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				AuthentificationDataProvider ad = JContestSettingsPanel.this.authProvider;
+				String username = ad.getUsername();
+				String password = ad.getPassword();
+				ServerXmlRpcInterface si = JContestSettingsPanel.this.serverInterface;
+				String s = JOptionPane.showInputDialog(new JLabel("Enter time in minutes"));
+				try
+				{
+					long incr = Long.parseLong(s) * 60 * 1000;
+					si.incrementContestTimeLeft(username, password, incr);
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+				}
+					
+			}
+		});
+		add(btnIncrementTimeLeft);
 		
 		btnClearSubmissions.addActionListener(new ActionListener(){
 			@Override

@@ -69,7 +69,7 @@ public class AdminClient extends JFrame
 		setLayout(new BorderLayout());
 		jtpTabs = new JTabbedPane();
 		
-		jtpTabs.add("Start/Stop", new JContestSettingsPanel(serverXmlRpcInterface, authData));
+		jtpTabs.add("Manage Contest", new JContestSettingsPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Users", usersPanel = new JUsersPanel(new RemoteTableUsers(serverXmlRpcInterface, authData)));
 		

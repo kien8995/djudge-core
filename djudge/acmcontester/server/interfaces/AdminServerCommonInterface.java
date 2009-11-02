@@ -6,6 +6,8 @@ public interface AdminServerCommonInterface
 	
 	public boolean setContestTimeLeft(String username, String password, long timeLeft);  // milliseconds
 	
+	public boolean incrementContestTimeLeft(String username, String password, long timeLeftAdd);  // milliseconds
+	
 	public boolean setContestRunning(String username, String password, boolean isRunning);
 	
 	public boolean setContestFreezeTime(String username, String password, long tillTimeLeft); // milliseconds

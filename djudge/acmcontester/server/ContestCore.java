@@ -63,10 +63,6 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 				
 				private String keyStr = key;
 				
-				{
-					log.info("Creating CO for " + key);
-				}
-				
 				@Override
 				protected SubmissionData[] updateData() throws Exception
 				{
@@ -75,10 +71,8 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 					sdm.updateData();
 					return sdm.getRows().toArray(new SubmissionData[0]);
 				}
-				
 			};
 		}
-		
 	};
 	
 	
@@ -545,5 +539,16 @@ public class ContestCore extends ContestCoreInternals implements AdminNativeInte
 			return false;
 		
 		return submitSolutionCore(userID, problemID, languageID, sourceCode, true);
+	}
+
+	@Override
+	public boolean incrementContestTimeLeft(String username, String password,
+			long timeLeftAdd)
+	{
+		if (!usersModel.isAdmin(username, password))
+			return false;
+		
+		state.incrementContestTimeLeft(timeLeftAdd);
+		return true;
 	}
 }

@@ -123,7 +123,19 @@ public class ContestState
 		{
 			lastLeftTime = newTimeLeft;
 			saveState();
-		}	
+		}
+
+		public boolean isFrozen()
+		{
+			//
+			return false;
+		}
+
+		public void incrementContestTimeLeft(long timeLeftAdd)
+		{
+			lastLeftTime += timeLeftAdd;
+			saveState();
+		}
 	}
 
 	/*
@@ -138,6 +150,11 @@ public class ContestState
 	/* 
 	 * Interface methods
 	 */
+	
+	synchronized public boolean isFrozen()
+	{
+		return internals.isFrozen();
+	}
 	
 	synchronized public boolean isRunnning()
 	{
@@ -178,5 +195,16 @@ public class ContestState
 		log.info("SetRunning: " + isRunning);
 		internals.setContestRunning(isRunning);
 		return true;
+	}
+
+	public long getContestTimeFrozen()
+	{
+		// TODO Auto-generated method stub
+		return getContestTime();
+	}
+
+	public void incrementContestTimeLeft(long timeLeftAdd)
+	{
+		internals.incrementContestTimeLeft(timeLeftAdd);
 	}	
 }
