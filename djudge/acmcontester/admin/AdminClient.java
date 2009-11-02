@@ -1,7 +1,7 @@
 package djudge.acmcontester.admin;
 
-import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -9,7 +9,6 @@ import javax.swing.JTabbedPane;
 import djudge.acmcontester.AuthentificationData;
 import djudge.acmcontester.JContestSettingsPanel;
 import djudge.acmcontester.JMonitorACMPanel;
-import djudge.acmcontester.JMonitorIOIPanel;
 import djudge.acmcontester.JStatusPanel;
 import djudge.acmcontester.JSubmitPanel;
 import djudge.acmcontester.JTestPanel;
@@ -38,7 +37,7 @@ public class AdminClient extends JFrame
 	
 	private JMonitorACMPanel monitorPanelACM;
 	
-	private JMonitorIOIPanel monitorPanelIOI;
+	//private JMonitorIOIPanel monitorPanelIOI;
 	
 	private JSubmitPanel submitPanel;
 	
@@ -82,7 +81,7 @@ public class AdminClient extends JFrame
 		
 		jtpTabs.add("Monitor-ACM", monitorPanelACM = new JMonitorACMPanel(serverXmlRpcInterface, authData));
 		
-		jtpTabs.add("Monitor-IOI", monitorPanelIOI = new JMonitorIOIPanel(serverXmlRpcInterface, authData));
+		//jtpTabs.add("Monitor-IOI", monitorPanelIOI = new JMonitorIOIPanel(serverXmlRpcInterface, authData));
 		
 		jtpTabs.add("Submit", submitPanel = new JSubmitPanel(serverXmlRpcInterface, authData));
 		
@@ -94,7 +93,7 @@ public class AdminClient extends JFrame
 		serverXmlRpcInterface.setVizi(statusPanel);
 		statusPanel.addUpdatetableObject(submissionsPanel);
 		statusPanel.addUpdatetableObject(monitorPanelACM);
-		statusPanel.addUpdatetableObject(monitorPanelIOI);
+		//statusPanel.addUpdatetableObject(monitorPanelIOI);
 		statusPanel.addUpdatetableObject(submitPanel);
 	}
 	

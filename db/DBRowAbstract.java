@@ -184,6 +184,7 @@ public abstract class DBRowAbstract extends SQLAbstract
 				log.debug(query);
 				stmt.executeUpdate(query);
 			}
+			f = true;
 		}
 		catch (Exception e)
 		{

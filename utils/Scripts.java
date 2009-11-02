@@ -21,9 +21,7 @@ import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 
-
 import djudge.exceptions.DJudgeXmlCorruptedException;
-import djudge.exceptions.DJudgeXmlException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.ProblemDescription;
 import djudge.judge.SubmissionResult;

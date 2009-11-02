@@ -39,6 +39,7 @@ public class MonitorData extends HashMapSerializable
 	public MonitorData()
 	{
 		teams = new MonitorUserStatus[0];
+		problems = new ProblemStatus[0];
 	}
 
 	@SuppressWarnings("unchecked")

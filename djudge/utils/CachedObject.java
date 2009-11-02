@@ -4,11 +4,11 @@ package djudge.utils;
 import java.util.Date;
 import org.apache.log4j.Logger;
 
-public abstract class CachedObject
+public abstract class CachedObject<T>
 {
 	private static final Logger log = Logger.getLogger(CachedObject.class);
 	
-	private Object cachedData = null;
+	private T cachedData = null;
 	
 	private long lastUpdateTime = 0;
 	
@@ -21,7 +21,7 @@ public abstract class CachedObject
 		this.updateInterval = updateInterval;
 	}
 	
-	protected abstract Object updateData() throws Exception;
+	protected abstract T updateData() throws Exception;
 	
 	private boolean updateCache()
 	{
@@ -39,7 +39,7 @@ public abstract class CachedObject
 		return false;
 	}	
 	
-	synchronized public Object getData()
+	synchronized public T getData()
 	{
 		long timeNow = new Date().getTime();
 		if (timeNow - lastUpdateTime > updateInterval * (1 + updateFailuresCounter))
