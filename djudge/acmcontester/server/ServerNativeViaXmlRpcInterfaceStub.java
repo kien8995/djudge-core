@@ -301,4 +301,11 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 	{
 		return serverConnector.testSolution(username, password, problemID, languageID, sourceCode);
 	}
+
+	@Override
+	public boolean incrementContestTimeLeft(String username, String password,
+			long timeLeftAdd)
+	{
+		return serverConnector.incrementContestTimeLeft(username, password, timeLeftAdd);
+	}
 }

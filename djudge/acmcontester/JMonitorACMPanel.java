@@ -22,6 +22,7 @@ public class JMonitorACMPanel extends JMonitorPanelAbstract implements Updateble
 		MonitorData data = new MonitorData(serverInterface.getTeamMonitor(
 				authProvider.getUsername(), authProvider.getPassword()));
 		setData(data);
+		setStateLabelText();
 	}
 	
 	@Override

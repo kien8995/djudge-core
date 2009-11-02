@@ -29,7 +29,7 @@ public abstract class CachedObject<T>
 		try
 		{
 			cachedData = updateData();
-			log.info("Cache updated");
+			log.debug("Cache updated");
 			return true;
 		}
 		catch (Exception e)

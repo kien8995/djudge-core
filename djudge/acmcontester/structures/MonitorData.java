@@ -31,6 +31,10 @@ public class MonitorData extends HashMapSerializable
 	
 	public int totalSubmitted = 0;
 	
+	public String contestState = "";
+	
+	public boolean isFrozen;
+	
 	/*
 	 * Problems IDs
 	 */
@@ -53,6 +57,8 @@ public class MonitorData extends HashMapSerializable
 	public void fromHashMap(HashMap map)
 	{
 		contestName = (String) map.get("contest-name");
+		contestState = (String) map.get("contest-state");
+		isFrozen = Boolean.parseBoolean(map.get("is-frozen").toString());
 		lastUpdateTime = new Date(Long.parseLong((String) map.get("last-update-time")));
 		contestTime = Long.parseLong((String) map.get("contest-time"));
 		totalAC = Integer.parseInt((String) map.get("total-ac"));
@@ -83,6 +89,8 @@ public class MonitorData extends HashMapSerializable
 		map.put("contest-time", "" + contestTime);
 		map.put("total-ac", "" + totalAC);
 		map.put("total-count", "" + totalSubmitted);
+		map.put("is-frozen", "" + isFrozen);
+		map.put("contest-state", contestState);
 		HashMap[] hm = new HashMap[teams.length];
 		for (int i = 0; i < teams.length; i++)
 		{

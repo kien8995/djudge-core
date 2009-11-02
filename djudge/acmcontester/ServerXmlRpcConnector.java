@@ -353,4 +353,11 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 		return (Boolean) callRemoteMethod("testSolution", username, password,
 				problemID, languageID, sourceCode);
 	}
+
+	@Override
+	public boolean incrementContestTimeLeft(String username, String password,
+			long timeLeftAdd)
+	{
+		return (Boolean) callRemoteMethod("incrementContestTimeLeft", username, password, timeLeftAdd);
+	}
 }

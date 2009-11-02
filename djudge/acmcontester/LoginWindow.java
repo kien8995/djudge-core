@@ -84,6 +84,7 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 		c.gridy = 12;
 		c.gridwidth = 2;
 		add(btnLogon, c);
+		getRootPane().setDefaultButton(btnLogon);
 		
 		btnExit = new JButton("Exit");
 		btnExit.setPreferredSize(btnSize);
@@ -99,7 +100,7 @@ public abstract class LoginWindow extends JDialog implements ActionListener
 		c.gridheight = 2;
 		c.gridwidth = 6;
 		c.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(), c);		
+		add(new JLabel(), c);
 	}
 	
 	public LoginWindow(AuthentificationData ad, String title)

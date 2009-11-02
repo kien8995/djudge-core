@@ -299,14 +299,22 @@ public class ContestCoreInternals
 		return true;
 	}
 	
-	protected MonitorData getMonitorInternal(boolean frozenFlag)
+	protected MonitorData getMonitorInternal(boolean ignoreFrozenFlag)
 	{
-		// TODO: fixme
-		MonitorData res = monitorModel.getMonitorIOI(state.getContestTime());
+		MonitorData res = null;
+		if (!ignoreFrozenFlag && state.isFrozen())
+		{
+			res = monitorModel.getMonitorACM(state.getContestTimeFrozen());
+			res.contestTime = state.getContestTimeFrozen();
+			res.isFrozen = true;
+		}
+		else
+		{
+			res = monitorModel.getMonitorACM(state.getContestTime());
+			res.contestTime = state.getContestTime();
+		}
 		res.lastUpdateTime = new Date();
-		res.contestTime = state.getContestTime();
 		res.contestName = settings.getContestName();
-		//res.
 		return res;
 	}
 }

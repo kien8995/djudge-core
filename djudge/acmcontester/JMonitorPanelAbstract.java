@@ -2,15 +2,19 @@ package djudge.acmcontester;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+
+import utils.PrintfFormat;
 
 import djudge.acmcontester.admin.DefaultCellRenderer;
 import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;
@@ -37,6 +41,8 @@ public abstract class JMonitorPanelAbstract extends JPanel implements ActionList
 	protected TeamXmlRpcInterface serverInterface;
 	
 	protected AuthentificationDataProvider authProvider;
+	
+	protected JLabel lblState = new JLabel();
 	
 	class MonitorDataModel extends AbstractTableModel
 	{
@@ -194,8 +200,22 @@ public abstract class JMonitorPanelAbstract extends JPanel implements ActionList
 		
 		setLayout(new BorderLayout());
 		
+		lblState.setForeground(Color.RED);
+		lblState.setHorizontalTextPosition(JLabel.CENTER);
+		lblState.setFont(new Font("Arial", Font.PLAIN, 24));
+		setStateLabelText();
+		add(lblState, BorderLayout.NORTH);
+		
 		add(new JScrollPane(jtMonitor), BorderLayout.CENTER);
 		add(jpButtons, BorderLayout.SOUTH);
+	}
+	
+	protected void setStateLabelText()
+	{
+		int timeSec = (int) data.contestTime / 1000;
+		String time = new PrintfFormat("%d:%02d:%02d").sprintf(new Object[]{timeSec / 60 / 60, (timeSec / 60) % 60, timeSec % 60});
+		lblState.setText(time + " - " + (data.isFrozen ? "Running (frozen)" : "Running"));
+		lblState.updateUI();
 	}
 	
 	public void updateData()

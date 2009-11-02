@@ -306,4 +306,11 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 	{
 		return ContestServer.getCore().testSolution(username, password, problemID, languageID, sourceCode);
 	}
+
+	@Override
+	public boolean incrementContestTimeLeft(String username, String password,
+			long timeLeftAdd)
+	{
+		return ContestServer.getCore().incrementContestTimeLeft(username, password, timeLeftAdd);
+	}
 }
