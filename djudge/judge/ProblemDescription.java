@@ -1,10 +1,9 @@
 package djudge.judge;
 
-import java.io.FileNotFoundException;
 
+import java.io.FileNotFoundException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
@@ -18,7 +17,6 @@ import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.validator.ValidatorDescription;
-
 
 public class ProblemDescription extends AbstractDescription 
 {
@@ -84,7 +82,7 @@ public class ProblemDescription extends AbstractDescription
         groups = new GroupDescription[groupsCount];
         for (int i = 0; i < groupsCount; i++)
         {   		
-        	groups[i] = new GroupDescription(this, i, problemInfo, (Element)list.item(i));
+        	groups[i] = new GroupDescription(this, i, problemInfo, (Element) list.item(i));
         	if (ownValidator == null)
         	{
         		ownValidator = groups[i].getActualValidator();
@@ -376,6 +374,33 @@ public class ProblemDescription extends AbstractDescription
 	public GlobalProblemInfo getGlobalProblemInfo()
 	{
 		return problemInfo;
+	}
+
+	public void overrideParams(CheckParams params)
+	{
+		if (null != params.limits)
+		{
+			for (int i = 0; i < groupsCount; i++)
+			{
+				for (int j = 0; j < groups[i].getTestCount(); j++)
+				{
+					groups[i].getTest(j).setLimits(params.limits);
+				}
+			}
+		}
+		
+		problemInfo.files = new ExecutorFiles(
+				null == params.inputFilename
+						|| params.inputFilename.length() == 0
+						|| params.inputFilename.equalsIgnoreCase("stdin") ? "input.txt"
+						: null,
+				null == params.outputFilename
+						|| params.outputFilename.length() == 0
+						|| params.outputFilename.equalsIgnoreCase("stdout") ? "output.txt"
+						: null);
+		
+		problemInfo.programInputFilename = params.inputFilename;
+		problemInfo.programOutputFilename = params.outputFilename;
 	}
 	
 }
