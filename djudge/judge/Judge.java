@@ -227,11 +227,12 @@ public class Judge
 		return res;
 	}
 	
-	public static void checkProblem(String contestId, String problemId)
+	public static void checkProblem(String contestId, String problemId, CheckParams params)
 	{
 		try
 		{
 			ProblemDescription desc = new ProblemDescription(contestId, problemId);
+			desc.overrideParams(params);
 			JudgeDirectory jd = new JudgeDirectory(desc);
 			DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
 			String s = HtmlWorks.directoryResultToHtml(res);
@@ -278,6 +279,7 @@ public class Judge
 		try
 		{
 			pd = new ProblemDescription(task.tcontest, task.tproblem);
+			pd.overrideParams(params);
 		}
 		catch (Exception e)
 		{

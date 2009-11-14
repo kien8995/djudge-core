@@ -163,7 +163,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	public void setLimits(ExecutorLimits newLimits)
 	{
 		ownLimits = newLimits;
-	} 
+	}
 	
 	public GlobalProblemInfo getGlobalProblemInfo()
 	{

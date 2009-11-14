@@ -6,13 +6,8 @@ import org.w3c.dom.NodeList;
 
 import djudge.common.XMLSerializable;
 
-
 import utils.StringWorks;
 import utils.XmlWorks;
-
-
-
-
 
 
 public class ExecutorLimits extends XMLSerializable implements Comparable<ExecutorLimits>
