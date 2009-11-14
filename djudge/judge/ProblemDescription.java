@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
@@ -136,6 +137,43 @@ public class ProblemDescription extends AbstractDescription
 		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, elem.getAttribute("score"));
 	}
 	
+	private void ParsePcmsXML(Element elem) throws DJudgeXmlException
+	{
+		problemInfo.problemRoot = problemRoot;
+		
+		// Only one group
+		groupsCount = 1;
+		// constant type
+		problemInfo.type = ProblemTypeEnum.ACM;
+
+		ownValidator = new ValidatorDescription(problemInfo.contestID,
+				problemInfo.problemID, ValidatorDescription.StringToType("%TESTLIB"), "", "check.exe");
+		
+		NodeList list = elem.getElementsByTagName("testset");
+		Element testset = (Element) list.item(0);
+		
+		int testsCount = Integer.parseInt(testset.getAttribute("test-count"));
+		String inputFileMask = testset.getAttribute("input-href").replaceAll("tests/", "").replaceAll("###", "%03d").replaceAll("##", "%02d");
+		String outputFileMask = testset.getAttribute("answer-href").replaceAll("tests/", "").replaceAll("###", "%03d").replaceAll("##", "%02d");
+
+		String in = problemInfo.programInputFilename = testset.getAttribute("input-name");
+		String out = problemInfo.programOutputFilename = testset.getAttribute("output-name");
+		
+		problemInfo.files = new ExecutorFiles(
+				in.length() == 0 || in.equalsIgnoreCase("stdin") ? "input.txt" : null,
+				out.length() == 0 || out.equalsIgnoreCase("stdout") ? "output.txt" : null
+				);
+		
+		// Limits
+		ownLimits = new ExecutorLimits();
+		ownLimits.outputLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("output-limit"));
+		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("memory-limit"));
+		ownLimits.timeLimit = StringWorks.StrToTimeLimit(testset.getAttribute("time-limit"));
+		
+		groups = new GroupDescription[1];
+		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, testset.getAttribute("score"));
+	}
+	
 	@Override
 	public Document getXML()
 	{
@@ -163,13 +201,21 @@ public class ProblemDescription extends AbstractDescription
 		{
 			String version = elem.getAttribute("version");
 			
-			if (version.startsWith("2.0"))
+			NodeList list = elem.getElementsByTagName("judging");
+			if (list.getLength() > 0)
 			{
-				parseXML20(elem);
+				ParsePcmsXML(elem);
 			}
 			else
 			{
-				ParseOldXML(elem);
+				if (version.startsWith("2.0"))
+				{
+					parseXML20(elem);
+				}
+				else
+				{
+					ParseOldXML(elem);
+				}
 			}
 		} catch (Exception e)
 		{
