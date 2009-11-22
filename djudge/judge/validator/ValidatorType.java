@@ -45,6 +45,7 @@ public enum ValidatorType
 	InternalFloatAbsRel,
 	InternalFloatOther,
 	ExternalTestLib,
+	ExternalTestLibJava,
 	ExternalPC2,
 	ExternalCustom,
 	ExternalExitCode,

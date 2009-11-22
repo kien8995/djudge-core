@@ -23,6 +23,7 @@ public class ContestState
 		
 		private ContestStatusEnum state = ContestStatusEnum.Running;
 		
+		@SuppressWarnings("unused")
 		private ContestSettings settings;
 		
 		public ContestStateInternals(ContestSettings settings)

@@ -51,6 +51,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 		else if (s.equalsIgnoreCase("%FLOAT%")) res = ValidatorType.InternalFloatAbs;
 		else if (s.equalsIgnoreCase("%TESTLIB%")) res = ValidatorType.ExternalTestLib;
 		else if (s.equalsIgnoreCase("%TESTLIB")) res = ValidatorType.ExternalTestLib;
+		else if (s.equalsIgnoreCase("%TESTLIB_JAVA")) res = ValidatorType.ExternalTestLibJava;
 		else if (s.equalsIgnoreCase("%PC2%")) res = ValidatorType.ExternalPC2;
 		else if (s.equalsIgnoreCase("%RET_VAL%")) res = ValidatorType.ExternalExitCode;
 		else if (s.equalsIgnoreCase("%RET_VAL_EXTENDED%")) res = ValidatorType.ExternalExitCodeExtended;
@@ -63,6 +64,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 		else if (s.equalsIgnoreCase("@FLOAT2")) res = ValidatorType.InternalFloatAbsRel;
 		else if (s.equalsIgnoreCase("@FLOAT_SKIP")) res = ValidatorType.InternalFloatOther;
 		else if (s.equalsIgnoreCase("%STDLIB")) res = ValidatorType.ExternalTestLib;
+		else if (s.equalsIgnoreCase("%STDLIB_JAVA")) res = ValidatorType.ExternalTestLibJava;
 		else if (s.equalsIgnoreCase("%PC2")) res = ValidatorType.ExternalPC2;
 		else if (s.equalsIgnoreCase("%EXITCODE")) res = ValidatorType.ExternalExitCode;
 		else if (s.equalsIgnoreCase("%EXITCODE_EXTENDED")) res = ValidatorType.ExternalExitCodeExtended;

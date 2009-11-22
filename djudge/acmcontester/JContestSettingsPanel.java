@@ -26,6 +26,7 @@ public class JContestSettingsPanel extends JPanel
 		
 		private JButton btnSetPast, btnSetLeft, btnSetFreeze;
 		
+		@SuppressWarnings("unused")
 		private JTextField tfPassed, tfLeft, tfFreeze;
 		
 		private ContestTimes data;

@@ -144,9 +144,6 @@ public class ProblemDescription extends AbstractDescription
 		// constant type
 		problemInfo.type = ProblemTypeEnum.ACM;
 
-		ownValidator = new ValidatorDescription(problemInfo.contestID,
-				problemInfo.problemID, ValidatorDescription.StringToType("%TESTLIB"), "", "check.exe");
-		
 		NodeList list = elem.getElementsByTagName("testset");
 		Element testset = (Element) list.item(0);
 		
@@ -168,10 +165,70 @@ public class ProblemDescription extends AbstractDescription
 		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("memory-limit"));
 		ownLimits.timeLimit = StringWorks.StrToTimeLimit(testset.getAttribute("time-limit"));
 		
+		list = elem.getElementsByTagName("verifier");
+		Element validatorElement = (Element) list.item(0);
+		
+		ownValidator = parsePcmsValidator(validatorElement);
+		
+//		ownValidator = new ValidatorDescription(problemInfo.contestID,
+//				problemInfo.problemID, ValidatorDescription.StringToType("%TESTLIB"), "", "check.exe");		
+		
 		groups = new GroupDescription[1];
 		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, testset.getAttribute("score"));
 	}
 	
+	private ValidatorDescription parsePcmsValidator(Element validatorElement)
+	{
+		// TODO Auto-generated method stub
+		ValidatorDescription res = null;
+		try
+		{
+			String type = validatorElement.getAttribute("type");
+			if ("%testlib".equalsIgnoreCase(type))
+			{
+				NodeList list = validatorElement.getElementsByTagName("binary");
+				if (1 == list.getLength())
+				{
+					Element exeElement = (Element) list.item(0);
+					String executableId = exeElement.getAttribute("executable-id");
+					if ("x86.exe.win32".equalsIgnoreCase(executableId))
+					{
+						res = new ValidatorDescription(problemInfo.contestID,
+								problemInfo.problemID, ValidatorDescription
+										.StringToType("%TESTLIB"), "",
+								exeElement.getAttribute("file"));
+					}
+					else if ("java.check".equalsIgnoreCase(executableId))
+					{
+						res = new ValidatorDescription(problemInfo.contestID,
+								problemInfo.problemID, ValidatorDescription
+										.StringToType("%TESTLIB_JAVA"), "",
+								exeElement.getAttribute("file"));
+					}
+					else
+					{
+						throw new Exception("wrong executable-id: " + executableId);
+					}
+				}
+				else
+				{
+					throw new Exception();
+				}
+			}
+			else
+			{
+				throw new Exception("wrong validator type: " + type);
+			}			
+		}
+		catch (Exception e)
+		{
+			System.out
+					.println("!!!Error while parsing PCMS-style xml problem description: "
+							+ e.getMessage());
+		}
+		return res;
+	}
+
 	@Override
 	public Document getXML()
 	{
