@@ -51,7 +51,7 @@ public class Runner extends Runner2
 	{
 		this.limits = limits;
 		this.files = new ExecutorFiles();
-	}	
+	}
 	
 	public Runner()
 	{
@@ -199,9 +199,9 @@ public class Runner extends Runner2
 				System.out.println("!!! IOException catched (while parsing runner's stdout): " + exc);
 			}
 			
-			FileWorks.deleteFile(files.rootDirectory + "invoke.dll");
-			FileWorks.deleteFile(files.rootDirectory + "run.exe");
-			FileWorks.deleteFile(files.rootDirectory + "crutch.exe");
+			//FileWorks.deleteFile(files.rootDirectory + "invoke.dll");
+			//FileWorks.deleteFile(files.rootDirectory + "run.exe");
+			//FileWorks.deleteFile(files.rootDirectory + "crutch.exe");
 			
 			res.OK(retValue, time, mem, output);
 			
@@ -210,7 +210,6 @@ public class Runner extends Runner2
 		{
 			System.out.println("!!! IOException catched: " + exc);
 		}
-		
 		return res;
 	}
 	

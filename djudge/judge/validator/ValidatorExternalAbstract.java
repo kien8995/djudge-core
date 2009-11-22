@@ -20,10 +20,13 @@ import java.io.*;
 import java.util.ArrayList;
 
 import utils.FileWorks;
+import utils.Scripts;
 
 
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
+import djudge.judge.dexecutor.LocalExecutor;
+import djudge.judge.executor.Runner;
 import djudge.judge.executor.Runner2;
 import djudge.judge.executor.RunnerResultEnum;
 
@@ -76,7 +79,6 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			return res;
 		
 		// All files are present, executing external validator
-
 		ValidatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
 		res.validatorOutput = new String[0];
 		
@@ -90,17 +92,22 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = exeFile + " " + input + " " + answer + " " + output;
 		
-		//System.out.println("VOF: " + ValidatorOutputFile);
+		// TODO: FIMXE
+		if (exeFile.endsWith(".jar"))
+		{
+			String s = exeFile.replaceFirst(".jar", "");
+			cmd = "java -cp " + exeFile + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
+		}
 		
 		try
 		{
-			//System.out.println("VOFCMD: " + cmd);
+			//System.out.println(cmd);
 			res.runInfo = runner.run(cmd);
 		}
 		catch (Exception exc)
 		{
 			// FIXME
-			System.out.println("!!![ValidatorExternalAbstract.Validate]: " + exc);
+			System.out.println("!!![ValidatorExternalAbstract.Validate]2: " + exc);
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.ValidatorNoExeFile;
 		}
@@ -167,5 +174,9 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 	}
 	
 	protected abstract void processData();
-	
+
+	public static void main(String arg[]) throws Exception
+	{
+		Scripts.generateProblemReport("ORSPC-2009", "C");
+	}	
 }

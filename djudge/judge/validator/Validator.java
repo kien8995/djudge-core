@@ -49,6 +49,10 @@ public class Validator
 			res = (new ValidatorTestLib(desc.getCheckerPath())).validateOutput(input, output, answer);
 			break;
 
+		case ExternalTestLibJava:
+			res = (new ValidatorTestLibJava(desc.getCheckerPath())).validateOutput(input, output, answer);
+			break;
+
 		case InternalExact:	
 			res = (new Validator_String()).validateOutput(input, output, answer);
 			break;
