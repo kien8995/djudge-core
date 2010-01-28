@@ -90,4 +90,14 @@ public class CheckParams// extends XMLSerializable
 	{
 		return !fFirstTestOnly;
 	}
+	
+	public void setLimits(ExecutorLimits limits)
+	{
+		this.limits = limits;
+	}
+	
+	public void setFlagFirstTestOnly(boolean flag)
+	{
+		fFirstTestOnly = flag;
+	}
 }

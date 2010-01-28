@@ -49,7 +49,7 @@ public class XmlWorks
 	public static Document getDocumentFromString(String xmlString)
 	{
 		Document doc = null;
-		System.out.println(xmlString);
+		//System.out.println(xmlString);
 		try
 		{
 			DOMParser parser = new DOMParser();
@@ -60,7 +60,7 @@ public class XmlWorks
 		{
 			System.out.println("Exception in XmlWorks::getDocument: " + exc);
 		}
-		System.out.println(doc);
+		//System.out.println(doc);
         return doc;
 	}	
 	

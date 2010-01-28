@@ -127,7 +127,6 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 		return (Long) callRemoteMethod("getContestTimeLeft", new Object[] {username, password});
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap getTeamMonitor(String username, String password)
 	{
@@ -217,7 +216,7 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 		return (Boolean) callRemoteMethod("deleteSubmission", username, password, id);
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	@Override
 	public boolean editSubmission(String username, String password, String id,
 			HashMap data)
