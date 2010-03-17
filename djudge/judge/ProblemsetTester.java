@@ -49,8 +49,5 @@ public class ProblemsetTester
 		{
 			System.out.println("Wrong arguments");
 		}
-		
-		
-		//Scripts.generateContestReport("Yokohama-2006");
 	}
 }

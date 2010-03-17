@@ -107,7 +107,8 @@ public class XmlWorks
 	            serializer.serialize(document);
 	            System.out.println(out.toString());
 	            return out.toString();
-	        } catch (IOException e)
+	        }
+	        catch (IOException e)
 	        {
 	            throw new RuntimeException(e);
 	        }

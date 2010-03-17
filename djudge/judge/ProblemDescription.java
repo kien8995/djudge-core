@@ -446,7 +446,10 @@ public class ProblemDescription extends AbstractDescription
 			}
 		}
 		
-		problemInfo.files = new ExecutorFiles(
+		params.inputFilename = "";
+		params.outputFilename = "";
+		
+	/*	problemInfo.files = new ExecutorFiles(
 				null == params.inputFilename
 						|| params.inputFilename.length() == 0
 						|| params.inputFilename.equalsIgnoreCase("stdin") ? "input.txt"
@@ -457,7 +460,7 @@ public class ProblemDescription extends AbstractDescription
 						: null);
 		
 		problemInfo.programInputFilename = params.inputFilename;
-		problemInfo.programOutputFilename = params.outputFilename;
+		problemInfo.programOutputFilename = params.outputFilename;*/
 	}
 	
 }

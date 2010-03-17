@@ -20,6 +20,8 @@ public class CompilerResult extends XMLSerializable
 	
 	public ExecutionResult compilerExecution;
 	
+	public String[] compilerOutput;
+	
 	public CompilerResult(Element item)
 	{
 		readXML(item);
@@ -37,14 +39,12 @@ public class CompilerResult extends XMLSerializable
 
 	public String[] getCompilerOutput()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return compilerOutput;
 	}
 
 	public void setCompilerOutput(String[] native_output)
 	{
-		// TODO Auto-generated method stub
-		
+		compilerOutput = native_output;
 	}
 
 	public boolean isSuccessfull()
