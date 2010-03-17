@@ -14,7 +14,6 @@ import org.w3c.dom.Element;
 
 import utils.FileWorks;
 
-
 import djudge.common.Loggable;
 import djudge.common.JudgeDirs;
 import djudge.judge.dexecutor.ExecutorFiles;
@@ -103,14 +102,19 @@ public class Language extends Loggable
 			if (res.compilerExecution.getExitCode() == 0)
 			{
 				res.result = CompilationResult.OK;
-				String r[] = new String[1];
-				r[0] = res.compilerExecution.files.map.get("stdout.txt").filename;
-				res.setCompilerOutput(r);
 			}
 			else
 			{
 				res.result = CompilationResult.CompilationError;
 			}
+			StringBuilder sb = new StringBuilder();
+			String fStdout = res.compilerExecution.files.map.get("stdout.txt").fsName;
+			String sStdout = FileWorks.readFile(fStdout);
+			sb.append(sStdout);
+			String fStderr = res.compilerExecution.files.map.get("stderr.txt").fsName;
+			String sStderr = FileWorks.readFile(fStderr);
+			sb.append(sStderr);
+			res.setCompilerOutput(new String[]{sb.toString()});
 			
 			CompiledProgram pr2 = new CompiledProgram();
 			pr2.files = res.compilerExecution.getFiles();
@@ -126,14 +130,14 @@ public class Language extends Loggable
 		return res;
 	}
 	
-	public static void main2(String[] args)
+	public static void main(String[] args)
 	{
 		CompilerTask task = new CompilerTask();
-		task.languageId = "GCC342";
+		task.languageId = "GCC";
 		task.files = new DistributedFileset("d:\\1000.cpp");
 		
 		CompilerResult res = Compiler.compile(task);
 		System.out.println(res.result);
-		
+		System.out.println(res.compilerOutput[0]);
 	}
 }

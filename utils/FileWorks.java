@@ -126,6 +126,22 @@ public class FileWorks
 	    }
 	}
 	
+	public static void writeFileContent(String file, String content)
+	{
+		try
+		{
+			File f = new File(file);
+			f.getParentFile().mkdirs();
+			PrintWriter pw = new PrintWriter(f);
+			pw.println(content);
+			pw.close();
+		}
+	    catch(IOException e)
+	    {
+	    	System.out.println(e.getMessage());      
+	    }
+	}
+	
 	public static byte[] readFileContent(String file)
 	{
 		byte[] res = null;
@@ -189,13 +205,16 @@ public class FileWorks
 	
 	public static String readFile(String filename)
 	{
-		String res = "";
+		StringBuilder res = new StringBuilder();
 		try
 		{
             BufferedReader r = new BufferedReader(new FileReader(new File(filename)));
             String str = null;
             while ((str = r.readLine()) != null)
-            	res = res + str + "\n";
+            {
+            	res.append(str);
+            	res.append('\n');
+            }
             r.close();
 		}
 		catch(FileNotFoundException ex)
@@ -206,7 +225,7 @@ public class FileWorks
 	    {
 	    	System.out.println(e.getMessage());      
 	    }
-	    return res;
+	    return res.toString();
 	}
 	
 	public static void deleteDirectory(String dir)
