@@ -2,6 +2,7 @@ package djudge.judge;
 
 
 import java.io.File;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import utils.DirectoryResult;
@@ -249,6 +250,7 @@ public class Judge
 		log.info("Judging file " + file);
 		RemoteFS.startSession();
 		SubmissionResult res = new SubmissionResult(problem);
+		res.setJudgingStarted(new Date());
 		res.comment = file;
 		CompilerTask ctask = new CompilerTask(file, lang);
 		CompilerResult ci = Compiler.compile(ctask);
@@ -266,6 +268,7 @@ public class Judge
 			res.setProblemResult(pres);
 		}
 		RemoteFS.clearSession();
+		res.setJudgingFinished(new Date());
 		log.info("Judgement: " + res.result);
 		return res;
 	}

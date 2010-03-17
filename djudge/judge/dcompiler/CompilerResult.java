@@ -1,5 +1,6 @@
 package djudge.judge.dcompiler;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -57,7 +58,7 @@ public class CompilerResult extends XMLSerializable
 	{
 		Document doc = XmlWorks.getDocument();
 		Element res = doc.createElement(XMLRootElement);
-		// TODO: fill me
+		res.setAttribute("compiler-output", StringEscapeUtils.escapeXml(compilerOutput.length > 0 && compilerOutput[0] != null ? compilerOutput[0] : ""));
 		doc.appendChild(res);
 		return doc;
 	}

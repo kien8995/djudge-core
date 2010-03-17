@@ -1,5 +1,7 @@
 package djudge.judge;
 
+import java.util.Date;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -19,6 +21,10 @@ public class SubmissionResult extends AbstractResult
 	private CompilerResult compilationInfo;
 	
 	public String comment;
+	
+	private Date judgingStarted;
+	
+	private Date judgingFinished;
 	
 	public ProblemResult getProblemResult()
 	{
@@ -130,5 +136,25 @@ public class SubmissionResult extends AbstractResult
 	public static void main(String[] args)
 	{
 		new AdminClient();
+	}
+
+	public void setJudgingStarted(Date judgingStarted)
+	{
+		this.judgingStarted = judgingStarted;
+	}
+
+	public Date getJudgingStarted()
+	{
+		return judgingStarted;
+	}
+
+	public void setJudgingFinished(Date judgingFinished)
+	{
+		this.judgingFinished = judgingFinished;
+	}
+
+	public Date getJudgingFinished()
+	{
+		return judgingFinished;
 	}
 }

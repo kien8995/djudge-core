@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -25,13 +26,13 @@ import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
 import djudge.judge.dexecutor.ExecutorLimits;
 
-public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLinkInterface
+public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 {
 	private String rootUrl = "http://localhost:8080/";
 
 	private String logDir = "appengine-local";
 	
-	private boolean isRunning = true;
+	private boolean isActive = true;
 	
 	private int judgeLinkId = 0;
 	
@@ -53,11 +54,7 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 		public void reportSubmissionReportSent(int judgeId, JudgeTaskResult submissionsId) {}
 
 		@Override
-		public void reportSubmissionJudged(int judgeId, JudgeTaskResult res)
-		{
-			// TODO Auto-generated method stub
-			
-		}
+		public void reportSubmissionJudged(int judgeId, JudgeTaskResult res) {}
 	};
 	
 	private String fetchXml()
@@ -83,7 +80,6 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 			callback.reportConnectionLost(judgeLinkId, ce.getMessage());
 		}
 		catch (IOException e1)
-		
 		{
 			e1.printStackTrace();
 			callback.reportError(judgeLinkId, e1.getMessage());
@@ -92,7 +88,7 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 	}
 
 	@SuppressWarnings("deprecation")
-	private void postXml(Document xml, String id)
+	private boolean postXml(Document xml, String id)
 	{
 		try
 		{
@@ -135,31 +131,34 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 			while (null != input.readLine());
 			input.close();
 			callback.reportConnectionRecovered(judgeLinkId, "");
+			return true;
 		}
 		catch (MalformedURLException me)
 		{
 			System.err.println("MalformedURLException: " + me);
+			me.printStackTrace();
+			callback.reportError(judgeLinkId, me.getMessage());
 		}
 		catch (IOException ioe)
 		{
 			System.err.println("IOException: " + ioe.getMessage());
+			ioe.printStackTrace();
+			callback.reportConnectionLost(judgeLinkId, ioe.getMessage());
 		}
+		return false;
 	}
 
 	public void run()
 	{
 		while (true)
 		{
-			while (!isRunning)
+			while (!isActive)
 			{
 				try
 				{
 					sleep(100);
 				}
-				catch (InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
+				catch (InterruptedException e1) {}
 			}
 			String content = fetchXml();
 			System.out.println(content);
@@ -207,8 +206,11 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 					JudgeTaskResult res = Judge.judgeTask(
 							new JudgeTaskDescription(task), params);
 					callback.reportSubmissionJudged(judgeLinkId, res);
-					postXml(res.res.getXML(), id);
-					callback.reportSubmissionReportSent(judgeLinkId, res);
+					if (postXml(res.res.getXML(), id))
+					{
+						res.submittedTime = new Date();
+						callback.reportSubmissionReportSent(judgeLinkId, res);
+					}
 				}
 				catch (Exception e)
 				{
@@ -222,23 +224,20 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 				{
 					sleep(1000);
 				}
-				catch (InterruptedException e)
-				{
-
-				}
+				catch (InterruptedException e) {}
 			}
 		}
 	}
 	
 	public static void main(String[] args)
 	{
-		new Judge2GoogleAppEngine1LinkLocal().start();
+		new Judge2AppEngineLink().start();
 	}
 
 	@Override
 	public void startLink()
 	{
-		isRunning = true;
+		isActive = true;
 		if (!isAlive())
 			start();
 	}
@@ -246,7 +245,7 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 	@Override
 	public void stopLink()
 	{
-		isRunning = false;
+		isActive = false;
 	}
 
 	@Override
@@ -261,6 +260,6 @@ public class Judge2GoogleAppEngine1LinkLocal extends Thread implements JudgeLink
 	@Override
 	public boolean getRunning()
 	{
-		return isRunning;
+		return isActive;
 	}
 }

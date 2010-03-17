@@ -72,8 +72,7 @@ public class ValidationResult extends XMLSerializable
 			res.setAttribute("type", "" + validatorName);
 			res.setAttribute("result", "" + result);
 			res.setAttribute("fail", "" + fail);
-			res.setAttribute("output", "none");
-					//StringEscapeUtils.escapeXml(StringWorks.ArrayToString(validatorOutput)));
+			res.setAttribute("output", StringEscapeUtils.escapeXml(StringWorks.ArrayToString(validatorOutput)));
 			doc.appendChild(res);
 		}
 		catch (Exception exc)

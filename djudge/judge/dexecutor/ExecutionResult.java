@@ -1,5 +1,6 @@
 package djudge.judge.dexecutor;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -68,8 +69,8 @@ public class ExecutionResult extends XMLSerializable
 		res.setAttribute(outputAttributeName, "" + outputGenerated);
 		res.setAttribute(exitCodeAttributeName, "" + exitCode);
 		res.setAttribute(resultAttributeName, result.toString());
-		res.setAttribute(runnerOutputAttributeName, runnerOutput);
-		res.setAttribute(tempDirAttributeName, tempDir);
+		res.setAttribute(runnerOutputAttributeName, StringEscapeUtils.escapeXml(runnerOutput));
+		res.setAttribute(tempDirAttributeName, StringEscapeUtils.escapeXml(tempDir));
 		
 		doc.appendChild(res);
 		return doc;
