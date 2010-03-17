@@ -103,6 +103,9 @@ public class Language extends Loggable
 			if (res.compilerExecution.getExitCode() == 0)
 			{
 				res.result = CompilationResult.OK;
+				String r[] = new String[1];
+				r[0] = res.compilerExecution.files.map.get("stdout.txt").filename;
+				res.setCompilerOutput(r);
 			}
 			else
 			{

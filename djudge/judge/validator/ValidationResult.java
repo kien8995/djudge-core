@@ -16,6 +16,7 @@
 
 package djudge.judge.validator;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -71,7 +72,8 @@ public class ValidationResult extends XMLSerializable
 			res.setAttribute("type", "" + validatorName);
 			res.setAttribute("result", "" + result);
 			res.setAttribute("fail", "" + fail);
-			res.setAttribute("output", StringWorks.ArrayToString(validatorOutput));
+			res.setAttribute("output", "none");
+					//StringEscapeUtils.escapeXml(StringWorks.ArrayToString(validatorOutput)));
 			doc.appendChild(res);
 		}
 		catch (Exception exc)
