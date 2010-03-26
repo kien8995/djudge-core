@@ -1,6 +1,7 @@
 package djudge.judge.interfaces;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -28,6 +29,8 @@ import djudge.judge.dexecutor.ExecutorLimits;
 
 public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 {
+	private static final Logger log = Logger.getLogger(Judge2AppEngineLink.class);
+	
 	private String rootUrl = "http://localhost:8080/";
 
 	private String logDir = "appengine-local";
@@ -73,6 +76,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 		catch (MalformedURLException e)
 		{
 			e.printStackTrace();
+			log.error("fechXML", e);
 			callback.reportError(judgeLinkId, e.getMessage());
 		}
 		catch (ConnectException ce)
@@ -137,6 +141,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 		{
 			System.err.println("MalformedURLException: " + me);
 			me.printStackTrace();
+			log.error("fechXML", me);
 			callback.reportError(judgeLinkId, me.getMessage());
 		}
 		catch (IOException ioe)
@@ -216,6 +221,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 				{
 					callback.reportError(judgeLinkId, e.getMessage());
 					e.printStackTrace();
+					log.error("judge", e);
 				}
 			}
 			else
