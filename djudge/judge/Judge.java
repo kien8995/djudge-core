@@ -306,4 +306,98 @@ public class Judge
 		}
 		return res;
 	}
+	
+	public static SubmissionResult generateAnswerFiles(String file, ProblemDescription problem)
+	{
+		RemoteFS.startSession();
+		SubmissionResult res = new SubmissionResult(problem);
+		res.setJudgingStarted(new Date());
+		res.comment = file;
+		CompilerTask ctask = new CompilerTask(file, "%AUTO%");
+		CompilerResult ci = Compiler.compile(ctask);
+		res.setCompilationInfo(ci);
+		if (!ci.isSuccessfull())
+		{
+			res.result = TestResultEnum.CE;
+		}
+		else
+		{
+			ExecutorProgram pr = new ExecutorProgram();
+			pr.command = ci.program.getRunCommand();
+			pr.files = ci.program.files;
+			ProblemResult pres = generateAnswerFiles(problem, pr);
+			res.setProblemResult(pres);
+		}
+		RemoteFS.clearSession();
+		res.setJudgingFinished(new Date());
+		log.info("Judgement: " + res.result);
+		return res;
+	}
+	
+	public static ProblemResult generateAnswerFiles(ProblemDescription desc, ExecutorProgram program)
+	{
+		ProblemResult res = new ProblemResult(desc);
+		
+		System.out.println("All tests");
+   		for (int i = 0; i < desc.groupsCount; i++)
+   		{
+   			res.groupResults[i] = generateAnswerFiles(desc.groups[i], program);
+   		}
+		res.updateResult();
+		return res;
+	}	
+
+	public static GroupResult generateAnswerFiles(GroupDescription desc, ExecutorProgram program)
+	{
+		GroupResult res = new GroupResult(desc);
+		
+		for (int i = 0; i < desc.getTestCount(); i++)
+		{
+			res.testResults[i] = generateAnswerFiles(desc.tests.get(i), program);
+		}
+		res.updateResult();
+		
+		return res;		
+	}
+	
+	public static TestResult generateAnswerFiles(TestDescription test, ExecutorProgram program)
+	{
+		TestResult res = new TestResult(test);
+		String contestId = test.problemInfo.contestID;
+		String problemId = test.problemInfo.problemID;
+		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
+		
+		File f = new File(testsDir + test.getInputMask());
+		if (!f.exists())
+		{
+			res.result = TestResultEnum.IE;
+			return res;
+		}
+		
+		String inputTestFilename = test.getInputFilename();
+		if (inputTestFilename == null || "".equals(inputTestFilename) || "stdin".equals(inputTestFilename))
+		{
+			inputTestFilename = "input.txt";
+		}
+		program.files.addFile(testsDir + test.getInputMask(), inputTestFilename);
+		
+		ExecutorFiles files = test.getExecutorFiles();
+		ExecutorLimits limits = test.getActualLimits();
+		ExecutorTask exTask = new ExecutorTask(program, limits, files);
+		exTask.returnDirectoryContent = true;
+		LocalExecutor ex = new LocalExecutor();
+		
+		ExecutionResult exRes = ex.execute(exTask);
+		res.setRuntimeInfo(exRes);
+		if (exRes.getResult() == ExecutionResultEnum.OK)
+		{
+			String filename = test.getAnswerFilename();			
+			if (filename == null || "".equals(filename) || "stdout".equals(filename))
+			{
+				filename = "output.txt";
+			}
+			FileWorks.CopyFile(FileWorks.ConcatPaths(testsDir, test.getOutputMask()), FileWorks.ConcatPaths(exRes.tempDir, filename));
+		}
+		return res;
+	}	
 }
