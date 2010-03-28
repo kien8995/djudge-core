@@ -33,7 +33,7 @@ public class TestResult extends AbstractResult
 	public TestResult(TestDescription testDescription)
 	{
 		testNumber = testDescription.testNumber;
-		testScore = testDescription.score;
+		testScore = testDescription.getScore();
 	}
 
 	public TestResult(Element elem)

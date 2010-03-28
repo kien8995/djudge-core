@@ -16,10 +16,13 @@ public class ProblemResult extends AbstractResult
 	GroupResult[] groupResults;
 	int groupCount;
 
+	int problemScore = 0;
+	
 	public ProblemResult(ProblemDescription problem)
 	{
 		groupCount = problem.groupsCount;
 		groupResults = new GroupResult[groupCount];
+		problemScore = problem.getScore();
 		for (int i = 0; i < groupCount; i++)
 			groupResults[i] = new GroupResult(problem.groups[i]);
 	}
@@ -48,6 +51,10 @@ public class ProblemResult extends AbstractResult
 			}
 			maxTime = Math.max(maxTime, groupResults[i].maxTime);
 			maxMemory = Math.max(maxMemory, groupResults[i].maxMemory);			
+		}
+		if (TestResultEnum.AC.equals(result))
+		{
+			score += problemScore;
 		}
 	}
 

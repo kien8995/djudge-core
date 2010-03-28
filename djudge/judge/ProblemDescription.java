@@ -80,14 +80,15 @@ public class ProblemDescription extends AbstractDescription
         list = elem.getElementsByTagName(GroupDescription.XMLRootElement);
         groupsCount = list.getLength();
         groups = new GroupDescription[groupsCount];
-        for (int i = 0; i < groupsCount; i++)
-        {   		
-        	groups[i] = new GroupDescription(this, i, problemInfo, (Element) list.item(i));
-        	if (ownValidator == null)
-        	{
-        		ownValidator = groups[i].getActualValidator();
-        	}
-        }
+		for (int i = 0; i < groupsCount; i++)
+			if (list.item(i).getParentNode().equals(elem))
+			{
+				groups[i] = new GroupDescription(this, i, problemInfo, (Element) list.item(i));
+				if (ownValidator == null)
+				{
+					ownValidator = groups[i].getActualValidator();
+				}
+			}
 	}
 	
 	
