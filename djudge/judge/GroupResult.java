@@ -1,14 +1,11 @@
 package djudge.judge;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import utils.StringWorks;
 import utils.XmlWorks;
-
-
-
 
 public class GroupResult extends AbstractResult
 {
@@ -26,6 +23,7 @@ public class GroupResult extends AbstractResult
 		groupNumber = group.groupNumber;
 		testsCount = group.getTestCount();
 		testResults = new TestResult[testsCount];
+		groupScore = group.getScore();
 		for (int i = 0; i < testsCount; i++)
 			testResults[i] = new TestResult(group.tests.get(i));
 	}

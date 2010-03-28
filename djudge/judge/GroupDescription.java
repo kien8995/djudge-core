@@ -43,7 +43,7 @@ public class GroupDescription extends AbstractDescription
         {
         	String[] scoreA = score.split(" ");
         	for (int i = 0; i < scoreA.length; i++)
-        		tests.get(i).score = Integer.parseInt(scoreA[i]);
+        		tests.get(i).setScore(Integer.parseInt(scoreA[i]));
         }
 	}
 
@@ -67,7 +67,7 @@ public class GroupDescription extends AbstractDescription
 		{
 			res.appendChild(doc.importNode(tests.get(i).getXML().getFirstChild(), true));
 		}
-				
+		
 		doc.appendChild(res);
 		return doc;
 	}
@@ -77,20 +77,34 @@ public class GroupDescription extends AbstractDescription
 	{
 		readOwnXML(elem);
 		
-		NodeList list = elem.getElementsByTagName(TestDescription.XMLRootElement);
-        int testsCount = list.getLength();
-        tests = new Vector<TestDescription>();
-        for (int i = 0; i < testsCount; i++)
-        {
-        	tests.add(new TestDescription(this, i, problemInfo, (Element)list.item(i)));
-        }
-        String score = elem.getAttribute("score");
-//        System.out.print(score + "\n");
+		String testsCountStr = elem.getAttribute("tests-count");
+		if (null != testsCountStr && testsCountStr.length() > 0)
+		{
+			int testsCount = Integer.parseInt(testsCountStr);
+			tests = new Vector<TestDescription>();
+			for (int i = 0; i < testsCount; i++)
+			{
+				tests.add(new TestDescription(this, i, problemInfo));
+			}
+		}
+		else
+		{
+    		NodeList list = elem.getElementsByTagName(TestDescription.XMLRootElement);
+            int testsCount = list.getLength();
+            tests = new Vector<TestDescription>();
+            for (int i = 0; i < testsCount; i++)
+            {
+            	tests.add(new TestDescription(this, i, problemInfo, (Element)list.item(i)));
+            }
+		}
+        String score = elem.getAttribute("tests-score");
         if (score != null && score.length() > 0)
         {
         	String[] scoreA = score.split(" ");
         	for (int i = 0; i < scoreA.length; i++)
-        		tests.get(i).score = Integer.parseInt(scoreA[i]);
+        	{
+        		tests.get(i).setScore(Integer.parseInt(scoreA[Math.min(i, scoreA.length - 1)]));
+        	}
         }
 		return true;
 	}

@@ -19,7 +19,7 @@ public class TestDescription extends AbstractDescription
 	
 	{
 		testNumber = 0;
-		score = 1;
+		setScore(1);
 		blockName = "test";
 	}
 	

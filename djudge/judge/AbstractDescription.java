@@ -27,7 +27,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	protected String outputMask;
 	final String outputMaskAttributeName = "output-mask";
 	
-	int score = 0;
+	private int score = 0;
 	final String scoreAttributeName = "score";
 	
 	String blockName; 
@@ -61,7 +61,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	{
 		NodeList list;
 		
-		score = StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0);
+		setScore(StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0));
 		
 		inputMask = elem.getAttribute(inputMaskAttributeName);
 		
@@ -94,7 +94,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	protected final void writeOwnXML(Document doc, Element res)
 	{
-		res.setAttribute(scoreAttributeName, "" + score);
+		res.setAttribute(scoreAttributeName, "" + getScore());
 		
 		if (hasOwnInputMask())
 		{
@@ -168,5 +168,15 @@ public abstract class AbstractDescription extends XMLSerializable
 	public GlobalProblemInfo getGlobalProblemInfo()
 	{
 		return problemInfo;
+	}
+
+	public void setScore(int score)
+	{
+		this.score = score;
+	}
+
+	public int getScore()
+	{
+		return score;
 	}
 }
