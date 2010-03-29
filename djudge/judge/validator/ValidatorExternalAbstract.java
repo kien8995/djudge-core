@@ -25,8 +25,6 @@ import utils.Scripts;
 
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
-import djudge.judge.dexecutor.LocalExecutor;
-import djudge.judge.executor.Runner;
 import djudge.judge.executor.Runner2;
 import djudge.judge.executor.RunnerResultEnum;
 
@@ -95,7 +93,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		// TODO: FIMXE
 		if (exeFile.endsWith(".jar"))
 		{
-			String s = exeFile.replaceFirst(".jar", "");
+			//String s = exeFile.replaceFirst(".jar", "");
 			cmd = "java -cp " + exeFile + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
 		}
 		

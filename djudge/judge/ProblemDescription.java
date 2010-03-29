@@ -355,6 +355,8 @@ public class ProblemDescription extends AbstractDescription
 		return groups[groupNumber].tests.get(testNumber).getOutputMask();
 	}
 	
+	// possible masks %d, %c, %c%d, %d%c; first mask position is substituted by either digit or letter depending
+	// on %c or %d
 	protected String substituteMask(String mask, int groupNumber)
 	{
 		int cnt = 0;
@@ -366,15 +368,23 @@ public class ProblemDescription extends AbstractDescription
 			{
 				int t = k + 1;
 				while (t < mask.length() && mask.charAt(t) != 'd' && mask.charAt(t) != 'c') t++;
-				if (t >= mask.length()) continue;
+				if (t >= mask.length())
+					break;
 				c[cnt] = mask.charAt(t);
 				pos[cnt] = k;
 				cnt++;
 			}
 		}
-		String p1 = new PrintfFormat(mask.substring(0, pos[1])).sprintf(groupNumber + 1);
-		String res = p1 + mask.substring(pos[1]);
-		return res;
+		if (c[0] == 'c')
+		{
+			return mask.replaceAll("%c", "" + ((char)('a' + groupNumber)));
+		}
+		else
+		{
+    		String p1 = new PrintfFormat(mask.substring(0, pos[1])).sprintf(groupNumber + 1);
+    		String res = p1 + mask.substring(pos[1]);
+    		return res;
+		}
 	}
 	
 	protected String getGroupInputMask(int groupNumber)
