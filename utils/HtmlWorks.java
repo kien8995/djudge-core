@@ -1,25 +1,16 @@
 /* $Id: HtmlWorks.java, v 0.1 2008/07/28 05:13:08 alt Exp $ */
 
-/* Copyright (C) 2008 Olexiy Palinkash <olexiy.palinkash@gmail.com> */
-
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */ 
-
 package utils;
 
 
+import org.apache.commons.lang.StringEscapeUtils;
+
+import djudge.judge.GroupDescription;
 import djudge.judge.GroupResult;
+import djudge.judge.ProblemDescription;
 import djudge.judge.ProblemResult;
 import djudge.judge.SubmissionResult;
+import djudge.judge.TestDescription;
 import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
 import djudge.judge.dexecutor.ExecutionResult;
@@ -28,36 +19,8 @@ import djudge.judge.validator.ValidationResult;
 
 public class HtmlWorks 
 {
-	public static String toSafeHtml(String s)
-	{
-		StringBuffer res = new StringBuffer();
-		for (int i = 0; i < s.length(); i++)
-			switch (s.charAt(i))
-			{
-			case '&':
-				res.append("&amp;");
-				break;
-			case '<':
-				res.append("&lt;");
-				break;
-			case '>':
-				res.append("&gt;");
-				break;
-			case '"':
-				res.append("&quot;");
-				break;
-			case '\n':
-				res.append("<br>");
-				break;
-			default:
-				res.append(s.charAt(i));
-			}
-		return res.toString();
-	}
-	
 	public static String getHeaderColor()
 	{
-		// Grey color
 		return "Gainsboro";
 	}
 	
@@ -98,7 +61,7 @@ public class HtmlWorks
 		return "" + time/1000 + "s " +  (time % 1000) + " ms";		
 	}
 	
-	public static String testToHtml(TestResult res)
+	public static String testToHtml(TestResult res, TestDescription desc)
 	{
 		TestResultEnum judgement = res.getResult();
 		ExecutionResult RunInfo = res.getRuntimeInfo();
@@ -109,23 +72,25 @@ public class HtmlWorks
 		String color = getJudgementColor(judgement);
 		s.append("<tr bgcolor=" + color + ">");
 			s.append("<td>" + (TestNum + 1)  + "</td>");
-			s.append("<td>" + formatRuntime(RunInfo.timeConsumed)  + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.memoryConsumed)  + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.outputGenerated)  + "</td>");
+			s.append("<td>" + res.getScore()  + "</td>");
+			s.append("<td>" + formatRuntime(RunInfo.timeConsumed) + " of " + formatRuntime(desc.getWorkLimits().timeLimit) + "</td>");
+			s.append("<td>" + formatMemorySize(RunInfo.memoryConsumed) + " of " + formatMemorySize(desc.getWorkLimits().memoryLimit) + "</td>");
+			s.append("<td>" + formatMemorySize(RunInfo.outputGenerated) + "</td>");
 			s.append("<td>" + judgement  + "</td>");
 			try
 			{
-				s.append("<td>" + toSafeHtml(StringWorks.ArrayToString(ValidationInfo.validatorOutput))  + "</td>");
+				s.append("<td>" + StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(ValidationInfo.validatorOutput))  + "</td>");
 			}
 			catch (Exception e)
 			{
 				s.append("<td></td>");
 			}
+			s.append("<td>" + desc.getInputMask() + " - " + desc.getOutputMask() + " - " + res.getRuntimeInfo().tempDir + "</td>");
 		s.append("</tr>\n");
 		return s.toString();		
 	}
 	
-	public static String testGroupToHtml(GroupResult res)
+	public static String testGroupToHtml(GroupResult res, GroupDescription desc)
 	{
 		StringBuffer s = new StringBuffer();
 /*		s.append("<table border=1>");
@@ -135,11 +100,11 @@ public class HtmlWorks
 		s.append("<tr><td>MaxMemory</td><td>" + formatMemorySize(res.getMaxMemory()) + " K</td></tr>");
 		s.append("</table>");*/
 		s.append("<table border=1>");
-		s.append("<tr><th>Test</th><th>Time</th><th>Memory</th><th>OutputSize</th><th>Judgement</th><th>Validator</th></tr>");
+		s.append("<tr><th>Test</th><th>Score</th><th>Time</th><th>Memory</th><th>OutputSize</th><th>Judgement</th><th>Validator</th><th>IO</th></tr>");
 		try
 		{
     		for (int i = 0; i < res.getTestsCount(); i++)
-    			s.append(testToHtml(res.getTestInfo(i)));
+    			s.append(testToHtml(res.getTestInfo(i), desc.getTest(i)));
 		}
 		catch (Exception e)
 		{
@@ -149,7 +114,7 @@ public class HtmlWorks
 		return s.toString();
 	}
 	
-	public static String problemToHtml(SubmissionResult res2)
+	public static String problemToHtml(SubmissionResult res2, ProblemDescription desc)
 	{
 		StringBuffer s = new StringBuffer();
 		// ?compiled
@@ -161,7 +126,7 @@ public class HtmlWorks
 			for (int i = 0; i < res.getGroupsCount(); i++)
 			{
 				s.append("<tr><td>");
-				s.append(testGroupToHtml(res.getGroupResult(i)));
+				s.append(testGroupToHtml(res.getGroupResult(i), desc.getGroup(i)));
 				s.append("</td></tr>");
 			}
 		}
@@ -178,7 +143,7 @@ public class HtmlWorks
 		return s.toString();
 	}
 	
-	public static String directoryResultToHtml(DirectoryResult res)
+	public static String directoryResultToHtml(DirectoryResult res, ProblemDescription desc)
 	{
 		StringBuffer s = new StringBuffer();
 		// Global statistics
@@ -212,7 +177,7 @@ public class HtmlWorks
 		{
 			s.append("<a name=" + (i+1) +"></a>");			
 			SubmissionResult t = res.getSubmissionResult(i);
-			s.append(problemToHtml(t));
+			s.append(problemToHtml(t, desc));
 		}
 		return s.toString();		
 	}

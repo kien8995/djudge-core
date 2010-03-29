@@ -236,7 +236,7 @@ public class Judge
 			desc.overrideParams(params);
 			JudgeDirectory jd = new JudgeDirectory(desc);
 			DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
-			String s = HtmlWorks.directoryResultToHtml(res);
+			String s = HtmlWorks.directoryResultToHtml(res, desc);
 			FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
 		}
 		catch (Exception e)
