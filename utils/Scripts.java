@@ -51,7 +51,7 @@ public class Scripts
     		
     		DirectoryResult res = j.judge(problemsRoot + contestId + "\\" + problemId +"\\solutions");
     		String html = "<h1>Problem " + problemId + " (" + contestId + ") [ " + Calendar.getInstance().getTime() +  "]</h1>"
-    						+ HtmlWorks.directoryResultToHtml(res);
+    						+ HtmlWorks.directoryResultToHtml(res, desc);
     		FileWorks.saveToFile(html, problemsRoot + contestId + "\\" + problemId +"\\report.html");
     		return res;
 		}
