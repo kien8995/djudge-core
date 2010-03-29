@@ -1,11 +1,12 @@
 package djudge.judge.interfaces;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import utils.FileWorks;
+import utils.HtmlWorks;
 import utils.XmlWorks;
 
 import java.io.DataInputStream;
@@ -25,6 +26,7 @@ import djudge.judge.CheckParams;
 import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
+import djudge.judge.ProblemDescription;
 import djudge.judge.dexecutor.ExecutorLimits;
 
 public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
@@ -211,6 +213,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 					JudgeTaskResult res = Judge.judgeTask(
 							new JudgeTaskDescription(task), params);
 					callback.reportSubmissionJudged(judgeLinkId, res);
+					FileWorks.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + "-report.html", HtmlWorks.problemToHtml(res.res, new ProblemDescription(task.getContest(), task.getProblem())));
 					if (postXml(res.res.getXML(), id))
 					{
 						res.submittedTime = new Date();

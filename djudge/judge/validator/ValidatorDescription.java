@@ -46,6 +46,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 		s = s.toUpperCase();
 		ValidatorType res = ValidatorType.Unknown;
 		if (s.equalsIgnoreCase("%STR%")) res = ValidatorType.InternalExact;
+		else if (s.equalsIgnoreCase("%INT%")) res = ValidatorType.InternalInt32;
 		else if (s.equalsIgnoreCase("%INT32%")) res = ValidatorType.InternalInt32;
 		else if (s.equalsIgnoreCase("%INT64%")) res = ValidatorType.InternalInt64;
 		else if (s.equalsIgnoreCase("%FLOAT%")) res = ValidatorType.InternalFloatAbs;
@@ -58,6 +59,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 		else if (s.equalsIgnoreCase("@STR")) res = ValidatorType.InternalExact;
 		else if (s.equalsIgnoreCase("@TOKEN")) res = ValidatorType.InternalToken;
 		else if (s.equalsIgnoreCase("@TOKEN_SORTED")) res = ValidatorType.InternalSortedToken;
+		else if (s.equalsIgnoreCase("@INT")) res = ValidatorType.InternalInt32;
 		else if (s.equalsIgnoreCase("@INT32")) res = ValidatorType.InternalInt32;
 		else if (s.equalsIgnoreCase("@INT64")) res = ValidatorType.InternalInt64;
 		else if (s.equalsIgnoreCase("@FLOAT")) res = ValidatorType.InternalFloatAbs;

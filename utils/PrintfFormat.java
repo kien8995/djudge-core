@@ -3087,7 +3087,6 @@ private class ConversionSpecification {
  private String fmt;
 }
 /** Vector of control strings and format literals. */
-@SuppressWarnings("unchecked")
 private Vector vFmt = new Vector();
 /** Character position.  Used by the constructor. */
 private int cPos=0;
