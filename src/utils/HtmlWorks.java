@@ -1,4 +1,4 @@
-/* $Id: HtmlWorks.java, v 0.1 2008/07/28 05:13:08 alt Exp $ */
+/* $Id$ */
 
 package utils;
 

@@ -1,4 +1,4 @@
-/* $Id: Validator_String.java, v 0.1 2008/07/24 05:13:08 alt Exp $ */
+/* $Id$ */
 
 package djudge.judge.validator;
 
