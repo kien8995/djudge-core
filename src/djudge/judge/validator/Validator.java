@@ -1,4 +1,4 @@
-/* $Id: Validator.java, v 0.1 2008/08/06 05:13:08 alt Exp $ */
+/* $Id$ */
 
 /* Copyright (C) 2008 Olexiy Palinkash <olexiy.palinkash@gmail.com> */
 

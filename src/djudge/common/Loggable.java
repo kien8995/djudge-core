@@ -1,4 +1,4 @@
-/* $Id: Loggable.java, v 1.0 2008/11/14 13:24:00 alt Exp $ */
+/* $Id$ */
 
 package djudge.common;
 
