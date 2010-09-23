@@ -1,0 +1,9 @@
+<problem
+    problem-type     = "ACM-ICPC"
+    test-count       = "3"
+    input-mask       = "cens%d.in"
+    output-mask      = "cens%d.out"
+    time-limit       = "5000"
+    memory-limit     = "64M"
+    checker          = "@STR"
+/>
