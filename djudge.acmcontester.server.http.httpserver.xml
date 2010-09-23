@@ -1,0 +1,9 @@
+<settings
+	http-port = "8282"
+
+	server-data-provider = "djudge.acmcontester.server.ServerNativeViaXmlRpcInterfaceStub"
+	server-username = "board"
+	server-password = "board"
+
+	cache-update-monitor-interval = "30"
+/>
