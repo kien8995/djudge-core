@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.interfaces;
 
 import djudge.judge.JudgeTaskResult;

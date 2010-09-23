@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package db;
 
 import java.sql.ResultSet;
@@ -11,6 +13,8 @@ import djudge.utils.xmlrpc.AbstractDataTable;
 
 public abstract class AbstractTableDataModel extends AbstractDataTable
 {
+	private static final long serialVersionUID = 1L;
+
 	protected static final Logger log = Logger.getLogger(AbstractTableDataModel.class);
 	
 	public final static String dbMutex = "Mutex";

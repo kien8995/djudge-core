@@ -1,5 +1,6 @@
-package djudge.utils.xmlrpc;
+/* $Id$ */
 
+package djudge.utils.xmlrpc;
 
 import java.net.URL;
 import org.apache.xmlrpc.client.XmlRpcClient;

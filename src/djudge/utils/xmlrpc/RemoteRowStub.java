@@ -1,5 +1,6 @@
-package djudge.utils.xmlrpc;
+/* $Id$ */
 
+package djudge.utils.xmlrpc;
 
 public class RemoteRowStub extends AbstractRemoteRow
 {

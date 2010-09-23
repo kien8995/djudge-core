@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server.interfaces;
 
 import java.util.HashMap;

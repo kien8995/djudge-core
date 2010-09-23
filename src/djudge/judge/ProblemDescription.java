@@ -1,5 +1,6 @@
-package djudge.judge;
+/* $Id$ */
 
+package djudge.judge;
 
 import java.io.FileNotFoundException;
 import org.w3c.dom.Document;

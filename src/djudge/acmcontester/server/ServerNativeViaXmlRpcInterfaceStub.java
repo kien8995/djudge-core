@@ -1,5 +1,6 @@
-package djudge.acmcontester.server;
+/* $Id$ */
 
+package djudge.acmcontester.server;
 
 import djudge.acmcontester.ServerXmlRpcConnector;
 import djudge.acmcontester.server.interfaces.ServerNativeInterface;

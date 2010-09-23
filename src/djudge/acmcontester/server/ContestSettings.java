@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server;
 
 import djudge.utils.XMLSettings;

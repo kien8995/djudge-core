@@ -1,8 +1,9 @@
+/* $Id$ */
+
 package djudge.utils.xmlrpc;
 
 import java.util.HashMap;
 import java.util.Vector;
-
 
 public class HashMapSerializer
 {

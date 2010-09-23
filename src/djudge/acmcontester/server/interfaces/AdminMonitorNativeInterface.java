@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server.interfaces;
 
 import djudge.acmcontester.structures.MonitorData;

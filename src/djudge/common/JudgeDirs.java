@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.common;
 
 public class JudgeDirs

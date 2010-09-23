@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package db;
 
 public class DBField

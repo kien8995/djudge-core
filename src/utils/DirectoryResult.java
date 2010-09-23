@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import djudge.judge.SubmissionResult;
 
-
-
 public class DirectoryResult 
 {
 	String directory;

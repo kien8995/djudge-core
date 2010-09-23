@@ -1,6 +1,5 @@
 package utils;
 
-
 //
 //(c) 2000 Sun Microsystems, Inc.
 //ALL RIGHTS RESERVED
@@ -27,7 +26,6 @@ package utils;
 //http://java.sun.com/nav/business/index.html for further important licensing 
 //information for the Java Technology.
 //
-
 
 import java.util.Enumeration;
 import java.util.Vector;

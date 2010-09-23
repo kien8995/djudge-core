@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.dcompiler;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -9,7 +11,6 @@ import utils.XmlWorks;
 
 import djudge.common.XMLSerializable;
 import djudge.judge.dexecutor.ExecutionResult;
-
 
 public class CompilerResult extends XMLSerializable
 {

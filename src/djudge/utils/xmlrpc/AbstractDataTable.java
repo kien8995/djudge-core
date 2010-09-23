@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.utils.xmlrpc;
 
 import javax.swing.table.AbstractTableModel;

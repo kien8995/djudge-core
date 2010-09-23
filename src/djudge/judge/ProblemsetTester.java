@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge;
 
 import java.io.File;
@@ -21,15 +23,9 @@ import org.w3c.dom.Element;
 
 import djudge.common.JudgeDirs;
 
-
-//import com.sun.org.apache.bcel.internal.util.ByteSequence;
-
-//import sun.misc.BASE64Decoder;
-import sun.font.Script;
 import utils.FileWorks;
 import utils.Scripts;
 import utils.XmlWorks;
-
 
 @SuppressWarnings("unused")
 public class ProblemsetTester

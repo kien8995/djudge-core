@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.common_data_structures;
 
 import org.w3c.dom.Document;
@@ -7,11 +9,6 @@ import djudge.common.XMLSerializable;
 
 
 import utils.XmlWorks;
-
-
-
-
-
 
 public class ExecutorFiles extends XMLSerializable
 {

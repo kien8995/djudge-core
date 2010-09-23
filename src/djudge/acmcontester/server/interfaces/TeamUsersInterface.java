@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server.interfaces;
 
 public interface TeamUsersInterface

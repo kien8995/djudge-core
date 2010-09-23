@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.utils.xmlrpc;
 
 import org.apache.log4j.Logger;

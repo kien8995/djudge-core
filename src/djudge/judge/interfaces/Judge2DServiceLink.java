@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.interfaces;
 
 import org.apache.log4j.Logger;

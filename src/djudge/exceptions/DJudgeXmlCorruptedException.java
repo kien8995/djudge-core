@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.exceptions;
 
 public class DJudgeXmlCorruptedException extends DJudgeXmlException

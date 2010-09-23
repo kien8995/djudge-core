@@ -2,7 +2,6 @@
 
 package utils;
 
-
 import org.apache.commons.lang.StringEscapeUtils;
 
 import djudge.judge.GroupDescription;
@@ -15,7 +14,6 @@ import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
 import djudge.judge.dexecutor.ExecutionResult;
 import djudge.judge.validator.ValidationResult;
-
 
 public class HtmlWorks 
 {

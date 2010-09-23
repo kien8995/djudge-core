@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package db;
 
 import java.awt.Color;
@@ -12,7 +14,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
 
 public class CellDefault extends JComboBox
 {
