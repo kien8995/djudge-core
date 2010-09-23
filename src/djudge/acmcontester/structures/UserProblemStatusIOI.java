@@ -1,5 +1,6 @@
-package djudge.acmcontester.structures;
+/* $Id$ */
 
+package djudge.acmcontester.structures;
 
 import java.util.HashMap;
 import djudge.utils.xmlrpc.HashMapSerializable;

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.utils.xmlrpc;
 
 public interface XmlRpcStateVisualizer

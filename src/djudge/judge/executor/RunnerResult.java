@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.executor;
 
 import org.w3c.dom.Document;
@@ -7,11 +9,6 @@ import djudge.common.XMLSerializable;
 
 
 import utils.XmlWorks;
-
-
-
-
-
 
 public class RunnerResult extends XMLSerializable implements Comparable<RunnerResult>
 {

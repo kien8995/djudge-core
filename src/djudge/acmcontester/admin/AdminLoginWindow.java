@@ -1,5 +1,6 @@
-package djudge.acmcontester.admin;
+/* $Id$ */
 
+package djudge.acmcontester.admin;
 
 import javax.swing.JOptionPane;
 import djudge.acmcontester.AuthentificationData;

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.common;
 
 import java.io.StringWriter;

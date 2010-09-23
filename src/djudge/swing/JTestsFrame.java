@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.swing;
 
 import java.awt.GridBagConstraints;

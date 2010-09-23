@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge;
 
 import org.w3c.dom.Document;
@@ -5,9 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import utils.XmlWorks;
-
-
-
 
 public class ProblemResult extends AbstractResult
 {

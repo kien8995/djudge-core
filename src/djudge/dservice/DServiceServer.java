@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.dservice;
 
 import java.io.IOException;

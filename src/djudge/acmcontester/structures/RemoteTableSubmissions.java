@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.structures;
 
 import djudge.acmcontester.server.interfaces.ServerXmlRpcInterface;

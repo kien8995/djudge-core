@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.dservice.interfaces;
 
 public interface DServiceCommonJudgeInterface

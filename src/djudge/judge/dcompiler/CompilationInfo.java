@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.dcompiler;
 
 import java.io.Serializable;
@@ -8,11 +10,7 @@ import org.w3c.dom.Element;
 
 import djudge.common.XMLSerializable;
 
-
 import utils.XmlWorks;
-
-
-
 
 public class CompilationInfo extends XMLSerializable implements Serializable 
 {

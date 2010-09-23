@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server;
 
 import java.util.Date;
@@ -20,7 +22,6 @@ import djudge.acmcontester.structures.MonitorData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.acmcontester.structures.SubmissionData;
 import djudge.acmcontester.structures.UserData;
-
 
 public class ContestCoreInternals
 {

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.validator;
 
 public enum ValidationFailEnum 

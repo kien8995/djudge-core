@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.admin;
 
 import javax.swing.SwingConstants;

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.interfaces;
 
 public interface JudgeLinkInterface

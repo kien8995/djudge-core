@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.server;
 
 import java.util.HashSet;

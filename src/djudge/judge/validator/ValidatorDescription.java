@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.validator;
 
 import org.w3c.dom.Document;

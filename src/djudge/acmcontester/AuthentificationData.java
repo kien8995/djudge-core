@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester;
 
 import djudge.acmcontester.server.interfaces.AuthentificationDataProvider;

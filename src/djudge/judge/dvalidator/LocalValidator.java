@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.dvalidator;
 
 import java.text.DateFormat;

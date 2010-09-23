@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.exceptions;
 
 public class DJudgeXmlNotFoundException extends DJudgeXmlException

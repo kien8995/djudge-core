@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.dvalidator;
 
 public class RemoteFile

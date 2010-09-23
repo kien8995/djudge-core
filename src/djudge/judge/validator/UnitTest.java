@@ -1,11 +1,10 @@
+/* $Id$ */
+
 package djudge.judge.validator;
 
 import java.util.Calendar;
 
 import utils.StringWorks;
-
-
-
 
 
 class ValidatorTest

@@ -1,5 +1,6 @@
-package djudge.judge;
+/* $Id$ */
 
+package djudge.judge;
 
 import java.util.Vector;
 import org.w3c.dom.Document;

@@ -1,5 +1,6 @@
-package djudge.acmcontester.server;
+/* $Id$ */
 
+package djudge.acmcontester.server;
 
 import org.apache.log4j.Logger;
 

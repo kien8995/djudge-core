@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge;
 
 import java.util.Date;

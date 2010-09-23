@@ -1,7 +1,8 @@
+/* $Id$ */
+
 package djudge.utils.xmlrpc;
 
 import java.util.HashMap;
-
 
 public abstract class HashMapSerializable extends RemoteRowStub
 {

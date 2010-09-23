@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.dservice.interfaces;
 
 import djudge.dservice.DServiceTaskResult;

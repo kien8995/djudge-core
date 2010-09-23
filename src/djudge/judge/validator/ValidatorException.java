@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.judge.validator;
 
 public class ValidatorException extends Exception

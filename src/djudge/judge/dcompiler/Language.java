@@ -1,8 +1,4 @@
-/*
- * 
- * 
- * 
- */
+/* $Id$ */
 
 package djudge.judge.dcompiler;
 

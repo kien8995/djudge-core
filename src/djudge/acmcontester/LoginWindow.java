@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester;
 
 import java.awt.GridBagConstraints;

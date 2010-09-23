@@ -1,3 +1,5 @@
+/* $Id$ */
+
 package djudge.acmcontester.structures;
 
 import java.text.DateFormat;

@@ -1,5 +1,6 @@
-package djudge.acmcontester.server;
+/* $Id$ */
 
+package djudge.acmcontester.server;
 
 import java.util.HashMap;
 
