@@ -1,0 +1,20 @@
+<settings
+	name = "Debug Contest"
+	max-submits-per-user = "20"
+	max-submits-per-task = "3"
+
+	show-alien-monitor = "true"
+	show-alien-submissions = "true"
+	show-alien-details = "true"
+
+	show-score = "true"
+	show-wrong-test-number = "true"
+	show-time-consumed = "true"
+	show-memory-consumed = "true"
+	show-output-size = "true"
+	
+	hide-compilation-error-submissions = "true"
+	allow-first-test-only-submissions = "true"
+	
+	allow-new-user-registration = "true"
+/>

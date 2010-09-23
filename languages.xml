@@ -1,0 +1,21 @@
+<Languages>
+
+<!-- Java -->
+<language
+  id              = "JAVA"
+  compiler-name   = "Java 1.6.0_06"
+  file-extension  = ".java"
+  compile-command = "javac %name%ext"
+  run-command     = "java -Xmx512m -Xms64m -Xss64m -DONLINE_JUDGE -DDJUDGE -cp ./ %name"
+/>
+
+<!-- GNU C++ Compiler 3.4.2 -->
+<language
+  id              = "GCC"
+  compiler-name   = "GNU C++ Compiler 3.4.2"
+  file-extension  = ".cc"
+  compile-command = "g++ %name%ext -o %name.exe -O -march=pentium4m -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE -DDJUDGE"
+  run-command     = "%name.exe"
+/>
+
+</Languages>

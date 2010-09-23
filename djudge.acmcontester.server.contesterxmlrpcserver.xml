@@ -1,0 +1,5 @@
+<settings
+	rpc-port = "8202"
+	rpc-name = "AcmContester"
+	http-port = "8208"
+/>

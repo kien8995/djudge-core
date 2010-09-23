@@ -1,0 +1,6 @@
+<settings
+	service-url = "http://127.0.0.1:8001/xmlrpc"
+	service-name = "DService"
+	connnection-timeout = "5000"
+	reply-timeout = "5000"
+/>

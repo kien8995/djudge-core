@@ -1,0 +1,6 @@
+<settings
+	rpc-port = "8001"
+	rpc-name = "DService"
+
+	http-port = "5555"
+/>
