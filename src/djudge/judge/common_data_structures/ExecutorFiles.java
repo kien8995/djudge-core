@@ -57,7 +57,6 @@ public class ExecutorFiles extends XMLSerializable
 	public ExecutorFiles(String out)
 	{
 		outputFilename = out;
-		outputFilename = out;
 	}
 	
 	public void print()

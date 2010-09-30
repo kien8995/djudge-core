@@ -11,6 +11,7 @@ import org.xml.sax.SAXParseException;
 import utils.PrintfFormat;
 import utils.StringWorks;
 import utils.XmlWorks;
+import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlException;
@@ -128,7 +129,7 @@ public class ProblemDescription extends AbstractDescription
 		String checkerExe = elem.getAttribute("check.exe");
 		if (checkerExe == null || "".equals(checkerExe))
 		{
-			checkerExe = "check.exe";
+			checkerExe = Deployment.isOSWinNT() ? "check.exe" : "check.o";
 		}
 		ownValidator = new ValidatorDescription(problemInfo.contestID,
 				problemInfo.problemID, ValidatorDescription.StringToType(checker), checkerParam, checkerExe);

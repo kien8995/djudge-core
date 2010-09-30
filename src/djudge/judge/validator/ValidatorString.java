@@ -5,7 +5,8 @@ package djudge.judge.validator;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class Validator_String extends ValidatorInternalAbstract
+/* Compares files line-by-line */
+public class ValidatorString extends ValidatorInternalAbstract
 {
 	@Override
 	protected String getToken(BufferedReader rd) throws IOException
@@ -22,6 +23,6 @@ public class Validator_String extends ValidatorInternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator_String";
+		return "Validator-String";
 	}
 }

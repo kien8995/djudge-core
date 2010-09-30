@@ -67,7 +67,7 @@ public class Language extends Loggable
 			String fileDirNameExtComp = tempDir + fileName + info.getExtension();
 			
 			if (!fileNameExt.equals(fileName + info.getExtension()))
-				FileWorks.CopyFile(fileDirNameExtComp, fileDirNameExt);
+				FileWorks.copyFile(fileDirNameExtComp, fileDirNameExt);
 			
 			StringBuffer cmd = new StringBuffer(info.getCompileCommand());
 			int i1;
@@ -88,7 +88,7 @@ public class Language extends Loggable
 			exTask.files = new ExecutorFiles();
 			
 			//FIXME: Hardcode
-			exTask.limits = new ExecutorLimits(20000, 256 * 1024 * 1024);
+			exTask.limits = new ExecutorLimits(20000, 1024 * 1024 * 1024);
 			
 			exTask.program = program;
 			
@@ -126,7 +126,7 @@ public class Language extends Loggable
 		return res;
 	}
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		CompilerTask task = new CompilerTask();
 		task.languageId = "GCC";
@@ -135,5 +135,5 @@ public class Language extends Loggable
 		CompilerResult res = Compiler.compile(task);
 		System.out.println(res.result);
 		System.out.println(res.compilerOutput[0]);
-	}
+	}*/
 }

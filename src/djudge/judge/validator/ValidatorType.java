@@ -2,6 +2,7 @@
 
 package djudge.judge.validator;
 
+/* Enumeration for possible types of validators */
 public enum ValidatorType
 {
 	/**

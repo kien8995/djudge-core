@@ -6,9 +6,9 @@ import djudge.judge.executor.*;
 
 public class ValidatorExitCode extends ValidatorExternalAbstract
 {
-	public ValidatorExitCode(String ExeFile) 
+	public ValidatorExitCode(String exeFile) 
 	{
-		super(ExeFile);
+		super(exeFile);
 	}
 	
 	protected void processData()
@@ -24,7 +24,7 @@ public class ValidatorExitCode extends ValidatorExternalAbstract
 		else
 		{
 			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.ValidatorFail;			
+			res.fail = ValidationFailEnum.ValidatorFail;
 		}
 	}
 }

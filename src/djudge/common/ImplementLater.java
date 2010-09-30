@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package utils;
+package djudge.common;
 
 public @interface ImplementLater
 {

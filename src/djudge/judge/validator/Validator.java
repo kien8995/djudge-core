@@ -40,39 +40,39 @@ public class Validator
 			break;
 
 		case InternalExact:	
-			res = (new Validator_String()).validateOutput(input, output, answer);
+			res = (new ValidatorString()).validateOutput(input, output, answer);
 			break;
 
 		case InternalInt32:
-			res = (new Validator_Int32()).validateOutput(input, output, answer);
+			res = (new ValidatorInt32()).validateOutput(input, output, answer);
 			break;
 
 		case InternalFloatAbs:
 			double eps = Double.parseDouble(desc.param);
-			res = (new Validator_Float(eps, false, true).validateOutput(input, output, answer));
+			res = (new ValidatorFloat(eps, false, true).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatRel:
 			double eps3 = Double.parseDouble(desc.param);
-			res = (new Validator_Float(eps3, true, false).validateOutput(input, output, answer));
+			res = (new ValidatorFloat(eps3, true, false).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatOther:
 			double eps4 = Double.parseDouble(desc.param);
-			res = (new Validator_Float(eps4).validateOutput(input, output, answer));
+			res = (new ValidatorFloat(eps4).validateOutput(input, output, answer));
 			break;
 		
 		case InternalFloatAbsRel:
 			double eps2 = Double.parseDouble(desc.param);
-			res = (new Validator_Float(eps2, true, true).validateOutput(input, output, answer));
+			res = (new ValidatorFloat(eps2, true, true).validateOutput(input, output, answer));
 			break;
 
 		case InternalToken:
-			res = (new Validator_Token()).validateOutput(input, output, answer);
+			res = (new ValidatorToken()).validateOutput(input, output, answer);
 			break;
 
 		case InternalSortedToken:
-			res = (new Validator_SortedToken()).validateOutput(input, output, answer);
+			res = (new ValidatorSortedToken()).validateOutput(input, output, answer);
 			break;
 
 		case ExternalPC2:

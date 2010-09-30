@@ -8,6 +8,8 @@ import org.w3c.dom.Element;
 
 import utils.XmlWorks;
 
+import djudge.common.Deployment;
+import djudge.common.JudgeDirs;
 import djudge.common.XMLSerializable;
 import djudge.exceptions.DJudgeXmlException;
 import djudge.judge.GlobalProblemInfo;
@@ -108,7 +110,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 	{
 		this.type = StringToType(type);
 		this.param = param;
-		this.exeName = "check.exe";
+		this.exeName = Deployment.isOSWinNT() ? "check.exe" : "check.o";
 	}
 	
 	public ValidatorDescription(ValidatorType type)
@@ -182,7 +184,7 @@ public class ValidatorDescription extends XMLSerializable implements Cloneable
 	
 	public String getCheckerPath()
 	{
-		return "./problems/" + contestID + "/" + problemID + "/" + exeName;
+		return JudgeDirs.getProblemsDir() + contestID + "/" + problemID + "/" + exeName;
 	}
 	
 	public void setExeName(String newExe)

@@ -6,8 +6,10 @@ import java.io.*;
 
 import utils.StringWorks;
 
+/* Abstract class for all internal (built-in) validators */
 public abstract class ValidatorInternalAbstract extends ValidatorAbstract implements ValidatorLimits 
 {
+	/* Readers for corresponding files */
 	BufferedReader judgeInput, judgeAnswer, programOutput;
 	
 	@Override
@@ -15,13 +17,14 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 	{
 		res = new ValidationResult(this.toString());
 		
-		// Checking whether input file exists		
+		// Checking whether input file exists
 		File f = new File(judgeInputFile);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoInputFileError;
 			res.validatorOutput = new String[]{"Cannot find input file: " + judgeInputFile};
+			return res;
 		}
 		
 		// Checking whether output file exists 
@@ -31,6 +34,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoOutputFileError;
 			res.validatorOutput = new String[]{"Cannot find answer file: " + judgeAnswerFile};
+			return res;
 		}
 		
 		// Checking whether answer file exists 
@@ -40,10 +44,8 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			res.result = ValidationResultEnum.WrongAnswer;
 			res.fail = ValidationFailEnum.OK;
 			res.validatorOutput = new String[]{"Cannot find program's output file: " + programOutputFile};
-		}
-		
-		if (res.result != ValidationResultEnum.Undefined)
 			return res;
+		}
 		
 		// All files are present, validating data
 		res.validatorOutput = new String[2];
@@ -71,17 +73,18 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 	{
 		int cTokens = 0;
 		
-		Object line = "", str = "";
+		Object correct = "", guess = "";
 		
 		try
 		{
-			while ((line = getToken(judgeAnswer)) != null)
+			// reading token from answer file
+			while ((correct = getToken(judgeAnswer)) != null)
 			{
 				cTokens++;
 				try
 				{
-					str = getToken(programOutput);
-					if (str == null)
+					guess = getToken(programOutput);
+					if (guess == null)
 					{
 						res.validatorOutput[0] = "Wrong Answer";
 						res.validatorOutput[1] = "Answer too short: token #" + cTokens + " not founded";
@@ -90,10 +93,10 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 					}
 					try
 					{
-    					if (!compareTokens(line, str))
+    					if (!compareTokens(correct, guess))
     					{
     						res.validatorOutput[0] = "Wrong Answer";
-    						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "' [answer] [" + this.toString()+"]";
+    						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "' [answer] [" + this.toString()+"]";
     						res.result = ValidationResultEnum.WrongAnswer;
     						return;
     					}
@@ -101,7 +104,12 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 					catch (Exception e)
 					{
 						res.validatorOutput[0] = "Wrong Answer [" + e + "]";
-						res.validatorOutput[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "' [answer] [" + this.toString()+"]";
+						res.validatorOutput[1] = "Token #" + cTokens
+								+ ": [etalon] '"
+								+ StringWorks.truncate(correct.toString())
+								+ "' != '"
+								+ StringWorks.truncate(guess.toString())
+								+ "' [answer] [" + this.toString() + "]";
 						res.result = ValidationResultEnum.WrongAnswer;
 						return;
 					}
@@ -109,15 +117,16 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 				catch (Exception exc)
 				{
 					res.validatorOutput[0] = "Don't know:" + exc;
-					res.validatorOutput[1] = "Token '" + StringWorks.truncate(line.toString()) + "' != '" + StringWorks.truncate(str.toString()) + "'";
-					res.result = ValidationResultEnum.WrongAnswer;
+					res.validatorOutput[1] = "Token '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "'";
+					res.result = ValidationResultEnum.InternalError;
 					return;				
 				}
 			}
-			if ((line = getToken(programOutput)) != null)
+			// if output still contains tokens
+			if ((correct = getToken(programOutput)) != null)
 			{
 				res.validatorOutput[0] = "Wrong Answer";
-				res.validatorOutput[1] = "Extra token: '" + StringWorks.truncate(line.toString()) + "'";				
+				res.validatorOutput[1] = "Extra token: '" + StringWorks.truncate(correct.toString()) + "'";				
 				res.result = ValidationResultEnum.WrongAnswer;
 				return;
 			}				
@@ -129,7 +138,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 			res.result = ValidationResultEnum.InternalError;
 			return;
 		}
-		res.validatorOutput[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(str.toString()) + "\"" : "");
+		res.validatorOutput[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(guess.toString()) + "\"" : "");
 		res.validatorOutput[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
 		res.result = ValidationResultEnum.OK;
 	}

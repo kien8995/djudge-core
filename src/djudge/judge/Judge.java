@@ -172,7 +172,7 @@ public class Judge
 		TestResult res = new TestResult(test);
 		String contestId = test.problemInfo.contestID;
 		String problemId = test.problemInfo.problemID;
-		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
+		String testsDir = JudgeDirs.getProblemsDir() + contestId + "/" + problemId + "/" + "tests/";
 		
 		File f = new File(testsDir + test.getInputMask());
 		if (!f.exists())
@@ -211,12 +211,12 @@ public class Judge
 			}
 			RemoteFile rf = new RemoteFile();
 			rf.fIsPresent = false;
-			rf.filename = FileWorks.ConcatPaths(exRes.tempDir, filename);
+			rf.filename = FileWorks.concatPaths(exRes.tempDir, filename);
 			task.programOutput.filename = RemoteFS.saveToRemoteStorage(rf);
 			task.programOutput.fIsPresent = false;
-			task.testInput.filename = FileWorks.ConcatPaths(testsDir, test.getInputMask());
+			task.testInput.filename = FileWorks.concatPaths(testsDir, test.getInputMask());
 			task.testInput.fIsPresent = false;
-			task.testOutput.filename = FileWorks.ConcatPaths(testsDir, test.getOutputMask());
+			task.testOutput.filename = FileWorks.concatPaths(testsDir, test.getOutputMask());
 			task.testOutput.fIsPresent = false;
 			// validation
 			ValidationResult vres = LocalValidator.validate(task);
@@ -397,7 +397,7 @@ public class Judge
 			{
 				filename = "output.txt";
 			}
-			FileWorks.CopyFile(FileWorks.ConcatPaths(testsDir, test.getOutputMask()), FileWorks.ConcatPaths(exRes.tempDir, filename));
+			FileWorks.copyFile(FileWorks.concatPaths(testsDir, test.getOutputMask()), FileWorks.concatPaths(exRes.tempDir, filename));
 		}
 		return res;
 	}	

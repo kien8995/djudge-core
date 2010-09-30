@@ -11,11 +11,12 @@ public abstract class ValidatorAbstract
 	// Provides information about validation result
 	ValidationResult res;
 	
-	protected String exeFile;
+	// executable filename (for external validator)
+	String exeFilename;
 	
 	public String getExeFile()
 	{
-		return exeFile;
+		return exeFilename;
 	}
 	
 	/**
@@ -26,5 +27,4 @@ public abstract class ValidatorAbstract
 	 * @return object of type ValidationResult 
 	 */
 	public abstract ValidationResult validateOutput(String input, String output, String answer);
-	
 }
