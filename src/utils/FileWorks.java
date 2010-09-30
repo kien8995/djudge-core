@@ -22,20 +22,14 @@ public class FileWorks
 		int k = name.indexOf('.');
 		if (k < 0)
 			return "";
-		else return name.substring(k, name.length());
+		return name.substring(k, name.length());
 	}
 	
-	public static String getTempDirAbsolutePath(String file)
-	{
-		File f = new File(".\\temp\\" + file);
-		return getAbsolutePath(f.getAbsolutePath());
-	}
-
 	public static String getAbsolutePath(String relativePath)
 	{
 		File f = new File(relativePath);
 		// FIXME
-		String res = f.getAbsolutePath().replace("\\.", "");
+		String res = f.getAbsolutePath().replace("\\.", "").replace("/.", "");
 		return res;
 	}
 	
@@ -75,21 +69,26 @@ public class FileWorks
 		}
 	}
 	
-	public static String ConcatPaths(String dir, String file)
+	public static String concatPaths(String dir, String file)
 	{
-		return (dir + "\\" + file).replace("\\\\", "\\").replace("\\.", "");
+		return (dir + "/" + file).replace("\\\\", "\\").replace("\\.", "").replace("//", "/");
 	}
 	
-	public static void CopyFile(String dtFile, String srFile)
+	public static void copyFile(String destFilename, String srcFilename, boolean setExecutable)
 	{
 		try
 		{
-			File f1 = new File(srFile);
-			File f2 = new File(dtFile);
-			f2.getParentFile().mkdirs();
-			//f2.mkdirs();
-			InputStream in = new FileInputStream(f1);
-			OutputStream out = new FileOutputStream(f2);
+			File scrFile = new File(srcFilename);
+			if (!scrFile.exists())
+				throw new FileNotFoundException("Cannot find source file");
+			
+			File destFile = new File(destFilename);
+			destFile.getParentFile().mkdirs();
+			
+			InputStream in = new FileInputStream(scrFile);
+			OutputStream out = new FileOutputStream(destFile);
+			
+			// TODO: review buffer size
 			byte[] buf = new byte[64 * 1024];
 			int len;
 			
@@ -100,6 +99,8 @@ public class FileWorks
 			
 			in.close();
 			out.close();
+			
+			destFile.setExecutable(setExecutable | scrFile.canExecute());
 		}
 		catch(FileNotFoundException ex)
 	    {
@@ -109,6 +110,11 @@ public class FileWorks
 	    {
 	    	System.out.println(e.getMessage());      
 	    }
+	}
+	
+	public static void copyFile(String destFilename, String srcFilename)
+	{
+		copyFile(destFilename, srcFilename, false);
 	}
 	
 	public static void writeFileContent(String file, byte[] content)
@@ -196,7 +202,7 @@ public class FileWorks
 		}
 		try
 		{
-			CopyFile(filename, file.filename);
+			copyFile(filename, file.filename);
 		}
 	    catch(Exception e)
 	    {

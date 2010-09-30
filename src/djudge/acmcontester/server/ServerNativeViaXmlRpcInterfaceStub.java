@@ -167,7 +167,6 @@ public class ServerNativeViaXmlRpcInterfaceStub implements ServerNativeInterface
 		return serverConnector.rejudgeSubmissions(username, password, key, value);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public SubmissionData[] getSubmissions(String username, String password)
 	{

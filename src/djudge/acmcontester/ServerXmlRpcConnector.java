@@ -232,7 +232,6 @@ public class ServerXmlRpcConnector extends XmlRpcConnector implements TeamXmlRpc
 		return (Boolean) callRemoteMethod("rejudgeSubmissions", username, password, key, value);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap[] getSubmissions(String username, String password)
 	{

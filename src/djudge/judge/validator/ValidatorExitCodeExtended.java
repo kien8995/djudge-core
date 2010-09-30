@@ -6,9 +6,9 @@ import djudge.judge.executor.*;
 
 public class ValidatorExitCodeExtended extends ValidatorExternalAbstract
 {
-	public ValidatorExitCodeExtended(String ExeFile) 
+	public ValidatorExitCodeExtended(String exeFile) 
 	{
-		super(ExeFile);
+		super(exeFile);
 	}
 	
 	protected void processData()

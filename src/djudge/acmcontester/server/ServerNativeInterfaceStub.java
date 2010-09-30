@@ -160,7 +160,6 @@ public class ServerNativeInterfaceStub implements ServerNativeInterface
 		return ContestServer.getCore().rejudgeSubmissions(username, password, key, value);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public SubmissionData[] getSubmissions(String username, String password)
 	{

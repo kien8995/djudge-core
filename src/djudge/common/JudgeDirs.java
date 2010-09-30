@@ -2,22 +2,34 @@
 
 package djudge.common;
 
+import utils.FileWorks;
+
 public class JudgeDirs
 {
-	private final static String rootDir = "./";
+	final static String rootDirectory;
+	
+	static
+	{
+		rootDirectory = FileWorks.getAbsolutePath(".") + "/";
+	}	
 	
 	public static String getWorkDir()
 	{
-		return rootDir + "work/";
+		return rootDirectory + "work/";
 	}
 	
 	public static String getTempDir()
 	{
-		return rootDir + "temp/";
+		return rootDirectory + "temp/";
 	}
 
 	public static String getProblemsDir()
 	{
-		return rootDir + "problems/";
+		return rootDirectory + "problems/";
+	}
+
+	public static String getToolsDir()
+	{
+		return rootDirectory + "tools/";
 	}
 }

@@ -6,9 +6,9 @@ import djudge.judge.executor.RunnerResultEnum;
 
 public class ValidatorTestLib extends ValidatorExternalAbstract
 {
-	public ValidatorTestLib(String ExeFile) 
+	public ValidatorTestLib(String exeFile) 
 	{
-		super(ExeFile);
+		super(exeFile);
 	}
 
 	protected void processData() 
@@ -48,6 +48,6 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator.TestLib";
+		return "Validator-TestLib";
 	}
 }

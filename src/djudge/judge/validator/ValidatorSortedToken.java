@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.Vector;
 
-public class Validator_SortedToken extends Validator_Token 
+public class ValidatorSortedToken extends ValidatorToken 
 {
 	protected Object getToken(BufferedReader rd) throws IOException
 	{
@@ -15,7 +15,6 @@ public class Validator_SortedToken extends Validator_Token
 		Vector<String> res = new Vector<String>();
 		while (null != (s = super.getToken(rd)))
 		{
-			//System.out.println("   " + s);
 			res.add(s.toString());
 		}
 		String[] r = res.toArray(new String[0]);
@@ -39,6 +38,6 @@ public class Validator_SortedToken extends Validator_Token
 	@Override
 	public String toString()
 	{
-		return "Validator_Token";
+		return "Validator-Token";
 	}
 }

@@ -11,23 +11,24 @@ import utils.Scripts;
 
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
-import djudge.judge.executor.Runner2;
+import djudge.judge.executor.Runner;
 import djudge.judge.executor.RunnerResultEnum;
 
 public abstract class ValidatorExternalAbstract extends ValidatorAbstract implements ValidatorLimits
 {
 	String ValidatorOutputFile;
 	
-	public ValidatorExternalAbstract(String ExeName)
+	public ValidatorExternalAbstract(String exeName)
 	{
-		exeFile = ExeName;
+		exeFilename = exeName;
 	}
 	
 	@Override
 	public ValidationResult validateOutput(String input, String output, String answer)
 	{
 		res = new ValidationResult(this.toString());
-		File f = new File(exeFile);
+		File f = new File(exeFilename);
+		System.out.println("EXE: " + exeFilename);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
 			System.out.println("!!! Error: No validator exe: " + f);
@@ -68,19 +69,19 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		
 		ExecutorFiles files = new ExecutorFiles(ValidatorOutputFile);
 		
-		ExecutorLimits limits = new ExecutorLimits(ValidatorLimits.MAX_VALIDATOR_RUNNING_TIME, 
-				ValidatorLimits.MAX_VALIDATOR_CONSUMED_MEMORY, ValidatorLimits.MAX_VALIDATOR_OUTPUT_SIZE);
+		ExecutorLimits limits = new ExecutorLimits(ValidatorLimits.VALIDATOR_MAX_RUNNING_TIME, 
+				ValidatorLimits.VALIDATOR_MAX_CONSUMED_MEMORY, ValidatorLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
-		Runner2 runner = new Runner2(limits, files);
+		Runner runner = new Runner(limits, files);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
-		String cmd = exeFile + " " + input + " " + answer + " " + output;
+		String cmd = exeFilename + " " + input + " " + answer + " " + output;
 		
 		// TODO: FIMXE
-		if (exeFile.endsWith(".jar"))
+		if (exeFilename.endsWith(".jar"))
 		{
 			//String s = exeFile.replaceFirst(".jar", "");
-			cmd = "java -cp " + exeFile + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
+			cmd = "java -cp " + exeFilename + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
 		}
 		
 		try

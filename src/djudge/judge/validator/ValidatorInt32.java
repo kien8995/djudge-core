@@ -2,7 +2,10 @@
 
 package djudge.judge.validator;
 
-public class Validator_Int32 extends Validator_Token 
+/*
+ * Compares output and answer files as sequences of 32-bit signed integers
+ */
+public class ValidatorInt32 extends ValidatorToken 
 {
 	@Override
 	protected boolean compareTokens(Object a, Object b)
@@ -13,6 +16,6 @@ public class Validator_Int32 extends Validator_Token
 	@Override
 	public String toString()
 	{
-		return "Validator_Int32";
+		return "Validator-Int32";
 	}
 }

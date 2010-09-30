@@ -73,7 +73,6 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 		return ContestServer.getCore().getContestTimeLeft(username, password);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap getTeamMonitor(String username, String password)
 	{
@@ -160,14 +159,12 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 		return ContestServer.getCore().deleteSubmission(username, password, id);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap[] getTeamSubmissions(String username, String password)
 	{
 		return HashMapSerializer.serializeToHashMapArray(ContestServer.getCore().getTeamSubmissions(username, password));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean editSubmission(String username, String password, String id,
 			HashMap data)
@@ -183,7 +180,6 @@ public class ServerXmlRpcInterfaceStub extends HashMapSerializer implements Serv
 		return ContestServer.getCore().rejudgeSubmissions(username, password, key, value);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap[] getSubmissions(String username, String password)
 	{

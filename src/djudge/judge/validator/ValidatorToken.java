@@ -5,10 +5,14 @@ package djudge.judge.validator;
 import java.io.IOException;
 import java.io.BufferedReader;
 
-public class Validator_Token extends ValidatorInternalAbstract 
+/* 
+ * Compares files token-by-token
+ * i.e., it skips whitespace characters
+ */
+public class ValidatorToken extends ValidatorInternalAbstract 
 {
-	@Override
 	//TODO: review code
+	@Override
 	protected Object getToken(BufferedReader rd) throws IOException
 	{
 		StringBuffer res = new StringBuffer();
@@ -17,7 +21,6 @@ public class Validator_Token extends ValidatorInternalAbstract
 		while (t == 32 || t == 10 || t == 9 || t == 13)
 		{
 			t = rd.read();
-			//System.out.println("1 " + t + " " + (char)t);
 		}
 		// if EOF reached
 		if (t == -1)
@@ -27,7 +30,6 @@ public class Validator_Token extends ValidatorInternalAbstract
 		while (!(t == 32 || t == 10 || t == 9 || t == 13 || t == -1))
 		{
 			res.append((char) t);
-			//System.out.println("2 " + t + " " + (char)t);
 			t = rd.read();
 		}
 		return res.toString();
@@ -42,6 +44,6 @@ public class Validator_Token extends ValidatorInternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator_Token";
+		return "Validator-Token";
 	}
 }

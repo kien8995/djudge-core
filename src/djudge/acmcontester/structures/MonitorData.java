@@ -54,7 +54,7 @@ public class MonitorData extends HashMapSerializable
 		fromHashMap(map);
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public void fromHashMap(HashMap map)
 	{
