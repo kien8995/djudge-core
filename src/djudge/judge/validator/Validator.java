@@ -86,8 +86,8 @@ public class Validator
 
 		case Unknown:
 		default:
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.ValidatorNotFounded;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.ValidatorNotFounded);
 			System.out.println("Unknown validator: " + desc.type);
 		}
 

@@ -152,10 +152,10 @@ public class SolutionTester extends JFrame implements ActionListener
 				data[k][3] = tRes.getMaxMemory();
 				data[k][4] = tRes.getMaxOutput();
 				data[k][5] = tRes.getRuntimeInfo().result;
-				data[k][6] = tRes.getValidationInfo().result;
-				data[k][7] = tRes.getValidationInfo().validatorOutput;
+				data[k][6] = tRes.getValidationInfo().getResult();
+				data[k][7] = tRes.getValidationInfo().getValidatorOutput();
 				data[k][8] = tRes.getJudgement();
-				data[k][9] = tRes.getValidationInfo().validatorName;
+				data[k][9] = tRes.getValidationInfo().getValidatorName();
 				k++;
 			}
 		}

@@ -78,8 +78,8 @@ public class HtmlWorks
 			s.append("<td>" + judgement  + "</td>");
 			try
 			{
-				s.append("<td>" + (validationInfo.fail + " - ") 
-						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(validationInfo.validatorOutput))  + "</td>");
+				s.append("<td>" + (validationInfo.getFail() + " - ") 
+						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(validationInfo.getValidatorOutput()))  + "</td>");
 			}
 			catch (Exception e)
 			{

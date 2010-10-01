@@ -70,6 +70,7 @@ public class ProblemResult extends AbstractResult
 		res.setAttribute(maxMemoryAttributeName, "" + maxMemory);
 		res.setAttribute(maxTimeAttributeName, "" + maxTime);
 		res.setAttribute(wrongTestAttributeName, "" + wrongTest);
+		res.setAttribute(resultDetailsAttributeName, resultDetails);
 		
 		for (int i = 0; i < groupCount; i++)
 		{
@@ -83,6 +84,8 @@ public class ProblemResult extends AbstractResult
 	@Override
 	public boolean readXML(Element elem)
 	{
+		resultDetails = elem.getAttribute(resultDetailsAttributeName);
+		
 		NodeList groups = elem.getElementsByTagName(GroupResult.XMLRootElement);
 		groupCount = groups.getLength();
 		groupResults = new GroupResult[groupCount];

@@ -69,6 +69,7 @@ public class GroupResult extends AbstractResult
 		res.setAttribute(scoreAttributeName, "" + score);
 		res.setAttribute(resultAttributeName, "" + result);
 		res.setAttribute(wrongTestAttributeName, "" + wrongTest);
+		res.setAttribute(resultDetailsAttributeName, resultDetails);
 		
 		for (int i = 0; i < testsCount; i++)
 			res.appendChild(doc.importNode(testResults[i].getXML().getFirstChild(), true));
@@ -82,6 +83,7 @@ public class GroupResult extends AbstractResult
 	{
 		groupNumber = StringWorks.parseInt(elem.getAttribute(groupNumberAttributeName), 0);
 		score = StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0);
+		resultDetails = elem.getAttribute(resultDetailsAttributeName);
 
 		NodeList tests = elem.getElementsByTagName(TestResult.XMLRootElement);
 		testsCount = tests.getLength();

@@ -19,12 +19,13 @@ public class TestResult extends AbstractResult
 	public final static String XMLRootElement = "test";
 	
 	private ExecutionResult runResult;
+	
 	private ValidationResult validationResult;
 	
-	int testNumber;
+	private int testNumber;
 	final String testNumberAttributeName = "num";
 	
-	int testScore;
+	private int testScore;
 	
 	//String systemMessage;
 	
@@ -50,22 +51,27 @@ public class TestResult extends AbstractResult
 		if (runResult != null && runResult.result != ExecutionResultEnum.OK)
 		{
 			result = TestResultEnumFactory.getResult(runResult.result);
+			resultDetails = "Run: " + runResult.getResultDetails();
 		}
 		else if (runResult == null)
 		{
 			result = TestResultEnum.Undefined;
+			resultDetails = "Run: null";
 		}
-		else if (validationResult != null && validationResult.result != ValidationResultEnum.OK)
+		else if (validationResult != null && validationResult.getResult() != ValidationResultEnum.OK)
 		{
-			result = TestResultEnumFactory.getResult(validationResult.result); 
+			result = TestResultEnumFactory.getResult(validationResult.getResult()); 
+			resultDetails = "Validation: " + validationResult.getResultDetails();
 		}
 		else if (validationResult == null)
 		{
 			result = TestResultEnum.Undefined;
+			resultDetails = "Validation: null";
 		}
 		else
 		{
 			result = TestResultEnum.AC;
+			resultDetails = "OK: ok";
 		}
 		
 		maxMemory = runResult.memoryConsumed;
@@ -119,6 +125,7 @@ public class TestResult extends AbstractResult
 		res.setAttribute(maxTimeAttributeName, "" + maxTime);
 		res.setAttribute(resultAttributeName, "" + result);
 		res.setAttribute(scoreAttributeName, "" + score);
+		res.setAttribute(resultDetailsAttributeName, resultDetails);
 		
 		if (runResult != null)
 			res.appendChild(doc.importNode(runResult.getXML().getFirstChild(), true));
@@ -138,6 +145,7 @@ public class TestResult extends AbstractResult
 		maxTime = Long.parseLong(elem.getAttribute(maxTimeAttributeName));
 		result = TestResultEnum.valueOf(elem.getAttribute(resultAttributeName));
 		score = Integer.parseInt(elem.getAttribute(scoreAttributeName));
+		resultDetails = elem.getAttribute(resultDetailsAttributeName);
 		
 		NodeList runs = elem.getElementsByTagName(RunnerResult.XMLRootElement);
         if (runs.getLength() > 0)

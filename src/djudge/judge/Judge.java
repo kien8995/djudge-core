@@ -32,118 +32,20 @@ public class Judge
 {
 	private static final Logger log = Logger.getLogger(Judge.class);
 	
-	/*
-	public static void checkProblem(String contestId, String problemId)
-	{
-		ProblemDescription desc = new ProblemDescription(contestId, problemId);
-		JudgeDirectory jd = new JudgeDirectory(desc);
-		DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
-		String s = HtmlWorks.directoryResultToHtml(res);
-		FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
-	}
-	
-	public static JudgeTaskResult judgeTask(JudgeTaskDescription task)
-	{
-		JudgeTaskResult res = new JudgeTaskResult();
-		res.desc = task;
-		ProblemDescription pd;
-		
-		try
-		{
-			pd = new ProblemDescription(task.tcontest, task.tproblem);
-		}
-		catch (Exception e)
-		{
-			e.getStackTrace();
-			return res;
-		}
-		
-		String filesrc = settings.getTempDir() + task.tid + ".xml";
-		
-		FileWorks.saveToFile(task.tsourcecode, filesrc);
-		
-		try
-		{
-			res.res = judgeSourceFile(filesrc, task.tlanguage, pd, task.fTrial == 1);
-		}
-		catch (Exception e)
-		{
-			e.getStackTrace();
-		}
-		
-		return res;
-	}
-	
-	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, boolean fTrial)
-	{
-		SubmissionResult res = new SubmissionResult(problem);
-		res.comment = file;
-		CompilationInfo ci = Compiler.compile(new CompilerTask(file, lang));
-		res.setCompilationInfo(ci);
-		if (!ci.isSuccessfull())
-		{
-			System.out.println(ci.getCompilerOutput());
-			res.result = TestResultEnum.CE;
-		}
-		else
-		{
-			System.out.println("Trial: " + fTrial);
-			if (fTrial)
-				res.setProblemResult(judgeProblemTrial(ci, problem));
-			else
-				res.setProblemResult(judgeProblem(ci, problem));
-		}
-		return res;
-	}
-	
-	public static ProblemResult judgeProblem(CompilationInfo cinfo, ProblemDescription problem)
-	{
-		return judgeProblem(cinfo, problem, true, false);
-	}
-	
-	public static ProblemResult judgeProblem(CompilationInfo cinfo, ProblemDescription problem, boolean fFullTesting, boolean fFullResults)
-	{
-		ProblemResult res = new ProblemResult(problem);
-
-		for (int i = 0; i < problem.groupsCount; i++)
-		{
-			GroupResult t = res.groupResults[i] = judgeGroup(cinfo, problem.groups[i], fFullTesting, fFullResults);
-			if (!fFullTesting && t.result != TestResultEnum.AC)
-				break;
-		}
-		res.updateResult();
-		
-		return res;
-	}
-	
-	public static ProblemResult judgeProblemTrial(CompilationInfo command, ProblemDescription problem)
-	{
-		System.out.println("Trial: " + true);
-		ProblemResult res = new ProblemResult(problem);
-		res.groupCount = 1;
-		res.groupResults = new GroupResult[1];
-
-		res.groupResults[0] = judgeGroup(command, problem.groups[0], false, false);
-		res.updateResult();
-		
-		return res;
-	}
-	}*/
-	
 	public static ProblemResult judgeProblem(ProblemDescription desc, CheckParams params, ExecutorProgram program)
 	{
 		ProblemResult res = new ProblemResult(desc);
 
 		if (params.fFirstTestOnly)
 		{
-			System.out.println("First only");
+			log.info("Testing on first test only");
 			res.groupCount = 1;
 			res.groupResults = new GroupResult[1];
 			res.groupResults[0] = judgeGroup(desc.groups[0], params, program);
 		}
 		else
 		{
-			System.out.println("All tests");
+			log.info("Testing on all tests");
     		for (int i = 0; i < desc.groupsCount; i++)
     		{
     			res.groupResults[i] = judgeGroup(desc.groups[i], params, program);

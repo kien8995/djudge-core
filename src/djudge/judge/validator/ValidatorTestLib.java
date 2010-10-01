@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: ValidatorTestLib.java 125 2010-09-30 13:46:51Z altdotua $ */
 
 package djudge.judge.validator;
 
@@ -15,7 +15,7 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 	{
 		if (res.runInfo.state == RunnerResultEnum.OK)
 		{
-			res.result = ValidationResultEnum.OK;
+			res.setResult(ValidationResultEnum.OK);
 		}
 		else if (res.runInfo.state == RunnerResultEnum.NonZeroExitCode)
 		{
@@ -24,24 +24,24 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 			case 1:
 			case 3:
 			case 4:
-				res.result = ValidationResultEnum.WrongAnswer;
+				res.setResult(ValidationResultEnum.WrongAnswer);
 				break;
 				
 			case 2: 
-				res.result = ValidationResultEnum.PresentationError;
+				res.setResult(ValidationResultEnum.PresentationError);
 				break;
 			
 			default:
 				System.out.println("rr2");
-				res.fail = ValidationFailEnum.ValidatorFail;
-				res.result = ValidationResultEnum.InternalError;
+				res.setFail(ValidationFailEnum.ValidatorFail);
+				res.setResult(ValidationResultEnum.InternalError);
 			}
 		}
 		else
 		{
 			System.out.println("rr");
-			res.fail = ValidationFailEnum.ValidatorFail;
-			res.result = ValidationResultEnum.InternalError;
+			res.setFail(ValidationFailEnum.ValidatorFail);
+			res.setResult(ValidationResultEnum.InternalError);
 		}
 	}
 	

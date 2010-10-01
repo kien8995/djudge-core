@@ -27,6 +27,24 @@ public abstract class XMLSerializable extends Loggable
 
 	public abstract boolean readXML(Element elem) throws DJudgeXmlException;
 
+	public XMLSerializable()
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+	public XMLSerializable(Element elem)
+	{
+		try
+		{
+			readXML(elem);
+		}
+		catch (Exception e)
+		{
+			// TODO: fixme
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean loadXML(String filename)
 	{
 		boolean result = false;

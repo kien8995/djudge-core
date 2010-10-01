@@ -14,7 +14,7 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 {
 	public static final String XMLRootElement = "runner"; 
 	
-	public int time;
+	int time;
 	final String timeAttributeName = "time";
 	
 	public int memory;
@@ -25,6 +25,9 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	
 	public int exitCode;
 	final String exitCodeAttributeName = "exit-code";
+	
+	public String resultDetails = "";
+	final String resultDetailsName = "result-details";
 	
 	public RunnerResultEnum state;
 	

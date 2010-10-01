@@ -22,37 +22,40 @@ public class ValidationResult extends XMLSerializable
 	public final static String XMLRootElement = "validator";
 
 	/* Validation result */
-	public ValidationResultEnum result;
+	private ValidationResultEnum result = ValidationResultEnum.Undefined;
 
 	/* If validation failed, this consists the reason */
-	public ValidationFailEnum fail;
+	private ValidationFailEnum fail = ValidationFailEnum.Undefined;
 
 	/* External validator's exit code */
-	public int exitCode;
+	int exitCode = 0;
 
 	/* Validator-generated text */
-	public String[] validatorOutput;
+	private String[] validatorOutput = new String[] {"undefined"};
 
 	/* Runtime information (for external validators) */
-	public RunnerResult runInfo;
+	RunnerResult runInfo = null;
 
 	/* Name of validator */
-	public String validatorName;
+	private String validatorName = "undefined";
+	
+	/* Detailed result of validation */
+	String resultDetails = "";
 
 	/* Creates new empty ValidationResult structure */
 	public ValidationResult(String name)
 	{
-		validatorName = name;
-		validatorOutput = new String[0];
+		setValidatorName(name);
+		setValidatorOutput(new String[0]);
 		result = ValidationResultEnum.Undefined;
-		fail = ValidationFailEnum.Undefined;
+		setFail(ValidationFailEnum.Undefined);
 		runInfo = new RunnerResult();
 	}
 
 	/* Creates ValidationResult instance from XML element */
 	public ValidationResult(Element elem)
 	{
-		readXML(elem);
+		super(elem);
 	}
 
 	/* XML serialization */
@@ -64,11 +67,12 @@ public class ValidationResult extends XMLSerializable
 		{
 			Element res = doc.createElement("val");
 			res = doc.createElement(XMLRootElement);
-			res.setAttribute("type", "" + validatorName);
-			res.setAttribute("result", "" + result);
-			res.setAttribute("fail", "" + fail);
+			res.setAttribute("type", "" + getValidatorName());
+			res.setAttribute("result", "" + getResult());
+			res.setAttribute("fail", "" + getFail());
 			res.setAttribute("output", StringEscapeUtils.escapeXml(StringWorks
-					.ArrayToString(validatorOutput)));
+					.ArrayToString(getValidatorOutput())));
+			res.setAttribute("result-details", resultDetails);
 			doc.appendChild(res);
 		}
 		catch (Exception exc)
@@ -82,10 +86,69 @@ public class ValidationResult extends XMLSerializable
 	@Override
 	public boolean readXML(Element elem)
 	{
-		validatorName = elem.getAttribute("type");
-		result = ValidationResultEnum.valueOf(elem.getAttribute("result"));
-		fail = ValidationFailEnum.valueOf(elem.getAttribute("fail"));
-		validatorOutput = elem.getAttribute("output").split("\n");
-		return true;
+		try
+		{
+    		setValidatorName(elem.getAttribute("type"));
+    		result = ValidationResultEnum.valueOf(elem.getAttribute("result"));
+    		setFail(ValidationFailEnum.valueOf(elem.getAttribute("fail")));
+    		setValidatorOutput(elem.getAttribute("output").split("\n"));
+    		resultDetails = elem.getAttribute("result-details");
+    		return true;
+		}
+		catch (Exception e)
+		{
+			// TODO: handle exception
+		}
+		return false;
+	}
+
+	public void setResultDetails(String details)
+	{
+		this.resultDetails = details;
+	}
+	
+	public String getResultDetails()
+	{
+		return resultDetails;
+	}
+
+	public ValidationResultEnum getResult()
+	{
+		return result;
+	}
+
+	public void setResult(ValidationResultEnum res)
+	{
+		this.result = res;
+	}
+
+	public void setValidatorOutput(String[] validatorOutput)
+	{
+		this.validatorOutput = validatorOutput;
+	}
+
+	public String[] getValidatorOutput()
+	{
+		return validatorOutput;
+	}
+
+	public void setValidatorName(String validatorName)
+	{
+		this.validatorName = validatorName;
+	}
+
+	public String getValidatorName()
+	{
+		return validatorName;
+	}
+
+	public void setFail(ValidationFailEnum fail)
+	{
+		this.fail = fail;
+	}
+
+	public ValidationFailEnum getFail()
+	{
+		return fail;
 	}
 }

@@ -8,6 +8,9 @@ public abstract class AbstractResult extends XMLSerializable
 {
 	TestResultEnum result = TestResultEnum.Undefined;
 	final String resultAttributeName = "result";
+
+	String resultDetails = "";
+	final String resultDetailsAttributeName = "result-details";
 	
 	long maxTime = -1;
 	final String maxTimeAttributeName = "max-time";
@@ -64,5 +67,10 @@ public abstract class AbstractResult extends XMLSerializable
 	public TestResultEnum getJudgement()
 	{
 		return result;
+	}
+	
+	public final String getResultDetails()
+	{
+		return resultDetails;
 	}
 }
