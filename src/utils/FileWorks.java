@@ -5,6 +5,7 @@ package utils;
 import java.io.*;
 import java.util.ArrayList;
 
+import djudge.common.Deployment;
 import djudge.judge.dvalidator.RemoteFile;
 
 public class FileWorks
@@ -74,7 +75,48 @@ public class FileWorks
 		return (dir + "/" + file).replace("\\\\", "\\").replace("\\.", "").replace("//", "/");
 	}
 	
-	public static void copyFile(String destFilename, String srcFilename, boolean setExecutable)
+	/*
+	 * Creates symbolic link from destFilename to srcFilename
+	 * on Linux - creates link
+	 * other platforms - copies file srcFilename to destFilename
+	 * TODO: on Windows NTFS - try to create symlink too
+	 */
+	public static boolean createLink(String destFilename, String srcFilename)
+	{
+		if (Deployment.isOSLinux())
+		{
+			File f = new File(destFilename);
+			f.getParentFile().mkdir();
+			
+			String[] command = new String[]{"ln", srcFilename, destFilename};
+			
+			try
+			{
+				Process process = Runtime.getRuntime().exec(command);
+				process.waitFor();
+				return true;
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+				e.printStackTrace();
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+				e.printStackTrace();
+			}
+			return false;
+		}
+		else
+		{
+			return copyFile(destFilename, srcFilename);
+		}
+	}
+	
+	public static boolean copyFile(String destFilename, String srcFilename, boolean setExecutable)
 	{
 		try
 		{
@@ -101,6 +143,8 @@ public class FileWorks
 			out.close();
 			
 			destFile.setExecutable(setExecutable | scrFile.canExecute());
+			
+			return true;
 		}
 		catch(FileNotFoundException ex)
 	    {
@@ -108,13 +152,14 @@ public class FileWorks
 	    }
 	    catch(IOException e)
 	    {
-	    	System.out.println(e.getMessage());      
+	    	System.out.println(e.getMessage());
 	    }
+		return false;
 	}
 	
-	public static void copyFile(String destFilename, String srcFilename)
+	public static boolean copyFile(String destFilename, String srcFilename)
 	{
-		copyFile(destFilename, srcFilename, false);
+		return copyFile(destFilename, srcFilename, false);
 	}
 	
 	public static void writeFileContent(String file, byte[] content)

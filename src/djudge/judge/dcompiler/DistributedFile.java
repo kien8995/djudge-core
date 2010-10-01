@@ -37,8 +37,9 @@ public class DistributedFile
 	
 	public boolean saveFile(String rootDirectory)
 	{
-		//FileWorks.writeFileContent(FileWorks.ConcatPaths(rootDirectory, filename), content);
-		FileWorks.copyFile(FileWorks.concatPaths(rootDirectory, filename), fsName);
-		return true;
+		// TODO test this
+		return FileWorks.createLink(FileWorks.concatPaths(rootDirectory, filename), fsName);
+		//FileWorks.copyFile(FileWorks.concatPaths(rootDirectory, filename), fsName);
+		//return true;
 	}
 }
