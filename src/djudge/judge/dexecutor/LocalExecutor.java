@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: LocalExecutor.java 125 2010-09-30 13:46:51Z altdotua $ */
 
 package djudge.judge.dexecutor;
 
@@ -161,7 +161,7 @@ public class LocalExecutor
 				System.out.println("!!! IOException catched (while parsing runner's stdout): " + exc);
 			}
 			
-			// Cleaning crutchtools
+			// Cleaning crutch
 			FileWorks.deleteFile(workDir + "invoke.dll");
 			FileWorks.deleteFile(workDir + "run.exe");
 			FileWorks.deleteFile(workDir + "crutch.exe");			
@@ -304,8 +304,6 @@ public class LocalExecutor
 			{
 				output = new File(files.outputFilename).length();
 			}
-			
-			System.out.println("Exit Code: " + retValue);
 			
 			// Return values of external runner
 			switch (retValue)

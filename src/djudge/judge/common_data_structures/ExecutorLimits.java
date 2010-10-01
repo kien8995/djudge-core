@@ -105,7 +105,7 @@ public class ExecutorLimits extends XMLSerializable implements Comparable<Execut
 		
 		tempStr = elem.getAttribute(timeLimitAttributeName);
 		if (tempStr != "")
-			timeLimit = StringWorks.StrToTimeLimit(tempStr);
+			timeLimit = StringWorks.strToTimeLimit(tempStr);
 
 		tempStr = elem.getAttribute(memoryLimitAttributeName);
 		if (tempStr != "")

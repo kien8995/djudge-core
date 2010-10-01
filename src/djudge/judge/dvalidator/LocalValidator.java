@@ -6,8 +6,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import utils.FileWorks;
+import org.apache.log4j.Logger;
 
+import utils.FileWorks;
 
 import djudge.judge.ProblemDescription;
 import djudge.judge.validator.ValidationResult;
@@ -15,6 +16,8 @@ import djudge.judge.validator.Validator;
 
 public class LocalValidator
 {
+	private static final Logger log = Logger.getLogger(LocalValidator.class);
+	
 	public static ValidationResult validate(ValidatorTask task)
 	{
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
@@ -29,9 +32,10 @@ public class LocalValidator
         }
         catch (Exception e)
         {
-			e.printStackTrace();
+        	log.error("Unknown exception", e);
 		}
-        FileWorks.deleteFile(workDir + "answer.txt");
+        // TODO: delete this?
+        // FileWorks.deleteFile(workDir + "answer.txt");
         return null;
 		
 	}

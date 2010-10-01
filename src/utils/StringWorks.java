@@ -70,7 +70,7 @@ public class StringWorks
 	 * @param s String 
 	 * @return Integer number - amount of milliseconds 
 	 */	
-	public static int StrToTimeLimit(String s)
+	public static int strToTimeLimit(String s)
 	{
 		s = s.toUpperCase();
 		if (s == "") s = "-1";
