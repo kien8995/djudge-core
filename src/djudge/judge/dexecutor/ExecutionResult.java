@@ -100,4 +100,10 @@ public class ExecutionResult extends XMLSerializable
 		tempDir = elem.getAttribute(tempDirAttributeName);		
 		return true;
 	}
+
+	public String getResultDetails()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

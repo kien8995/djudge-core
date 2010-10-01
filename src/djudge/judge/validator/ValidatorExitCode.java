@@ -15,16 +15,16 @@ public class ValidatorExitCode extends ValidatorExternalAbstract
 	{
 		if (res.runInfo.state == RunnerResultEnum.OK)
 		{
-			res.result = ValidationResultEnum.OK;
+			res.setResult(ValidationResultEnum.OK);
 		}
 		else if (res.runInfo.state == RunnerResultEnum.NonZeroExitCode)
 		{
-			res.result = ValidationResultEnum.WrongAnswer;
+			res.setResult(ValidationResultEnum.WrongAnswer);
 		}
 		else
 		{
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.ValidatorFail;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.ValidatorFail);
 		}
 	}
 }

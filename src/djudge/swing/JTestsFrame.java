@@ -190,15 +190,15 @@ public class JTestsFrame extends JFrame implements ActionListener
 		vTask.testOutput = pd.getJudgeOutputFilepath(groupNumber, testNumber);*/
 		//throw new Exception();
 		ValidationResult vRes = LocalValidator.validate(vTask);
-		String msg = "<html><h2 align='center'>" + vRes.result + "</h2>\n";
-		msg += "Validator: " + vRes.validatorName + "\n";
+		String msg = "<html><h2 align='center'>" + vRes.getResult() + "</h2>\n";
+		msg += "Validator: " + vRes.getValidatorName() + "\n";
 		msg += "Validator's output: \n";
-		for (int i = 0; i < vRes.validatorOutput.length; i++)
+		for (int i = 0; i < vRes.getValidatorOutput().length; i++)
 		{
-			msg += vRes.validatorOutput[i] + "\n";
+			msg += vRes.getValidatorOutput()[i] + "\n";
 		}
 		JOptionPane.showMessageDialog(this, msg, "Result",
-				vRes.result == ValidationResultEnum.OK ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+				vRes.getResult() == ValidationResultEnum.OK ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
 		
 	}
 

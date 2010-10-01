@@ -30,46 +30,46 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 	{
 		res = new ValidationResult(this.toString());
 		File f = new File(exeFilename);
-		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find validator executable file: " + exeFilename);
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.ValidatorNoExeFile;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.ValidatorNoExeFile);
 		}
 		
 		// Checking whether input file exists
 		f = new File(input);
-		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find input file: " + input);
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.NoInputFileError;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.NoInputFileError);
 			return res;
 		}
 		
 		// Checking whether output file exists 
 		f = new File(output);
-		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find output file: " + output);
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.NoOutputFileError;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.NoOutputFileError);
 			return res;
 		}
 		
 		// Checking whether answer file exists
 		f = new File(answer);
-		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			log.debug("Cannot answer file: " + answer);
-			res.result = ValidationResultEnum.WrongAnswer;
-			res.fail = ValidationFailEnum.OK;
+			res.setResult(ValidationResultEnum.WrongAnswer);
+			res.setFail(ValidationFailEnum.OK);
 			return res;
 		}
 		
 		// All files are present, executing external validator
 		validatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
-		res.validatorOutput = new String[0];
+		res.setValidatorOutput(new String[0]);
 		
 		ExecutorFiles files = new ExecutorFiles(validatorOutputFile);
 		
@@ -94,14 +94,14 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		catch (Exception exc)
 		{
 			log.error("Exception while running external validator", exc);
-			res.result = ValidationResultEnum.InternalError;
-			res.fail = ValidationFailEnum.ValidatorNoExeFile;
+			res.setResult(ValidationResultEnum.InternalError);
+			res.setFail(ValidationFailEnum.ValidatorNoExeFile);
 		}
 		
-		if (res.result == ValidationResultEnum.Undefined)
+		if (res.getResult() == ValidationResultEnum.Undefined)
 		{
 			res.exitCode = res.runInfo.exitCode;
-			res.fail = ValidationFailEnum.OK;
+			res.setFail(ValidationFailEnum.OK);
 			
 			ArrayList<String> tmp = new ArrayList<String>();
 			try
@@ -118,41 +118,41 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			}
 			finally
 			{
-				res.validatorOutput = new String[tmp.size()+1];
+				res.setValidatorOutput(new String[tmp.size()+1]);
 				for (int i = 0; i < tmp.size(); i++)
-					res.validatorOutput[i] = tmp.get(i);
-				res.validatorOutput[tmp.size()] = "[" + this.toString() + "]";
+					res.getValidatorOutput()[i] = tmp.get(i);
+				res.getValidatorOutput()[tmp.size()] = "[" + this.toString() + "]";
 			}
 			
 			if (res.runInfo.state != RunnerResultEnum.OK && res.runInfo.state != RunnerResultEnum.NonZeroExitCode)
 			{
 				log.error("Validator error - " + res.runInfo.state);
-				res.result = ValidationResultEnum.InternalError;
+				res.setResult(ValidationResultEnum.InternalError);
 				
 				switch (res.runInfo.state)
 				{
 				case MemoryLimitExceeded:
-					res.fail = ValidationFailEnum.ValidatorMLE;
+					res.setFail(ValidationFailEnum.ValidatorMLE);
 					break;
 					
 				case TimeLimitExceeeded:
-					res.fail = ValidationFailEnum.ValidatorTLE;
+					res.setFail(ValidationFailEnum.ValidatorTLE);
 					break;
 					
 				case OutputLimitExceeded:
-					res.fail = ValidationFailEnum.ValidatorOLE;
+					res.setFail(ValidationFailEnum.ValidatorOLE);
 					break;
 					
 				case RuntimeErrorCrash:
 				case RuntimeErrorAccessViolation:
 				case RuntimeErrorGeneral:
-					res.fail = ValidationFailEnum.ValidatorCrash;
+					res.setFail(ValidationFailEnum.ValidatorCrash);
 					break;
 				}
 			}
 			else
 			{
-				res.fail = ValidationFailEnum.OK;
+				res.setFail(ValidationFailEnum.OK);
 				processData();
 			}
 		}
