@@ -121,7 +121,7 @@ public class ProblemDescription extends AbstractDescription
 		ownLimits = new ExecutorLimits();
 		ownLimits.outputLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("output-limit"));
 		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("memory-limit"));
-		ownLimits.timeLimit = StringWorks.StrToTimeLimit(elem.getAttribute("time-limit"));
+		ownLimits.timeLimit = StringWorks.strToTimeLimit(elem.getAttribute("time-limit"));
 		
 		// Validator
 		String checker = elem.getAttribute("checker");
@@ -166,7 +166,7 @@ public class ProblemDescription extends AbstractDescription
 		ownLimits = new ExecutorLimits();
 		ownLimits.outputLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("output-limit"));
 		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("memory-limit"));
-		ownLimits.timeLimit = StringWorks.StrToTimeLimit(testset.getAttribute("time-limit"));
+		ownLimits.timeLimit = StringWorks.strToTimeLimit(testset.getAttribute("time-limit"));
 		
 		list = elem.getElementsByTagName("verifier");
 		Element validatorElement = (Element) list.item(0);

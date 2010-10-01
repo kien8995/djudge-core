@@ -51,7 +51,7 @@ public class Scripts
 		}
 		catch (Exception e)
 		{
-    		log.error("Exception ", e);
+    		log.error("Unknown exception ", e);
 		}
 		return null;
 	}

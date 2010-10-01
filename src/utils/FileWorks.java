@@ -247,7 +247,9 @@ public class FileWorks
 		}
 		try
 		{
-			copyFile(filename, file.filename);
+			// TODO: probably buggy
+			createLink(filename, file.filename);
+			// copyFile(filename, file.filename);
 		}
 	    catch(Exception e)
 	    {

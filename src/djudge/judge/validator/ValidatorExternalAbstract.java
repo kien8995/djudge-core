@@ -2,12 +2,12 @@
 
 package djudge.judge.validator;
 
-import java.io.*;
 import java.util.ArrayList;
 
-import utils.FileWorks;
-import utils.Scripts;
+import java.io.*;
+import org.apache.log4j.Logger;
 
+import utils.FileWorks;
 
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
@@ -16,7 +16,9 @@ import djudge.judge.executor.RunnerResultEnum;
 
 public abstract class ValidatorExternalAbstract extends ValidatorAbstract implements ValidatorLimits
 {
-	String ValidatorOutputFile;
+	private static final Logger log = Logger.getLogger(ValidatorAbstract.class);
+	
+	String validatorOutputFile;
 	
 	public ValidatorExternalAbstract(String exeName)
 	{
@@ -28,10 +30,9 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 	{
 		res = new ValidationResult(this.toString());
 		File f = new File(exeFilename);
-		System.out.println("EXE: " + exeFilename);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
-			System.out.println("!!! Error: No validator exe: " + f);
+			log.error("Error. Cannot find validator executable file: " + exeFilename);
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.ValidatorNoExeFile;
 		}
@@ -40,34 +41,37 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		f = new File(input);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
+			log.error("Error. Cannot find input file: " + input);
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoInputFileError;
+			return res;
 		}
 		
 		// Checking whether output file exists 
 		f = new File(output);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
+			log.error("Error. Cannot find output file: " + output);
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.NoOutputFileError;
+			return res;
 		}
 		
 		// Checking whether answer file exists
 		f = new File(answer);
 		if (!f.exists() && res.result == ValidationResultEnum.Undefined)
 		{
+			log.debug("Cannot answer file: " + answer);
 			res.result = ValidationResultEnum.WrongAnswer;
 			res.fail = ValidationFailEnum.OK;
+			return res;
 		}
 		
-		if (res.result != ValidationResultEnum.Undefined)
-			return res;
-		
 		// All files are present, executing external validator
-		ValidatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
+		validatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
 		res.validatorOutput = new String[0];
 		
-		ExecutorFiles files = new ExecutorFiles(ValidatorOutputFile);
+		ExecutorFiles files = new ExecutorFiles(validatorOutputFile);
 		
 		ExecutorLimits limits = new ExecutorLimits(ValidatorLimits.VALIDATOR_MAX_RUNNING_TIME, 
 				ValidatorLimits.VALIDATOR_MAX_CONSUMED_MEMORY, ValidatorLimits.VALIDATOR_MAX_OUTPUT_SIZE);
@@ -80,19 +84,16 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		// TODO: FIMXE
 		if (exeFilename.endsWith(".jar"))
 		{
-			//String s = exeFile.replaceFirst(".jar", "");
 			cmd = "java -cp " + exeFilename + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
 		}
 		
 		try
 		{
-			//System.out.println(cmd);
 			res.runInfo = runner.run(cmd);
 		}
 		catch (Exception exc)
 		{
-			// FIXME
-			System.out.println("!!![ValidatorExternalAbstract.Validate]2: " + exc);
+			log.error("Exception while running external validator", exc);
 			res.result = ValidationResultEnum.InternalError;
 			res.fail = ValidationFailEnum.ValidatorNoExeFile;
 		}
@@ -105,7 +106,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			ArrayList<String> tmp = new ArrayList<String>();
 			try
 			{
-				BufferedReader out = new BufferedReader(new FileReader(ValidatorOutputFile));
+				BufferedReader out = new BufferedReader(new FileReader(validatorOutputFile));
 				String t;
 				while ((t = out.readLine()) != null)
 					tmp.add(t);
@@ -113,7 +114,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			catch (Exception exc)
 			{
 				// FIXME
-				System.out.println("!!![ValidatorExternalAbstract.Validate]: " + exc);
+				log.error("Unknown error", exc);
 			}
 			finally
 			{
@@ -125,7 +126,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			
 			if (res.runInfo.state != RunnerResultEnum.OK && res.runInfo.state != RunnerResultEnum.NonZeroExitCode)
 			{
-				System.out.println("Validator error - " + res.runInfo.state);
+				log.error("Validator error - " + res.runInfo.state);
 				res.result = ValidationResultEnum.InternalError;
 				
 				switch (res.runInfo.state)
@@ -159,9 +160,4 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 	}
 	
 	protected abstract void processData();
-
-	public static void main(String arg[]) throws Exception
-	{
-		Scripts.generateProblemReport("ORSPC-2009", "C");
-	}	
 }

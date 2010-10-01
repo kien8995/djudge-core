@@ -1,10 +1,12 @@
-/* $Id$ */
+/* $Id: Runner.java 125 2010-09-30 13:46:51Z altdotua $ */
 
 // TODO: review this class (old version used)
 package djudge.judge.executor;
 
-import java.io.*;
 import java.util.Vector;
+import java.io.*;
+
+import org.apache.log4j.Logger;
 
 import utils.FileWorks;
 
@@ -16,14 +18,17 @@ import djudge.judge.common_data_structures.ExecutorSecurityLimits;
 // TODO: merge this class with LocalExecutor
 public class Runner
 {
-	private String homeDirectory;
+	private static final Logger log = Logger.getLogger(Runner.class);
 	
-	private ExecutorLimits limits;
+	private final String homeDirectory;
 	
-	private ExecutorFiles files;
+	private final ExecutorLimits limits;
 	
-	String saveOutputTo;
-	boolean fRedirect = false;
+	private final ExecutorFiles files;
+	
+	private String saveOutputTo;
+	
+	private boolean fRedirect = false;
 	
 	
 	@SuppressWarnings("unused")
@@ -40,18 +45,21 @@ public class Runner
 	{
 		this.limits = limits;
 		this.files = files;
+		this.homeDirectory = null;
 	}
 	
 	public Runner(ExecutorLimits limits)
 	{
 		this.limits = limits;
 		this.files = new ExecutorFiles();
+		this.homeDirectory = null;
 	}	
 	
 	public Runner()
 	{
 		this.files = new ExecutorFiles();
 		this.limits = new ExecutorLimits();
+		this.homeDirectory = null;
 	}
 	
 	public RunnerResult runWinNT(String command)
@@ -224,6 +232,8 @@ public class Runner
 		{
 			params.add("-m");
 			params.add("" + limits.memoryLimit);
+			
+			// TODO: review
 			// for java
 			params.add("-p");
 		}
@@ -266,7 +276,7 @@ public class Runner
 			}
 			catch (Exception exc)
 			{
-				System.out.println("!!! Exception catched (while waiting for external runner): " + exc);
+				log.error("Exception catched (while waiting for external runner)", exc);
 			}
 
 			int retValue = process.exitValue();
@@ -274,7 +284,9 @@ public class Runner
 			int mem = 0, time = 0, cnt = 0, output = 0;
 			
 			if (files.outputFilename != null)
-				output = (int)new File(files.outputFilename).length();
+				output = (int) new File(files.outputFilename).length();
+			
+			log.debug("Validator's exit code: " + retValue);
 			
 			// Return values of external runner
 			switch (retValue)
@@ -335,19 +347,15 @@ public class Runner
 						}
 						catch (Exception ex){ }
 					}
-					// Debug info
-					if (true)
-					{
-						//System.out.println(line);
-					}
 				}
 				out.close();
+				
 				if (file != null)
 					file.close();
 			}
 			catch (Exception exc)
 			{
-				System.out.println("!!! IOException catched (while parsing runner's stdout): " + exc);
+				log.error("!!! IOException catched (while parsing runner's stdout): ", exc);
 			}
 			
 			res.OK(retValue, time, mem, output);
@@ -355,7 +363,7 @@ public class Runner
 		}
 		catch (IOException exc)
 		{
-			System.out.println("!!! IOException catched: " + exc);
+			log.error("!!! IOException catched: ", exc);
 		}
 		return res;
 	}
@@ -368,7 +376,7 @@ public class Runner
 			return runLinux(command);
 		else
 		{
-			System.out.println("Error. Your OS in not supported");
+			log.fatal("Error. Your OS in not supported");
 			return null;
 		}
 	}
