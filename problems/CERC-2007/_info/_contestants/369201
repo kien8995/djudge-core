@@ -1,0 +1,158 @@
+#include <iostream>
+#include <string>
+
+#define ROCK 1
+#define SCISSORS 2
+#define PAPER 3
+
+using namespace std;
+
+int main() {
+	string country1, country2, name1, name2, mark1s, mark2s;
+	int points1, points2;
+	int gameNum = 0;
+	int mark1, mark2;
+	
+	for (;;) {
+		gameNum++;
+		cin >> country1;
+		cin >> name1;
+		cin >> country2;
+		cin >> name2;
+		points1=0;
+		points2=0;
+		
+		for (;;) {
+			cin >> mark1s;
+			if (mark1s == "-") {break;}
+			if (mark1s == ".") {break;}
+		
+			cin >> mark2s;
+			
+			
+			//paper
+			if ((mark1s == "Papir")
+		 			|| (mark1s == "Paper")
+						  || (mark1s == "Feuille")
+						  || (mark1s == "Papier")
+						  || (mark1s == "Carta")
+						  || (mark1s == "Rete")
+						  || (mark1s == "Paa")
+						  || (mark1s == "Papel")
+			   ) {
+				mark1 = PAPER;
+			   }
+			   if ((mark2s == "Papir")
+						     || (mark2s == "Paper")
+						     || (mark2s == "Feuille")
+						     || (mark2s == "Papier")
+						     || (mark2s == "Carta")
+						     || (mark2s == "Rete")
+						     || (mark2s == "Paa")
+						     || (mark2s == "Papel")
+			      ) {
+				   mark2 = PAPER;
+			      }
+			   //stone
+			      if ((mark1s == "Kamen")
+							|| (mark1s == "Rock")
+							|| (mark1s == "Pierre")
+							|| (mark1s == "Stein")
+							|| (mark1s == "Ko")
+							|| (mark1s == "Koe")
+							|| (mark1s == "Sasso")
+							|| (mark1s == "Roccia")
+							|| (mark1s == "Guu")
+							|| (mark1s == "Kamien")
+							|| (mark1s == "Piedra")
+				 ) {
+				      mark1 = ROCK;
+				 }
+				 if ((mark2s == "Kamen")
+							|| (mark2s == "Rock")
+							|| (mark2s == "Pierre")
+							|| (mark2s == "Stein")
+							|| (mark2s == "Ko")
+							|| (mark2s == "Koe")
+							|| (mark2s == "Sasso")
+							|| (mark2s == "Roccia")
+							|| (mark2s == "Guu")
+							|| (mark2s == "Kamien")
+							|| (mark2s == "Piedra")
+				 ) {
+				      mark2 = ROCK;
+				 }
+			      
+
+			   //scissors
+			      if ((mark1s == "Nuzky")
+							|| (mark1s == "Scissors")
+							|| (mark1s == "Ciseaux")
+							|| (mark1s == "Schere")
+							|| (mark1s == "Ollo")
+							|| (mark1s == "Olloo")
+							|| (mark1s == "Forbice")
+							|| (mark1s == "Choki")
+							|| (mark1s == "Nozyce")
+							|| (mark1s == "Tijera")
+				 ) {
+				      mark1 = SCISSORS;
+				 }
+			      if ((mark2s == "Nuzky")
+							|| (mark2s == "Scissors")
+							|| (mark2s == "Ciseaux")
+							|| (mark2s == "Schere")
+							|| (mark2s == "Ollo")
+							|| (mark2s == "Olloo")
+							|| (mark2s == "Forbice")
+							|| (mark2s == "Choki")
+							|| (mark2s == "Nozyce")
+							|| (mark2s == "Tijera")
+				 ) {
+				      mark2 = SCISSORS;
+				 }
+
+
+
+			if (mark1 == SCISSORS)	{
+				if (mark2 == ROCK) {
+					points2++;				
+				} else if (mark2 == PAPER) {
+					points1++;
+				}
+			}
+			if (mark1 == ROCK)	{
+				if (mark2 == PAPER) {
+					points2++;				
+				} else if (mark2 == SCISSORS) {
+					points1++;
+				}
+			}
+			if (mark1 == PAPER)	{
+				if (mark2 == SCISSORS) {
+					points2++;				
+				} else if (mark2 == ROCK) {
+					points1++;
+				}
+			}
+		}
+		
+		
+		
+		cout << "Game #" << gameNum << ":" << endl;
+		cout << name1 << ": " << points1 << ((points1 == 1)?" point":" points")
+		 	<< endl;
+		cout << name2 << ": " << points2 << ((points2 == 1)?" point":" points")
+				<< endl;
+		if (points1 == points2) {
+			cout << "TIED GAME" << endl<<endl;
+		} else {
+			cout << "WINNER: " << ((points1 > points2)?name1:name2)
+				<< endl<<endl;
+		}
+		if (mark1s == ".") {break;}
+	}
+	
+
+	return 0;
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cstdio>
+#include <set>
+#include <map>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <complex>
+#include <queue>
+#include <string>
+#include <cstdlib>
+#include <cstring>
+#include <bitset>
+using namespace std;
+
+typedef pair<int, int> PI;
+#define REP(i,n) for (int i=0; i<int(n); i++)
+#define FOR(i,a,n) for (int i=a; i<int(n); i++)
+#define FORD(i,n) for (int i=int(n)-1; i>=0; i--)
+#define FOREACH(it,a) for (__typeof(a.begin()) it=a.begin(); it!=a.end(); it++)
+int R, C;
+bitset<20> oper(bitset<20> a, bitset<20> b) {
+    bitset<20> res = a ^ b ^ (b<<1) ^ (b>>1);
+    if (res[C]) res[C] = false;
+    return res;
+}
+int main() {
+    char x[50][50];
+    bitset<20> a[32], b[32];
+        
+    while (scanf("%d %d", &R, &C) == 2) {
+        if (R == 0 && C == 0) break;
+        REP(i,R) {
+            scanf("%s", x[i]);
+            REP(j,C) a[i][j] = (x[i][j] == 'X');
+        }
+        int s = 1<<C;
+        int res = R*C+47;
+        REP(i,s) {
+            b[0] = bitset<20>(i);
+            b[1] = oper(a[0], b[0]);
+
+            FOR(j,1,R) {
+                b[j+1] = oper(a[j]^b[j-1], b[j]);
+            }
+            int m = 0;
+            REP(j,R) m += b[j].count();
+            if (b[R].count() == 0)
+                res = min(res, m);
+        }
+
+        if (res != R*C+47) printf("You have to tap %d tiles.\n", res);
+        else printf("Damaged billboad.\n");
+    }
+} 

@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <string.h> 
+char decode(char *s, char *n)
+{
+  if(!strcmp(s,"cs"))
+  {
+    if(!strcmp(n, "Kamen")) return 1;
+    if(!strcmp(n, "Nuzky")) return 2;
+    if(!strcmp(n, "Papir")) return 3;
+  }
+  if(!strcmp(s,"en"))
+  {
+    if(!strcmp(n, "Rock")) return 1;
+    if(!strcmp(n, "Scissors")) return 2;
+    if(!strcmp(n, "Paper")) return 3;
+  }
+  if(!strcmp(s,"fr"))
+  {
+    if(!strcmp(n, "Pierre")) return 1;
+    if(!strcmp(n, "Ciseaux")) return 2;
+    if(!strcmp(n, "Feuille")) return 3;
+  }
+  if(!strcmp(s,"de"))
+  {
+    if(!strcmp(n, "Stein")) return 1;
+    if(!strcmp(n, "Schere")) return 2;
+    if(!strcmp(n, "Papier")) return 3;
+  }
+  if(!strcmp(s,"hu"))
+  {
+    if(!strcmp(n, "Ko")) return 1;
+    if(!strcmp(n, "Koe")) return 1;
+    if(!strcmp(n, "Ollo")) return 2;
+    if(!strcmp(n, "Olloo")) return 2;
+    if(!strcmp(n, "Papir")) return 3;
+  }
+  if(!strcmp(s,"it"))
+  {
+    if(!strcmp(n, "Sasso")) return 1;
+    if(!strcmp(n, "Roccia")) return 1;
+    if(!strcmp(n, "Forbice")) return 2;
+    if(!strcmp(n, "Carta")) return 3;
+    if(!strcmp(n, "Rete")) return 3;
+  }
+  if(!strcmp(s,"jp"))
+  {
+    if(!strcmp(n, "Guu")) return 1;
+    if(!strcmp(n, "Choki")) return 2;
+    if(!strcmp(n, "Paa")) return 3;
+  }
+  if(!strcmp(s,"pl"))
+  {
+    if(!strcmp(n, "Kamien")) return 1;
+    if(!strcmp(n, "Nozyce")) return 2;
+    if(!strcmp(n, "Papier")) return 3;
+  }
+  if(!strcmp(s,"es"))
+  {
+    if(!strcmp(n, "Piedra")) return 1;
+    if(!strcmp(n, "Tijera")) return 2;
+    if(!strcmp(n, "Papel")) return 3;
+  }
+  return 0;
+}
+
+int main()
+{
+  long cnt = 0;
+  for(;;)
+  {
+    char nemzet[2][3];
+    char nev[2][100];
+    char szo[2][100];
+    char a, b;
+    long ap = 0, bp = 0;
+    scanf("%s %s", nemzet[0], nev[0]);
+    scanf("%s %s", nemzet[1], nev[1]);
+    for(;;)
+    {
+      scanf("%s", szo[0]);
+      if(!strcmp(szo[0],"-") || !strcmp(szo[0],".")) break;
+      scanf("%s", szo[1]);
+      a = decode(nemzet[0], szo[0]);
+      b = decode(nemzet[1], szo[1]);
+      if(a==1 && b==2) ap++;
+      if(a==2 && b==3) ap++;
+      if(a==3 && b==1) ap++;
+
+      if(a==2 && b==1) bp++;
+      if(a==3 && b==2) bp++;
+      if(a==1 && b==3) bp++;
+    }
+    printf("Game #%ld:\n", ++cnt);
+    printf("%s: %ld point", nev[0], ap);
+    if(ap != 1) printf("s"); printf("\n");
+    printf("%s: %ld point", nev[1], bp);
+    if(bp != 1) printf("s"); printf("\n");
+    if(ap==bp) printf("TIED GAME\n");
+    if(ap>bp) printf("WINNER: %s\n", nev[0]);
+    if(ap<bp) printf("WINNER: %s\n", nev[1]); 
+    if(!strcmp(szo[0],".")) break;   
+    printf("\n");
+  }
+}
+

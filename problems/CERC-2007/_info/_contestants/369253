@@ -1,0 +1,93 @@
+#include <cctype>
+#include <cstdio>
+#include <cstring>
+#include <queue>
+using namespace std;
+
+#define MAX 105
+
+struct State {
+   int y, x, mask;
+   State() { }
+   State(int y, int x, int mask) : y(y), x(x), mask(mask) { }
+};
+
+int decode(char c) {
+   c = tolower(c);
+   if ( c == 'b' ) return 0;
+   if ( c == 'y' ) return 1;
+   if ( c == 'r' ) return 2;
+   if ( c == 'g' ) return 3;
+   return 4;
+}
+
+int main() {
+   for (;;) {
+      int r, c;
+      scanf( "%d%d", &r, &c );
+      if (r == 0 && c == 0) break;
+
+      static char board[MAX][MAX];
+      for (int i=0; i<r; ++i) {
+         scanf( "%s", board[i] );
+      }
+
+      State start;
+      for (int y=0; y<r; ++y)
+         for (int x=0; x<c; ++x)
+            if ( board[y][x] == '*' )
+               start = State(y, x, 0);
+
+      static int dist[MAX][MAX][16];
+      memset( dist, -1, sizeof dist );
+      dist[start.y][start.x][0] = 0;
+
+      queue<State> q;
+      q.push( start );
+      bool exited = false;
+
+      while (!q.empty()) {
+         State S = q.front(); q.pop();
+         //         fprintf( stderr, "S = (%d, %d, %d)\n", S.y, S.x, S.mask );
+
+         if (board[S.y][S.x] == 'X') {
+            exited = true;
+            printf( "Escape possible in %d steps.\n", dist[S.y][S.x][S.mask] );
+            break;
+         }
+
+         static const int dy[] = { -1, 0, 1, 0 };
+         static const int dx[] = { 0, 1, 0, -1 };
+         for (int dir=0; dir<4; ++dir) {
+            int ny = S.y+dy[dir], nx = S.x+dx[dir];
+            if (ny < 0 || ny >= r || nx < 0 || nx >= c ||
+                board[ny][nx] == '#') {
+               continue;
+            }
+
+            if (board[ny][nx] != 'X' && isupper(board[ny][nx]) &&
+                (S.mask & (1 << decode(board[ny][nx]))) == 0) {
+               continue;
+            }
+
+            int nmask = S.mask;
+            if (islower(board[ny][nx])) {
+               nmask |= 1 << decode(board[ny][nx]);
+            }
+
+            if (dist[ny][nx][nmask] != -1) {
+               continue;
+            }
+
+            dist[ny][nx][nmask] = dist[S.y][S.x][S.mask] + 1;
+            q.push( State(ny, nx, nmask) );
+         }
+      }
+
+      if (!exited) {
+         puts("The poor student is trapped!");
+      }
+   }
+
+   return 0;
+}

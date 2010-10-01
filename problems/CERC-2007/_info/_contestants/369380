@@ -1,0 +1,75 @@
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <vector>
+
+using namespace std;
+
+typedef pair<int,int> p2;
+#define REP(i,n) for(int i = 0;i<n;i++)
+
+int jak[1010][2];
+int ile[1010];
+char res[1010];
+int main() {
+    while(1) {
+	map<p2,int> m,m2;
+	int n; cin>>n;
+	if(!n)return 0;
+	vector<p2> tab,tab2,oryginal;
+	REP(i,n) {
+	    ile[i]=0;
+	    int a,b;
+	    cin>>a>>b;
+	    oryginal.push_back(p2(a,b));
+	    tab.push_back(p2(a,b));
+	    m[tab[i]] = i;
+	    tab2.push_back(p2(b,a));
+	    m2[tab2[i]] = i;
+	}
+	sort(tab.begin(),tab.end());	
+	sort(tab2.begin(),tab2.end());
+	int i = 0;
+        while(i<n){
+	    int x = m[tab[i]], y = m[tab[i+1]];
+//	    printf("lacze2 %d %d\n",x,y);
+	    jak[x][0]=y;
+	    jak[y][0]=x;
+	    i+=2;
+	}
+	i = 0;
+        while(i<n){
+	    int x = m2[tab2[i]], y = m2[tab2[i+1]];
+//	    printf("lacze %d %d\n",x,y);
+	    jak[x][1]=y;
+	    jak[y][1]=x;
+	    i+=2;
+	}	
+	int akt = m[tab[0]];
+	int pocz = akt;
+	int next = jak[akt][0];
+	int j = 0,par=1;
+	int startowy=-1;
+	while(1) {
+//	    printf("akt = %d next = %d\n",akt,next);
+	    if(akt==0) startowy=j;	    
+	    if(oryginal[akt].first == oryginal[next].first) {
+		if(oryginal[akt].second<oryginal[next].second) res[j++]='N';
+		else res[j++]='S';	
+	    } else {
+		if(oryginal[akt].first < oryginal[next].second) res[j++]='E';
+		else res[j++]='W';
+	    }
+	    akt=next;
+	    next = jak[next][par];
+	    par = 1-par;
+	    if(akt==pocz)break;	    
+	}	
+	REP(i,n) printf("%c",res[ (i+startowy)%n]);
+//	puts("");
+//	REP(i,n) putchar(res[i]);
+	
+	puts("");		
+    }
+    return 0;
+}

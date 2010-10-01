@@ -1,0 +1,140 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int from(string s, int radix)
+{
+  int n = 0, len = s.length();
+  for(int i = 0; i<len; i++)
+    n = n*radix + s[i]-'0';
+  //if(len&1) n *= -1;
+  return n;
+}
+
+string to(int n, int radix)
+{
+  vector<int> s; string m;
+  int i = 0;
+  for(;n;i++)
+  {
+    if(!(i&1)) 
+      s.push_back(n % radix);
+    else
+      s.push_back(-(n % radix));
+    n /= radix;
+  }
+  int len = s.size();
+  
+  for(int i = 0; ; i++)
+  {
+    int dif = 0;
+    if(!(i&1))
+    {
+      if(s[i] >= radix)
+      {
+        s[i] = s[i]-radix;
+        dif = -1;
+      }
+    }
+    else
+    {
+      if(s[i] < 0)
+      {
+        s[i]=radix+s[i];
+        dif = 1;
+      }   
+    }
+    
+    if(dif)
+    {
+      if(i<s.size()-1) s[i+1]+=dif;
+      else s.push_back(dif);  
+    }
+    else
+    {
+      if(i==s.size()-1) break;
+    }
+    
+    //for(int i=0; i<s.size(); i++) printf("(%d) ",s[i]); printf("\n");
+  }
+
+ /* string s = "", m = "";
+  int i = 0;
+  for(;n;i++)
+  {
+    if((i&1) == 0) 
+      s += (char)(n % radix +'0');
+    else
+      s += (char)(-(n % radix) +'0');
+    n /= radix;
+  }
+  int len = s.length();
+//  bool ok = false;
+  for(int i = 0; ; i++)
+  {
+    int dif = 0;
+    if(!(i&1))
+    {
+      if(s[i]-'0' >= radix)
+      {
+        s[i] = (s[i]-'0')-radix+'0';
+        dif = 1;
+      }
+    }
+    else
+    {
+      if(s[i]-'0' < 0)
+      {
+        s[i]=radix-(s[i] - '0')+'0';
+        dif = -1;
+      }
+    }
+    if(dif)
+    {
+      if(i<len-1) s[i+1]+=dif;
+      else s = s + (char)(dif+'0');  
+    }
+    else
+    {
+      if(i==len-1) break;
+    }
+  }
+  */
+  len = s.size();
+  for(int i=0; i<len; i++)
+  {
+    m = (char)(s[i]+'0')+m;
+  }
+  return m;
+  
+  
+}
+
+int main()
+{
+  for(bool fut = true; fut; )
+  {
+    int radix, n;
+    string s;
+    char c;
+    cin >> c;
+    switch(c)
+    {
+    case 't':
+      cin.ignore(2);
+      cin >> radix >> n;
+      //base = -radix
+      //cout << n << " (base 10) to base " << -radix << "\n";
+      cout << to(n, radix) << "\n";
+      break;
+    case 'f':
+      cin.ignore(4);
+      cin >> radix >> s;
+      //cout << n << " (base " << -radix << ") to base 10\n";
+      cout << from(s, -radix) << "\n";
+      break;
+    case 'e': fut = false; break;
+    }
+  }
+}

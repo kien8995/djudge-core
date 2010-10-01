@@ -1,0 +1,113 @@
+#define NDEBUG
+
+#include <cassert>
+#include <cstdio>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+#ifndef NDEBUG
+#define PV(var) std::cerr<<#var<<": "<<var<<"; ";
+#define PN std::cerr<<std::endl;
+#else
+#define PV(...)
+#define PN
+#endif
+
+std::string id[20];
+std::string r[20];
+std::string s[20];
+std::string p[20];
+
+void init()
+{
+	id[0] = "cs";	r[0] = "Kamen";		s[0] = "Nuzky";			p[0] = "Papir";
+	id[1] = "en";	r[1] = "Rock"; 		s[1] = "Scissors";  	p[1] = "Paper";
+	id[2] = "fr";	r[2] = "Pierre";	s[2] = "Ciseaux";   	p[2] = "Feuille";
+	id[3] = "de";	r[3] = "Stein";		s[3] = "Schere";    	p[3] = "Papier";
+	id[4] = "hu";	r[4] = "Ko";   		s[4] = "Ollo";      	p[4] = "Papir";
+	id[5] = "hu";	r[5] = "Koe";  		s[5] = "Olloo";     	p[5] = "Papir";
+	id[6] = "it";	r[6] = "Sasso";		s[6] = "Forbice";   	p[6] = "Carta";
+	id[7] = "it";	r[7] = "Roccia";	s[7] = "Forbice";   	p[7] = "Rete";
+	id[8] = "jp";	r[8] = "Guu";  		s[8] = "Choki";     	p[8] = "Paa";
+	id[9] = "pl";	r[9] = "Kamien";	s[9] = "Nozyce";    	p[9] = "Papier";
+	id[10] ="es";	r[10] ="Piedra";	s[10] ="Tijera";    	p[10] ="Papel";
+}
+
+int winner(std::string a, std::string b)
+{
+	char ai=' ',bi=' ';
+	for(int i=0;i<11;i++)
+	{
+		if(a == r[i]) ai = 'r';
+		if(b == r[i]) bi = 'r';
+		if(a == s[i]) ai = 's';
+		if(b == s[i]) bi = 's';
+		if(a == p[i]) ai = 'p';
+		if(b == p[i]) bi = 'p';
+	}
+	if(ai == bi) return 0;
+	if(ai == 'r' && bi == 'p') return 2;
+	if(ai == 'r' && bi == 's') return 1;
+	if(ai == 'p' && bi == 'r') return 1;
+	if(ai == 'p' && bi == 's') return 2;
+	if(ai == 's' && bi == 'r') return 2;
+	if(ai == 's' && bi == 'p') return 1;
+	return -1;
+}
+
+char a[10000],b[10000];
+int c1,c2;
+int game;
+
+void result()
+{
+	printf("Game #%d:\n",game);
+	game++;
+	printf("%s: %d %s\n",a,c1,c1==1?"point":"points");
+	printf("%s: %d %s\n",b,c2,c2==1?"point":"points");
+	if(c1==c2)
+		printf("TIED GAME\n");
+	else
+		printf("WINNER: %s\n",c1>c2?a:b);
+	printf("\n");
+}
+
+int main2()
+{
+	c1 = c2 = 0;
+	char an[10],bn[10],aa[100],bb[100];
+	scanf("%s%s%s%s",an,a,bn,b);
+	int end = 0;
+	while(end==0)
+	{
+		scanf("%s",aa);
+		if(strcmp(aa,"-")==0)
+		{
+			result();
+			return 0;
+		}
+		if(strcmp(aa,".")==0)
+		{
+			result();
+			return 1;
+		}
+		scanf("%s",bb);
+		int wyn = winner(aa,bb);
+		if(wyn == 1) c1++;
+		if(wyn == 2) c2++;
+	}
+	//return 1 if end of input
+	return 0;
+}
+
+int main()
+{
+	init();
+	game = 1;
+	int d=1000000000;
+//	scanf("%d",&d);
+	while(d-- && !main2());
+	return 0;
+}

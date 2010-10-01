@@ -1,0 +1,103 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<cctype>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<numeric>
+
+using namespace std;
+
+#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
+#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define REP(i, n) for(int i=0; i<(n); i++)
+#define ALL(x) (x).begin(), (x).end()
+#define MP make_pair
+#define PB push_back
+#define X first
+#define Y second
+#define FI first
+#define SE second
+#define FORE(i, c) for(__typeof((c).begin) i = (c).begin(); i!=(c).end(); ++i)
+#define SIZE(x) ((int)(x).size())
+
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int, int> PII;
+
+void from(int baza, char* str)
+{
+    int n;
+    n = strlen(str);
+    int ret, ab;
+    ret = 0;
+    ab = 1;
+    FORD(i, n-1, 0)
+    {
+	ret += (str[i]-'0')*ab;
+	ab *= baza;
+    }
+    printf("%d\n", ret);
+}
+
+void to(int baza, char* str)
+{
+    int r, rabs, ar, rap, n;
+    r = baza;
+    sscanf(str, "%d",&n);
+    rabs = abs(r);
+    rap = 1;
+    ar = 1;
+    vector<int> wyn;
+    while(n)
+    {
+	REP(i, rabs)
+	{
+	    if((n - i*ar) % (rap*rabs) == 0)
+	    {
+		wyn.PB(i);
+		n -= i*ar;
+		break;
+	    }
+	}
+	rap *= rabs;
+	ar *= r;
+    }
+    while(!wyn.empty()) if(wyn.back() == 0) wyn.pop_back(); else break;
+    reverse(ALL(wyn));
+    if(wyn.size() == 0) 
+	wyn.PB(0);
+    REP(it, (wyn.size()))
+	printf("%d",wyn[it]);
+    printf("\n");
+    
+}
+
+int main()
+{
+    char s1[100], s2[100];
+    int baza;
+    while(1)
+    {
+	scanf("%s", s1);
+	if(strcmp(s1, "end") == 0)
+	    break;
+	scanf("%s", s2);
+	if(s1[0] == 't')
+	{
+	    sscanf(s1+2, "%d", &baza);
+	    to(baza, s2);
+	}
+	else
+	{
+	    sscanf(s1+4, "%d",&baza);
+	    from(baza, s2);
+	}
+    }
+    return 0;
+}

@@ -1,0 +1,127 @@
+#include <cstdio>
+#include <algorithm>
+#include <list>
+#include <set>
+#include <queue>
+#include <deque>
+using namespace std;
+
+#define REP(i,n) for(int i = 0; i < (n); ++i)
+#define FOR(i,a,b) for(int i = (a); i <= (b); ++i)
+#define FORD(i,a,b) for(int i = (a); i >= (b); --i)
+//#define PRINTF(args...) printf(args)
+#define PRINTF(args...)
+
+char labirynt[105][105];
+
+int odleglosc[100][100][1<<4];
+
+inline int zwroc(char a) {
+  if(a == 'B' || a == 'b') return 0;
+  if(a == 'y' || a == 'Y') return 1;
+  if(a == 'r' || a == 'R') return 2;
+  if(a == 'g' || a == 'G') return 3;
+  return 19;
+}
+
+inline bool mozna(int a, int b) {
+  return (labirynt[a][b] != 'Y' && labirynt[a][b] != 'B' && labirynt[a][b] != 'G' && labirynt[a][b] != 'R');
+}
+
+struct trojka {
+  int x, y, klucze;
+  trojka() {}
+  trojka(int _x, int _y, int _klucze): x(_x), y(_y), klucze(_klucze) {}
+};
+
+void testcase(int n, int m) {
+  int res = 1000000000;
+//  PRINTF("EN: %d, EM: %d\n", n, m);
+  REP(i,n)
+	scanf("%s", labirynt[i]);
+  REP(i,n) REP(j,m) REP(x,1<<4) odleglosc[i][j][x] = 1000000000;
+  int startx, starty, startz = 0;
+//  PRINTF("LAB od 0: %s\n", labirynt[0]);
+  REP(i,n) REP(j,m)
+	if(labirynt[i][j] == '*') {
+	  startx = i; starty = j; break;
+	}
+  odleglosc[startx][starty][startz] = 0;
+  deque<trojka> Q;
+  Q.push_back(trojka(startx, starty, 0));
+  PRINTF("Start w: %d %d\n", startx, starty);
+  while(!Q.empty()) {
+	trojka tmp = Q.front();
+	Q.pop_front();
+	if(labirynt[tmp.x][tmp.y] == '#') continue;
+	if(labirynt[tmp.x][tmp.y] == 'X') res <?= odleglosc[tmp.x][tmp.y][tmp.klucze];
+	PRINTF("Jestem w %d %d: %c\n", tmp.x, tmp.y, labirynt[tmp.x][tmp.y]);
+	char co = labirynt[tmp.x][tmp.y];
+	PRINTF("CO KURWA: %c\n", co);
+	if(co == 'g' || co == 'y' || co == 'b' || co == 'r') { // probujemy podniesc klucz
+	  PRINTF("Byc moze podnosze klucz: %c\n", co);
+	  if(odleglosc[tmp.x][tmp.y][tmp.klucze | (1<<zwroc(co))] > odleglosc[tmp.x][tmp.y][tmp.klucze]) {
+		PRINTF("Podnosze klucz: %c\n", co);
+		odleglosc[tmp.x][tmp.y][tmp.klucze | (1<<zwroc(co))] = odleglosc[tmp.x][tmp.y][tmp.klucze];
+		Q.push_front( trojka(tmp.x, tmp.y, tmp.klucze | (1<<zwroc(co))) );
+	  }
+	}
+	// IKSY
+	if(tmp.x > 0)
+	  if(odleglosc[tmp.x-1][tmp.y][tmp.klucze] > odleglosc[tmp.x][tmp.y][tmp.klucze]+1) {
+		if(mozna(tmp.x-1,tmp.y)) { // jesli nie ma drzwi
+		  odleglosc[tmp.x-1][tmp.y][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x-1, tmp.y, tmp.klucze));
+		} else if(tmp.klucze & (1<<zwroc(labirynt[tmp.x-1][tmp.y]))) { // jesli moze wejsc, bo tam sa drzwi
+		  odleglosc[tmp.x-1][tmp.y][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x-1, tmp.y, tmp.klucze));
+		}
+	  }
+	// 
+	if(tmp.y > 0)
+	  if(odleglosc[tmp.x][tmp.y-1][tmp.klucze] > odleglosc[tmp.x][tmp.y][tmp.klucze]+1) {
+//		PRINTF("RUSZAM W LEWO\n");
+		if(mozna(tmp.x,tmp.y-1)) {
+		  odleglosc[tmp.x][tmp.y-1][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x, tmp.y-1, tmp.klucze));
+		} else if(tmp.klucze & (1<<zwroc(labirynt[tmp.x][tmp.y-1]))) { // jesli moze wejsc, bo tam sa drzwi
+		  odleglosc[tmp.x][tmp.y-1][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x, tmp.y-1, tmp.klucze));
+		}
+	  }
+	/////////////////
+	if(tmp.x < n-1)
+	  if(odleglosc[tmp.x+1][tmp.y][tmp.klucze] > odleglosc[tmp.x][tmp.y][tmp.klucze]+1) {
+		if(mozna(tmp.x+1,tmp.y)) {
+		  odleglosc[tmp.x+1][tmp.y][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x+1, tmp.y, tmp.klucze));
+		} else if(tmp.klucze & (1<<zwroc(labirynt[tmp.x+1][tmp.y]))) { // jesli moze wejsc, bo tam sa drzwi
+		  odleglosc[tmp.x+1][tmp.y][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x+1, tmp.y, tmp.klucze));
+		}
+	  }
+	//
+	if(tmp.y < m-1)
+	  if(odleglosc[tmp.x][tmp.y+1][tmp.klucze] > odleglosc[tmp.x][tmp.y][tmp.klucze]+1) {
+		if(mozna(tmp.x,tmp.y+1)) {
+		  odleglosc[tmp.x][tmp.y+1][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x, tmp.y+1, tmp.klucze));
+		} else if(tmp.klucze & (1<<zwroc(labirynt[tmp.x][tmp.y+1]))) { // jesli moze wejsc, bo tam sa drzwi
+		  odleglosc[tmp.x][tmp.y+1][tmp.klucze] = odleglosc[tmp.x][tmp.y][tmp.klucze]+1;
+		  Q.push_back(trojka(tmp.x, tmp.y+1, tmp.klucze));
+		}
+	  }
+	}
+	if(res < 1000000000) printf("Escape possible in %d steps.\n", res);
+	else printf("The poor student is trapped!\n");
+}
+
+int main() {
+	int n, m;
+	for(;;) {
+	  scanf("%d%d", &n, &m);
+	  if(n == 0 && m == 0) break;
+	  testcase(n, m);
+	}
+    return 0;
+}

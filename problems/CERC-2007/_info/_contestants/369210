@@ -1,0 +1,105 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<cctype>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<numeric>
+
+using namespace std;
+
+#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
+#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define REP(i, n) for(int i=0; i<(n); i++)
+#define ALL(x) (x).begin(), (x).end()
+#define MP make_pair
+#define PB push_back
+#define X first
+#define Y second
+#define FI first
+#define SE second
+#define FORE(i, c) for(__typeof((c).begin) i = (c).begin(); i!=(c).end(); ++i)
+#define SIZE(x) ((int)(x).size())
+
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int, int> PII;
+
+string na[9]={"cs","en","fr","de","hu","it","jp","pl","es"};
+string t[9][3]={{"Kamen","Nuzky","Papir"}, {"Rock","Scissors","Paper"},
+    {"Pierre","Ciseaux","Feuille"}, {"Stein","Schere","Papier"},
+    {"Ko Koe","Ollo Olloo","Papir"}, {"Sasso Roccia","Forbice","Carta Rete"},
+    {"Guu", "Choki", "Paa"}, {"Kamien","Nozyce","Papier"}, {"Piedra","Tijera","Papel"}};
+
+bool rowne(string a,string x)
+{
+    int poz=-1;
+    REP(i,SIZE(a)) if (a[i]==' ') poz=i;
+    if (poz<0) return a==x;
+    return string(a.begin(),a.begin()+poz)==x || string(a.begin()+poz+1,a.end())==x;
+}
+
+int ile=0;
+char st[200];
+int main()
+{
+    while (1)
+    {
+	int u,v;
+	string s,p1,p2;
+	fgets(st,150,stdin);
+	int l=strlen(st);
+	int i=0;
+	while (st[i]!=' ') i++;
+	s=string(st,st+i);
+	u=-1;
+	REP(j,9) if (na[j]==s) u=j;
+	if (u<0) i=i/(i-i);
+	i++;
+	p1=string(st+i,st+l-1);
+	
+	i=0;
+	fgets(st,150,stdin);
+	l=strlen(st);
+	while (st[i]!=' ') i++;
+	s=string(st,st+i);
+	v=-1;
+	REP(j,9) if (na[j]==s) v=j;
+	if (v<0) i=i/(i-i);
+	i++;
+	p2=string(st+i,st+l-1);
+
+	int w1=0,w2=0;
+	while (1)
+	{
+	    fgets(st,150,stdin);
+	    if (st[0]=='-' || st[0]=='.') break;
+	    i=0;
+	    while (st[i]!=' ') i++;
+	    string x=string(st,st+i),y=string(st+i+1,st+(int)strlen(st)-1);
+	    int x1=-1,x2=-1;
+	    REP(j,3) if (rowne(t[u][j],x)) x1=j;
+	    REP(j,3) if (rowne(t[v][j],y)) x2=j;
+	    if (x1!=x2)
+	    {
+		if (x1==0 && x2==1 || x1==1 && x2==2 || x1==2 && x2==0) w1++; else w2++;
+	    }
+	}
+	printf("Game #%d:\n",++ile);
+	printf("%s: %d point%s\n",p1.c_str(),w1,(w1==1 ? "" : "s"));
+	printf("%s: %d point%s\n",p2.c_str(),w2,(w2==1 ? "" : "s"));
+	if (w1!=w2)
+	{
+	    if (w1>w2) printf("WINNER: %s\n",p1.c_str()); else
+		printf("WINNER: %s\n",p2.c_str());
+	} else puts("TIED GAME");
+	puts("");
+	if (st[0]=='.') break;
+    }
+    return 0;
+}

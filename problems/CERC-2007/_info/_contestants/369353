@@ -1,0 +1,104 @@
+import java.io.*;
+import java.util.*;
+
+public class roshambo
+{
+
+    public static void main(String[] args)throws Exception
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer stok;
+        String line;
+        HashMap<String, String> rock = new HashMap<String, String>();
+        HashMap<String, String> scissors = new HashMap<String, String>();
+        HashMap<String, String> paper = new HashMap<String, String>();
+        
+        rock.put("Kamen", null);
+        rock.put("Rock", null);
+        rock.put("Pierre", null);
+        rock.put("Stein", null);
+        rock.put("Ko", null);
+        rock.put("Koe", null);
+        rock.put("Sasso", null);
+        rock.put("Roccia", null);
+        rock.put("Guu", null);
+        rock.put("Kamien", null);
+        rock.put("Piedra", null);
+        
+        scissors.put("Nuzky", null);
+        scissors.put("Scissors", null);
+        scissors.put("Ciseaux", null);
+        scissors.put("Schere", null);
+        scissors.put("Ollo", null);
+        scissors.put("Olloo", null);
+        scissors.put("Forbice", null);
+        scissors.put("Choki", null);
+        scissors.put("Nozyce", null);
+        scissors.put("Tijera", null);
+        
+        paper.put("Papir", null);
+        paper.put("Paper", null);
+        paper.put("Feuille", null);
+        paper.put("Papier", null);
+        paper.put("Carta", null);
+        paper.put("Rete", null);
+        paper.put("Paa", null);
+        paper.put("Papel", null);
+        
+        String[] names = new String[2];
+        int[] points = new int[2];
+        int[] besede = new int[2];
+        String ukaz;
+        int game=0;
+        while(true)
+        {
+            game++;
+            points[0] = 0;
+            points[1] = 0;
+            line = reader.readLine();
+            stok = new StringTokenizer(line);
+            stok.nextToken();
+            names[0] = stok.nextToken();
+            line = reader.readLine();
+            stok = new StringTokenizer(line);
+            stok.nextToken();
+            names[1] = stok.nextToken();
+            line=reader.readLine();
+            while(line.length()!=1)
+            {
+               // System.out.println(line);
+                
+                stok = new StringTokenizer(line);
+                ukaz = stok.nextToken();
+                if(rock.containsKey(ukaz)) besede[0] = 0;
+                else if(scissors.containsKey(ukaz)) besede[0] =1;
+                else besede[0] = 2;
+                ukaz = stok.nextToken();
+                if(rock.containsKey(ukaz)) besede[1] = 0;
+                else if(scissors.containsKey(ukaz)) besede[1] =1;
+                else besede[1] = 2;
+                
+                if(besede[0]==0 && besede[1]==1) points[0]++;
+                else if(besede[0]==0 && besede[1]==2) points[1]++;
+                else if(besede[0]==1 && besede[1]==0) points[1]++;
+                else if(besede[0]==1 && besede[1]==2) points[0]++;
+                else if(besede[0]==2 && besede[1]==0) points[0]++;
+                else if(besede[0]==2 && besede[1]==1) points[1]++;
+                
+                line=reader.readLine();
+            }
+            System.out.println("Game #"+game+":");
+            System.out.print(names[0]+": "+points[0]+" point");
+            if(points[0]==1)System.out.println();
+            else System.out.println("s");
+            System.out.print(names[1]+": "+points[1]+" point");
+            if(points[1]==1)System.out.println();
+            else System.out.println("s");
+            if(points[0]==points[1]) System.out.println("TIED GAME");
+            else if (points[0]>points[1]) System.out.println("WINNER: "+names[0]);
+            else System.out.println("WINNER: "+names[1]);
+            System.out.println();
+            if(line.equals("."))break;
+        }
+     }
+}

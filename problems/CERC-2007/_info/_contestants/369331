@@ -1,0 +1,74 @@
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <cstring>
+
+#define FOR(a,b,c) for(int a=b;a<=c;a++)
+#define REP(a,c) for(int a=0;a<c;a++)
+#define ROF(a,b,c) for(int a=b;a>=c;a--)
+#define WT while(1)
+#define GETI(a) scanf("%d", &a)
+#define BZ(a) memset(a,0,sizeof(a))
+#define FILL(a,b) fill(a,a+(sizeof(a)/sizeof(a[0])),b)
+#define FOREACH(a,b) for(__typeof((b).begin()) a=(b).begin(); a!=(b).end();a++)
+#define D(args...) printf(args)
+
+using namespace std;
+
+int r, c;
+
+char tmpmapa[100][100];
+char mapa[100][100];
+int val[100][100];
+
+const int dx[] = { 0, -1, 1, 0 , 0};
+const int dy[] = { 0, 0,  0,-1, 1};
+
+int main()
+{
+	while(1) {
+		scanf("%d%d", &r, &c) ;
+		if(r==0 && c==0) break;
+		REP(i,r) REP(j, c) scanf(" %c", &tmpmapa[i][j]);
+		
+		if (c>r) {
+		    REP(i,100) REP(j, 100)  mapa[j][i] =tmpmapa[i][j];
+		    swap(c,r);
+		} else {
+		    REP(i,100) REP(j, 100)  mapa[i][j] =tmpmapa[i][j];		
+		}
+		
+		int best = r*c+100;
+		REP(s, (1<<c))  {
+
+			int ile = 0;
+			bool ok = true;
+
+			REP(i, r) REP(j, c) val[i][j] = (mapa[i][j]=='X')?1:0;
+			REP(i, c) if(s&(1<<i)) {
+				ile++;
+				if(ile >= best) goto nast;
+				int j=  0;
+				REP(k, 5) if(i+dx[k]>=0 && i+dx[k]<c && j+dy[k]>=0 && j+dy[k]<r) val[j+dy[k]][i+dx[k]] = 1 - val[j+dy[k]][i+dx[k]];
+
+			}
+			FOR(j, 1, r-1) REP(i, c) if(val[j-1][i] == 1) {
+				ile++;
+				if(ile >= best) goto nast;
+												
+				REP(k, 5) {				
+				    int px=i+dx[k];
+				    int py=j+dy[k];
+				    if(px>=0 && px<c &&  py<r) val[py][px] = 1 - val[py][px];
+				}
+			}
+			REP(i, c) if(val[r-1][i] == 1) ok = false;
+			if(ok) best = min(best, ile);
+			nast: ;
+		}
+		if(best > r*c) puts("Damaged billboard.");
+		else printf("You have to tap %d tiles.\n", best);
+	}
+	return 0;
+}

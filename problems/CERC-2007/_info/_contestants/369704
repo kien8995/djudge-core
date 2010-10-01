@@ -1,0 +1,86 @@
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+using namespace std;
+
+const double eps = 1.0e-9;
+
+char buf[60], B[60];
+long long Rii[60];
+long long R, N;
+
+int main()
+{
+	while ( gets(buf) )
+	{
+		if ( buf[0] == 'e' ) return 0;
+		if ( buf[0] == 't' )
+		{
+			sscanf( buf+3, "%lld %lld", &R, &N );
+			//printf( "N = %d\n", N );
+
+			long long logr = (long long)( log(double(abs(N))) / log(double(R)) + eps);
+			Rii[0] = 1;
+			for ( long long i = 1; i < 60; ++i )
+				Rii[i] = Rii[i-1] * R;
+
+			long long Ri = 1;
+			long long Rk = 0;
+			//if ( N >= 0 ) Rk = -R+1;
+			//else Rk = 0;
+			memset( buf, '0', sizeof buf );
+			buf[59] = 0;
+			for ( long long i = 0; i <= logr+2; ++i, Ri*=R )
+			{
+				if ( i%2 == 0 )
+				{
+					if ( N > 0 )
+					{
+						if ( i != 0 )
+							Rk += Rii[i-1]*(R-1);
+					}
+					buf[58-i] = ((R + ( (N+Rk)/Ri ) % R ) % R ) + '0';
+					
+					//else
+					//{
+					//	buf[58-i] = (2*R - ( (N+Rk)/Ri ) % R) % R + '0';
+					//}
+					//printf( "1. Rk = %lld\n", Rk );
+				}
+				else
+				{
+					if ( N < 0 )
+					{
+						Rk -= Rii[i-1]*(R-1);
+					}
+					buf[58-i] = (2*R - ( (N+Rk)/Ri ) % R) % R + '0';
+					//else
+					//	buf[58-i] = (R + ( (N+Rk)/Ri )) % R + '0';
+					//printf( "2. Rk = %lld\n", Rk );
+				}
+			}
+			long long s = 0;
+			while ( s < 59 && buf[s] == '0' ) ++s;
+			if ( s == 59 )
+				puts( "0" );
+			else
+				puts( buf+s );
+		}
+		else
+		{
+			sscanf( buf+5, "%lld %s", &R, B );
+			Rii[0] = 1;
+			for ( long long i = 1; i < 60; ++i )
+				Rii[i] = Rii[i-1] * (-R);
+			long long len = strlen(B);
+			long long sum = 0;
+			for ( long long i = len-1; i >= 0; --i )
+			{
+				sum += Rii[len-i-1] * (B[i]-'0');
+			}
+			printf( "%lld\n", sum );
+		}
+	}
+	return 0;
+}

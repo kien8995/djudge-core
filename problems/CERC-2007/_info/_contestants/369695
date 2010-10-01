@@ -1,0 +1,291 @@
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <cstring>
+#include <string>
+
+#define FOR(a,b,c) for(int a=b;a<=c;a++)
+#define REP(a,c) for(int a=0;a<c;a++)
+#define ROF(a,b,c) for(int a=b;a>=c;a--)
+#define WT while(1)
+#define GETI(a) scanf("%d", &a)
+#define BZ(a) memset(a,0,sizeof(a))
+#define FILL(a,b) fill(a,a+(sizeof(a)/sizeof(a[0])),b)
+#define FOREACH(a,b) for(__typeof((b).begin()) a=(b).begin(); a!=(b).end();a++)
+#define D(args...) //printf(args)
+
+using namespace std;
+
+int outputs[50];
+
+struct node
+{
+	char c;
+	int value;
+	vector<int> inputs;
+	int reqinputs;
+
+	int opx, opy; char op;
+	int outx, outy;
+
+	node(): c(0), value(-1), reqinputs(-1), opx(-1), opy(-1), op('!'), outx(-1), outy(-1) {};
+
+	void eval() {
+		switch(op) {
+			case '&':
+				value=1;
+				FOREACH(i, inputs)
+					value = value && *i;
+				break;
+			case '1':
+				value=0;
+				FOREACH(i, inputs)
+					value = value || *i;
+				break;
+			case '=':
+				value=0;
+				FOREACH(i, inputs)
+					value = value ^ *i;
+				break;
+		}
+		D("EVAL OUTPUT op %c V %d N %d\n", op, value, reqinputs);
+	}
+};
+
+node mapa[250][250];
+int W,H;
+
+void block(int x, int y)
+{
+	int x1=x;
+	while(mapa[y][x1].c=='#')
+		++x1;
+
+	int y1=y;
+	while(mapa[y1][x].c=='#')
+		++y1;
+
+	char op='!';
+
+	FOR(yy, y, y1-1)  
+		FOR(xx, x, x1-1)  {
+			char C = mapa[yy][xx].c;
+			if(C=='1' || C=='&' || C=='=')
+				op=C;
+
+			mapa[yy][xx].c='%';
+			mapa[yy][xx].opx = x;
+			mapa[yy][xx].opy = y;
+		}
+
+	mapa[y][x].op = op;
+	mapa[y][x].reqinputs=0;
+
+	FOR(yy, y, y1-1) {
+		if(mapa[yy][x-1].c == '=') {
+			mapa[y][x].reqinputs++;
+			//mapa[yy][x-1].c = ':';
+		}
+		if(mapa[yy][x1].c == 'o' || mapa[yy][x1].c == '=') {
+			mapa[y][x].outy = yy;
+			mapa[y][x].outx = x1;
+		}
+	}
+}
+
+void dfs(int y, int x)
+{
+	char here=mapa[y][x].c;
+	mapa[y][x].c = '@';
+
+	bool horiz=false,vert=false;
+
+	D("DFS %d %d %c %d\n", x, y, here, mapa[y][x].value);
+	if(mapa[y][x].value < 0)
+		*((void**)0)=0;
+
+	switch(here) {
+		case '0':
+		case '1':
+			horiz=true;
+			break;
+		case '@':
+			return;
+
+		case '-':
+			horiz=true;
+			break;
+		case '|':
+			vert=true;
+			break;
+		case '+':
+			horiz=true;
+			vert=true;
+			break;
+		case 'x':
+			*((void**)0)=0;
+			// TODO
+			break;
+		case '=':
+			horiz=true;
+			break;
+		case 'o':
+			horiz=true;
+			break;
+		case '%':
+			*((void**)0)=0;
+			// TODO
+			break;
+		case 'A'...'Z':
+			D("OUTPUT %c %d\n", here, mapa[y][x].value);
+			outputs[here-'A'] = mapa[y][x].value;
+			return;
+	}
+
+
+	if(horiz) {
+		for(int DX=-1;DX<=1;DX+=2) {
+			switch(mapa[y][x+DX].c) {
+				case '-':
+				case '+':
+				case '=':
+				case 'A'...'Z':
+					mapa[y][x+DX].value = mapa[y][x].value;
+					dfs(y,x+DX);
+					break;
+				case 'o':
+					mapa[y][x+DX].value = !mapa[y][x].value;
+					dfs(y,x+DX);
+					break;
+				case '%': {
+					int OX = mapa[y][x+DX].opx;
+					int OY = mapa[y][x+DX].opy;
+					mapa[OY][OX].inputs.push_back(mapa[y][x].value);
+					if((int)mapa[OY][OX].inputs.size() == mapa[OY][OX].reqinputs) {
+						mapa[OY][OX].eval();
+						int neg=0;
+						if(mapa[mapa[OY][OX].outy][mapa[OY][OX].outx].c == 'o')
+							neg=1;
+						mapa[mapa[OY][OX].outy][mapa[OY][OX].outx].value = mapa[OY][OX].value^neg;
+						dfs(mapa[OY][OX].outy,mapa[OY][OX].outx);
+					}
+
+					break; }
+				case 'x': {
+					int tmpx = x+DX;
+					while(mapa[y][tmpx].c=='x') ++tmpx;
+					mapa[y][tmpx].value = mapa[y][x].value;
+					dfs(y, tmpx);
+					break; }
+			}
+		}
+	}
+	
+	if(vert) {
+		for(int DY=-1;DY<=1;DY+=2) {
+			switch(mapa[y+DY][x].c) {
+				case '|':
+				case '+':
+					mapa[y+DY][x].value = mapa[y][x].value;
+					dfs(y+DY,x);
+					break;
+				case 'x':
+					int tmpy = y+DY;
+					while(mapa[tmpy][x].c=='x') ++tmpy;
+					mapa[tmpy][x].value = mapa[y][x].value;
+					dfs(tmpy, x);
+
+					break;
+			}
+		}
+
+	}
+}
+
+int main()
+{
+	WT {
+		REP(y, 250)
+			REP(x, 250) 
+				mapa[y][x] = node();
+
+		vector<string> input;
+
+		input.push_back("");
+
+		WT {
+			char line[250];
+			fgets(line, sizeof(line), stdin);
+			char * c=strchr(line, '\n');
+			if(c) 
+				*c=0;
+
+			if(line[0]=='*')
+				break;
+			input.push_back(" " + string(line) + " ");
+		}
+		input.push_back("");
+
+		if(input.size() <=2)
+			break;
+
+		int maxw = 0;
+		FOREACH(in, input)
+			maxw = max(maxw, (int)in->size());
+
+		W=maxw;
+		H=input.size();
+
+		REP(y, H) {
+			REP(x, W) {
+				char ch = ' ';
+				if(x < (int)input[y].size())
+					ch = input[y][x];
+				mapa[y][x].c = ch;
+			}
+		}
+
+		// #
+		REP(y, H) {
+			REP(x, W) {
+				if(mapa[y][x].c == '#') {
+					block(x,y);
+				}
+			}
+		}
+
+		REP(i, 50)
+			outputs[i]=-1;
+		
+		REP(y, H) {
+			REP(x, W) {
+				if(mapa[y][x].c=='1') {
+					mapa[y][x].value=1;
+					dfs(y,x);
+				}
+
+				if(mapa[y][x].c=='0') {
+					mapa[y][x].value=0;
+					dfs(y,x);
+				}
+			}
+		}
+		
+		REP(y, H) {
+			REP(x, W) 
+				if(mapa[y][x].value >= 0)
+					D("%d", mapa[y][x].value);
+				else
+					D("%c", mapa[y][x].c);
+			D("\n");
+		}
+
+		REP(i, 50) {
+			if(outputs[i] >= 0)
+				printf("%c=%d\n", i+'A', outputs[i]);
+		}
+		printf("\n");
+	}
+	return 0;
+}

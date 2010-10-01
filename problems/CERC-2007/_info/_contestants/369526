@@ -1,0 +1,116 @@
+#include<cstdio>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+
+struct tocka
+{
+	int x,y;
+	int broj;
+};
+
+struct cmp1
+{
+	bool operator() (const tocka &a, const tocka &b)
+	{
+		if(a.x!=b.x) return a.x<b.x;
+		return a.y<b.y;
+	} 
+};
+struct cmp2
+{
+	bool operator() (const tocka &a, const tocka &b)
+	{
+		if(a.y!=b.y) return a.y<b.y;
+		return a.x<b.x;
+	} 
+};
+
+vector<tocka> niz,poc;
+int susjed[1001][2];
+int obilazak[1001];
+
+int ccw(tocka &t1, tocka &t2, tocka &t3)
+{
+	return t1.x*(t2.y-t3.y)+t2.x*(t3.y-t1.y)+t3.x*(t1.y-t2.y);
+}
+
+int main()
+{
+	int n;
+	while(1)
+	{
+		scanf("%d",&n);
+		if(n==0) break;
+		
+		niz.clear();
+		
+		for(int i=0;i<n;i++)
+		{
+			tocka t;
+			scanf("%d %d",&t.x,&t.y);
+			t.broj=i;
+			niz.push_back(t);			
+		}
+		
+		poc=niz;
+		
+		sort(niz.begin(),niz.end(),cmp1());		
+		for(int i=0;i<n;i+=2)
+		{
+			susjed[niz[i].broj][0]=niz[i+1].broj;
+			susjed[niz[i+1].broj][0]=niz[i].broj;
+		}
+		
+		sort(niz.begin(),niz.end(),cmp2());
+		for(int i=0;i<n;i+=2)
+		{
+			susjed[niz[i].broj][1]=niz[i+1].broj;
+			susjed[niz[i+1].broj][1]=niz[i].broj;
+		}				
+				
+		int smjer=0;
+		int t=0;
+		for(int i=0;i<n;i++)
+		{			
+			obilazak[i]=t;
+			if(smjer==0) t=susjed[t][0];
+			else t=susjed[t][1];		
+			smjer^=1;
+		}
+		
+		int kolko=0;
+		
+		for(int i=0;i<n;i++)
+		{
+			if(ccw( poc[obilazak[i%n] ],poc[ obilazak[(i+1)%n] ], poc[ obilazak[(i+2)%n] ]) > 0) kolko++;
+		}
+		
+		if(kolko>n/2) smjer=1;
+		else smjer=0;						
+		
+		int novi;
+		t=0;
+		for(int i=0;i<n;i++)
+		{								
+			if(smjer==0)
+			{				
+				novi=susjed[t][0];
+				if(poc[novi].y < poc[t].y) printf("S");
+				else printf("N");
+			}
+			else
+			{
+				novi=susjed[t][1];				
+				if(poc[novi].x < poc[t].x) printf("W");
+				else printf("E");
+			}			
+			t=novi;
+			smjer^=1;
+		}
+		printf("\n");
+	}	
+	return 0;
+}

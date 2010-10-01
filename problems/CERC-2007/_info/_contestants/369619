@@ -1,0 +1,107 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+struct point{
+  int x,y,idx;
+  point* hor,*ver;
+};
+
+bool sortxfunc(const point* a,const point* b){
+  if (a->x<b->x) return true;
+  return (a->x == b->x && a->y<b->y);
+}
+
+bool sortyfunc(const point* a,const point* b){
+  if (a->y<b->y) return true;
+  return (a->y == b->y && a->x<b->x);
+}
+
+int main(){
+  int N;
+  while(1){
+    cin>>N;
+    if (N==0)
+      return 0;
+    vector<point> origpoints (N);
+    vector<point*> points(N);
+    for (int i=0;i<N;i++){
+      points[i]=&origpoints[i];
+      int x,y;
+      cin>>x>>y;
+      points[i]->x=x;
+      points[i]->y=y;
+      points[i]->idx=i;
+      points[i]->hor=NULL;
+      points[i]->ver=NULL;
+    }
+    sort(points.begin(),points.end(),sortxfunc);
+    //    cout<<"sortx"<<endl;
+    for (unsigned i=0;i<points.size();i+=2){
+      /*
+      cout<<points[i]->x<<' '<<points[i]->y<<' '<<endl;
+      i++;
+      cout<<points[i]->x<<' '<<points[i]->y<<' '<<endl;
+      i--;
+      **/
+      points[i]->ver=points[i+1];
+      points[i+1]->ver=points[i];
+    }
+    sort(points.begin(),points.end(),sortyfunc);
+    //    cout<<"sorty"<<endl;
+    for (unsigned i=0;i<points.size();i+=2){
+      /*
+      cout<<points[i]->x<<' '<<points[i]->y<<' '<<endl;
+      i++;
+      cout<<points[i]->x<<' '<<points[i]->y<<' '<<endl;
+      i--;
+      */
+      points[i]->hor=points[i+1];
+      points[i+1]->hor=points[i];
+    }
+    bool hor=true;
+    point* cur = points[1];
+    //  cout<<"prepare"<<endl;
+    while(cur->idx!=0){
+      //      cout<<cur->idx<<endl;
+      if (hor){
+	cur = cur->hor;
+	hor=false;
+      }
+      else{
+	cur = cur->ver;
+	hor = true;
+      }
+    }
+    string output="";
+    //  cout<<"Start"<<endl;
+    do{
+      //      cout<<cur->idx<<endl;
+      if (hor){
+	if (cur->x > cur->hor->x){
+	  output+='W';
+	}
+	else{
+	  output+='E';
+	}
+	hor=false;
+	cur = cur->hor;
+      }
+      else{
+	if (cur->y > cur->ver->y){
+	  output+='S';
+	}
+	else{
+	  output+='N';
+	}
+	hor=true;
+	cur = cur->ver;
+      }
+    }
+    while(cur->idx!=0);
+    cout<<output<<endl;
+  }
+} 

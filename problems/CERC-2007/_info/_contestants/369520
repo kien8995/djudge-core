@@ -1,0 +1,164 @@
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
+public class roshambo
+{
+   public static void main(String[] args) throws IOException
+   {
+     //StringTokenizer sor = new StringTokenizer();
+     String bemenet = "kedo";
+     int nemind1=0,i=0,nemind2=0;
+     String s1="",s2="";
+     int p1=0,p2=0,szam=0;
+     String nemzet1=" ",nemzet2=" ",nev1=" ",nev2="";
+     BufferedReader be = new BufferedReader(new InputStreamReader(System.in));
+     BufferedWriter ki = new BufferedWriter(new OutputStreamWriter(System.out));
+     String[][] tomb= new String[7][9];
+     	tomb[0][0] ="cs";
+	tomb[0][1] ="en";
+	tomb[0][2] ="fr";
+	tomb[0][3] ="de";
+	tomb[0][4] ="hu";
+	tomb[0][5] ="it";
+	tomb[0][6] ="jp";
+	tomb[0][7] ="pl";
+	tomb[0][8] ="es";
+	tomb[1][0] ="Kamen";
+	tomb[1][1] ="Rock";
+	tomb[1][2] ="Pierre";
+	tomb[1][3] ="Stein";
+	tomb[1][4] ="Ko";
+	tomb[1][5] ="Sasso";
+	tomb[1][6] ="Guu";
+	tomb[1][7] ="Kamien";
+	tomb[1][8] ="Piedra";
+	tomb[2][0] ="Nuzky";
+	tomb[2][1] ="Scissors";
+	tomb[2][2] ="Ciseaux";
+	tomb[2][3] ="Schere";
+	tomb[2][4] ="Ollo";
+	tomb[2][5] ="Forbice";
+	tomb[2][6] ="Choki";
+	tomb[2][7] ="Nozyce";
+	tomb[2][8] ="Tijera";
+	tomb[3][0] ="Papir";
+	tomb[3][1] ="Paper";
+	tomb[3][2] ="Feuille";
+	tomb[3][3] ="Papier";
+	tomb[3][4] ="Papir";
+	tomb[3][5] ="Carta";
+	tomb[3][6] ="Paa";
+	tomb[3][7] ="Papier";
+	tomb[3][8] ="Papel";
+  	tomb[4][0] = "";
+  	tomb[4][1] = "";
+  	tomb[4][2] = "";
+  	tomb[4][3] = "";
+        tomb[4][4] = "Koe";
+        tomb[4][5] = "Roccia";
+  	tomb[4][6] = "";
+  	tomb[4][7] = "";
+  	tomb[4][8] = "";
+  	tomb[5][0] = "";
+  	tomb[5][1] = "";
+  	tomb[5][2] = "";
+  	tomb[5][3] = "";
+        tomb[5][4] = "Olloo";
+  	tomb[5][5] = "";
+  	tomb[5][6] = "";
+  	tomb[5][7] = "";
+  	tomb[5][8] = "";
+  	tomb[6][0] = "";
+  	tomb[6][1] = "";
+  	tomb[6][2] = "";
+  	tomb[6][3] = "";
+  	tomb[6][4] = "";
+	tomb[6][5] = "Rete";
+  	tomb[6][6] = "";
+  	tomb[6][7] = "";
+  	tomb[6][8] = "";
+
+     bemenet=be.readLine();
+     while(bemenet.charAt(0)!='.')
+     {
+        szam++;
+	p1=p2=0;
+  //      System.out.println(bemenet);
+     	StringTokenizer sor = new StringTokenizer(bemenet);
+     	nemzet1 = sor.nextToken();
+        //System.out.println(nemzet1);
+     	nev1= sor.nextToken();
+	//System.out.println(nev1);
+        bemenet=be.readLine();
+//	System.out.println(bemenet);
+	sor = new StringTokenizer(bemenet);
+        nemzet2 = sor.nextToken();
+	//System.out.println(nemzet2);
+     	nev2 = sor.nextToken();
+	//System.out.println(nev2);
+        for(i=0;i<9;i++){
+            if(nemzet1.compareTo(tomb[0][i])==0){
+                 nemind1=i;
+	    }
+	    if(nemzet2.compareTo(tomb[0][i])==0){
+                 nemind2=i;
+	    }
+        }
+//		System.out.println(nemind1);
+//System.out.println(nemind2);
+        while(((bemenet=be.readLine()).charAt(0)!='-') && (bemenet.charAt(0)!='.')){
+            //System.out.println("go ide");
+            sor = new StringTokenizer(bemenet);
+            s1=sor.nextToken();
+	    s2=sor.nextToken();
+
+	    if(((tomb[1][nemind1].compareTo(s1)==0)||(tomb[4][nemind1].compareTo(s1)==0)) && ((tomb[2][nemind2].compareTo(s2)==0)||(tomb[5][nemind2].compareTo(s2)==0)))
+	    {
+		p1++;
+	    }
+            else if(((tomb[2][nemind1].compareTo(s1)==0)||(tomb[5][nemind1].compareTo(s1)==0)) && ((tomb[1][nemind2].compareTo(s2)==0)||(tomb[4][nemind2].compareTo(s2)==0)))
+	    {
+		p2++;
+	    }
+	    else if(((tomb[2][nemind1].compareTo(s1)==0)||(tomb[5][nemind1].compareTo(s1)==0)) && ((tomb[3][nemind2].compareTo(s2)==0)||(tomb[6][nemind2].compareTo(s2)==0)))
+	    {
+		p1++;
+	    }
+	    else if(((tomb[3][nemind1].compareTo(s1)==0)||(tomb[6][nemind1].compareTo(s1)==0)) && ((tomb[2][nemind2].compareTo(s2)==0)||(tomb[5][nemind2].compareTo(s2)==0)))
+	    {
+		p2++;
+	    }
+	    else if(((tomb[1][nemind1].compareTo(s1)==0)||(tomb[4][nemind1].compareTo(s1)==0)) && ((tomb[3][nemind2].compareTo(s2)==0)||(tomb[6][nemind2].compareTo(s2)==0)))
+	    {
+		p2++;
+	    }
+	    else if(((tomb[3][nemind1].compareTo(s1)==0)||(tomb[6][nemind1].compareTo(s1)==0)) && ((tomb[1][nemind2].compareTo(s2)==0)||(tomb[4][nemind2].compareTo(s2)==0)))
+	    {
+
+		p1++;
+	    }
+        }
+	ki.write("Game #"+szam+":\n"+nev1+": "+p1+" point\n"+nev2+": "+p2+" point\n");
+        if(p1>p2){
+		ki.write("WINNER: "+nev1+"\n\n");	
+	}else if (p1<p2){
+		ki.write("WINNER: "+nev2+"\n\n");	
+	}else{
+		ki.write("TIED GAME"+"\n\n");
+	}
+	//System.out.println(bemenet);
+        if(bemenet.charAt(0)=='.')
+        {
+	 break;
+        }else{
+	bemenet=be.readLine();
+	}
+     }
+     //ki.write(p1+" "+p2);
+     //ki.write(bemenet);
+     ki.flush();
+   }
+
+
+}

@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <vector>
+
+typedef std::vector<int> Digits;
+
+Digits to_R(int N, int R)
+{
+	Digits result;
+	int Rabs = (R>0) ? R : -R;
+	
+	if (N==0) 
+	{
+		result.push_back(0);
+		return result;
+	}
+	
+	while(N)
+	{
+		int mod = (N + 2000000 *Rabs)%Rabs;
+		N = (N-mod) /R;
+		result.push_back(mod);
+	}	
+	
+	return result;
+}
+
+
+int main() {
+	char s[200],d[10];
+	int base, num;
+	while (scanf("%s",s) && s[0] != 'e') {
+		sscanf(s, "%[^0123456789-]%d", d, &base);
+		
+		if (d[0] == 't') {
+			scanf("%d", &num);	
+			Digits d = to_R(num,base);
+			
+			for(int i=d.size()-1; i>=0; --i)
+			{
+				printf("%d",d[i]);
+			}
+			printf("\n");
+		} else {
+			int result = 0;
+			char snum[100];
+			scanf("%s", snum);
+			for (int i = 0; snum[i]; ++i)
+				result = result * base + snum[i] - '0';
+			printf("%d\n", result);
+		}
+		
+		
+	}
+	return 0;
+}

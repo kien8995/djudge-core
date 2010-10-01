@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+typedef struct {
+	int x; int y;
+	int v; int n;
+	int id;
+} tocka;
+
+int n;
+
+int main(void){
+	int i,j,st,start;
+	string rez;
+	vector<tocka> t,t2;
+	tocka dummy;
+
+	while (true) {
+		rez="";
+		scanf("%d",&n);
+		if (n==0) { break; }
+		for (i=0;i<n;i++) { 
+			t.push_back(dummy);
+			scanf("%d %d",&t[i].x,&t[i].y); t[i].v=0; t[i].n=0; t[i].id=i;
+		}
+		
+		//vodoravno
+		for (i=0;i<n;i++) {
+			for (j=i+1;j<n;j++) { if (t[i].x>t[j].x) { swap(t[i],t[j]); } }
+		}
+		
+		for (i=0;i<n;i++) {
+			if (t[i].v==0) {
+				//najdi naslednjo na isti y koordinati
+				for (j=i+1;j<n;j++) { if (t[j].y==t[i].y) { break; } }
+				if (j<n) {
+					t[i].v=t[j].id; t[j].v=t[i].id;
+					//printf("%d - %d\n",t[i].id,t[i].v);
+				}
+			}
+		}
+		
+		//navpicno
+		for (i=0;i<n;i++) {
+			for (j=i+1;j<n;j++) { if (t[i].y>t[j].y) { swap(t[i],t[j]); } }
+		}
+		
+		for (i=0;i<n;i++) {
+			if (t[i].n==0) {
+				//najdi naslednjo na isti x koordinati
+				for (j=i+1;j<n;j++) { if (t[j].x==t[i].x) { break; } }
+				if (j<n) {
+					t[i].n=t[j].id; t[j].n=t[i].id;
+					//printf("%d | %d\n",t[i].id,t[i].n);
+				}
+			}
+		}
+		
+		//sort po id-jih
+		for (i=0;i<n;i++) {
+			for (j=i+1;j<n;j++) { if (t[i].id>t[j].id) { swap(t[i],t[j]); } }
+		}
+		
+		//sort za navisjega levega
+		t2=t;
+		for (i=0;i<n;i++) {
+			for (j=i+1;j<n;j++) { 
+				if (t2[i].y<t2[j].y) { swap(t2[i],t2[j]); } 
+				else if (t2[i].y==t2[j].y) {
+					if (t2[i].x>t2[j].x) { swap(t2[i],t2[j]); }
+				}
+			}
+		}
+		
+		if (t2[0].y==t2[0].y) { i=t2[0].v; } else { i=t2[0].n; }
+		j=t2[0].id;
+		//printf("i=%d j=%d\n",i,j);
+		
+		st=0;
+		while (i!=t2[0].id) {
+			if (i==0) { start=st; }
+			if (t[i].v!=j) {
+				if (t[i].y>t[j].y) { rez+="N"; }
+				else { rez+="S"; }
+				j = i;
+				i = t[i].v;
+			} else {
+				if (t[i].x>t[j].x) { rez+="E"; }
+				else { rez+="W"; }
+				j = i;
+				i = t[i].n;
+			}
+			//printf("i=%d j=%d\n",i,j);
+			st++;
+			//break;
+		}
+		
+		if (i==0) { start=st; }
+		if (t[i].v!=j) {
+			if (t[i].y>t[j].y) { rez+="N"; }
+			else { rez+="S"; }
+			j = i;
+			i = t[i].v;
+		} else {
+			if (t[i].x>t[j].x) { rez+="E"; }
+			else { rez+="W"; }
+			j = i;
+			i = t[i].n;
+		}
+		//printf("i=%d j=%d\n",i,j);
+		
+		
+		//cout << rez << endl;
+		
+		start++;
+		for (i=0;i<n;i++) {
+			printf("%c",rez[(i+start)%n]);
+		}
+		printf("\n");
+	}
+	return 0;
+}

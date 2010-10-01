@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+
+	do {
+		char type[10];
+		int r;
+		char num[300];
+		int j = 0;
+
+		scanf("%s", type);
+//		printf("%s\n", type);
+
+		if (strcmp(type, "end") == 0) break;
+
+		char *p = strchr(type, '-');
+		*p = '\0';
+		char *buf;
+   	sprintf(buf, "%s", p+1);
+		r = atoi(buf);
+
+		scanf("%s\n", num);
+		if (strcmp(type, "from") == 0) {
+			int len = strlen(num);
+			int sum = 0;
+//			printf("-- from --\n");
+//			printf("-%s-%d\n", num, len);
+			int r2 = 1;
+			for (int i = (len-1); i >= 0; i--) {
+//				printf("%c - %d : ", num[i], i);
+				int cis = num[i] - 48;
+				sum += cis * r2;
+				r2 *= r * (-1);
+			}
+			printf("%d\n", sum);
+		
+		} else if (strcmp(type, "to") == 0) {
+//			printf("-- to --%d\n", r);
+
+		   int buf[300];
+			int i = 0;
+			int mod, del;
+			del = atoi(num);
+//			printf("D: %s - %d\n", num, del);
+//			printf();
+//			int rr;
+//			printf("R: %d\n", (r*-1));
+//			rr *= (-1);
+			do {
+				mod = del % (r * (-1));
+				del = del / (r * (-1));
+				if (mod < 0) {
+					mod += r;
+					del += 1;
+				}
+				buf[i] = mod;
+				i++;
+//				printf("M: %d - %d / %d\n", buf[i-1], mod, del);
+
+			} while (del != 0);
+//			printf("%d\n", i);
+
+//			i--;
+//			printf("I: %d\n", i);
+
+//			int j;
+			for (j = 0; j < i; j++)
+				printf("%d", buf[i-j-1]);
+			printf("\n");
+		}
+	
+	} while (true);
+
+	return 0;
+}
+

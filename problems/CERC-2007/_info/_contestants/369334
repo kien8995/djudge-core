@@ -1,0 +1,147 @@
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <queue>
+#include <cstring>
+#include <cctype>
+
+#define SZ(x) ((int)(x).size())
+
+using namespace std;
+
+vector<string> m;
+
+int r, c;
+int sol[101][101][2][2][2][2];
+
+struct state{
+	int x, y;
+	int b,yk,r,g;
+	state():x(-1){}
+	state(int x, int y, int b, int yk, int r, int g):x(x),y(y),b(b),yk(yk),r(r),g(g){}
+};
+
+int move[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
+
+int main(){
+	while ( 1 ){
+		scanf("%d %d\n", &r, &c);
+		if ( r == 0 && c == 0 )  break;
+
+		m.clear();
+		for (int i = 0; i < r; i++){
+			char buff[150];
+			gets(buff);
+			m.push_back(buff);
+		}
+
+		int sx = 0, sy = 0-1;
+		for (int i = 0; i < r; i++)
+			for (int j = 0; j < c; j++)
+				if ( m[i][j] == '*' ){
+					sx = i;
+					sy = j;
+					m[i][j] = '.';
+				}
+					
+		memset(sol, -1, sizeof(sol));
+		sol[sx][sy][0][0][0][0] = 0;
+		queue<state> Q;
+		
+		char done = 0;
+
+		Q.push(state(sx,sy,0,0,0,0));
+		while ( !Q.empty() && !done ){
+			int x = Q.front().x;
+			int y = Q.front().y;
+			int bk = Q.front().b;
+			int yk = Q.front().yk;
+			int rk = Q.front().r;
+			int gk = Q.front().g;
+			int time = sol[x][y][bk][yk][rk][gk];
+			Q.pop();
+		
+			for (int k = 0; k < 4 && !done; k++){
+				int nx = x + move[k][0];
+				int ny = y + move[k][1];
+				if ( nx < 0 || nx >= r ) continue;
+				if ( ny < 0 || ny >= c ) continue;
+
+				if ( m[nx][ny] == '#' ) continue;
+				if ( m[nx][ny] == '.' ){
+					if ( sol[nx][ny][bk][yk][rk][gk] == -1 ){
+						sol[nx][ny][bk][yk][rk][gk] = time + 1;
+						Q.push(state(nx,ny,bk,yk,rk,gk));
+					}
+				}
+				if ( m[nx][ny] == 'X' ){
+					done = 1;
+					printf("Escape possible in %d steps.\n", time + 1);
+					continue;
+				}
+				char go = 0;
+				if ( m[nx][ny] == 'B' ){
+					if ( bk == 1 ){
+						go = 1;
+					}
+				}
+				if ( m[nx][ny] == 'Y' ){
+					if ( yk == 1 ){
+						go = 1;
+					}
+				}
+				if ( m[nx][ny] == 'R' ){
+					if ( rk == 1 ){
+						go = 1;
+					}
+				}
+
+				if ( m[nx][ny] == 'G' ){
+					if ( gk == 1 ){
+						go = 1;
+					}
+				}
+				if ( go ){
+					if ( sol[nx][ny][bk][yk][rk][gk] == -1 ){
+						sol[nx][ny][bk][yk][rk][gk] = time + 1;
+						Q.push(state(nx,ny,bk,yk,rk,gk));
+					}
+				}
+
+				if ( m[nx][ny] == 'b' ){
+					if ( sol[nx][ny][1][yk][rk][gk] == -1 ){
+						sol[nx][ny][1][yk][rk][gk] = time + 1;
+						Q.push(state(nx,ny,1,yk,rk,gk));
+					}
+				}
+				if ( m[nx][ny] == 'y' ){
+					if ( sol[nx][ny][bk][1][rk][gk] == -1 ){
+						sol[nx][ny][bk][1][rk][gk] = time + 1;
+						Q.push(state(nx,ny,bk,1,rk,gk));
+					}
+				}
+				if ( m[nx][ny] == 'r' ){
+					if ( sol[nx][ny][bk][yk][1][gk] == -1 ){
+						sol[nx][ny][bk][yk][1][gk] = time + 1;
+						Q.push(state(nx,ny,bk,yk,1,gk));
+					}
+				}
+				if ( m[nx][ny] == 'g' ){
+					if ( sol[nx][ny][bk][yk][rk][1] == -1 ){
+						sol[nx][ny][bk][yk][rk][1] = time + 1;
+						Q.push(state(nx,ny,bk,yk,rk,1));
+					}
+				}
+
+			}
+		}
+
+		if ( !done ){
+			printf("The poor student is trapped!\n");
+		}
+		while (!Q.empty()) Q.pop();
+	}
+
+
+	return 0;
+}

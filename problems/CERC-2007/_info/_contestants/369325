@@ -1,0 +1,145 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <set>
+#include <map>
+#include <list>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+typedef vector<int> VI;
+typedef vector<VI> VII;
+typedef vector<string> VS;
+typedef long long lint;
+typedef long long LL;
+typedef string ST;
+
+#define VAR(v,n) __typeof(n) v=(n)
+#define REP(i,n) for(int i=0; i<(n); i++)
+#define FOR(i,a,b) for(int i=(a); i<=(b); i++)
+#define FORD(i,a,b) for(int i=(a); i>=(b); i--)
+#define FOREACH(i,c) for(VAR(i,(c).begin()); i!=(c).end(); i++)
+
+#define PB push_back
+#define PF push_front
+#define PI pair<int,int>
+#define MP make_pair
+#define FI first
+#define SE second
+#define VR vector
+#define IT iterator
+#define ALL(x) (x).begin(),(x).end()
+#define SIZE(x) ((int)(x).size())
+#define CLEAR(c,w) memset(c,w,sizeof(c))
+#define M 1005
+
+int n;
+PI T[M];
+map<int,VI > pion,poziom;
+int next[M][2],il[M];
+char vis[M];
+VI res;
+
+
+inline bool fun1(int x, int y) {
+	return T[x].SE<T[y].SE;
+}
+
+
+inline bool fun2(int x, int y) {
+	return T[x].FI<T[y].FI;
+}
+
+
+inline void wypisz() {
+	int x,y;
+	REP(i,SIZE(res)-1) {
+		x=res[i];
+		y=res[i+1];
+		if (T[x].FI==T[y].FI) {
+			if (T[x].SE<T[y].SE) printf("N");
+			else printf("S");
+		} else {
+			if (T[x].FI<T[y].FI) printf("E");
+			else printf("W");
+		}
+	}
+	printf("\n");
+}
+
+
+inline int det(PI i, PI j, PI k) {
+	return (j.FI-i.FI)*(k.SE-i.SE)-(j.SE-i.SE)*(k.FI-i.FI);
+}
+
+
+inline bool sprawdz() {
+	LL pole=0LL;
+	FOR(i,1,SIZE(res)-3)
+		pole+=(LL)det(T[res[0]],T[res[i]],T[res[i+1]]);	
+	return (pole<0);
+}			
+	
+
+int main() {
+	scanf("%d",&n);
+	
+	while (n) {
+		pion.clear();
+		poziom.clear();
+		REP(i,n) il[i]=0;
+		REP(i,n) {
+			scanf("%d%d",&T[i].FI,&T[i].SE);
+			pion[T[i].FI].PB(i);
+			poziom[T[i].SE].PB(i);
+		}
+		
+		
+		FOREACH(it,pion) {
+			sort(ALL((*it).SE),fun1);
+			for(int i=0; i<SIZE((*it).SE); i+=2) {
+				int x=(*it).SE[i];
+				int y=(*it).SE[i+1];
+				next[x][il[x]++]=y;
+				next[y][il[y]++]=x;
+			}
+		}
+			
+		
+		FOREACH(it,poziom) {
+			sort(ALL((*it).SE),fun2);
+			for(int i=0; i<SIZE((*it).SE); i+=2) {
+				int x=(*it).SE[i];
+				int y=(*it).SE[i+1];
+				next[x][il[x]++]=y;
+				next[y][il[y]++]=x;
+			}
+		}
+	
+		
+		REP(i,n) vis[i]=0;
+		
+		res.clear();
+		res.PB(0),vis[0]=1;
+		REP(i,n-1) {
+			int x=res[i],y;
+			if (vis[next[x][0]]) y=next[x][1];
+			else y=next[x][0];
+			res.PB(y),vis[y]=1;
+		}		
+		res.PB(0);
+		
+		if (!sprawdz()) reverse(ALL(res));		
+		wypisz();
+		
+		scanf("%d",&n);
+	}
+	return 0;
+}

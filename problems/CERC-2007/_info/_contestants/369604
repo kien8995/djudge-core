@@ -1,0 +1,212 @@
+#include <algorithm>
+#include <cctype>
+#include <cstdio>
+#include <map>
+#include <utility>
+#include <vector>
+using namespace std;
+
+#define MAX 210
+
+typedef pair<int, int> Point;
+
+int r, c;
+char board[MAX][MAX];
+
+struct Gate {
+   map<Point, int> ulazi;
+   vector<Point> izlazi;
+
+   int y1, x1, y2, x2;
+   char tip;
+
+   int calc() {
+      map<Point, int>::const_iterator it;
+      int ret = tip == '&' ? 1 : 0;
+      for (it=ulazi.begin(); it!=ulazi.end(); ++it) {
+         if (it->second == -1)
+            return -1;
+
+         if (tip == '&') ret &= it->second;
+         else if (tip == '1') ret |= it->second;
+         else ret ^= it->second;
+      }
+      return ret;
+   }
+
+   void dump() {
+      fprintf( stderr, "tip %c\n", tip );
+      fprintf( stderr, "lokacija (%d,%d)-(%d,%d)\n", y1, x1, y2, x2 );
+      for ( map<Point, int>::const_iterator it=ulazi.begin(); it!=ulazi.end(); ++it ) {
+         fprintf( stderr, "ulaz (%d, %d), vrijednost %d\n", it->first.first, it->first.second, it->second );
+      }
+      for ( vector<Point>::const_iterator it=izlazi.begin(); it!=izlazi.end(); ++it ) {
+         fprintf( stderr, "izlaz (%d, %d)\n", it->first, it->second );
+      }
+      fprintf( stderr, "\n" );
+   }
+};
+
+vector<Gate> gejtovi;
+map<char, int> izlazi;
+
+bool bio[MAX][MAX][4];
+
+enum { GORE, DOLJE, LIJEVO, DESNO };
+const char *smjerime[] = { "GORE", "DOLJE", "LIJEVO", "DESNO" };
+const int dy[] = { -1, 1, 0, 0 };
+const int dx[] = { 0, 0, -1, 1 };
+int opposite( int dir ) { return dir^1; };
+
+bool input(void);
+
+void parse() {
+   gejtovi.clear();
+   izlazi.clear();
+
+   for (int i=0; i<r-1; ++i) {
+      for (int j=0; j<c-1; ++j) {
+         if (board[i][j] == '#' && board[i][j+1] == '#' && board[i+1][j] == '#') {
+            Gate g;
+            int &y1 = g.y1, &x1 = g.x1, &y2 = g.y2, &x2 = g.x2;
+
+            // granice
+            y1 = i; x1 = j;
+            for (y2=y1+1; y2<r && board[y2][x1]== '#'; ++y2); --y2;
+            for (x2=x1+1; x2<c && board[y1][x2]== '#'; ++x2); --x2;
+
+            // tip
+            for (int y=y1+1; y<y2; ++y)
+               for (int x=x1+1; x<x2; ++x)
+                  if (!isspace(board[y][x]))
+                     g.tip = board[y][x];
+
+            // ulazi
+            for (int y=y1; y<=y2; ++y) {
+               if (x1>0 && board[y][x1-1] == '=')
+                  g.ulazi[ Point(y, x1) ] = -1;
+               if (x2<c-1 && strchr("o=", board[y][x2+1])!=NULL)
+                  g.izlazi.push_back( Point(y, x2+1) );
+            }
+
+            gejtovi.push_back(g);
+         }
+      }
+   }
+}
+
+void propagiraj(int y, int x, int dir, int val) {
+//    fprintf(stderr, "propagiraj(%d, %d, %s, %d)\n", y, x, smjerime[dir], val);
+
+   if (y < 0 || y >= r || x < 0 || x >= c || bio[y][x][dir]) return;
+   bio[y][x][dir] = bio[y][x][opposite(dir)] = 1;
+
+   const char ch = board[y][x];
+   
+   if ((dir == LIJEVO || dir == DESNO) && strchr("|" , ch) != NULL ||
+       (dir == GORE   || dir == DOLJE) && strchr("=-", ch) != NULL ) {
+
+//       fprintf(stderr, ":: ilegalno\n" );
+
+   } else if (strchr(" 01", ch) != NULL) {
+
+//       fprintf(stderr, ":: spejs ili znamenka\n" );
+
+   } else if (isupper(ch)) {
+      izlazi[ch] = val;
+   } else if (ch == 'o') {
+      propagiraj(y+dy[dir], x+dx[dir], dir, !val);
+   } else if (ch == '#') {
+      if (dir == GORE || dir == DOLJE) return;
+
+      vector<Gate>::iterator it;
+      for ( it=gejtovi.begin(); it!=gejtovi.end(); ++it ) {
+         if ( y >= it->y1 && y <= it->y2 &&
+              x >= it->x1 && x <= it->x2 )
+            break;
+      }
+
+      Gate &g = *it;
+      for ( map<Point, int>::iterator mi=g.ulazi.begin(); mi!=g.ulazi.end(); ++mi ) {
+         if ( mi->first == Point(y, x) ) {
+            mi->second = val;
+         }
+      }
+
+      int out = g.calc();
+      if ( out != -1 ) {
+         for (int i=0; i<(int)g.izlazi.size(); ++i) {
+            propagiraj( g.izlazi[i].first, g.izlazi[i].second, DESNO, out );
+         }
+      }
+   } else if (ch == '+') {
+      for (int ndir=0; ndir<4; ++ndir) {
+         propagiraj(y+dy[ndir], x+dx[ndir], ndir, val);
+      }
+   } else {
+//       fprintf(stderr, ":: ostalo, nastavljam\n" );
+      propagiraj(y+dy[dir], x+dx[dir], dir, val);
+   }
+}
+
+void solve() {
+//    fprintf( stderr, "\nsolve()\n\n" );
+   parse();
+   
+   memset( bio, 0, sizeof bio );
+
+   for ( vector<Gate>::iterator it=gejtovi.begin(); it!=gejtovi.end(); ++it ) {
+      Gate &g = *it;
+
+      int out = g.calc();
+      if ( out != -1 ) {
+         for (int i=0; i<(int)g.izlazi.size(); ++i) {
+            propagiraj( g.izlazi[i].first, g.izlazi[i].second, DESNO, out );
+         }
+      }
+   }
+      
+   for (int y=0; y<r; ++y)
+      for (int x=0; x<c; ++x)
+         if (isdigit(board[y][x])) {
+            propagiraj(y, x+1, DESNO, board[y][x]-'0');
+//             fprintf( stderr, "gotovo\n" );
+         }
+}
+
+int main() {
+   while ( input() ) {
+      solve();
+      for (map<char, int>::const_iterator it=izlazi.begin(); it!=izlazi.end(); ++it) {
+         printf("%c=%d\n", it->first, it->second);
+      }
+      printf("\n");
+   }
+
+   return 0;
+}
+
+bool allstars(const char *s) {
+   if (strlen(s) == 0) return false;
+   for (int i=0; s[i]!='\0'; ++i)
+      if (s[i] != '*') return false;
+   return true;
+}
+
+bool input() {
+   c = 0;
+   for (r=0;; ++r) {
+      fgets( board[r], sizeof board[r], stdin );
+      *strchr(board[r], '\n') = '\0';
+      if (allstars(board[r])) break;
+      c = max( c, (int)strlen(board[r]) );
+   }
+
+   for (int i=0; i<r; ++i) {
+      for (int j=strlen(board[i]); j<c; ++j) {
+         board[i][j] = ' ';
+      }
+   }
+
+   return r > 0;
+}

@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+char input[100];
+int numbers[50];
+
+int read_base(int & index)
+{
+	int base = 0;
+	while (input[index] != ' ') base = base * 10 + input[index++] - '0';
+	return base * -1;
+}
+
+int negamod(int c, int negabase)
+{
+	if (c >= 0)
+		return (c % (-negabase));
+	
+	if ((-c) % (-negabase) == 0)
+		return 0;
+	return (-negabase)-(-c) % (-negabase);
+}
+
+int main()
+{
+	while (1)
+	{
+		gets(input);
+		if (input[0] == 'e') break;
+		int len = strlen(input);
+		
+		int index;
+		if (input[0] == 'f') //from
+		{
+			index = 5;
+			int base = read_base(index);
+			++index;
+			
+			int n = 0;
+			while (index < len) numbers[n++] = input[index++] - '0';
+			
+			int res = 0;
+			int b = 1;
+			for (int i = n-1; i >= 0; --i)
+			{
+				res += numbers[i] * b;
+				b *= base;
+			}
+			printf("%d\n", res);
+		}
+		else //to
+		{
+			index = 3;
+			int base = read_base(index);
+			++index;
+			
+			bool s = false;
+			if (input[index] == '-') { s = true; index++; }
+			int n = 0;
+			while (index < len) n = n * 10 + input[index++] - '0';
+			if (s) n *= -1;
+			
+			index = 0;
+			while (n)
+			{
+				numbers[index++] = negamod(n, base);
+				n = (n-negamod(n, base))/base;
+			}
+			for (int i = index-1; i >= 0; --i)
+				printf("%d", numbers[i]);
+			printf("\n");
+		}
+	}
+
+	return 0;
+}

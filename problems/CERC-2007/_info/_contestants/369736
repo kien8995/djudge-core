@@ -1,0 +1,145 @@
+#include <cstdio>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+struct point {
+  double x;
+  double y;
+};
+
+struct porder {
+  bool operator < (const porder & p) const {
+    return a < p.a;
+  }
+  double a;
+  int id;
+  bool valid;
+};
+
+#define MAX_N 2000
+
+const double PI = acos(-1.0);
+
+point P[MAX_N];
+porder B[MAX_N];
+porder E[MAX_N];
+bool V[MAX_N];
+int n;
+double R;
+
+int find(int x) {
+  point r = P[x];
+
+//  printf("%lf %lf:", r.x, r.y);
+
+  if (n == 1)
+    return 1;
+
+  if (R == 0)
+    return 1;
+
+  for (int i = 0; i < n; i++) {
+    B[i].id = i; B[i].valid = true;
+    E[i].id = i; E[i].valid = true;
+
+    if (i == x) {
+      B[i].valid = false;
+      E[i].valid = false;
+
+      continue;
+    }
+
+    point n = { P[i].x - r.x, P[i].y - r.y };
+    double dist = sqrt(n.x * n.x + n.y * n.y);
+
+    if (dist > 2 * R) {
+      B[i].valid = false;
+      E[i].valid = false;
+
+      continue;
+    }
+
+    double alpha = fabs(acos(dist / (2 * R)));
+
+    B[i].a = fmod(atan2(n.y, n.x) - alpha + 4 * PI, 2 * PI);
+    E[i].a = fmod(atan2(n.y, n.x) + alpha + 4 * PI, 2 * PI);
+//    printf(" (%.0lf, %.0lf: %.1lf, %.1lf, %.1lf)", P[i].x, P[i].y, B[i].a * 180 / PI, E[i].a * 180 / PI, dist);
+  }
+//  printf("\n");
+
+  sort(B, B + n);
+  sort(E, E + n);
+
+  int points = 0;
+  int ret = 1;
+
+  for (int k = 0; k < 2; k++) {
+    double a = 0;
+    int i = 0;
+    int j = 0;
+
+    for (; j < n && !E[j].valid; j++);
+    for (; i < n && !B[i].valid; i++);
+
+    while (true) {
+     double ai = 2 * PI;
+     double aj = 2 * PI;
+
+     if (i < n)
+       ai = B[i].a - a;
+
+     if (j < n)
+       aj = E[j].a - a;
+
+     if (aj < ai) {
+  //     printf("e %d %lf\n", E[j].id, E[j].a);
+       if (V[E[j].id]) {
+         points--;
+         V[E[j].id] = false;
+       }
+       a = E[j].a;
+       for (j++; j < n && !E[j].valid; j++);
+     } else {
+    //   printf("b %d %lf\n", B[i].id, B[i].a);
+       points++;
+       V[B[i].id] = true;
+       a = B[i].a;
+       for (i++; i < n && !B[i].valid; i++);
+     }
+
+   //  printf("%d\n", points);
+     if (ret < points + 1)
+       ret = points + 1;
+
+     if (i == n && j == n)
+       break;
+    }
+  }
+
+ // printf("%d\n", ret);
+
+  return ret;
+}
+
+int main() {
+  while (scanf("%d%lf", &n, &R) == 2) {
+    if (!n)
+      break;
+   
+    for (int i = 0; i < n; i++)
+      scanf("%lf%lf", &P[i].x, &P[i].y);
+
+    int m = 0;
+    for (int i = 0; i < n; i++) {
+      int t = find(i);
+
+      if (t > m)
+        m = t;
+    }
+
+    printf("It is possible to cover %d points.\n", m);
+  }
+  return 0;
+}
+

@@ -1,0 +1,92 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int main(void)
+{
+
+  char line [100];
+
+  int R = 0;
+  int N = 0;
+
+
+
+  while (1)
+    {
+      cin.getline(line,100);
+
+      N = 0;
+      R = 0;
+      unsigned i = 0;
+      char number [50];
+      char inumber [50];
+      unsigned lnum = 0;
+      switch(line[0])
+	{
+	case 't':
+	  sscanf(line,"to-%d %d",&R,&N) ;
+
+
+	  //	  sscanf(line + 5 + R/10, "%d", &N);
+	  
+	  // cout << "R = " << R << " N = " << N << endl;
+
+
+	  if(N==0)
+	    {
+	      cout << 0 << endl;
+	      break;
+	    }
+
+	      while(N)
+		{
+		  int digit = (N%R>=0) ? N%R : (R + (N%R))%R;
+		  N -= digit;
+		  N /= (-R);
+	      number [i] = digit + '0';
+	      i++;
+
+	    }
+
+	  number[i] = 0;
+ 
+	  lnum = i;
+	  while(i)
+	    {
+	      inumber[lnum-i]=number[i-1];
+	      --i;
+	    }
+	  inumber[lnum] = 0;
+
+	  cout << inumber << endl;
+
+	  break;
+	case 'f':
+	  R=line[i+5] - '0';
+	  if(R==1)
+	    R = 10;
+	  
+
+	  for (i=7+R/10;line[i];i++)
+	    {
+	      N*=-R;
+	      N+=line[i] - '0';
+	    }
+
+	  cout << N << endl;
+
+	  break;
+
+	case 'e':
+	  return 0;
+
+	}
+
+
+    }
+
+  return 0;
+
+}

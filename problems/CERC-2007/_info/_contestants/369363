@@ -1,0 +1,152 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<cctype>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<numeric>
+
+using namespace std;
+
+#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
+#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define REP(i, n) for(int i=0; i<(n); i++)
+#define ALL(x) (x).begin(), (x).end()
+#define MP make_pair
+#define PB push_back
+#define X first
+#define Y second
+#define FI first
+#define SE second
+#define FORE(i, c) for(__typeof((c).begin) i = (c).begin(); i!=(c).end(); ++i)
+#define SIZE(x) ((int)(x).size())
+
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int, int> PII;
+
+vector<int> graf[1000];
+int odw[1000];
+
+void wypisz(PII a, PII b)
+{
+    if(a == b) throw 0;
+    if(a.X < b.X)
+	printf("E");
+    else if(a.X > b.X)
+	printf("W");
+    else if(a.Y < b.Y)
+	printf("N");
+    else
+	printf("S");
+}
+
+void poly(int n)
+{
+    PII p[1000];
+    pair<PII, int> cp[1000];
+    map<int, int> mp;
+    map<int, int>::iterator mit;
+
+
+    REP(i, n)
+    {
+	graf[i].clear();
+	scanf("%d%d", &p[i].X, &p[i].Y);
+	cp[i] = MP(p[i], i);
+    }
+    if(n == 1)
+    {
+	printf("\n");
+	return;
+    }
+    sort(cp, cp+n);
+    int akt, pocz;
+    vector<pair<PII, int> > aw;
+    akt = 0;
+    while(akt < n)
+    {
+	pocz = akt;
+	aw.clear();
+	while(akt < n && cp[akt].X.X == cp[pocz].X.X)
+	    aw.PB(cp[akt++]);
+	REP(i, aw.size()/2)
+	{
+	    graf[aw[2*i].Y].PB(aw[2*i+1].Y);
+	    graf[aw[2*i+1].Y].PB(aw[2*i].Y);
+	}
+	REP(i, aw.size())
+	{
+//	    printf("%d\n", aw[i].Y);
+	    mit = mp.find(aw[i].X.Y);
+	    if(mit != mp.end())
+	    {
+		graf[aw[i].Y].PB(mp[aw[i].X.Y]);
+		graf[mp[aw[i].X.Y]].PB(aw[i].Y);
+		mp.erase(mit);
+	    }
+	    else
+		mp.insert(MP(aw[i].X.Y, aw[i].Y));
+	}
+//	printf("AA\n");
+    }
+    REP(i, n)
+    {
+	REP(j, graf[i].size())
+	{
+//	    printf("%d %d\n", i, graf[i][j]);
+	}
+    }
+  //:  return;
+    //start w 
+    int start, skad, aww;
+   start= cp[0].Y;
+   REP(i, n) odw[i] = 0;
+   odw[start] = 1;
+   skad = start;
+//   printf("%d %d\n", p[start].X, p[start].Y);
+   if(p[graf[start][0]].X == p[start].X)
+       aww = graf[start][0];
+   else
+       aww = graf[start][1];
+   while(1)
+   {
+       REP(i, 2)
+       {
+	   if(graf[aww][i] == skad) continue;
+	   skad = aww;
+	   aww = graf[aww][i];
+	   break;
+       }
+       if(aww == 0) break;
+   }
+//   printf("%d\n", skad);
+     while(1)
+     {
+	REP(i, 2)
+	{
+	    if(graf[aww][i] == skad) continue;
+	    //printf("ide do %d\n", graf[aww][i]);
+	    wypisz(p[aww], p[graf[aww][i]]);
+	    skad = aww;
+	    aww = graf[aww][i];
+	    break;
+	}
+	if(aww == 0)
+	    break;
+     }
+    printf("\n");
+}
+
+int main()
+{
+    int n;
+    while(scanf("%d",&n) && n)
+	poly(n);
+    return 0;
+}

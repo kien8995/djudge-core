@@ -1,0 +1,117 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+#define REP(i,n)	for(int i=0,_n=(n);i<_n;++i)
+#define REPD(i,n)	for(int i=(n-1);i>=0;--i)
+#define FOR(i,s,k)	for(int i=(s),_k=(k);i<=_k;++i)
+#define FORD(i,s,k)	for(int i=(s),_k=(k);i>=_k;--i)
+#define FORE(it,q)	for(__typeof((q).begin())it=(q).begin();it!=(q).end();++it)
+#define FORED(it,q)	for(__typeof((q).rbegin())it=(q).rbegin();it!=(q).rend();++it)
+#define FOREACH(it,f,l)	for(__typeof(f)it=f;it!=l;++it)
+#define FOREACHD(it,f,l)	for(__typeof(f)it=l;it--!=f;)
+
+const int min_r = 2;
+const int max_r = 10;
+const int min_n = -1000000;
+const int max_n = 1000000;
+
+int f[100], *l = f;
+
+bool testcase() {
+    int r, n;
+    char c;
+    scanf("%c", &c);
+    if (c == 't') {
+	REP(i,2) getchar();
+	scanf("%d %d\n", &r, &n);
+	if (n == 0) {
+	    printf("0\n");
+	    return 1;
+	}
+	l = f;
+	bool neg = n<0;
+	if (neg) n = -n;
+	while (n) {
+	    *l++ = n%r;
+	    n /= r;
+	}
+	int s = 0;
+	if (!neg) {
+    for (int i = 0; f+i < l || s; ++i) {
+		if (f+i == l) {
+			f[i] = 0;
+			++l;
+		}
+    	f[i] += s;
+		if (i&1) {
+		    if (f[i] > 0) {
+			f[i] = r-f[i];
+    			s = 1;
+		    } else
+			s = 0;
+		} else {
+		    if (f[i] == r) {
+			f[i] = 0;
+		    s = 1;
+		    } else
+			s = 0;
+		}
+	}
+	} else {
+	for (int i = 0; f+i < l || s; ++i) {
+		if (f+i == l) {
+			f[i] = 0;
+			++l;
+		}
+    	f[i] += s;
+		if ((i&1) == 0) {
+		    if (f[i] > 0) {
+			f[i] = r-f[i];
+    			s = 1;
+		    } else
+			s = 0;
+		} else {
+		    if (f[i] == r) {
+			f[i] = 0;
+		    s = 1;
+		    } else
+			s = 0;
+		}
+	}
+	}
+	REPD(i,l-f)
+	    printf("%1d", f[i]);
+	putchar('\n');
+    } else if (c == 'f') {
+	REP(i,4) getchar();
+	scanf("%d\n", &r);
+	char c;
+	int len = 0;
+	while ((c = getchar()) != '\n')
+	    f[len++] = c-'0';
+	reverse(f, f+len);
+	int res = 0;
+	int p = 1;
+	REP(i,len) {
+	    if (i&1)
+		res = res - f[i]%r*p;
+	    else
+		res = res + f[i]*p;
+	    n /= r;
+	    p *= r;
+	}
+	printf("%d\n", res);
+    } else
+	return 0;
+    return 1;
+}
+
+
+int main() {
+	while(testcase());
+	return 0;
+}
+

@@ -1,0 +1,13 @@
+﻿<problem
+    id               = "A"
+    origin           = "University of Ulm Local Contest 1997"
+
+    problem-type     = "ACM-ICPC"
+    test-count       = "1"
+    input-mask       = "%02d.in"
+    output-mask      = "%02d.out"
+    time-limit       = "2000"
+    memory-limit     = "64M"
+    checker          = "%STDLIB"
+    judge-solution   = "A.c"
+/>

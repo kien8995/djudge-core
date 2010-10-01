@@ -1,0 +1,114 @@
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <set>
+#include <map>
+#include <queue>
+#include <numeric>
+#include <list>
+#include <cstring>
+#include <cctype>
+#include <sstream>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+typedef vector<int> VI;
+typedef pair<int,int> PII;
+typedef vector<PII> VPII;
+
+#define MP make_pair
+#define ST first
+#define ND second
+#define PB push_back
+#define FOR(i,a,b) for( int i=(a); i<=(b); ++i)
+#define FORD(i,a,b) for( int i=(a); i>=(b); --i)
+#define REP(i,n) for(int i=0; i<(n); ++i)
+#define ALL(X) (X).begin(),(X).end()
+#define SIZE(X) (int)(X).size()
+#define FOREACH(it,X) for(__typeof((X).begin()) it=(X).begin(); it!=(X).end(); ++it)
+
+#define MXN 2100
+#define EPS 1e-5
+
+struct wsp_t
+{
+	int x, y;
+};
+
+int dist2(const wsp_t &o, const wsp_t &p)
+{
+	return (o.x-p.x) * (o.x-p.x) + (o.y-p.y) * (o.y-p.y);
+}
+
+LD upd(LD x)
+{
+	if (x < -1.)
+		x = -1.;
+	if (x > 1.)
+		x = 1.;
+	return x;
+}
+
+wsp_t wsp[MXN];
+list< pair<LD,int> > kol;
+
+int main()
+{
+	LD MY_2PI = (LD)8. * atanl((LD)1.);
+	int n, r;
+	scanf("%i%i", &n, &r);
+	while (n || r)
+	{
+		for (int a = 0; a < n; a++ )
+			scanf("%i%i", &wsp[a].x, &wsp[a].y);
+		int res = 0;
+		for (int cur = 0; cur < n; cur++ )
+		{
+			int il = 1;
+			kol.clear();
+			for (int a = 0; a < n; a++ )
+				if (a != cur && dist2(wsp[a],wsp[cur]) <= 4*r*r)
+				{
+					LD d = sqrtl((LD)dist2(wsp[a],wsp[cur]));
+					LD cosbeta = (LD)(wsp[a].x - wsp[cur].x) / d;
+					LD cosalfa = d / (LD)(2*r);
+					LD beta = acosl(upd(cosbeta));
+					if (wsp[cur].y > wsp[a].y)
+						beta = MY_2PI - beta;
+					LD alfa = acosl(upd(cosalfa)) + EPS;
+					LD angle1 = beta - alfa;
+					LD angle2 = beta + alfa;
+					if (angle1 < 0.)
+					{
+						angle1 += MY_2PI;
+						il++;
+					}
+					if (angle2 > MY_2PI)
+					{
+						angle2 -= MY_2PI;
+						il++;
+					}
+					kol.PB(MP(angle1,1));
+					kol.PB(MP(angle2,-1));
+				}
+			kol.sort();
+			res = max(res, il);
+			FOREACH(it,kol)
+			{
+				il += it->second;
+				res = max(res, il);
+			}
+		}
+		
+		printf("It is possible to cover %i points.\n", res);
+
+		scanf("%i%i", &n, &r);
+	}
+	return 0;
+}

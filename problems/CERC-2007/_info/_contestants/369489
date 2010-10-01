@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <list>
+
+using std::list;
+
+struct robot
+{
+  int x, y;
+  char keys;
+  
+  robot(int x, int y, char keys) : x(x), y(y), keys(keys) { /* printf("r: %d %d %d born.\n", x,y,keys); */ }
+  
+  robot clone(int dx, int dy)
+  {
+    return robot(x+dx, y+dy, keys);
+  }
+  
+  /*
+  ~robot()
+  {
+    printf("r: %d %d %d killed.\n", x,y,keys);
+  }
+  */
+};
+
+char key(char c)
+{
+  char r = 0;
+  switch(c)
+  {
+  case 'b': r = 1; break;
+  case 'y': r = 2; break;
+  case 'r': r = 4; break;
+  case 'g': r = 8; break;
+  }
+  return r;
+}
+
+char door(char c)
+{
+  char r = 0;
+  switch(c)
+  {
+  case 'B': r = 1; break;
+  case 'Y': r = 2; break;
+  case 'R': r = 4; break;
+  case 'G': r = 8; break;
+  }
+  return r;
+}
+
+int main()
+{
+  char tile[102*102];
+  int stat[102*102];
+  for(;;)
+  {
+    int r, c;
+    scanf("%d %d", &r, &c);
+    getchar();
+    if(r==0 && c==0) break;
+    c += 2;
+    
+    for(int y = 1; y<=r; y++)
+      fgets(&tile[1 + y*c], c, stdin);
+    
+    for(int x = 0; x<c; x++)
+      tile[x + 0*c] = tile[x + (r+1)*c] = '#';
+    for(int y = 1; y<=r; y++)
+      tile[0 + y*c] = tile[(c-1) + y*c] = '#';
+      
+    //test
+    /*
+    for(int y = 0; y<=r+1; y++)
+    {
+      fwrite(&tile[y*c], 1,c, stdout);
+      putchar('\n');
+    }
+    */
+    
+    r += 2;
+    
+    int sx, sy;
+    bool eexit = false;
+    for(int y = 0; y<r; y++)
+      for(int x = 0; x<c; x++)
+      {
+        stat[x + y*c] = 0;
+        switch(tile[x + y*c])
+        {
+        case '*': sx = x; sy = y; break;
+        case 'X': eexit = true; break;
+        }
+      }
+      
+    //printf("start: %d %d\n", sx,sy);
+    
+    if(!eexit) { printf("The poor student is trapped!\n"); continue; }
+    
+    list<robot> rl[2];
+    int lidx = 0;
+    rl[0].clear();
+    rl[1].clear();
+    rl[lidx].push_back( robot(sx, sy, 0) );
+    int steps = 0;
+    
+    while(!rl[lidx].empty())
+    {
+      eexit = false;
+      list<robot>::iterator ri, rb = rl[lidx].begin(), re = rl[lidx].end();
+      //empty newborn list
+      rl[lidx^1].clear();
+      for(ri = rb; ri!=re; ri++)
+      {
+        robot ar = *ri;
+        char t = tile[ar.x + ar.y*c];
+        ar.keys |= key(t);
+        if(stat[ar.x + ar.y*c] & (1<<ar.keys)) continue;
+        
+        if(t=='X') { eexit = true; break; }
+        char d = door(t);
+        if(t=='#' || (d & ar.keys)!=d) continue;
+        
+        //printf("r: %d %d %d\n", ar.x, ar.y, ar.keys);
+        
+        rl[lidx^1].push_back(ar.clone(-1,0));
+        rl[lidx^1].push_back(ar.clone(+1,0));
+        rl[lidx^1].push_back(ar.clone(0,-1));
+        rl[lidx^1].push_back(ar.clone(0,+1));
+        
+        stat[ar.x + ar.y*c] |= (1<<ar.keys);
+      }
+      if(eexit) break;
+      lidx ^= 1;
+      steps++;
+      //printf("%d\n", steps);
+    }
+    
+    if(!eexit) { printf("The poor student is trapped!\n"); continue; }
+    
+    printf("Escape possible in %d steps.\n", steps);
+  }
+}

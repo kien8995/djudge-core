@@ -1,0 +1,52 @@
+#include <cstdio>
+
+void to(int n,int b)
+{
+  if(n==0)
+  {
+    return;
+  }
+  int z = ((n%b)+b)%b;
+
+  to(-1*(n-z)/b,b);
+  printf("%d",z);
+}
+
+int from(int n,int b)
+{
+	if(n==0)
+		return 0;
+	return (n%10)+from(n/10,b)*b;
+}
+
+int main()
+{
+  for(;;)
+  {
+    char c = getchar();
+    if(c=='e')
+      return 0;
+    if(c=='t')
+    {
+      getchar(),getchar();
+      int b,n;
+      scanf("%d %d ",&b,&n);
+      if(n==0)
+      {
+	      puts("0");
+	      return 0;
+      }
+      to(n,b);
+      puts("");
+    }
+    if(c=='f')
+    {
+      getchar(),getchar(),getchar();
+      int b,n;
+      scanf("%d %d ",&b,&n);
+      printf("%d\n",from(n,b));
+    }
+  }
+
+
+}

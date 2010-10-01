@@ -1,0 +1,125 @@
+#include <stdio.h>
+
+struct queue{
+	int x,y,st;
+}q[128*128*32];
+
+int m[128][128][32];
+
+
+
+int get[128][128];
+int pos[128][128];
+
+int main()
+{
+	int a, b;
+	int x, y;
+	int tx, ty;
+	int qs, qe;
+	while(scanf("%d%d", &a, &b), a||b)
+	{
+		
+		qs=qe=0;
+		for(int i=0; i<a; i++)
+			for(int j=0; j<b; j++)
+				for(int c=0; c<32; c++)
+					m[i][j][c]=1000000000;
+		for(int i=0; i<a; i++)
+		{
+			char s[128];
+				scanf("%s", s);
+				
+			for(int j=0; j<b; j++)
+			{
+				switch(s[j]){
+				case '#':{pos[i][j]=0;get[i][j]=0;}break;
+				case '.':{pos[i][j]=1; get[i][j]=1;}break;
+				case '*':{pos[i][j]=1; get[i][j]=1;q[qe].x=j; q[qe].y=i; q[qe++].st=1;m[i][j][1]=0;}break;
+				case 'B':{pos[i][j]=2; get[i][j]=0;}break;
+				case 'Y':{pos[i][j]=4; get[i][j]=0;}break;
+				case 'R':{pos[i][j]=8; get[i][j]=0;}break;
+				case 'G':{pos[i][j]=16; get[i][j]=0;}break;
+				case 'b':{pos[i][j]=1; get[i][j]=2;}break;
+				case 'y':{pos[i][j]=1; get[i][j]=4;}break;
+				case 'r':{pos[i][j]=1; get[i][j]=8;}break;
+				case 'g':{pos[i][j]=1; get[i][j]=16;}break;
+				case 'X':{pos[i][j]=1; get[i][j]=1;tx=j;ty=i;}break;
+			}
+			}
+		}
+		while(1)
+		{
+			
+				int ns=q[qs].st|get[q[qs].y][q[qs].x];
+				
+				#define mx q[qs].x
+				#define my q[qs].y
+				#define mst q[qs].st
+                                //printf("|%d %d %d|",my, mx, ns);//get[q[qs].y][q[qs].x]);								
+				//printf("<%d %d>",qe,qs);
+				if (mx==tx && my==ty)
+				{
+					printf("Escape possible in %d steps.\n", m[my][mx][ns]);
+					break;
+				}
+				
+				if (qs>=qe) 
+				{
+					printf("The poor student is trapped!\n");
+					break;
+				}
+				
+				if (mx>0)
+				{
+					if ((pos[my][mx-1]&mst) && m[my][mx-1][ns]>m[my][mx][mst]+1)
+					{	
+						m[my][mx-1][ns]=m[my][mx][mst]+1;
+						q[qe].x=mx-1;
+						q[qe].y=my;
+						q[qe].st=ns;
+						qe++;
+					}
+				}
+				if (my>0)
+				{
+					if ((pos[my-1][mx]&mst) && m[my-1][mx][ns]>m[my][mx][mst]+1)
+					{	
+						m[my-1][mx][ns]=m[my][mx][mst]+1;
+						q[qe].x=mx;
+						q[qe].y=my-1;
+						q[qe].st=ns;
+						qe++;
+					}
+				}
+				if (mx<b-1)
+				{
+					//printf("|%d %d %d| ",my, mx, pos[my][mx+1]&mst);
+					if ((pos[my][mx+1]&mst) && m[my][mx+1][ns]>m[my][mx][mst]+1)
+					{	
+						m[my][mx+1][ns]=m[my][mx][mst]+1;
+						q[qe].x=mx+1;
+						q[qe].y=my;
+						q[qe].st=ns;
+						qe++;
+					}
+				}
+				if (my<a-1)
+				{
+					if ((pos[my+1][mx]&mst) && m[my+1][mx][ns]>m[my][mx][mst]+1)
+					{	
+						m[my+1][mx][ns]=m[my][mx][mst]+1;
+						q[qe].x=mx;
+						q[qe].y=my+1;
+						q[qe].st=ns;
+						qe++;
+					}
+				}
+				qs++;
+					
+					
+		}
+		
+	}
+	return 0;
+}

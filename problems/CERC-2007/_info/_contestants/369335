@@ -1,0 +1,133 @@
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+using namespace std;
+
+const int inf = 12345678;
+
+int R, C;
+
+int memo[110][110][17];
+char mapa[110][110];
+
+pair < pair<int,int>, int > Q[205700];
+int qb, qe;
+
+int getbest( int r, int c, int k )
+{
+	qb = 0;
+	qe = 1;
+	Q[0].first.first = r;
+	Q[0].first.second = c;
+	Q[0].second = k;
+	int rr=r, cc=c, kk=k;
+	for ( r=0; r < 110; ++r )
+		for ( c=0; c < 110; ++c )
+			for ( k=0; k < 17; ++k )
+				memo[r][c][k] = inf;
+	memo[rr][cc][kk] = 0;
+
+	while ( qb < qe )
+	{
+	NEXT:
+		r = Q[qb].first.first;
+		c = Q[qb].first.second;
+		k = Q[qb].second;
+
+		//printf( "qb=%d, qe=%d, r=%d, c=%d, k=%d\n", qb,qe,r,c,k );
+		++qb;
+
+		if ( mapa[r][c] == 'X' )
+			return memo[r][c][k];
+		if ( mapa[r][c] == '#' || mapa[r][c] == 0 )
+			continue;
+
+		int pk = k;
+		switch ( mapa[r][c] )
+		{
+		case 'b': k |= 1; break;
+		case 'y': k |= 2; break;
+		case 'r': k |= 4; break;
+		case 'g': k |= 8; break;
+		case 'B': if ( (k&1)==0 ) goto NEXT; break;
+		case 'Y': if ( (k&2)==0 ) goto NEXT; break;
+		case 'R': if ( (k&4)==0 ) goto NEXT; break;
+		case 'G': if ( (k&8)==0 ) goto NEXT; break;
+		}
+		memo[r][c][k] = memo[r][c][pk];
+
+		if ( memo[r][c][k]+1 < memo[r-1][c][k] )
+		{
+			Q[qe].first.first = r-1;
+			Q[qe].first.second = c;
+			Q[qe].second = k;
+			memo[Q[qe].first.first][Q[qe].first.second][k] = memo[r][c][k]+1;
+			++qe;
+		}
+		if ( memo[r][c][k]+1 < memo[r+1][c][k] )
+		{
+			Q[qe].first.first = r+1;
+			Q[qe].first.second = c;
+			Q[qe].second = k;
+			memo[Q[qe].first.first][Q[qe].first.second][k] = memo[r][c][k]+1;
+			++qe;
+		}
+		if ( memo[r][c][k]+1 < memo[r][c-1][k] )
+		{
+			Q[qe].first.first = r;
+			Q[qe].first.second = c-1;
+			Q[qe].second = k;
+			memo[Q[qe].first.first][Q[qe].first.second][k] = memo[r][c][k]+1;
+			++qe;
+		}
+		if ( memo[r][c][k]+1 < memo[r][c+1][k] )
+		{
+			Q[qe].first.first = r;
+			Q[qe].first.second = c+1;
+			Q[qe].second = k;
+			memo[Q[qe].first.first][Q[qe].first.second][k] = memo[r][c][k]+1;
+			++qe;
+		}
+
+
+	}
+
+	return inf;
+}
+
+int main()
+{
+	while ( scanf( "%d %d", &R, &C ), R+C != 0 )
+	{
+		memset( mapa, '#', sizeof mapa );
+
+		for ( int r = 1; r <= R; ++r )
+			scanf( "%s", &mapa[r][1] );
+		
+		int ret;
+
+		for ( int r = 1; r <= R; ++r )
+		{
+			for ( int c = 1; c <= C; ++c )
+			{
+				if ( mapa[r][c] == '*' )
+				{
+					ret = getbest(r,c,0);
+					goto DONE;
+				}
+			}
+		}
+
+DONE:
+		if ( ret >= inf )
+		{
+			puts( "The poor student is trapped!" );
+		}
+		else
+		{
+			printf( "Escape possible in %d steps.\n", ret );
+		}
+	}
+
+	return 0;
+}

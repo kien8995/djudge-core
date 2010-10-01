@@ -1,0 +1,76 @@
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+char command[16];
+char num[1024];
+
+int R;
+int mini[1000];
+int maxi[1000];
+
+int main( void ) {
+   while( scanf( "%s", command ) == 1 ) {
+      if( command[0] == 'e' ) break;
+      
+      if( command[0] == 'f' ) {
+         R = command[5] - '0';
+         if( R == 1 ) R = 10;
+
+         scanf( "%s", num );
+
+         int B = 1;
+         int len = strlen( num );
+
+         int ret = 0;
+
+         for( int i = len-1; i >= 0; --i ) {
+            ret += (num[i]-'0')*B;
+            B = B * -R;
+         }
+         
+         printf( "%d\n", ret );
+      } else {
+         R = command[3] - '0';
+         if( R == 1 ) R = 10;
+         
+         int x;
+         scanf( "%d", &x );
+         if( x == 0 ) {
+            printf( "0\n" );
+            continue;
+         }
+
+         mini[0] = 0;
+         maxi[0] = 0;
+         
+         int i;
+         int B = 1;
+         for( i = 1; ; ++i ) {
+            mini[i] = mini[i-1] + min( (R-1)*B, 0*B );
+            maxi[i] = maxi[i-1] + max( (R-1)*B, 0*B );
+
+            if( x >= mini[i] && x <= maxi[i] ) break;
+            B = B * -R;
+         }
+
+         
+         for( ; i > 0; --i ) {
+            for( int dig = 0; dig < R; ++dig ) {
+               int y = x - dig * B;
+               if( y >= mini[i-1] && y <= maxi[i-1] ) {
+                  printf( "%d", dig );
+                  x -= dig * B;
+                  break;
+               }
+            }
+            B = B / -R;
+         }
+         printf( "\n" );
+      }
+   }
+
+   return 0;
+}

@@ -1,0 +1,72 @@
+#include <cstdio>
+
+using namespace std;
+
+int co(char x[]){
+if(x[0] == 'P' && x[1] == 'a')return 3;
+if(x[0] == 'F' && x[1] == 'e')return 3;
+if(x[0] == 'C' && x[1] == 'a')return 3;
+if(x[0] == 'R' && x[1] == 'e')return 3;
+if(x[0] == 'N' && x[1] == 'u')return 2;
+if(x[0] == 'S' && x[1] == 'c')return 2;
+if(x[0] == 'C' && x[1] == 'i')return 2;
+if(x[0] == 'O' && x[1] == 'l')return 2;
+if(x[0] == 'F' && x[1] == 'o')return 2;
+if(x[0] == 'C' && x[1] == 'h')return 2;
+if(x[0] == 'N' && x[1] == 'o')return 2;
+if(x[0] == 'T' && x[1] == 'i')return 2;
+if(x[0] == 'K' && x[1] == 'a')return 1;
+if(x[0] == 'R' && x[1] == 'o')return 1;
+if(x[0] == 'P' && x[1] == 'i')return 1;
+if(x[0] == 'S' && x[1] == 't')return 1;
+if(x[0] == 'K' && x[1] == 'o')return 1;
+if(x[0] == 'S' && x[1] == 'a')return 1;
+if(x[0] == 'G' && x[1] == 'u')return 1;
+return 0;
+}
+
+
+int porownaj(char n1[], char n2[]){
+	int x1,x2;
+	x1 = co(n1);
+	x2 = co(n2);
+	if(x1 == x2) return 0;
+	if((x1==1 && x2 ==2)||(x1==2 && x2==3)||(x1==3 && x2==1))return 1;
+	else return 2;
+}
+
+
+
+int main() {
+	char gra1[20], gra2[20] = "-";
+	int numer = 0;
+	while(gra1[0]!='.'){
+		char kr[10],imie1[30],imie2[30];
+		int points1=0, points2=0;
+		scanf("%s %s", kr, imie1);
+		scanf("%s %s", kr, imie2);
+		numer++;
+		scanf("%s", gra1);
+		while(gra1[0]!='-' && gra1[0]!='.'){
+			scanf("%s", gra2);
+			int kto = porownaj(gra1, gra2);
+			if(kto == 1)
+				points1++;
+			else if(kto == 2)
+				points2++;
+			scanf("%s", gra1);
+		}
+		printf("Game #%d:\n", numer);
+		printf("%s: %d points\n",imie1, points1);
+		printf("%s: %d points\n",imie2, points2);
+		if(points1 == points2)
+			printf("TIED GAME\n\n");
+		else if(points1 > points2)
+			printf("WINNER: %s\n\n", imie1);
+		else
+			printf("WINNER: %s\n\n", imie2);
+	}
+
+
+	return 0;
+}

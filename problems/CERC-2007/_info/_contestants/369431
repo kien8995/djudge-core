@@ -1,0 +1,82 @@
+#include <cstdio>
+
+using namespace std;
+
+int R, C;
+char wej2[16][16];
+int ilosc;
+
+inline void change(int i, int j)
+{
+	wej2[i][j] = !wej2[i][j];
+	if (i > 0)
+		wej2[i - 1][j] = !wej2[i - 1][j];
+	if (j > 0)
+		wej2[i][j - 1] = !wej2[i][j - 1];
+	if (i < R - 1)
+		wej2[i + 1][j] = !wej2[i + 1][j];
+	if (j < C - 1)
+		wej2[i][j + 1] = !wej2[i][j + 1];
+
+	++ilosc;
+}
+
+int main()
+{
+	char wej[16][16];
+	int i, j, k;
+	bool ok;
+	int min_ilosc;
+
+	scanf("%d%d", &R, &C);
+
+	while ((R != 0) && (C != 0))
+	{
+		getchar();
+		for (i = 0; i < R; ++i)
+		{
+			for (j = 0; j < C; ++j)
+				wej[i][j] = getchar() == 'X' ? 1 : 0;
+
+			getchar();
+		}
+
+		min_ilosc = 1000;
+
+		for (i = 0; i < (1 << C); ++i)
+		{
+			for (j = 0; j < R; ++j)
+				for (k = 0; k < C; ++k)
+					wej2[j][k] = wej[j][k];
+
+			ilosc = 0;
+			for (j = 0; j < C; ++j)
+				if (i & (1 << j))
+					change(0, j);
+
+			for (j = 1; j < R; ++j)
+				for (k = 0; k < C; ++k)
+					if (wej2[j - 1][k])
+						change(j, k);
+				
+			ok = true;
+			for (k = 0; k < C; ++k)
+				if (wej2[R - 1][k])
+					ok = false;
+
+			if (ok)
+				if (ilosc < min_ilosc)
+					min_ilosc = ilosc;
+		}
+
+		if (min_ilosc < 1000)
+			printf("You have to tap %d tiles.\n", min_ilosc);
+		else
+			printf("Damaged billboard.\n");
+		scanf("%d%d", &R, &C);
+	}
+
+	return 0;
+
+}
+

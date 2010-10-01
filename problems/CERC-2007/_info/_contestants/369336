@@ -1,0 +1,83 @@
+#include <iostream>
+#include <string>
+
+//#define DBG
+
+#ifdef DBG
+#define PRT(var) cout << #var << " = " << var << endl;
+#else
+#define PRT(var)
+#endif
+
+using namespace std;
+
+int main (){
+	string nat1,name1,nat2,name2,word,word1,word2;
+	int n=0,sc1,sc2;
+	
+	while (cin){ //zacatek hry
+		cin >> nat1 >> name1;
+		cin >> nat2 >> name2;
+		sc1=0;sc2=0;
+		++n; //zvys pocet her
+		
+		cout << "Game #" << n << ":\n";
+		
+		//------------nacitam tahy
+		while (cin){
+			//1. slovo--------
+			cin >> word;
+			if (word == "-" || word == ".") break; //jdi na vysledky
+			if (word=="Kamen" || word=="Rock" || word=="Pierre" || word=="Stein" || word=="Ko" || word=="Koe" || word=="Sasso" || word=="Roccia" || word=="Guu" || word=="Kamien" || word=="Piedra"){
+				word1="Kamen";
+			}
+			if (word=="Nuzky" || word=="Scissors" || word=="Ciseaux" || word=="Schere" || word=="Ollo" || word=="Olloo" || word=="Forbice" || word=="Choki" || word=="Nozyce" || word=="Tijera"){
+				word1="Nuzky";
+			}
+			if (word=="Papir" || word=="Paper" || word=="Feuille" || word=="Papier" || word=="Carta" || word == "Rete" || word=="Paa" || word=="Papel"){
+				word1="Papir";
+			}
+			//2. slovo------------
+			cin >> word;
+			if (word=="Kamen" || word=="Rock" || word=="Pierre" || word=="Stein" || word=="Ko" || word=="Koe" || word=="Sasso" || word=="Roccia" || word=="Guu" || word=="Kamien" || word=="Piedra"){
+				word2="Kamen";
+			}
+			if (word=="Nuzky" || word=="Scissors" || word=="Ciseaux" || word=="Schere" || word=="Ollo" || word=="Olloo" || word=="Forbice" || word=="Choki" || word=="Nozyce" || word=="Tijera"){
+				word2="Nuzky";
+			}
+			if (word=="Papir" || word=="Paper" || word=="Feuille" || word=="Papier" || word=="Carta" || word=="Rete" || word=="Paa" || word=="Papel"){
+				word2="Papir";
+			}
+			
+			//if (word1==word2) continue;
+			
+			if (word1 == "Kamen" && word2=="Nuzky") sc1++;
+			if (word2 == "Kamen" && word1=="Nuzky") sc2++;
+			if (word1 == "Kamen" && word2=="Papir") sc2++;
+			if (word2 == "Kamen" && word1=="Papir") sc1++;
+			if (word1 == "Nuzky" && word2=="Papir") sc1++;
+			if (word2 == "Nuzky" && word1=="Papir") sc2++;
+			PRT(sc1);
+			PRT(sc2);
+		}
+
+		//TODO: tu vypis viteze
+		cout << name1 <<": "<<sc1 << (sc1==1 ? " point" : " points") << endl;
+		cout << name2 <<": "<<sc2 << (sc2==1 ? " point" : " points") << endl;
+		if (sc1==sc2){
+			cout << "TIED GAME" << endl;
+		}
+		if (sc1>sc2){
+			cout << "WINNER: " << name1 << endl;
+		}
+		if (sc1<sc2){
+			cout << "WINNER: " << name2 << endl;
+		}
+
+		cout << endl;
+		
+		if (word == ".") return 0;
+	}
+
+	return 0;
+}

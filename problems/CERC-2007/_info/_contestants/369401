@@ -1,0 +1,65 @@
+#include <cstdio>
+#include <stack>
+
+using namespace std;
+
+int main()
+{
+    while(1)
+    {
+        char buf[100];
+        scanf(" %[a-z]", buf);
+        if(strcmp(buf, "end") == 0)
+            break;
+
+        int R, A;
+        scanf("%d", &R);
+int B = R;
+        if(strcmp(buf, "to") == 0)
+        {
+            scanf("%d", &A);
+            if(A == 0)
+            {
+                printf("0\n");
+                continue;
+            }
+            stack<int> ret;
+            while(A!= 0)
+            {
+                if(A < 0){
+                    ret.push((abs(A) % abs(B))!=0?( abs(B) - (abs(A) % abs(B))):0);
+                    A = (abs(A) / abs(B) + ((abs(A)%abs(B)) > 0 ? 1 : 0));
+     //               printf("[11] %d\n", A);
+                }
+                else
+                {
+                    ret.push( A % abs(B) );
+                    A = -(A / abs(B));
+   //                 printf("[12] %d\n", A);
+                }
+
+            }
+            while(!ret.empty())
+            {
+                printf("%d", ret.top());
+                ret.pop();
+            }
+            printf("\n");
+        }
+        if(strcmp(buf, "from") == 0)
+        {
+            scanf(" %s", buf);
+            long long ret = 0;
+            long long tmp = 1;
+            for(int i=strlen(buf)-1; i>=0; i--)
+            {
+//                tmp *= B;
+                ret += tmp*(buf[i]-'0');
+                tmp *= B;
+ //               printf("[2] %lld\n", tmp*(buf[i]-'0'));
+            }
+            printf("%lld\n", ret);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,154 @@
+#include <cstdio>
+#include <algorithm>
+#define MN 1001
+
+using namespace std;
+
+class P
+{
+    public:
+    int X,Y,Nr;
+    
+    void Wczytaj(int W)
+    {
+	Nr = W;
+	scanf("%d%d",&X,&Y);
+    }
+};
+
+P Tab[MN];
+int Pio[MN];
+int Poz[MN];
+
+bool CmpX(P A,P B)
+{
+    return (A.X==B.X)?(A.Y<B.Y):(A.X<B.X);
+}
+
+bool CmpY(P A,P B)
+{
+    return (A.Y==B.Y)?(A.X<B.X):(A.Y<B.Y);
+}
+
+bool CmpNr(P A,P B)
+{
+    return A.Nr<B.Nr;
+}
+
+int main()
+{
+    while (true)
+    {
+	int n;
+	scanf("%d",&n);
+	
+	if (n==0) break;
+	
+	for (int i=0;i<n;i++)
+	{
+	    Tab[i].Wczytaj(i);
+	    Pio[i] = Poz[i] = -1;
+	}
+
+	sort(Tab,Tab+n,CmpX);
+
+	int Naj = Tab[0].Nr;	
+	int Akt = 0;
+	
+	for (int i=1;i<n;i++)
+	{
+	    if (Tab[i].X == Tab[i-1].X)
+	    {
+		if (Akt == 0)
+		{
+		    Pio[ Tab[i-1].Nr ] = Tab[i].Nr;
+		    Pio[ Tab[i].Nr ] = Tab[i-1].Nr;
+		    Akt = 1;
+		}
+		else
+		    Akt = 0;
+	    }
+	    else
+		Akt = 0;
+	}
+
+	sort(Tab,Tab+n,CmpY);
+	
+	Akt = 0;
+	
+	for (int i=1;i<n;i++)
+	{
+	    if (Tab[i].Y == Tab[i-1].Y)
+	    {
+		if (Akt == 0)
+		{
+		    Poz[ Tab[i-1].Nr ] = Tab[i].Nr;
+		    Poz[ Tab[i].Nr ] = Tab[i-1].Nr;
+		    Akt = 1;
+		}
+		else
+		    Akt = 0;
+	    }
+	    else
+		Akt = 0;
+	}
+	
+	sort(Tab,Tab+n,CmpNr);
+	
+	Akt = Naj;
+	int Last = Poz[Akt];
+	if (Akt!=0)
+	{
+	    do
+	    {
+		if (Last != Pio[Akt])
+		{
+//	    	    if (Tab[Akt].Y < Tab[ Pio[Akt] ].Y)
+//		    	putchar('N');
+//		    else
+//			putchar('S');
+		    Last = Akt;
+		    Akt = Pio[Akt];
+		}
+		else
+		{
+//		    if (Poz[Akt] != -1)
+//		    {
+//			if (Tab[Akt].X < Tab[ Poz[Akt] ].X)
+//			    putchar('E');
+//			else
+//			    putchar('W');
+//		    }		   
+		    Last = Akt;
+		    Akt = Poz[Akt]; 
+		}
+	    }while (Akt!=0);
+	}
+	
+	do
+	{
+	    if (Last != Pio[Akt])
+	    {
+	    	    if (Tab[Akt].Y < Tab[ Pio[Akt] ].Y)
+		    	putchar('N');
+		    else
+			putchar('S');
+		    Last = Akt;
+		    Akt = Pio[Akt];
+		}
+		else
+		{
+		    if (Tab[Akt].X < Tab[ Poz[Akt] ].X)
+			    putchar('E');
+			else
+			    putchar('W');
+		    Last = Akt;
+		    Akt = Poz[Akt]; 
+		}
+	}while (Akt!=0);
+
+	putchar('\n');
+    }
+
+    return 0;
+}

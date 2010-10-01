@@ -1,0 +1,106 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <utility>
+#include <cmath>
+#include <vector>
+#include <cstdarg>
+#include <cstdlib>
+
+#define FOR(i, v) for (int i = 0; i < v; i++)
+#define FORD(i, v) for (int i = v - 1; i >= 0; i--)
+#define REP(i, v, x) for (int i = v; i <= x; i++)
+#define REPD(i, v, x) for (int i = v; i >= x; i--)
+
+#define pb push_back
+#define fi first
+#define se second
+#define mp make_pair
+
+#define MAXB 1000
+
+using namespace std;
+
+typedef long long i64;
+typedef unsigned long long u64;
+
+char buf[MAXB];
+
+//fgets(buf, MAXB, stdin);
+void read(int n, char *s, ...)
+{
+  int p = 0, v;
+  va_list par;
+  va_start(par, s);
+  while (n--)
+  {
+    while (s[p] == ' ') p++;
+    v = 0;
+    while (isdigit(s[p])) v = v * 10 + s[p++] - '0';
+    *(va_arg(par, int*)) = v;
+  }
+  va_end(par);
+}
+
+int r, c, mask;
+char s[30];
+int b[20];
+int b2[20];
+
+#define inf 10000000
+
+int go(int i)
+{
+  int res = 0;
+  b2[1] = b[1];
+  b2[2] = b[2];
+  FOR(j, c) if (i & (1 << j)) b2[1] ^= 7 << j, b2[2] ^= 1 << (j + 1), res++;
+  if (r == 1)
+  {
+    if (!(b2[1] & mask)) return res;
+    return inf;
+  }
+  REP(j, 2, r)
+  {
+    b2[j + 1] = b[j + 1];
+    FOR(k, c) if (b2[j - 1] & (1 << (k + 1)))
+    {
+      b2[j] ^= 7 << k;
+      b2[j + 1] ^= 1 << (k + 1);
+      res++;
+    }
+    if (j == r)
+    {
+      if (!(b2[j] & mask)) return res;
+      return inf;
+    }
+  }
+}
+
+int main()
+{
+  while (1)
+  {
+    scanf("%d %d", &r, &c);
+    if (!r && !c) break;
+    mask = ((1 << c) - 1) << 1;
+    FOR(i, r)
+    {
+      scanf("%s", s);
+      b[i + 1] = 0;
+      FOR(j, c) 
+      {
+        int bt = (s[j] == 'X') ? 1 : 0;
+        b[i + 1] |= (1 << (j + 1)) * bt;
+      }
+    }
+    int res = inf;
+    FOR(i, 1 << c)
+    {
+      res = min(res, go(i));
+    }
+    if (res == inf) printf("Damaged billboard.\n");
+    else printf("You have to tap %d tiles.\n", res);
+  }
+  return 0;
+}

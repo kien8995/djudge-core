@@ -1,0 +1,76 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<climits>
+#include<cmath>
+#include<algorithm>
+#include<map>
+
+using namespace std;
+
+#define PRINTF(args...) printf(args)
+//#define PRINTF(args...) 
+
+#define FOR(i,a,b) for(int i=(a); i<(int)(b); ++i)
+#define FORD(i,a,b) for(int i=(a)-1; i>=(int)(b); --i)
+#define FOREACH(i,C) for(__typeof(C.begin()) i=C.begin(); i!=C.end(); ++i)
+
+map<string,int> M;
+
+string R[11] = {"Kamen","Rock","Pierre","Stein","Ko","Koe","Sasso","Roccia","Guu","Kamien","Piedra"};
+string S[10] = {"Nuzky","Scissors","Ciseaux","Schere","Ollo","Olloo","Forbice","Choki","Nozyce","Tijera"};
+string P[10] = {"Papir","Paper","Feuille","Papier","Papir","Carta","Rete","Paa","Papier","Papel"};
+
+char tab[50];
+char tabP[5];
+int t;
+
+bool testcase() {
+	string pA, pB, curA, curB;
+	scanf("%s %s",tabP,tab);
+	pA = string(tab);
+	scanf("%s %s",tabP,tab);
+	pB = string(tab);
+	int numA = 0, numB = 0;
+	while(true) {
+		scanf("%s",tab);
+		curA = string(tab);
+		if(curA[0]=='-' || curA[0]=='.') {
+			printf("Game #%d:\n",++t);
+			printf("%s: %d point",pA.c_str(),numA);
+			if(numA!=1)
+				printf("s\n"); else
+				printf("\n");
+			printf("%s: %d point",pB.c_str(),numB);
+			if(numB!=1)
+				printf("s\n"); else
+				printf("\n");
+			if(numA==numB)
+				printf("TIED GAME\n"); else if(numA>numB)
+				printf("WINNER: %s\n",pA.c_str()); else
+				printf("WINNER: %s\n",pB.c_str());
+			if(curA[0]=='.')
+				return false; else
+				return true;	
+		}
+		scanf("%s",tab);
+		curB = string(tab);
+		int posA = M[curA], posB=M[curB];
+		if(posA==posB)
+			continue; else if((posA+1)%3==posB)
+			numA++; else
+			numB++;
+	}
+}
+
+int main() {
+	t = 0;
+	FOR(i,0,11)
+		M[R[i]] = 0;
+	FOR(i,0,10)
+		M[S[i]] = 1;
+	FOR(i,0,10)
+		M[P[i]] = 2;
+	while(testcase());
+	return 0;
+}

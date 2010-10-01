@@ -1,0 +1,118 @@
+#include <stdio.h>
+
+long long b[20][100];
+long long sum[20][100];
+
+inline int is_in(long long a, long long b, long long c)
+{
+//printf("%lli in (%lli %lli)\n",c,a,b);
+	if (a>=b && (c<=a && c>=b))
+		return 1;
+	if (a<b && (c>=a && c<=b))
+		return 1;
+	return 0;
+	
+	
+
+}
+
+int main()
+{
+	long long i;
+	
+	for (i=2;i<=10;i++) {
+			long long m=1;
+		
+			long long j;
+			b[i][0]=0;
+			sum[i][0]=0;
+			for (j=1;j<=30;j++) {
+				b[i][j]=m;
+				if (j>1)
+					sum[i][j]=sum[i][j-2]+m*(i-1);
+				else
+					sum[i][j]=m*(i-1);
+//				printf("%lli ",sum[i][j]);
+
+				m*=-i;
+				
+			}
+//			printf("\n");
+	}
+
+	char buf[1000];
+	int base;
+	char num[100];
+	while (1) {
+		scanf(" %s",buf);
+		if (*buf=='e')
+			break;
+
+
+		char *tmp;
+		for (tmp=buf;*tmp!='-';tmp++);
+		++tmp;
+		
+		sscanf(tmp,"%d",&base);
+		scanf("%s",num);
+		
+		base=-base;
+	
+		if (*buf=='f') {
+			int vysl=0;
+			char *p=num;
+			while (*p) {
+				vysl=vysl*base+*p-'0';
+				p++;
+			}
+			printf("%d\n",vysl);
+		} else
+		if (*buf=='t') {
+			int n;
+			sscanf(num,"%d",&n);
+			
+			int pos=0;
+			
+			int oldpos=-1;
+
+			if (n==0) {
+				printf("0\n");
+				continue;
+			}
+				base=-base;
+			
+
+				for (pos=0;pos<30;pos++) {
+					if (is_in(sum[base][pos],sum[base][pos+1],n))
+						break;
+				}
+			while (1) {
+
+				if (oldpos>0)
+					for (;oldpos-1>pos;oldpos--)
+						printf("0");
+				oldpos=pos;
+				long long k,tmp;
+				
+					
+				for (k=0;k<base;k++)
+					if (is_in(pos?sum[base][pos-1]:0,sum[base][pos],tmp=n-k*b[base][pos+1]))
+						break;
+				
+				--pos;
+				printf("%d",k);
+				n=tmp;
+					
+				if (n==0) {
+					for (;oldpos>0;oldpos--)
+						printf("0");
+					break;
+				}
+				fflush(stdout);
+			}
+			printf("\n");
+		}
+	}
+	
+	return 0;
+}

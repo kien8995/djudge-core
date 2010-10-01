@@ -1,0 +1,119 @@
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <set>
+#include <map>
+#include <queue>
+#include <numeric>
+#include <list>
+#include <cstring>
+#include <cctype>
+#include <sstream>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+typedef vector<int> VI;
+typedef pair<int,int> PII;
+typedef vector<PII> VPII;
+
+#define MP make_pair
+#define ST first
+#define ND second
+#define PB push_back
+#define FOR(i,a,b) for( int i=(a); i<=(b); ++i)
+#define FORD(i,a,b) for( int i=(a); i>=(b); --i)
+#define REP(i,n) for(int i=0; i<(n); ++i)
+#define ALL(X) (X).begin(),(X).end()
+#define SIZE(X) (int)(X).size()
+#define FOREACH(it,X) for(__typeof((X).begin()) it=(X).begin(); it!=(X).end(); ++it)
+
+char txt[1000];
+
+
+bool czycyf(char x){
+	return x >= '0' && x <= '9';
+}
+
+void zamien(char *b, int n, int r, int &len){
+	len = 0;
+	if (n == 0){
+		b[0] = '0';
+		len = 1;
+		return;
+	}
+	int mn = 1;
+	int i = 0;
+	r = -r;
+	while(n > 0){
+		if (mn > 0){
+			b[i] = '0' + (n % r);
+			n /= r;
+		}else{
+			if (n % r){
+				b[i] = '0' + (r - n % r);
+				n = (n/r) + 1;
+			}else{
+				b[i] = '0';
+				n = n/r;
+			}
+		}
+		mn *= -r;
+		i++;
+	}
+	len = i;
+}
+
+int main(){
+	while(1){
+		fgets(txt, 999, stdin);
+		if (txt[0]=='e') break;
+		if (txt[0]=='t'){
+			int r, n;
+			sscanf(txt+2, "%d %d", &r, &n);
+			char wyn[1000]; 
+			if (n < 0){
+				int mn = 1, id = 0;
+				while (mn * (-r-1)> n){
+					mn *= r;
+					id++;
+				}
+				int c = 1; while (mn * c > n) ++c;
+				REP(i, id) wyn[i] = '0';
+				int d;
+				zamien(wyn, n-c*mn, r, d);
+				wyn[id] = '0'+c;
+				wyn[id+1] = 0;
+				reverse(wyn, wyn+id+1);
+				printf("%s\n", wyn);
+			}else{
+				int d;
+				zamien(wyn, n, r, d);
+				wyn[d] = 0;
+				reverse(wyn, wyn+d);
+				printf("%s\n", wyn);
+			}
+		}else{
+			int i = 4;
+			int r;
+			sscanf(txt+4, "%d", &r);
+			while(txt[i] != ' ') ++i;
+			while(!czycyf(txt[i])) ++i;
+			int j = i;
+			while(czycyf(txt[j])) ++j;
+			int mn = 1;
+			int s = 0;
+			for(j--; j>=i; --j){
+				s += (txt[j]-'0') * mn;
+				mn *= r;
+			}
+			printf("%d\n", s);
+		}
+	}
+	return 0;
+}

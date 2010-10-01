@@ -1,0 +1,144 @@
+#include <cstdio>
+#include <queue>
+#include <cctype>
+
+using namespace std;
+
+const int maxn=100+1,
+		blue=1, yellow=2, red=4, green=8,
+		empty=0, wall=1, key=2, door=4, ex=5;
+
+int nb[4][2]={{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+int w, h, mego, map[maxn][maxn], color[maxn][maxn];
+int dst[maxn][maxn][16];
+
+struct Pos {
+		int r, c, st;
+		
+	Pos(int r=-1, int c=-1, int st=-1):r(r), c(c), st(st) {
+		}
+};
+
+Pos start;
+
+int getcolor(int c) {
+	static char *s="BYRG";
+	static int n[4]={1, 2, 4, 8};
+	int i;
+	
+	
+	for(i=0; s[i]!=toupper(c); i++)
+		;
+	return n[i];
+}
+
+int beolvas() {
+	int r, c, i;
+	char line[100+5];
+	
+	
+	scanf("%d %d\n", &h, &w);
+	
+	if(h==0)
+		return 0;
+	
+	for(r=0; r < h; r++)
+	{
+		fgets(line, 105, stdin);
+		for(c=0; c < w; c++)
+		{
+			i=line[c];
+			switch(i) {
+				case '.':
+						map[r][c]=empty;
+					break;
+				case '#':
+					map[r][c]=wall;
+					break;
+				case '*':
+					start=Pos(r, c, 0);
+					map[r][c]=empty;
+					break;
+				case 'X':
+					map[r][c]=ex;
+					break;
+				default:
+					if(isupper(i))
+						map[r][c]=door;
+					else
+						map[r][c]=key;
+					color[r][c]=getcolor(i);
+			}
+		}
+	}
+	
+	return 1;
+}
+
+void szelbejar() {
+	queue<Pos> sor;
+	Pos akt;
+	int i, r, c, st;
+	
+	sor.push(start);
+	dst[start.r][start.c][start.st]=0;
+	while(!sor.empty()) {
+		akt=sor.front();
+		sor.pop();
+		
+		for(i=0; i<4; i++) {
+			r=akt.r+nb[i][0];
+			c=akt.c+nb[i][1];
+			st=akt.st;
+			
+			//printf("Try %d %d %d\n", r, c, st);
+			
+			if(r<0 || r>=h || c<0 || c>=w)
+				continue;
+			
+			if(map[r][c]==wall)
+				continue;
+			
+			if(map[r][c]==door && (color[r][c] & st) == 0)
+				continue;
+			
+			if(map[r][c]==key)
+				st=st | color[r][c];
+			
+			if(dst[r][c][st]!=-1)
+				continue;
+			
+			//printf("success\n");
+			dst[r][c][st]=1+dst[akt.r][akt.c][akt.st];
+			
+			if(map[r][c]==ex) {
+				mego=dst[r][c][st];
+				return;
+			}
+			
+			sor.push(Pos(r, c, st));
+		}
+	}
+}
+
+int main() {
+	while(beolvas()) {
+		int i, j, k;
+		
+		for(i=0; i<h; i++)
+			for(j=0; j<w; j++)
+				for(k=0; k < 16; k++)
+					dst[i][j][k]=-1;
+	
+		mego=-1;
+		szelbejar();
+				
+		if(mego==-1)
+			printf("The poor student is trapped!\n");
+		else
+			printf("Escape possible in %d steps.\n", mego);
+	}
+	return 0;
+}
+

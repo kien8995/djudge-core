@@ -1,0 +1,62 @@
+#include <cstdio>
+#include <string>
+#include <map>
+using namespace std;
+
+char * tRock[] = { "Kamen", "Rock", "Pierre", "Stein", "Ko", "Koe", "Sasso", "Roccia", "Guu", "Kamien", "Piedra", 0 };
+char * tScissors[] = { "Nuzky", "Scissors", "Ciseaux", "Schere", "Ollo", "Olloo", "Forbice", "Choki", "Nozyce", "Tijera", 0 };
+char * tPaper[] = { "Papir", "Paper", "Feuille", "Papir", "Papier","Carta", "Rete", "Paa", "Papier", "Papel", 0 };
+
+int main()
+{
+	map<string, int> m;
+
+	for (int i=0; tRock[i]; i++)
+		m[tRock[i]] = 1;
+	for (int i=0; tScissors[i]; i++)
+		m[tScissors[i]] = 2;
+	for (int i=0; tPaper[i]; i++)
+		m[tPaper[i]] = 3;
+
+	for (int g=1; ;g++)
+	{
+		int p1 = 0;
+		int p2 = 0;
+
+		char l1[8], l2[8];
+		char n1[32], n2[32];
+		scanf("%s%s%s%s", l1, n1, l2, n2);
+
+		while (true)
+		{
+			char sa[128], sb[128];
+			scanf("%s", sa);
+			if (sa[0]=='-' || sa[0]=='.')
+			{
+				printf("Game #%d:\n", g);
+				printf("%s: %d point%s\n", n1, p1, p1==1 ? "" : "s");
+				printf("%s: %d point%s\n", n2, p2, p2==1 ? "" : "s");
+				if (p1==p2) puts("TIED GAME");
+				else printf("WINNER: %s\n", p1>p2 ? n1 : n2);
+				puts("");
+				
+				if (sa[0]=='.') return 0;
+				if (sa[0]=='-') break;
+			}
+			
+			scanf("%s", sb);
+		
+			int a = m[sa];
+			int b = m[sb];
+
+			if (a==b) continue;
+			if (a==1 && b==2) p1++;
+			if (a==2 && b==1) p2++;
+			if (a==2 && b==3) p1++;
+			if (a==3 && b==2) p2++;
+			if (a==3 && b==1) p1++;
+			if (a==1 && b==3) p2++;
+		}
+		
+	}
+}

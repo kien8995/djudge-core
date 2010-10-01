@@ -1,0 +1,71 @@
+#include <cstdio>
+#include <vector>
+using namespace std;
+char c,cc,ccc,cccc,xx;
+int z,i;
+int a[30];
+long long sus,vysl,sss,ssn,cislo;
+int main()
+{
+	while(scanf("%c",&c)==1)
+	{
+		vysl=0;
+		if(c=='e') break;
+		z=1;
+		memset(a,0,sizeof a);i=-1;
+		if(c=='t')
+		{
+			scanf("%c",&cc);
+			z=0;
+			scanf("%lld%lld%c",&sus,&cislo,&cc);
+		}
+		else
+		{
+			scanf("%c%c%c%lld%c",&cccc,&ccc,&cc,&sus,&c);
+			while(scanf("%c",&xx)==1)
+			{
+				if(xx>'9' || xx<'0') break;
+				a[++i]=xx-'0';
+			}
+		}
+		
+		//printf("%lld%lld\n",sus,cislo);
+		if (z)
+		{
+		sss=1;
+		for(int j=i;j>=0;j--)
+		{
+			vysl+=sss*(a[j]);
+			sss*=sus;
+		}
+		//for(int j=i;j>=0;j--){printf("%d",a[j]);}printf("\n");
+		printf("%lld\n",vysl);
+		}
+		else
+		{
+			if (cislo==0) printf("0\n");
+			else{
+			//sus=-sus;
+			sss=1;
+			ssn=sus;
+			memset(a,0,sizeof a);
+			i=0;
+		  	while(1)
+		  	{
+		  		int ssx=ssn;if (ssn<0) ssx=-ssn;
+		  		if(cislo==0) break;
+		  		while((cislo%ssx)!=0)
+		  		{
+		  			cislo-=sss;a[i]++;
+		  		}
+		  		i++;
+		  		sss=ssn;
+		  		ssn=ssn*sus;
+		  	}
+		  	for(int j=i-1;j>=0;j--){printf("%d",a[j]);}printf("\n");
+		  	}
+		}
+//		scanf("%c",&cc);
+	}
+	return 0;
+}

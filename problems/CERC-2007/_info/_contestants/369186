@@ -1,0 +1,75 @@
+#include <iostream>
+#include <cstdio>
+#include <map>
+
+using namespace std;
+
+map<string, int> M;
+
+int main()
+{
+    M["Kamen"]=0;
+    M["Rock"]=0;
+    M["Pierre"]=0;
+    M["Stein"]=0;
+    M["Ko"]=0;
+    M["Koe"]=0;
+    M["Sasso"]=0;
+    M["Roccia"]=0;
+    M["Guu"]=0;
+    M["Kamien"]=0;
+    M["Piedra"]=0;
+
+    M["Nuzky"]=1;
+    M["Scissors"]=1;
+    M["Ciseaux"]=1;
+    M["Schere"]=1;
+    M["Ollo"]=1;
+    M["Olloo"]=1;
+    M["Forbice"]=1;
+    M["Choki"]=1;
+    M["Nozyce"]=1;
+    M["Tijera"]=1;
+
+    M["Papir"]=2;
+    M["Paper"]=2;
+    M["Feuille"]=2;
+    M["Papier"]=2;
+    M["Papir"]=2;
+    M["Carta"]=2;
+    M["Rete"]=2;
+    M["Paa"]=2;
+    M["Papier"]=2;
+    M["Papel"]=2;
+
+    int game=1;
+    for(;;) {
+	string a,b,t;
+	cin>>t>>a;
+	cin>>t>>b;
+	int Sa=0,Sb=0;
+	while(cin>>t, t!="-" && t!=".") {
+	    string s;
+	    cin>>s;
+	    if(M[t]!=M[s]) {
+		if((M[s]-M[t] + 3) % 3 != 1) {
+		    Sb++;
+		} else {
+		    Sa++;
+		}
+	    }
+	}
+	printf("Game #%d:\n", game++);
+	printf("%s: %d point%s\n", a.c_str(), Sa, Sa==1 ? "" : "s");
+	printf("%s: %d point%s\n", b.c_str(), Sb, Sb==1 ? "" : "s");
+	if(Sa==Sb) {
+	    printf("TIED GAME\n\n");
+	} else {
+	    printf("WINNER: %s\n\n", (Sa>Sb ? a : b).c_str());
+	}
+	if(t==".")
+	    break;
+    }
+
+    return 0;
+}

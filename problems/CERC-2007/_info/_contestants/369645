@@ -1,0 +1,138 @@
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+class pkt {
+	public:
+		int x, y;
+		int index;
+};
+
+typedef long double ld;
+
+ld il_wekt(ld x1, ld y1, ld x2, ld y2) {
+	return x1 * y2 - x2 * y1;
+}
+
+#define EPS 1e-9
+class zdarzenie {
+	public:
+		static ld srx, sry;
+		ld x, y;
+		bool out;
+		int index;
+		int polowka;
+		void make() {
+			out = 0;
+			polowka = 1;
+			if(x-srx > 0) polowka = 0;
+			if(x-srx == 0 && y-sry > 0) polowka = 0;
+		}
+
+		bool operator<(const zdarzenie &rhs) const {
+			if(polowka == rhs.polowka) {
+				ld x1 = x - srx;
+				ld y1 = y - sry;
+				ld x2 = rhs.x - srx;
+				ld y2 = rhs.y - sry;
+				ld il = il_wekt(x1,y1,x2,y2);
+				if(fabsl(il) < EPS) {return out < rhs.out;}
+				return il > 0;
+			}
+			return polowka < rhs.polowka;
+		}
+
+		bool kt(const zdarzenie &rhs) const {
+
+			ld x1 = x - srx;
+			ld y1 = y - sry;
+			ld x2 = rhs.x - srx;
+			ld y2 = rhs.y - sry;
+			ld il = il_wekt(x1,y1,x2,y2) ;
+			return il < 0;
+		}
+};
+
+ld zdarzenie::srx;
+ld zdarzenie::sry;
+
+void do_it(int n, int r) {
+	pkt moje[5000];
+	for(int i=0;i<n;i++) {
+		scanf("%i %i",&moje[i].x, &moje[i].y);
+		moje[i].index = i;
+	}
+	int r2 = 2*r;
+
+	int ret = 1;
+	for(int i=0;i<n;i++) {
+		zdarzenie zdar[2*n]; int il_zd = 0;
+		zdarzenie::srx = moje[i].x;
+		zdarzenie::sry = moje[i].y;
+		for(int j=0;j<n;j++) {
+			if(i == j) continue;
+			int dx = moje[i].x - moje[j].x;
+			int dy = moje[i].y - moje[j].y;
+			ld d = 0.5 * sqrtl(dx * dx + dy*dy);
+			if(d > (ld)r)
+				continue;
+			ld l = sqrtl(r*r - d*d);
+			ld vx = (ld)dy * l / (2. * d);
+			ld vy = -(ld)dx  * l / (2. * d);
+			ld xp = (ld)(moje[i].x + moje[j].x)/ 2.;
+			ld yp = (ld)(moje[i].y + moje[j].y)/ 2.;
+			zdar[il_zd * 2].x = xp + vx;
+			zdar[il_zd * 2].y = yp + vy;
+			zdar[il_zd * 2 + 1].x = xp - vx;
+			zdar[il_zd * 2 + 1].y = yp - vy;
+			zdar[il_zd * 2].index = zdar[il_zd * 2 + 1].index = j;
+			zdar[il_zd*2].make();
+			zdar[il_zd * 2 + 1].make();
+
+			if(zdar[il_zd * 2]. kt(zdar[il_zd * 2 + 1])) zdar[il_zd * 2].out = 1;
+			else zdar[il_zd * 2 + 1].out = 1;
+			il_zd += 1;
+		}
+		il_zd *= 2;
+		sort(zdar, zdar + il_zd);
+		zdar[3] < zdar[4];
+		bool used[n];
+		for(int j=0;j<n;j++)
+			used[j] = 0;
+		int peak = 1;
+		for(int z = 0;z<2;z++) {/*printf("start tu  %Lf %Lf a indekx %i\n", zdarzenie::srx, zdarzenie::sry, i); */
+		for(int j=0;j<il_zd;j++) {
+			int ind = zdar[j].index;
+//			printf("ustawiamy %i na %i\n", ind, (int)zdar[j].out);
+			if(zdar[j].out) {
+				if(used[ind]) {
+					peak --;
+				}
+				used[ind] = 0;
+			}
+			else {
+/*				if(used[ind]) 
+					printf("lipa\n"); */
+				used[ind] = 1;
+				peak ++;
+			}
+			ret >?= peak;
+		} }
+//		printf("ret to %i\n",ret);
+
+	}
+//	printf("%i\n",ret);
+
+	printf("It is possible to cover %i points.\n",ret);
+}
+
+
+int main() {
+	int n,r;
+	scanf("%i %i",&n, &r);
+	while(n != 0 && r != 0) {
+		do_it(n,r);
+		scanf("%i %i",&n, &r);
+	}
+}

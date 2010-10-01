@@ -1,0 +1,102 @@
+#include <cstdio>
+#include <string.h>
+#include <queue>
+using namespace std;
+
+const int B = 1;
+const int Y = 2;
+const int R = 4;
+const int G = 8;
+
+queue<int> qx, qy, qk;
+int h, w;
+char m[120][120];
+int s[100][100][16] = { 0 };
+bool finish = false;
+
+void check(int x, int y, int k, int st) {
+	if (x < 0 || x >= w || y < 0 || y >= h)
+		return;
+	if (m[y][x] == '#')
+		return;
+	if (m[y][x] == 'b')
+		k |= B;
+	if (m[y][x] == 'y')
+		k |= Y;
+	if (m[y][x] == 'r')
+		k |= R;
+	if (m[y][x] == 'g')
+		k |= G;
+	if (s[x][y][k] != 0)
+		return;
+	if (m[y][x] == 'B' && !(k & B))
+		return;
+	if (m[y][x] == 'Y' && !(k & Y))
+		return;
+	if (m[y][x] == 'R' && !(k & R))
+		return;
+	if (m[y][x] == 'G' && !(k & G))
+		return;
+	qx.push(x);
+	qy.push(y);
+	qk.push(k);
+	s[x][y][k] = st + 1;
+	if (m[y][x] == 'X'){
+		printf("Escape possible in %d steps.\n", st);
+		finish = true;
+	}
+}
+
+int main()
+{
+	while (true) {
+		while(!qx.empty()) {
+			qx.pop();
+			qy.pop();
+			qk.pop();
+		}
+		
+		scanf("%d%d",&h, &w);
+		if (h == 0 && w == 0)
+			break;
+		for (int i = 0; i < h; ++i) {
+			scanf("%s", m[i]);
+		}
+		
+		for (int x = 0; x < w; ++x)
+			for (int y = 0; y < h; ++y)
+				if (m[y][x] == '*') {
+					s[x][y][0] = 1;
+					qx.push(x);
+					qy.push(y);
+					qk.push(0);
+				}
+		
+		finish = false;
+		
+		while(!qx.empty()) {
+			int x = qx.front(); qx.pop();
+			int y = qy.front(); qy.pop();
+			int k = qk.front(); qk.pop();
+			int st = s[x][y][k];
+			
+			check(x - 1, y, k, st);
+			if (finish)
+				break;
+			check(x + 1, y, k, st);
+			if (finish)
+				break;
+			check(x, y - 1, k, st);
+			if (finish)
+				break;
+			check(x, y + 1, k, st);
+			if (finish)
+				break;
+		}
+		if (qx.empty()) {
+			printf("The poor student is trapped!\n");
+		}
+	}
+	
+	return 0;
+}

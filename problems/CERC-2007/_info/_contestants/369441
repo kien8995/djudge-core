@@ -1,0 +1,121 @@
+#include <cstdio>
+#include <vector>
+using namespace std;
+
+struct pos {
+	int r, c, k;
+};
+
+bool visited[102][102][16];
+char m[102][102];
+vector<pos> a, n;
+
+int dr[] = {-1, 1,  0, 0};
+int dc[] = { 0, 0, -1, 1};
+
+int solve() {
+	for (int step = 1; !n.empty(); step++) {
+		a.swap(n);
+		while (!a.empty()) {
+			pos p = a.back();
+			//printf("%d %d %d\n", p.r, p.c, p.k);
+			a.pop_back();
+			for (int i = 0; i < 4; i++) {
+				pos t = p;
+				t.c += dc[i];
+				t.r += dr[i];
+				int v = m[t.r][t.c];
+				if (v == '#')
+					continue;
+				if (v == 'X')
+					return step;
+				if (v == '.') {
+				} else if (v < 4) {
+					t.k |= (1 << v);
+				} else if (!(t.k & (1 << (v - 4)))) {
+					continue;
+				}
+				if (!visited[t.r][t.c][t.k]) {
+					//printf("  %d %d %d %d(%c)\n", t.r, t.c, t.k, v, v);
+					n.push_back(t);
+					for (int k = 0; k < 16; k++)
+						visited[t.r][t.c][t.k & k] = true;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+int main() {
+	a.reserve(102 * 102);
+	n.reserve(102 * 102);
+	while (true) {
+		int R, C;
+		scanf("%d%d", &R, &C);
+		getc(stdin);
+		if (R == 0 && C == 0)
+			break;
+		for (int r = 1; r <= R; r++) {
+			m[r][0] = '#';
+			m[r][C + 1] = '#';
+		}
+		for (int c = 1; c <= C; c++) {
+			m[0][c] = '#';
+			m[R + 1][c] = '#';
+		}
+		pos s;
+		for (int r = 1; r <= R; r++) {
+			for (int c = 1; c <= C; c++) {
+				char v = getc(stdin);
+				switch (v) {
+					case '*':
+						s.r = r;
+						s.c = c;
+						s.k = 0;
+						v = '.';
+						break;
+					case 'b':
+						v = 0;
+						break;
+					case 'y':
+						v = 1;
+						break;
+					case 'r':
+						v = 2;
+						break;
+					case 'g':
+						v = 3;
+						break;
+					case 'B':
+						v = 4;
+						break;
+					case 'Y':
+						v = 5;
+						break;
+					case 'R':
+						v = 6;
+						break;
+					case 'G':
+						v = 7;
+						break;
+				}
+				m[r][c] = v;
+				for (int k = 0; k < 16; k++)
+					visited[r][c][k] = false;
+				//putc(v, stdout);
+			}
+			getc(stdin);
+			//putc('\n', stdout);
+		}
+		a.clear();
+		n.clear();
+		n.push_back(s);
+		int ret = solve();
+		if (ret == 0)
+			printf("The poor student is trapped!\n");
+		else
+			printf("Escape possible in %d steps.\n", ret);
+	}
+	return 0;
+}

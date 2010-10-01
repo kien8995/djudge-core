@@ -1,0 +1,87 @@
+#include <cstdio>
+
+bool tab[20][20];
+bool tmp[20][20];
+int i,j,k,l,m,n,R,C;
+char znak;
+int ilosc,maks;
+
+
+int sprawdz(){
+	int ile=0;
+	int i,j;
+	
+	for (i=2;i<=R;i++){
+		for (j=1;j<=C;j++){
+			if (tmp[i-1][j]){
+				ilosc++;
+				tmp[i-1][j]=!tmp[i-1][j];
+				tmp[i][j-1]=!tmp[i][j-1];
+				tmp[i][j]=!tmp[i][j];
+				tmp[i][j+1]=!tmp[i][j+1];
+				tmp[i+1][j]=!tmp[i+1][j];
+			}
+		}
+	}
+	
+	bool prawda=true;
+	
+	for (i=1;i<=R;i++){
+		for (j=1;j<=C;j++){
+			if (tmp[i][j]) prawda=false;
+		}
+	}
+	
+	if (!prawda) return 1000000;
+	else return ile;
+	
+}
+
+int main(){
+	while (1){
+		scanf("%d %d\n",&R,&C);
+		maks=1000000;
+		
+		if (R==0 && C==0) return 0;
+		
+		for (i=1;i<=R;i++){
+			for (j=1;j<=C;j++){
+				scanf("%c",&znak);	
+				if (znak=='X') tab[i][j]=true;
+				else tab[i][j]=false;
+			}
+			scanf("\n");
+		}
+		
+		for (i=0;i<(1<<C);i++){
+			ilosc=0;
+			
+			for (j=1;j<=R;j++)
+				for (k=1;k<=C;k++)
+					tmp[j][k]=tab[j][k];
+			
+			for (j=0;j<C;j++){
+				if ((1<<j) & i){
+					tmp[1][j]=!tmp[1][j];
+					tmp[1][j+1]=!tmp[1][j+1];
+					tmp[1][j+2]=!tmp[1][j+2];
+					tmp[2][j+1]=!tmp[2][j+1];
+					ilosc++;
+				}
+			}
+			
+			//bool prawda=true;
+			//for (j=1;j<=C;j++) if (tab[1][j]==true) prawda=false;
+			//if (!prawda) continue;
+			
+			ilosc+=sprawdz();
+			//printf("%d\n",i);
+			if (ilosc<maks) maks=ilosc;
+		}
+		
+		if (maks>=1000000) printf("Damaged billboard.\n");
+		else printf("You have to tap %d tiles.\n",maks);
+	}
+	
+	return 0;
+}

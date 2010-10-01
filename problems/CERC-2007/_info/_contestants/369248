@@ -1,0 +1,136 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+using namespace std;
+#define REP(i,n)	for(int i=0,_n=(n);i<_n;++i)
+#define REPD(i,n)	for(int i=(n-1);i>=0;--i)
+#define FOR(i,s,k)	for(int i=(s),_k=(k);i<=_k;++i)
+#define FORD(i,s,k)	for(int i=(s),_k=(k);i>=_k;--i)
+#define FORE(it,q)	for(__typeof((q).begin())it=(q).begin();it!=(q).end();++it)
+#define FORED(it,q)	for(__typeof((q).rbegin())it=(q).rbegin();it!=(q).rend();++it)
+#define FOREACH(it,f,l)	for(__typeof(f)it=f;it!=l;++it)
+#define FOREACHD(it,f,l)	for(__typeof(f)it=l;it--!=f;)
+
+const int max_r = 100;
+const int max_c = 100;
+const int inf = 1000000000;
+
+struct node {
+    bool vis;
+    int dist;
+};
+
+struct nid {
+    int i, j, k;
+    nid(int _i, int _j, int _k) : i(_i), j(_j), k(_k) {}
+};
+
+int M[max_r+2][max_c+2];
+node g[max_r+2][max_c+2][16];
+int r, c, si, sj;
+
+void bfs() {
+    FOR(i,0,r+1) FOR(j,0,c+1) REP(k,16) {
+	g[i][j][k].vis = false;
+	g[i][j][k].dist = inf;
+    }
+    g[si][sj][0].dist = 0;
+    g[si][sj][0].vis = true;
+    queue<nid> Q;
+    Q.push(nid(si,sj,0));
+    while (!Q.empty()) {
+	nid q = Q.front(); Q.pop();
+	int oi = q.i;
+	int oj = q.j;
+	int ok = q.k;
+//	printf("%d %d %d\n", oi, oj, ok);
+	FOR(i,oi-1,oi+1) FOR(j,oj-1,oj+1) if ((i == oi) ^ (j == oj)) if (M[i][j] != -1) {
+	    int k = ok;
+	    if (M[i][j] >= 1 && M[i][j] <= 8)
+		k |= M[i][j];
+	    if (g[i][j][k].vis) continue;
+	    if (M[i][j] > 8) {
+		if ((k&(M[i][j]>>4)) == 0) continue;
+//		else
+//		    printf("k=%d M[i][j]=%d   M[i][j]>>4=%d\n", k, M[i][j], M[i][j]>>4);
+	    }
+	    g[i][j][k].dist = g[oi][oj][ok].dist + 1;
+	    g[i][j][k].vis = true;
+	    Q.push(nid(i, j, k));
+	}
+    }
+};
+
+bool testcase() {
+    
+    scanf("%d %d\n", &r, &c);
+    if (r == 0 && c == 0) return 0;
+    FOR(i,0,r+1) M[i][0] = M[i][c+1] = -1;
+    FOR(j,1,c) M[0][j] = M[r+1][j] = -1;
+    FOR(i,1,r) {
+    FOR(j,1,c) {
+	char c;
+	scanf("%c", &c);
+	switch (c) {
+	    case '*':
+		si = i;
+		sj = j;
+		M[i][j] = 0;
+		break;
+	    case 'b':
+		M[i][j] = 1;
+		break;
+	    case 'y':
+		M[i][j] = 2;
+		break;
+	    case 'r':
+		M[i][j] = 4;
+		break;
+	    case 'g':
+		M[i][j] = 8;
+		break;
+	    case 'B':
+		M[i][j] = 16;
+		break;
+	    case 'Y':
+		M[i][j] = 32;
+		break;
+	    case 'R':
+		M[i][j] = 64;
+		break;
+	    case 'G':
+		M[i][j] = 128;
+		break;	
+	    case 'X':
+		M[i][j] = -2;
+		break;
+	    case '.':
+		M[i][j] = 0;
+		break;
+	    case '#':
+		M[i][j] = -1;
+		break;
+	}
+    }
+    scanf("\n");
+    }
+    bfs();
+    int mn = inf;
+    FOR(i,1,r) FOR(j,1,c) if (M[i][j] == -2)
+	REP(k,16) mn <?= g[i][j][k].dist;
+    if (mn == inf)
+	printf("The poor student is trapped!\n");
+    else
+	printf("Escape possible in %d steps.\n", mn);
+    return 1;
+}
+
+
+int main() {
+	while(testcase());
+	return 0;
+}
+

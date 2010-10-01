@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <string.h>
+
+int parse(char *b) {
+	if (strcmp(b, "Kamen") == 0) return 0;
+	if (strcmp(b, "Rock") == 0) return 0;
+	if (strcmp(b, "Pierre") == 0) return 0;
+	if (strcmp(b, "Stein") == 0) return 0;
+	if (strcmp(b, "Ko") == 0) return 0;
+	if (strcmp(b, "Koe") == 0) return 0;
+	if (strcmp(b, "Sasso") == 0) return 0;
+	if (strcmp(b, "Roccia") == 0) return 0;
+	if (strcmp(b, "Guu") == 0) return 0;
+	if (strcmp(b, "Kamien") == 0) return 0;
+	if (strcmp(b, "Piedra") == 0) return 0;
+	if (strcmp(b, "Nuzky") == 0) return 1;
+	if (strcmp(b, "Scissors") == 0) return 1;
+	if (strcmp(b, "Ciseaux") == 0) return 1;
+	if (strcmp(b, "Schere") == 0) return 1;
+	if (strcmp(b, "Ollo") == 0) return 1;
+	if (strcmp(b, "Olloo") == 0) return 1;
+	if (strcmp(b, "Forbice") == 0) return 1;
+	if (strcmp(b, "Choki") == 0) return 1;
+	if (strcmp(b, "Nozyce") == 0) return 1;
+	if (strcmp(b, "Tijera") == 0) return 1;
+	if (strcmp(b, "Papir") == 0) return 2;
+	if (strcmp(b, "Paper") == 0) return 2;
+	if (strcmp(b, "Feuille") == 0) return 2;
+	if (strcmp(b, "Papier") == 0) return 2;
+	if (strcmp(b, "Carta") == 0) return 2;
+	if (strcmp(b, "Rete") == 0) return 2;
+	if (strcmp(b, "Paa") == 0) return 2;
+	if (strcmp(b, "Papel") == 0) return 2;
+}
+
+void print_res(int game, char *n1, char *n2, int w1, int w2) {
+	char tem1[10], tem2[10];
+	char temp[1000];
+	if (w1 == 1) { tem1[0] = 0; } else { strcpy(tem1, "s"); }
+	if (w2 == 1) { tem2[0] = 0; } else { strcpy(tem2, "s"); }
+	if (w1 > w2) { sprintf(temp, "WINNER: %s", n1); }
+	if (w1 < w2) { sprintf(temp, "WINNER: %s", n2); }
+	if (w1 == w2) { sprintf(temp, "TIED GAME"); }
+
+	printf("Game #%d:\n%s: %d point%s\n%s: %d point%s\n%s\n\n", game, n1, w1, tem1, n2, w2, tem2, temp);
+
+
+}
+
+int main() {
+
+	char b1[100], b2[100];
+	char n1[100], n2[100];
+	char l1[10], l2[10];
+	char buf[10];
+	int w1, w2;
+	int a1, a2;
+	int game = 0;
+
+	while (1) {
+		game++;
+		scanf("%s %s", l1, n1);
+		scanf("%s %s", l2, n2);
+		//printf("N: %s %s\n", n1, n2);
+		w1 = w2 = 0;
+		
+		while (1) {
+			scanf("%s", buf);
+			if (buf[0] == '-') break;
+			if (buf[0] == '.') break;
+
+			strcpy(b1, buf);
+			scanf("%s", b2);
+			//printf("W: %s %s\n", b1, b2);
+
+			a1 = parse(b1); // 0 - kamen, 1 - noznice, 2 - papier
+			a2 = parse(b2);
+			if ((a1 == 0) && (a2 == 1)) { w1++; }
+			if ((a2 == 0) && (a1 == 1)) { w2++; }
+			if ((a1 == 1) && (a2 == 2)) { w1++; }
+			if ((a2 == 1) && (a1 == 2)) { w2++; }
+			if ((a1 == 2) && (a2 == 0)) { w1++; }
+			if ((a2 == 2) && (a1 == 0)) { w2++; }
+		}
+
+		print_res(game, n1, n2, w1, w2);
+
+
+
+		if (buf[0] == '.') { return 0; }
+
+
+	}
+
+	return 0;
+}

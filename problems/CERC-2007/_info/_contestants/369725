@@ -1,0 +1,85 @@
+#include<vector>
+#include<set>
+#include<map>
+#include<string>
+#include<iostream>
+#include<sstream>
+#include<deque>
+using namespace std;
+  bool orig[18][18],mat[18][18];
+void klik(int r,int c)
+{
+  mat[r-1][c]=!mat[r-1][c];
+  mat[r+1][c]=!mat[r+1][c];
+  mat[r][c-1]=!mat[r][c-1];
+  mat[r][c+1]=!mat[r][c+1];
+  mat[r][c]=!mat[r][c];
+}
+string bin(int mask)
+{
+string s="";
+  for (int i=0;i<10;i++)
+    if ((mask&(1<<i))!=0)
+      s+="1";
+	else 
+s+="0";
+return s;
+}
+int main()
+{
+  int r,c;
+  while(cin>>r>>c,c+r)
+  { getchar();
+    for (int i=1;i<=r;i++)
+    {
+	for (int j=1;j<=c;j++)
+	  orig[i][j]=getchar()=='X';
+	getchar();
+    }
+    int mask=0;
+    for (int i=1;i<=c;i++)
+    if (orig[1][i])
+	mask|=(1<<i);
+    int origm=mask;
+    int hran=max(5,(r*c)/2);
+    int curbest=hran;
+    while(1)
+    {
+	int curpoc=0;
+    //    cout<<"         "<<bin(mask)<<endl;
+        for (int i=1;i<=r;i++) 
+          for (int j=1;j<=c;j++) 
+             mat[i][j]=orig[i][j];
+	for (int i=1;i<=c;i++)
+	  if ((mask&(1<<i))!=0)
+	    klik(1,i),curpoc++;  
+
+        for (int i=2;i<=r;i++)
+	  for (int j=1;j<=c;j++)
+	    if (mat[i-1][j])
+            {
+	        if (curpoc+1>=curbest)
+			goto konec;
+		klik(i,j),curpoc++;
+            }
+//	cout<<"curpoc "<<curpoc<<endl;
+ 
+
+        konec:
+	bool notok=0;
+	for (int i=1;i<=c;i++)
+	  notok|=mat[r][i];
+        if (notok==0)
+	  curbest=min(curbest,curpoc);
+	if (mask==0) break;
+	mask--;
+	mask&=origm;
+    }
+    if (curbest==hran)
+      cout<<"Damaged billboard."<<endl;
+    else
+	cout<<"You have to tap "<<curbest<<" tiles."<<endl;
+    
+  }
+
+}

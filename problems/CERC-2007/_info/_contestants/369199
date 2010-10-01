@@ -1,0 +1,140 @@
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <cstring>
+
+#define FOR(a,b,c) for(int a=b;a<=c;a++)
+#define REP(a,c) for(int a=0;a<c;a++)
+#define ROF(a,b,c) for(int a=b;a>=c;a--)
+#define WT while(1)
+#define GETI(a) scanf("%d", &a)
+#define BZ(a) memset(a,0,sizeof(a))
+#define FILL(a,b) fill(a,a+(sizeof(a)/sizeof(a[0])),b)
+#define FOREACH(a,b) for(__typeof((b).begin()) a=(b).begin(); a!=(b).end();a++)
+#define D(args...) //printf(args)
+
+using namespace std;
+#include <set>
+#include <string>
+
+set<string> rock, scissors, paper;
+
+#define ROCK 1
+#define PAPER 2
+#define SCISSORS 3
+
+int recognize(char * x)
+{
+	string a = x;
+	if(rock.find(a) != rock.end())
+		return ROCK;
+
+	if(scissors.find(a) != scissors.end())
+		return SCISSORS;
+
+	if(paper.find(a) != paper.end())
+		return PAPER;
+
+	*((void**)0)=0;
+	return -1;
+}
+
+int main()
+{
+	rock.insert("Kamen");
+	rock.insert("Rock");
+	rock.insert("Pierre");
+	rock.insert("Stein");
+	rock.insert("Ko");
+	rock.insert("Koe");
+	rock.insert("Sasso");
+	rock.insert("Roccia");
+	rock.insert("Guu");
+	rock.insert("Kamien");
+	rock.insert("Piedra");
+
+	scissors.insert("Nuzky");
+	scissors.insert("Scissors");
+	scissors.insert("Ciseaux");
+	scissors.insert("Schere");
+	scissors.insert("Ollo");
+	scissors.insert("Olloo");
+	scissors.insert("Forbice");
+	scissors.insert("Choki");
+	scissors.insert("Nozyce");
+	scissors.insert("Tijera");
+
+	paper.insert("Papir");
+	paper.insert("Paper");
+	paper.insert("Feuille");
+	paper.insert("Papier");
+	paper.insert("Papir");
+	paper.insert("Carta");
+	paper.insert("Rete");
+	paper.insert("Paa");
+	paper.insert("Papier");
+	paper.insert("Papel");
+
+	for(int game=1;;game++) {
+		char lang1[100], p1[100];
+		char lang2[100], p2[100];
+
+		strcpy(lang1, ".");
+		scanf("%s%s%s%s", lang1,p1,lang2,p2);
+
+		char first[100], second[100];
+		int v1=0,v2=0;
+
+		WT {
+			scanf("%s", first);
+			if(!strcmp(first, "-") || !strcmp(first, "."))
+				break;
+			scanf("%s", second);
+
+			int A = recognize(first);
+			int B = recognize(second);
+
+			D("%s %d %s %d\n", first, A, second, B);
+
+			if(A!=B) {
+				switch(A) {
+					case ROCK:
+						if(B==PAPER)
+							v2++;
+						else if(B==SCISSORS)
+							v1++;
+						break;
+					case PAPER:
+						if(B==SCISSORS)
+							v2++;
+						else if(B==ROCK)
+							v1++;
+						break;
+					case SCISSORS:
+						if(B==ROCK)
+							v2++;
+						else if(B==PAPER)
+							v1++;
+						break;
+				}
+			}
+		}
+
+		printf("Game #%d:\n", game);
+		printf("%s: %d point%s\n", p1, v1, (v1==1)?"":"s");
+		printf("%s: %d point%s\n", p2, v2, (v2==1)?"":"s");
+		if(v1==v2)
+			printf("TIED GAME\n");
+		else if(v1 > v2)
+			printf("WINNER: %s\n", p1);
+		else
+			printf("WINNER: %s\n", p2);
+		printf("\n");
+
+		if(!strcmp(first, "."))
+			break;
+	}
+
+	return 0;
+}

@@ -1,0 +1,117 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<cctype>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<numeric>
+
+using namespace std;
+
+#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
+#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define REP(i, n) for(int i=0; i<(n); i++)
+#define ALL(x) (x).begin(), (x).end()
+#define MP make_pair
+#define PB push_back
+#define X first
+#define Y second
+#define FI first
+#define SE second
+#define FORE(i, c) for(__typeof((c).begin) i = (c).begin(); i!=(c).end(); ++i)
+#define SIZE(x) ((int)(x).size())
+
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int, int> PII;
+
+
+char mapa[200][200];
+
+char czyklucz[256], wklucz[256], czydr[256], wdr[256];
+
+
+struct pos
+{
+    int X, Y, maska;
+};
+
+
+#define INFTY 100000000
+
+int kx[] = {0, 1, 0, -1};
+int ky[] = {1, 0, -1, 0};
+
+void key(int r, int c)
+{
+    int odl[100][100][16];
+    REP(i, r)
+	scanf("%s",mapa[i]);
+    pos pocz;
+    REP(i, r)
+	REP(j, c)
+	{
+	    REP(k, 16) odl[i][j][k] = INFTY;
+	    if(mapa[i][j] == '*')
+	    {
+		pocz.X = i;
+		pocz.Y = j;
+		pocz.maska = 0;
+	    }
+	}
+    queue<pos> q;
+    q.push(pocz);
+    pos akt, nowa;
+    odl[pocz.X][pocz.Y][0] = 0;
+    while(!q.empty())
+    {
+	akt = q.front();
+//	printf("%d %d\n", akt.X, akt.Y);
+	q.pop();
+	REP(i, 4)
+	{
+	    nowa = akt;
+	    
+	    nowa.X += kx[i];
+	    nowa.Y += ky[i];
+	    if(nowa.X < 0 || nowa.X >= r || nowa.Y < 0 || nowa.Y >= c) continue;
+	    if(mapa[nowa.X][nowa.Y] == '#') continue;
+	    if(czydr[mapa[nowa.X][nowa.Y]] && (wdr[mapa[nowa.X][nowa.Y]] & akt.maska) == 0) continue;
+	    if(czyklucz[mapa[nowa.X][nowa.Y]])
+		nowa.maska |= wklucz[mapa[nowa.X][nowa.Y]];
+	    if(odl[nowa.X][nowa.Y][nowa.maska] > odl[akt.X][akt.Y][akt.maska] + 1)
+	    {
+		odl[nowa.X][nowa.Y][nowa.maska] = odl[akt.X][akt.Y][akt.maska] + 1;
+		if(mapa[nowa.X][nowa.Y] == 'X')
+		{
+		    printf("Escape possible in %d steps.\n", odl[nowa.X][nowa.Y][nowa.maska]);
+		    return;
+		}
+		q.push(nowa);
+	    }
+	}
+    }
+    printf("The poor student is trapped!\n");
+}
+
+int main()
+{
+    int r, c;
+    REP(i, 256)
+	czyklucz[i] = czydr[i] = 0;
+    czyklucz['b'] = czyklucz['y'] = czyklucz['r'] = czyklucz['g'] = 1;
+    czydr['B'] = czydr['Y'] = czydr['R'] = czydr['G'] = 1;
+
+    wdr['B'] = wklucz['b'] = 1;
+    wdr['Y'] = wklucz['y'] = 2;
+    wdr['R'] = wklucz['r'] = 4;
+    wdr['G'] = wklucz['g'] = 8;
+    while(scanf("%d%d",&r, &c) && (r || c))
+	key(r, c);
+    return 0;
+}

@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <string.h>
+bool bz[20][20];
+int ans;
+int n,m;
+void mark(int x,int y)
+{
+	for(int i=x-1;i<x+2;i++)
+		for(int j=y-1;j<y+2;j++)
+			if(i==x || j==y)
+				if(i>=0 && i<n && j>=0 && j<m)
+					bz[i][j]^=1;
+	ans++;
+}
+int main()
+{
+	for(;;)
+	{
+		scanf(" %d %d ",&n,&m);
+		if(n==0 && m==0)
+			return 0;
+		bool start[20][20];
+		for(int i=0;i<n;i++,getchar())
+			for(int j=0;j<m;j++)
+			{
+				char c=getchar();
+				start[i][j]=(c=='X');
+			}
+
+
+		int best = 1000000000;
+		for(int smask=0;smask<(1<<m);smask++)
+		{
+			memcpy(bz,start,sizeof(start));
+			ans=0;
+			for(int j=0;j<m;j++)
+			{
+				if(smask & (1<<j))
+					mark(0,j);
+			}
+
+			for(int i=1;i<n;i++)
+			{
+				for(int j=0;j<m;j++)
+					if(bz[i-1][j])
+						mark(i,j);
+			}
+
+			for(int j=0;j<m;j++)
+				if(bz[n-1][j])
+					ans=1000000000;
+
+/*			printf("%d %d\n",ans,smask);
+		for(int i=0;i<n;i++,puts(""))
+			for(int j=0;j<m;j++)
+				putchar(bz[i][j]?'X':'.');*/
+			best<?=ans;
+		}
+		if(best==1000000000)
+			puts("Damaged billboard.");
+		else
+			printf("You have to tap %d tiles.\n",best);
+	}
+}

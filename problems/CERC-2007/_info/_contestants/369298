@@ -1,0 +1,75 @@
+#include <cstdio>
+#include <algorithm>
+#include <list>
+#include <set>
+#include <queue>
+using namespace std;
+
+char bufor[20][20], drugie[20][20];
+int R, C;
+
+#define REP(i,n) for(int i = 0; i < (n); ++i)
+#define FOR(i,a,b) for(int i = (a); i <= (b); ++i)
+#define FORD(i,a,b) for(int i = (a); i >= (b); --i)
+//#define PRINTF(args...) printf(args)
+ #define PRINTF(args...)
+
+inline char rev(char c) {
+  if(c == 'X') return '.';
+  return 'X';
+}
+
+inline void zmien(int x, int y) {
+  drugie[x][y] = rev(drugie[x][y]);
+  if(x > 0) drugie[x-1][y] = rev(drugie[x-1][y]);
+  if(y > 0) drugie[x][y-1] = rev(drugie[x][y-1]);
+  if(x < R-1) drugie[x+1][y] = rev(drugie[x+1][y]);
+  if(y < C-1) drugie[x][y+1] = rev(drugie[x][y+1]);
+}
+
+void testcase(int r, int c) {
+  R = r; C = c; int wynik = 10000;
+  REP(i,R) {scanf("%s", bufor[i]);
+  PRINTF("WCZYTANY: %s\n", bufor[i]);}
+  REP(i, 1<<C) {
+	REP(a,R) REP(b,C) drugie[a][b] = bufor[a][b];
+	int res = 0;
+	REP(j,C)
+	  if(i & (1<<j)) {
+		++res;
+		zmien(0,j);
+	  }
+	FOR(a,1,R-1)
+	  REP(b,C)
+		if(drugie[a-1][b] == 'X'){ zmien(a, b); ++res; }
+	bool dobrze = true;
+	REP(a,R) REP(b,C)
+	  if(drugie[a][b] == 'X') dobrze = false;
+//	if(dobrze) {
+	PRINTF("OK %d: ", res);
+	if(res == 5) {
+	  REP(a, R) {
+		REP(b, C) PRINTF("%c", drugie[a][b]);
+	  PRINTF("\n");
+	}
+	}
+	REP(j, C)
+	  if(i& (1<<j)) PRINTF("%d ", j);
+	  PRINTF("\n");
+	if(dobrze)
+	wynik <?= res;
+  //}
+  }
+  if(wynik == 10000) printf("Damaged billboard.\n");
+  else printf("You have to tap %d tiles.\n", wynik);
+}
+
+int main() {
+    int r,c;
+	for(;;) {
+	  scanf("%d%d", &r, &c);
+	  if(r == 0 && c == 0) return 0;
+	  testcase(r,c);
+	}
+    return 0;
+}
