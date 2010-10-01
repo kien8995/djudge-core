@@ -1,0 +1,49 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+void vymen(int *x, int *y) {
+	int pom;
+	while (x<y) {
+		pom=*x;
+		*x=*y;
+		*y=pom;
+		x++;
+		y--;
+	}
+
+
+}
+
+int main() {
+	int p[100050];
+	int n=0;
+
+	while (true) {
+		scanf("%d",&n);
+		if (n==0) return 0;
+
+		for (int i=0;i<n;i++) {
+			scanf("%d",&p[i]);
+		}
+
+		int naj,naji=0,j;
+
+		for (int i=0;i<n;i++) {
+			naj=p[n-1];
+			naji=n-1;
+			for (j=n-2;j>=i;j--) {
+				if (p[j]<naj) {
+					naji=j;
+					naj=p[j];
+				}
+			}
+			vymen(p+i,p+naji);
+			printf("%d",naji+1);
+			if (i<n-1) putchar(' ');
+		}
+		printf("\n");
+	}
+	return 0;
+}

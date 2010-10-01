@@ -1,0 +1,90 @@
+#include <iostream>
+#include <map>
+#include <string>
+
+
+using namespace std;
+map<string,int> m;
+map<string,int> co[10];
+
+
+int walcz(int a, int b) {
+    if(a==1 && b==2) return 1;
+    if(a==2 && b==3) return 1;
+    if(a==3 && b==1) return 1;
+    if(a==b) return 0;
+    return -1;
+    
+}
+
+int numer=0;
+int solve() {
+    numer++;
+    string a,b; int x=0,y=0;
+    string imiea, imieb;
+    int langa =-1, langb=-1;
+    while(1) {
+	cin>>a;
+	if(a==".") return 0;	
+	cin>>b;
+	langa = m[a]; imiea = b;
+	cin>>a>>b;
+	langb = m[a]; imieb = b;	
+	int zle = 0;
+	while(1) {
+	    cin>>a;
+	    if(a=="-")break;
+	    if(a==".") { zle=1; break; }
+	    cin>>b;
+	    int res = walcz(co[langa][a],co[langb][b]);	    
+	    if(res==1) x++;
+	    if(res==-1) y++;    
+	}
+	printf("Game #%d:\n",numer);
+	printf("%s: %d point",imiea.c_str(),x);
+	if(x!=1) puts("s");
+	else puts("");
+	printf("%s: %d point",imieb.c_str(),y);
+	if(y!=1) puts("s");
+	else puts("");
+	if(x==y) puts("TIED GAME");
+	if(x>y) printf("WINNER: %s\n",imiea.c_str());
+	if(y>x) printf("WINNER: %s\n",imieb.c_str());
+	puts("");
+	if(zle) return 0;		
+	return 1;		
+    }
+    return 1;
+}
+int main() {
+    m["cs"]=0;
+    m["en"]=1;
+    m["fr"]=2;
+    m["de"]=3;
+    m["hu"]=4;
+    m["it"]=5;
+    m["jp"]=6;
+    m["pl"]=7;
+    m["es"]=8;
+    
+    co[0]["Kamen"]=1;  co[0]["Nuzky"]=2;    co[0]["Papir"]=3;    
+    co[1]["Rock"]=1;   co[1]["Scissors"]=2; co[1]["Paper"]=3;
+    co[2]["Pierre"]=1; co[2]["Ciseaux"]=2;  co[2]["Feuille"]=3;
+    co[3]["Stein"]=1;  co[3]["Schere"]=2;   co[3]["Papier"]=3;
+    
+    co[4]["Ko"]=1;     co[4]["Ollo"]=2;     co[4]["Papir"]=3;
+    co[4]["Koe"]=1;    co[4]["Olloo"]=2; 
+    
+    co[5]["Sasso"]=1;  co[5]["Forbice"]=2;  co[5]["Carta"]=3;
+    co[5]["Roccia"]=1;                      co[5]["Rete"]=3;
+    
+    co[6]["Guu"]=1;    co[6]["Choki"]=2;    co[6]["Paa"]=3;
+    co[7]["Kamien"]=1; co[7]["Nozyce"]=2;   co[7]["Papier"]=3;
+    co[8]["Piedra"]=1; co[8]["Tijera"]=2;   co[8]["Papel"]=3;
+    
+    
+    while(solve()) {	
+    
+    }
+    return 0;
+}

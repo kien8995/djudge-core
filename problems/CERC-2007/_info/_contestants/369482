@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+void vymen(int *p,int a,int b){
+ int pol=(b-a)/2;
+ int c;
+ if((b-a)%2 !=0)pol++;
+ for(int i=a;i<a+pol;i++){
+  c=p[i];
+  p[i]=p[b-i+a];
+  p[b-i+a]=c;
+ }
+}
+
+int main(void){
+ int n;
+ int p[100000];
+ int min,minpos;
+ int c;
+ for(;;){
+  scanf("%d",&n);
+  if(n==0)break;
+  min=100001;
+  for(int i=0;i<n;i++){
+   scanf("%d",&p[i]);
+	if(p[i]<=min){min=p[i];minpos=i;}
+  }
+ // c=p[0];p[0]=p[minpos];p[minpos]=c;
+//  reverse(&p[0],&p[minpos]);
+  vymen(p,0,minpos);
+//  	 for(int x=0;x<n;x++)
+//     printf(">%d",p[x]);
+//  printf("[%d]",min);
+  printf("%d",minpos+1);
+  for(int j=1;j<n;j++){
+    min=100001;
+	 int kk;
+	 kk= (n-j) /2;
+	 if((n-j)%2 !=0)kk++;
+    for(int k=0;k<kk;k++){
+				if(p[j+k]<=min){min=p[j+k];minpos=j+k;}
+				if(p[n-1-k]<=min){min=p[n-k-1];minpos=n-k-1;}
+  
+	 }
+//	 c=p[j];p[j]=p[minpos];p[minpos]=c;
+//    reverse(&p[j],&p[minpos]);
+    vymen(p,j,minpos);
+//	 for(int x=0;x<n;x++)
+//     printf(">%d",p[x]);
+//	  printf("[%d]",min);
+	 printf(" %d",minpos+1);
+  }
+  printf("\n");
+ }
+ return 0;
+}

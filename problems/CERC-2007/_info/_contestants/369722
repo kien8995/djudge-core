@@ -1,0 +1,131 @@
+#include<iostream>
+#include<map>
+#include<vector>
+#include<algorithm>
+#include<utility>
+
+using namespace std;
+
+const int N = 1;
+const int E = 2;
+const int W = 4;
+const int S = 8;
+
+int main()
+{
+	
+	int n;
+	while (true)
+	{
+	cin >> n;
+		if (!n) break;
+	map <pair<int, int> , int> edg;
+	map <int, vector<int> > rows, cols;
+	map <pair<int, pair<int, int> >, pair< int, int > > hrany;
+	int row, col;
+	int sr, sc;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> row >> col;
+		if (i == 0)
+		{
+			sr = row;
+			sc = col;
+		}
+		rows[row].push_back(col);
+		cols[col].push_back(row);
+	}
+	
+	for (map <int, vector<int> >::iterator i = rows.begin(); i != rows.end(); ++i)
+	{
+		if (i->second.size())
+		{
+			sort(i->second.begin(), i->second.end());
+		}
+		
+	}
+	for (map <int, vector<int> >::iterator i = cols.begin(); i != cols.end(); ++i)
+	{
+		if (i->second.size())
+		{
+			sort(i->second.begin(), i->second.end());
+		}
+		
+	}
+	
+	
+	for (map <int, vector<int> >::iterator i = cols.begin(); i != cols.end(); ++i)
+		
+	for (unsigned int j = 0; j < i->second.size(); j+=2)
+	{
+		edg[pair<int, int>(i->first, i->second[j])] |= N;
+		edg[pair<int, int>(i->first, i->second[j+1])] |= S;
+		hrany[pair<int, pair<int, int> >(N, pair<int, int>(i->first, i->second[j]))] = pair<int, int>(i->first, i->second[j+1]);
+		hrany[pair<int, pair<int, int> >(S, pair<int, int>(i->first, i->second[j+1]))] = pair<int, int>(i->first, i->second[j]);
+	}
+	for (map <int, vector<int> >::iterator i = rows.begin(); i != rows.end(); ++i)
+	for (unsigned int j = 0; j < i->second.size(); j+=2)
+	{
+		edg[pair<int, int>(i->second[j], i->first)] |= E;
+		edg[pair<int, int>(i->second[j+1], i->first)] |= W;
+		
+		hrany[pair<int, pair<int, int> >(E, pair<int, int>(i->second[j], i->first))] = pair<int, int>(i->second[j+1], i->first);
+		hrany[pair<int, pair<int, int> >(W, pair<int, int>(i->second[j+1], i->first))] = pair<int, int>(i->second[j], i->first);
+	}
+
+	int cr = sr, cc = sc;
+	pair<int, int> newq;
+	int from = 0;
+	string res;
+	int otoc = 0;
+	while (true)
+	{
+		if (cr == rows.begin()->first && cc== rows.begin()->second[0] && from == N)
+			otoc = 1;
+		if (edg[pair<int, int>(cc, cr)] & N && from != N)
+		{
+			newq = hrany[pair<int, pair<int, int> >(N, pair<int, int>(cc, cr))];
+			cc = newq.first;
+			cr = newq.second;
+			from = S;
+			res += "N";
+		}
+		else if (edg[pair<int, int>(cc, cr)] & W && from != W)
+		{
+			newq = hrany[pair<int, pair<int, int> >(W, pair<int, int>(cc, cr))];
+			cc = newq.first;
+			cr = newq.second;
+			from = E;
+			res+= "W";
+		}
+		else if (edg[pair<int, int>(cc, cr)] & S && from != S)
+		{
+			newq = hrany[pair<int, pair<int, int> >(S, pair<int, int>(cc, cr))];
+			cc = newq.first;
+			cr = newq.second;
+			from = N;
+			res+= "S";
+		}
+		else if (edg[pair<int, int>(cc, cr)] & E && from != E)
+		{
+			newq = hrany[pair<int, pair<int, int> >(E, pair<int, int>(cc, cr))];
+			cc = newq.first;
+			cr = newq.second;
+			from = W;
+			res += "E";
+		}
+		if (cc == sc && cr == sr)	
+			break;
+	}
+//0, cols[0][0]
+		//cout << res << endl;
+	if (otoc)
+	{
+		reverse(++res.begin(), res.end());
+	}
+cout << res;
+	cout << endl;
+	}
+	return 0;
+
+}

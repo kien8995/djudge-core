@@ -1,4 +1,4 @@
-/* $Id: ValidatorTestLib.java 125 2010-09-30 13:46:51Z altdotua $ */
+/* $Id$ */
 
 package djudge.judge.validator;
 

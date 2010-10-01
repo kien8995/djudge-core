@@ -1,0 +1,124 @@
+#include <cstdio>
+#include <cstring>
+
+char languages[10][10] = { "cs", "en", "fr", "de", "hu", "it", "jp", "pl", "es" };
+
+char elements[10][3][20] = {
+	{ "Kamen", "Nuzky", "Papir" },
+	{ "Rock", "Scissors", "Paper" },
+	{ "Pierre", "Ciseaux", "Feuille" },
+	{ "Stein", "Schere", "Papier" },
+	{ "Ko", "Ollo", "Papir" },
+	{ "Sasso", "Forbice", "Carta" },
+	{ "Guu", "Choki", "Paa" },
+	{ "Kamien", "Nozyce", "Papier" },
+	{ "Piedra", "Tijera", "Papel" } };
+
+char alt_hu[3][20] = { "Koe", "Olloo", "Papir" };
+char alt_it[3][20] = { "Roccia", "Forbice", "Rete" };
+
+int find_lang(char *l)
+{
+	int i;
+
+	for (i = 0; true; ++i)
+		if (strcmp(languages[i], l) == 0)
+			return i;
+}
+
+int find_el(int l, char *el)
+{
+	int i;
+
+	for (i = 0; i < 3; ++i)
+		if (strcmp(elements[l][i], el) == 0)
+			return i;
+
+	if (l == 4)
+		for (i = 0; i < 3; ++i)
+			if (strcmp(alt_hu[i], el) == 0)
+				return i;
+
+	if (l == 5)
+		for (i = 0; i < 3; ++i)
+			if (strcmp(alt_it[i], el) == 0)
+				return i;
+
+	return 0;
+}
+
+int main()
+{
+	char name1[100];
+	char name2[100];
+	int lang1, lang2;
+	int pt1, pt2;
+	int elv1, elv2;
+	char el1[100], el2[100];
+	bool end = false;
+	int GNO = 0;
+
+	while (!end)
+	{
+		++GNO;
+		scanf("%s %s %s %s", el1, name1, el2, name2);
+
+		pt1 = pt2 = 0;
+
+		lang1 = find_lang(el1);
+		lang2 = find_lang(el2);
+
+		while (true)
+		{
+			scanf("%s", el1);
+			if (strcmp(el1, "-") == 0)
+				break;
+			if (strcmp(el1, ".") == 0)
+			{
+				end = true;
+				break;
+			}
+
+			scanf("%s", el2);
+
+			elv1 = find_el(lang1, el1);
+			elv2 = find_el(lang2, el2);
+
+			// points
+			if (elv1 == elv2)
+			{
+			}
+			else
+			{
+				if ((elv1 + 1) % 3 == elv2)
+					++pt1;
+				else
+					++pt2;
+			}
+		}
+
+		if (GNO > 1)
+			printf("\n");
+		printf("Game #%d:\n", GNO);
+
+		if (pt1 == 1)
+			printf("%s: 1 point\n", name1);
+		else
+			printf("%s: %d points\n", name1, pt1);
+
+		if (pt2 == 1)
+			printf("%s: 1 point\n", name2);
+		else
+			printf("%s: %d points\n", name2, pt2);
+
+		if (pt1 == pt2)
+			printf("TIED GAME\n");
+		else if (pt1 > pt2)
+			printf("WINNER: %s\n", name1);
+		else
+			printf("WINNER: %s\n", name2);
+		}
+
+	return 0;
+}
+

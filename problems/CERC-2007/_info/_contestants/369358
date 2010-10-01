@@ -1,0 +1,72 @@
+#include <cstdio>
+#include <map>
+#include <algorithm>
+
+#define MP make_pair
+#define X first
+#define Y second
+
+#define REP(a, b) for(int a=0; a<(b); a++)
+
+using namespace std;
+
+typedef pair<int, int> p;
+
+p all[1000];
+map<p, p> poziom, pion;
+
+char kier(p p1, p p2) {
+	if (p1.X==p2.X) {
+		if (p1.Y<p2.Y) return 'N';
+		else return 'S';
+	} else if (p1.X<p2.X) return 'E';
+	return 'W';
+}
+
+char ret[1000];
+
+int main() {
+	while(true) {
+		int d;
+		scanf("%d", &d);
+		if(d==0) break;
+		poziom.clear();
+		pion.clear();
+		REP(i, d) {
+			int x, y;
+			scanf("%d%d", &x, &y);
+			all[i] = MP(x, y);
+		}
+		p start = all[0];
+		sort(all, all+d);
+		for(int i = 0; i<d; i+=2) {
+			pion[all[i]] = all[i+1];
+			pion[all[i+1]] = all[i];
+		}
+		REP(i, d) swap(all[i].X, all[i].Y);
+		sort(all, all+d);
+		REP(i, d) swap(all[i].X, all[i].Y);
+		for(int i = 0; i<d; i+=2) {
+			poziom[all[i]] = all[i+1];
+			poziom[all[i+1]] = all[i];
+		}
+		p check = all[0];
+		REP(i, d) if(all[i].X>check.X || (all[i].X==check.X && all[i].Y>check.Y))
+				check = all[i];
+		p akt = check; int ind = 0;
+		int st = -1;;
+		do {
+			if (akt==start) st = ind;
+			ret[ind++] = kier(akt, pion[akt]);
+			akt = pion[akt];
+			if (akt==start) st = ind;
+			ret[ind++] = kier(akt, poziom[akt]);
+			akt = poziom[akt];
+		} while(akt!=check);
+		if (d < 2) d--;
+		for(int i = st; i < d; i++) printf("%c", ret[i]);
+		for(int i = 0; i < st; i++) printf("%c", ret[i]);
+		printf("\n");
+	}
+	return 0;
+}

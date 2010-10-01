@@ -1,0 +1,72 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: check - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\alt\LOCALS~1\Temp\RSP14E.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/check.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\Temp\Work\acm\problems\ulm-1997\A\check\check.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\alt\LOCALS~1\Temp\RSP14E.tmp" 
+Creating temporary file "C:\DOCUME~1\alt\LOCALS~1\Temp\RSP14F.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/check.pdb" /debug /machine:I386 /out:"Debug/check.exe" /pdbtype:sept 
+".\Debug\check.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\alt\LOCALS~1\Temp\RSP14F.tmp"
+<h3>Output Window</h3>
+Compiling...
+check.cpp
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(185) : error C2039: 'FILE' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(221) : error C2258: illegal pure syntax, must be '= 0'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(221) : error C2252: 'LightGray' : pure specifier can only be specified for functions
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(222) : error C2258: illegal pure syntax, must be '= 0'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(222) : error C2252: 'LightRed' : pure specifier can only be specified for functions
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(223) : error C2258: illegal pure syntax, must be '= 0'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(223) : error C2252: 'LightCyan' : pure specifier can only be specified for functions
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(224) : error C2258: illegal pure syntax, must be '= 0'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(224) : error C2252: 'LightGreen' : pure specifier can only be specified for functions
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(229) : error C2039: 'FILE' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(276) : error C2039: 'FILE' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(289) : error C2065: 'LightRed' : undeclared identifier
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(293) : error C2065: 'LightCyan' : undeclared identifier
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(302) : error C2065: 'LightGreen' : undeclared identifier
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(314) : error C2039: 'fopen' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(337) : error C2065: 'LightGray' : undeclared identifier
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(338) : error C2039: 'printf' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(341) : error C2039: 'exit' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(359) : error C2039: 'printf' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(362) : error C2039: 'exit' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(370) : error C2039: 'FILE' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(414) : error C2039: 'printf' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(424) : error C2039: 'fopen' : is not a member of 'std'
+d:\temp\work\acm\problems\ulm-1997\a\check\testlib.h(633) : error C2039: 'vsprintf' : is not a member of 'std'
+c:\program files\microsoft visual studio\vc98\include\xtree(120) : warning C4786: 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' : identifier was truncated to '255' characters in the debug information
+        c:\program files\microsoft visual studio\vc98\include\map(46) : see reference to class template instantiation 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+        d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(26) : see reference to class template instantiation 'std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+c:\program files\microsoft visual studio\vc98\include\xtree(120) : warning C4786: 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::const_iterator' : identifier was truncated to '255' characters in the debug information
+        c:\program files\microsoft visual studio\vc98\include\map(46) : see reference to class template instantiation 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+        d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(26) : see reference to class template instantiation 'std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+c:\program files\microsoft visual studio\vc98\include\xtree(120) : warning C4786: 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::iterator' : identifier was truncated to '255' characters in the debug information
+        c:\program files\microsoft visual studio\vc98\include\map(46) : see reference to class template instantiation 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+        d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(26) : see reference to class template instantiation 'std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+c:\program files\microsoft visual studio\vc98\include\xtree(120) : warning C4786: 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Node' : identifier was truncated to '255' characters in the debug information
+        c:\program files\microsoft visual studio\vc98\include\map(46) : see reference to class template instantiation 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+        d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(26) : see reference to class template instantiation 'std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+c:\program files\microsoft visual studio\vc98\include\xtree(120) : warning C4786: 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::const_iterator' : identifier was truncated to '255' characters in the debug information
+        c:\program files\microsoft visual studio\vc98\include\map(46) : see reference to class template instantiation 'std::_Tree<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >::_Kfn,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+        d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(26) : see reference to class template instantiation 'std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<int> >' being compiled
+d:\temp\work\acm\problems\ulm-1997\a\check\check.cpp(117) : warning C4508: 'main' : function should return a value; 'void' return type assumed
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+check.exe - 24 error(s), 6 warning(s)
+</pre>
+</body>
+</html>

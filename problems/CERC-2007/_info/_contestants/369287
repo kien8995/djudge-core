@@ -1,0 +1,61 @@
+#include <cstdio>
+#include <map>
+#include <string>
+using namespace std;
+  struct strCmp {
+    bool operator()( const char* s1, const char* s2 ) const {
+      return strcmp( s1, s2 ) < 0;
+    }
+  };
+char a[4],b[4],aa[11],bb[11],x[100],y[100],m[100],n[100];
+map<const char*,int,strCmp> ma;
+int va,vb,vys,gc;
+char c; 
+int vih[9]={0,1,-1,-1,0,1,1,-1,0};
+int main()
+{
+	ma.clear();
+	ma["csKa"]=0;ma["csNu"]=2;ma["csPa"]=1;
+	ma["enRo"]=0;ma["enSc"]=2;ma["enPa"]=1;
+	ma["frPi"]=0;ma["frCi"]=2;ma["frFe"]=1;
+	ma["deSt"]=0;ma["deSc"]=2;ma["dePa"]=1;
+	ma["huKo"]=0;ma["huOl"]=2;ma["huPa"]=1;
+	ma["itSa"]=0;ma["itFo"]=2;ma["itCa"]=1;
+	ma["itRo"]=0;ma["itRe"]=1;	
+	ma["jpGu"]=0;ma["jpCh"]=2;ma["jpPa"]=1;
+	ma["plKa"]=0;ma["plNo"]=2;ma["plPa"]=1;
+	ma["esPi"]=0;ma["esTi"]=2;ma["esPa"]=1;
+	gc=0;
+	while(1)
+	{
+		gc++;
+		va=0;vb=0;
+		memset(a,0,sizeof a);
+		memset(b,0,sizeof b);
+		scanf("%s %s%c",a,m,&c);
+		scanf("%s %s%c",b,n,&c);
+		while(1)
+		{	
+			memset(aa,0,sizeof aa);
+			memset(bb,0,sizeof bb);
+			scanf("%s",x);
+			if(x[0]=='-' || x[0]=='.') break;
+			scanf("%s%c",y,&c);
+			aa[0]=a[0];aa[1]=a[1];bb[0]=b[0];bb[1]=b[1];aa[2]=x[0];aa[3]=x[1];bb[2]=y[0];bb[3]=y[1];
+			vys=vih[ma[aa]*3+ma[bb]];
+			//printf("%s %s %d\n",aa,bb,vys);
+			va+=(vys==-1);vb+=(vys==1);
+		}
+		printf("Game #%d:\n",gc);
+		if (va==1) printf("%s: 1 point\n",m);
+		else printf("%s: %d points\n",m,va);
+		if (vb==1) printf("%s: 1 point\n",n);
+		else printf("%s: %d points\n",m,vb);
+		if (va==vb) printf("TIED GAME\n");
+		if (va<vb) printf("WINNER: %s\n",n);
+		if (va>vb) printf("WINNER: %s\n",m);
+		
+		if (x[0]=='.') {scanf("%c",&c);break;}
+		printf("\n");
+	}
+}

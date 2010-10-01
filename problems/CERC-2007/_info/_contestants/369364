@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <queue>
+using namespace std;
+int mem[105][105][1<<4];
+bool byl[105][105][1<<4];
+int kier[][2]={{0,1},{0,-1},{1,0},{-1,0}};
+char mapa[105][105];
+struct stan{
+	int x,y,sub;
+};
+stan tem;
+queue<stan> Q;
+int val[1000];
+
+int main(){
+	int R,C,xp,yp,x,y,sub,x2,y2,a,b,sub2;
+	val['B']=0;
+	val['Y']=1;
+	val['R']=2;
+	val['G']=3;
+	val['b']=0;
+	val['y']=1;
+	val['r']=2;
+	val['g']=3;
+	while(true){
+		scanf("%d%d",&R,&C);
+		if(R==0 && C==0) break;
+		for(int i=0;i<105;i++) for(int j=0;j<105;j++) for(int z=0;z<(1<<4);z++){
+			mem[i][j][z]=1000000;
+			byl[i][j][z]=false;
+		}
+		char c;
+		while(true){
+			c=getchar();
+			if(c=='\n') break;
+		}
+		for(int i=0;i<R;i++){
+			for(int j=0;j<C;j++){
+				mapa[i][j]=getchar();
+				if(mapa[i][j]=='*'){
+					xp=i;
+					yp=j;
+				}
+			}
+			while(true){
+				c=getchar();
+				if(c=='\n') break;
+			}
+		}
+		tem.x=xp;
+		tem.y=yp;
+		tem.sub=0;
+		mem[xp][yp][0]=0;
+		byl[xp][yp][0]=true;
+		Q.push(tem);
+		while(!Q.empty()){
+			tem=Q.front();Q.pop();
+			sub=tem.sub;
+			x=tem.x;
+			y=tem.y;
+			for(int z=0;z<4;z++){
+				x2=x+kier[z][0];
+				y2=y+kier[z][1];
+				if(x2<0 || y2<0 || x2>=R || y2>=C) continue;
+				if(mapa[x2][y2]=='#') continue;
+				else if(mapa[x2][y2]=='.' || mapa[x2][y2]=='*' || mapa[x2][y2]=='X'){
+					a=mem[x][y][sub]+1;
+					if(!byl[x2][y2][sub]){
+						mem[x2][y2][sub]=a;
+						byl[x2][y2][sub]=true;
+						tem.x=x2;
+						tem.y=y2;
+						tem.sub=sub;
+						Q.push(tem);
+					}
+					else if(mem[x2][y2][sub]<a) mem[x2][y2][sub]=a;
+				}
+				else if(mapa[x2][y2]>'A' && mapa[x2][y2]<'Z' && ((sub>>val[mapa[x2][y2]])%2==1) ){
+					a=mem[x][y][sub]+1;
+					if(!byl[x2][y2][sub]){
+						mem[x2][y2][sub]=a;
+						byl[x2][y2][sub]=true;
+						tem.x=x2;
+						tem.y=y2;
+						tem.sub=sub;
+						Q.push(tem);
+					}
+					else if(mem[x2][y2][sub]<a) mem[x2][y2][sub]=a;
+				}
+				else if(mapa[x2][y2]>'a' && mapa[x2][y2]<'z'){
+					if((sub>>val[mapa[x2][y2]])%2) sub2=sub;
+					else sub2=sub+(1<<val[mapa[x2][y2]]);
+					a=mem[x][y][sub]+1;
+					if(!byl[x2][y2][sub2]){
+						mem[x2][y2][sub2]=a;
+						byl[x2][y2][sub2]=true;
+						tem.x=x2;
+						tem.y=y2;
+						tem.sub=sub2;
+						Q.push(tem);
+					}
+					else if(mem[x2][y2][sub2]<a) mem[x2][y2][sub2]=a;
+				}
+			}
+		}
+		int best=-1;
+		for(int i=0;i<R;i++) for(int j=0;j<C;j++) for(int z=0;z<(1<<4);z++){
+			if(mapa[i][j]=='X' && mem[i][j][z]<1000000 && (best==-1 || best>mem[i][j][z]) ) best=mem[i][j][z];
+		}
+		if(best==-1) printf("The poor student is trapped!\n");
+		else printf("Escape possible in %d steps.\n",best);
+	}
+	return 0;
+
+}

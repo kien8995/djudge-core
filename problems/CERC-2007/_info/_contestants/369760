@@ -1,0 +1,129 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+struct vertex
+{
+	int x,y;
+	int l,g;//lewy/prawy gora/dol
+	int ind;
+	bool visited;
+	vertex()
+	{
+		l=g=x=y=ind=0;
+		visited=0;
+	}
+};vertex w[1002];
+
+bool porx(vertex a, vertex b)
+{
+	if (a.x!=b.x)
+		return a.x<b.x;
+	return a.y>b.y;
+}
+
+bool pory(vertex a, vertex b)
+{
+	if (a.y!=b.y)
+		return a.y<b.y;
+	return a.x>b.x;
+}
+
+bool porind(vertex a, vertex b)
+{
+	return a.ind<b.ind;
+}
+
+int n;
+char droga[1002];
+int scianyx()
+{
+	for (int i=1; i<n; i++)
+		if (w[i].x == w[i-1].x && w[i-1].g==-1)
+		{
+//			printf("%d %d - %d %d\n",w[i].x,w[i].y,w[i-1].x,w[i-1].y);
+			w[i].g = w[i-1].ind;
+			w[i-1].g = w[i].ind;
+		}
+}
+
+int scianyy()
+{
+	for (int i=1; i<n; i++)
+		if (w[i].y == w[i-1].y && w[i-1].l==-1)
+		{
+//			printf("%d %d | %d %d\n",w[i].x,w[i].y,w[i-1].x,w[i-1].y);
+			w[i].l = w[i-1].ind;
+			w[i-1].l = w[i].ind;
+		}
+}
+int counter,przes,ile;
+int idz(int v)
+{
+	if (w[v].visited)
+		return 0;
+	w[v].visited=1;
+//	printf("\nwierzcholek:  %d %d lewy: %d %d gorny: %d %d\n",w[v].x,w[v].y,w[w[v].l].x,w[w[v].l].y,w[w[v].g].x,w[w[v].g].y);
+//	printf("%d %d %d\n",v,w[v].l,w[v].g);
+	if (w[v].ind==0)
+		przes=counter;
+	if (w[v].g==-1 || droga[counter-1]=='N' || droga[counter-1]=='S')
+	{
+		if (w[w[v].l].x<w[v].x)
+			droga[counter++]='W';
+		else
+			droga[counter++]='E';
+		w[w[v].l].l=-1;
+			idz(w[v].l);
+		return 0;
+	}
+	if (w[v].l==-1 || droga[counter-1]=='E' || droga[counter-1]=='W')
+	{
+		if (w[w[v].g].y<w[v].y)
+			droga[counter++]='S';
+		else
+			droga[counter++]='N';
+		w[w[v].g].g=-1;
+			idz(w[v].g);
+		return 0;
+		
+	}
+}
+int main()
+{
+	while(1)
+	{
+		scanf("%d",&n);
+		if (n==0)
+			return 0;
+		for (int i=0; i<n; i++)
+		{
+			scanf("%d%d",&w[i].x,&w[i].y);
+			w[i].ind=i;
+			w[i].l=w[i].g=-1;
+			w[i].visited=0;
+		}
+		sort(w,w+n,porx);
+		scianyx();
+		int tmp2=w[n-1].ind;
+		
+		sort(w,w+n,pory);
+		scianyy();
+
+		sort(w,w+n,porind);
+//		printf("%d %d %d\n",w[tmp2].l,w[tmp2].g);
+		ile=0;
+		counter=1;
+		droga[0]='W';
+		w[w[tmp2].l].l=-1;
+		w[tmp2].visited=1;
+//		printf("pierwszy wierzcholek %d %d\n",w[tmp2].x,w[tmp2].y);
+		idz(w[tmp2].l);
+		droga[counter]=0;
+//		printf("%s - %d\n",droga,przes);
+		reverse(droga,droga+przes);//+n-przes,w+n);
+		reverse(droga+przes,droga+counter);
+		reverse(droga,droga+counter);
+		printf("%s\n",droga);
+	}
+}

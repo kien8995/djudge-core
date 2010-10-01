@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <ctype.h>
+
+#define NOT 1
+#define AND 2
+#define XOR 4
+#define OR  8
+
+struct _o { char c; char vis; int gatenum; } o[205][205];
+int R,C;
+
+struct _g {char in[205]; int inlen; int inwant; int type; int o[2][206]; int ot[206]; int olen;} g[70*70];
+struct _out { int v, fill; } out[26];
+
+int read_line() {
+  int c, len=0;
+  for (int i=0;i<205;i++) o[R][i].c=0, o[R][i].gatenum=0, o[R][i].vis=0;
+  o[R][0].c=0;
+  while (c=getchar(), c!='\n' && c!=EOF) o[R][len].c=c, len++;
+  if (o[R][0].c=='*') return 0;
+  R++;
+  if (len>C) C=len;
+  return 1;
+}
+
+#define RIGHT 1
+#define LEFT  0
+#define UP    2
+#define DOWN  3
+
+struct _q { int x; int y; int v; int dir; } q[2005*2005]; int qs,qe;
+
+int main(void) {
+  while (R=0, C=0, read_line()) {
+    while (read_line()) ;
+    
+    for (int i=0;i<26;i++) out[i].fill=0;
+    //1) gatefind
+    int gates=0;
+    for (int i=0;i<R;i++)
+      for (int j=0;j<C;j++) {
+	if (o[i][j].c=='#' &&
+	    (i==0 || o[i-1][j].c!='#') &&
+	    (j==0 || o[i][j-1].c!='#')) {
+	  g[++gates].inwant=0;
+	  g[gates].inlen=0;
+	  g[gates].type=0;
+	  g[gates].olen=0;
+
+	  //left edge
+	  int ni=i;
+	  while (ni<R && o[ni][j].c=='#') {
+	    if (j && o[ni][j-1].c=='=') {
+	      o[ni][j].gatenum=gates;
+	      g[gates].inwant++;
+	    }
+	    ni++;
+	  }
+	  //top edge
+	  int nj=j;
+	  while (nj<C && o[i][nj].c=='#') nj++;
+	  //right edge
+	  for (int k=i;k<ni;k++) if (o[k][nj].c=='o' || o[k][nj].c=='=') {
+	    int ol=g[gates].olen;
+	    g[gates].o[0][ol]=k; g[gates].o[1][ol]=nj;
+	    g[gates].ot[ol]=0;
+	    if (o[k][nj].c=='o') {g[gates].o[1][ol]++; g[gates].ot[ol]|=NOT;}
+	    g[gates].olen++;
+	  }
+	  //gate type
+	  for (int k=i+1;k<ni-1;k++)
+	    for (int l=j+1;l<nj-1;l++) switch (o[k][l].c) {
+	    case '&': g[gates].type|=AND; k=ni; l=nj; break;
+	    case '=': g[gates].type|=XOR; k=ni; l=nj; break;
+	    case '1': g[gates].type|=OR; k=ni; l=nj; break;	      
+	    }
+
+	  //	  printf("Gate %d %d %d %d, end at %d %d, type %d\n", i, j, ni, nj, g[gates].ox, g[gates].oy, g[gates].type);
+	}
+      }
+
+    //we have all the gates except for 0 and 1 gates
+    qs=qe=0;
+    for (int i=0;i<R;i++)
+      for (int j=0;j<C;j++) 
+	if ((o[i][j].c=='0' || o[i][j].c=='1') && (j<C-1) && o[i][j+1].c=='=') {
+	  q[qe].x=i;
+	  q[qe].y=j+1;
+	  q[qe].dir=RIGHT;
+	  q[qe].v=o[i][j].c-'0';
+	  qe++;
+	}
+
+    while (qs<qe) { //traverse the net
+      _q act=q[qs++];
+
+      //      printf("%d %d, ", act.x, act.y);
+
+      int dirx=(act.dir==UP ? -1 : 0)+(act.dir==DOWN ? 1 : 0);
+      int diry=(act.dir==RIGHT ? 1 : 0)+(act.dir==LEFT ? -1 : 0);
+
+      if (o[act.x][act.y].gatenum) {
+	int gate=o[act.x][act.y].gatenum;
+	g[gate].in[g[gate].inlen++]=act.v;
+	o[act.x][act.y].gatenum=0;
+	if (g[gate].inlen == g[gate].inwant) {
+	  int out;
+	  switch (g[gate].type&(~NOT)) {
+	  case AND: out=1; for (int i=0;i<g[gate].inwant;i++) out&=g[gate].in[i]==1; break;
+	  case OR:  out=0; for (int i=0;i<g[gate].inwant;i++) out|=g[gate].in[i]==1; break;
+	  case XOR: out=0; for (int i=0;i<g[gate].inwant;i++) out^=g[gate].in[i]==1; break;
+	  }
+	  
+	  for (int i=0;i<g[gate].olen;i++) {
+	    q[qe].x=g[gate].o[0][i];  q[qe].y=g[gate].o[1][i];  q[qe].dir=RIGHT; 
+	    q[qe].v=out^(g[gate].ot[i]); 
+	    qe++;
+	  }
+	}
+      } else if (isupper(o[act.x][act.y].c)) {
+	out[o[act.x][act.y].c-'A'].fill=1;
+	out[o[act.x][act.y].c-'A'].v=act.v;
+      } else if (o[act.x][act.y].c=='+') {
+	if (o[act.x][act.y].vis) continue;
+	o[act.x][act.y].vis=1;
+	int prevx=act.x-dirx;
+	int prevy=act.y-diry;
+
+	int dx[]={-1,1,0,0}; int dy[]={0,0,-1,1}; 
+	int dd[]={UP, DOWN, LEFT, RIGHT};
+	for (int k=0;k<4;k++) {
+	  int nextx=act.x+dx[k];
+	  int nexty=act.y+dy[k];
+	  if (nextx==prevx && nexty==prevy) continue;
+	  if (nextx>=0 && nextx<R && nexty>=0 && nexty<C) {
+	    if (dd[k]==RIGHT || dd[k]==LEFT) {
+	      if (o[nextx][nexty].c!='-' && o[nextx][nexty].c!='=' && o[nextx][nexty].c!='+') continue;
+	    }
+	    if (dd[k]==UP || dd[k]==DOWN) {
+	      if (o[nextx][nexty].c!='|' && o[nextx][nexty].c!='+') continue;
+	    }
+	    q[qe].x=nextx; q[qe].y=nexty; q[qe].dir=dd[k]; q[qe].v=act.v; qe++;
+	  }	  
+	}       
+      } else {
+	int nextx=act.x+dirx;
+	int nexty=act.y+diry;
+	if (nextx>=0 && nextx<R && nexty>=0 && nexty<C) {
+	  q[qe].x=nextx; q[qe].y=nexty; q[qe].dir=act.dir; q[qe].v=act.v; qe++;
+	}
+      }
+    }
+    for (int i=0;i<26;i++) if (out[i].fill) printf("%c=%d\n", i+'A', out[i].v);
+    puts("");      
+  }
+
+  return 0;
+}

@@ -1,0 +1,122 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <set>
+#include <map>
+#include <list>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+typedef vector<int> VI;
+typedef vector<VI> VII;
+typedef vector<string> VS;
+typedef long long lint;
+typedef long long LL;
+typedef string ST;
+
+#define VAR(v,n) typeof(n) v=(n)
+#define REP(i,n) for(int i=0; i<(n); i++)
+#define FOR(i,a,b) for(int i=(a); i<=(b); i++)
+#define FORD(i,a,b) for(int i=(a); i>=(b); i--)
+#define FOREACH(i,c) for(VAR(i,(c).begin()); i!=(c).end(); i++)
+
+#define PB push_back
+#define PF push_front
+#define PI pair<int,int>
+#define MP make_pair
+#define FI first
+#define SE second
+#define VR vector
+#define IT iterator
+#define ALL(x) (x).begin(),(x).end()
+#define SIZE(x) ((int)(x).size())
+#define CLEAR(c,w) memset(c,w,sizeof(c))
+
+char buf[1000];
+lint r;
+
+void f(lint a,lint b,lint &div,lint &mod) {
+	div=a/b;
+	mod=a-div*b;
+	if (mod<0) {
+		if (b<0) {
+			mod-=b;
+			div++;
+		} else {
+			mod+=b;
+			div--;
+		}
+	}
+}
+
+void to10(char n[1000]) {
+	lint w=0,m=1,/*div,*/mod;
+	if (n[0]==0) {
+		printf("0\n");
+		return;
+	}
+	int l=strlen(n);
+	while (l>0) {
+		//f(n,10,div,mod);
+	/*	if (n[l-1]=='0') {
+			mod=0;
+			l--;
+		} else {
+			mod=10-(n[l-1]-'0');
+			
+		} */
+		mod=n[l-1]-'0';
+		l--;
+		w=w+m*mod;
+		//n=div;
+	//	printf("[%d %d]\n",div,mod);
+		m*=r;
+	}
+	printf("%lld\n",w);
+}
+
+void from10(lint n) {
+	lint div,mod;
+	vector<lint> D; D.clear();
+	if (n==0) {
+		printf("0\n");
+		return;
+	}
+	while (n) {
+		f(n,r,div,mod);
+		//printf("[%d %d]\n",div,mod);
+		D.PB(mod);
+		n=div;	
+	}
+	FORD(i,D.size()-1,0)
+		printf("%lld",D[i]);
+	printf("\n");
+}
+
+
+int main() {
+	lint n;
+	gets(buf);
+	while (buf[0]!='e') {
+		if (buf[0]=='t') {
+			sscanf(buf,"to-%lld %lld",&r,&n);
+			r=-r;
+			//printf("%d %d\n",r,n);
+			from10(n);
+			//return 0;
+		} else {
+			sscanf(buf,"from-%lld %s",&r,buf);
+			r=-r;
+			to10(buf);
+		}
+		gets(buf);
+	}
+	return 0;
+}

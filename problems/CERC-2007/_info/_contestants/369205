@@ -1,0 +1,111 @@
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <string>
+#include <set>
+#include <stack>
+#include <map>
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+typedef long long LL;
+
+
+
+
+
+string tab[] = {"cs","en","fr","de","hu","it","jp","pl","es"};
+
+string kam[] = {"Kamen","Rock","Pierre","Stein","Ko","Koe","Sasso","Roccia","Guu","Kamien","Piedra"};
+string pap[] = {"Papir","Paper","Feuille","Papier","Papir","Carta","Rete","Paa","Papier","Papel","k"};
+string noz[] = {"Nuzky","Scissors","Ciseaux","Schere","Ollo","Olloo","Forbice","Choki","Nozyce","Tijera","T"};
+
+int main()
+{
+  int n,tst;
+int pkt1,pkt2;
+int gra=0;
+
+while(++gra) {
+  string s,z,z2;
+pkt1 = 0;
+pkt2 = 0;
+  cin >> s;
+if (s==".") break;
+  cin >> z; 
+  int co,co2;
+ co = 0;
+   for (int i=0;i<9;i++) if (s==tab[i]) co = i;
+cin >> s;
+  cin >> z2; 
+for (int i=0;i<9;i++) if (s==tab[i]) co2 = i;
+string s2;
+
+while (true) {
+  cin >> s;
+
+if (s=="-" || s==".") break;
+cin >> s2;
+int ile,ile2;
+bool cz;
+bool cz2;
+cz = false;
+cz2 = false;
+for (int j=0;j<3;j++) 
+{
+  for (int i=0;i<11;i++)
+{ 
+  if (kam[i] == s) {ile = 1; cz= true;}
+if (kam[i] == s2) {ile2 = 1; cz2= true;}
+
+}
+if (cz && cz2) break;
+ for (int i=0;i<11;i++)
+{ 
+  if (pap[i] == s) {ile = 2;cz= true;}
+if (pap[i] == s2) {ile2 = 2; cz2= true;}
+
+}
+
+if (cz && cz2) break;
+ for (int i=0;i<11;i++)
+{ 
+  if (noz[i] == s) {ile = 3;cz= true;}
+if (noz[i] == s2) {ile2 = 3; cz2= true;}
+
+}
+
+}
+
+
+if (ile == 1 && ile2 == 2)  pkt2 +=1;
+if (ile == 2 && ile2 == 3)  pkt2 +=1;
+if (ile == 3 && ile2 == 1)  pkt2 +=1;
+
+if (ile == 1 && ile2 == 3)  pkt1 +=1;
+if (ile == 2 && ile2 == 1)  pkt1 +=1;
+if (ile == 3 && ile2 == 2)  pkt1 +=1;
+
+}
+
+cout << "Game #" << gra << ":\n";
+if (pkt1==1)
+cout << z << ": " << pkt1 << " point\n"; else
+cout << z << ": " << pkt1 << " points\n";
+if (pkt2==1)
+cout << z2 << ": " << pkt2 << " point\n"; else
+cout << z2 << ": " << pkt2 << " points\n";
+
+if (pkt1==pkt2) cout << "TIED GAME\n"; 
+if (pkt1>pkt2) cout << "WINNER: " << z << "\n"; 
+if (pkt1<pkt2) cout << "WINNER: " << z2 << "\n";
+cout << "\n";
+if (s==".") return 0;
+}
+
+
+  return 0;
+}

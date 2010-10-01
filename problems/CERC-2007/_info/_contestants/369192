@@ -1,0 +1,122 @@
+#include <map>
+#include <iostream>
+#include <string>
+#include <utility>
+
+using namespace std;
+
+enum { ROCK, PAPER, SCISSORS };
+enum { TIE, P1, P2 };
+
+typedef pair<string, string> KEY;
+
+map<KEY, int> M;
+
+int winner(int a, int b) {
+   if ( a == ROCK ) {
+      return
+         b == ROCK ? TIE :
+         b == SCISSORS ? P1 : P2;
+   } else if ( a == SCISSORS ) {
+      return
+         b == SCISSORS ? TIE :
+         b == PAPER ? P1 : P2;
+   } else {
+      return
+         b == PAPER ? TIE :
+         b == ROCK ? P1 : P2;
+   }
+}
+
+bool starts(const string &a, const string &b) {
+   return a.compare(0, b.length(), b) == 0;
+}
+
+int decrypt(const string &lang, const string &s) {
+   for (int i=0; i<(int)s.length(); ++i) {
+      map<KEY, int>::const_iterator it = M.find( KEY(lang, s.substr(0, i+1)) );
+      if (it != M.end()) {
+         return it->second;
+      }
+   }
+
+   throw 1;
+}
+
+int main() {
+   M[ KEY("cs", "K") ] = ROCK;
+   M[ KEY("cs", "N") ] = SCISSORS;
+   M[ KEY("cs", "P") ] = PAPER;
+
+   M[ KEY("en", "R") ] = ROCK;
+   M[ KEY("en", "S") ] = SCISSORS;
+   M[ KEY("en", "P") ] = PAPER;
+
+   M[ KEY("fr", "P") ] = ROCK;
+   M[ KEY("fr", "C") ] = SCISSORS;
+   M[ KEY("fr", "F") ] = PAPER;
+
+   M[ KEY("de", "St") ] = ROCK;
+   M[ KEY("de", "Sc") ] = SCISSORS;
+   M[ KEY("de", "P") ] = PAPER;
+
+   M[ KEY("hu", "K") ] = ROCK;
+   M[ KEY("hu", "O") ] = SCISSORS;
+   M[ KEY("hu", "P") ] = PAPER;
+
+   M[ KEY("it", "Sas") ] = ROCK;
+   M[ KEY("it", "Roc") ] = ROCK;
+   M[ KEY("it", "F") ] = SCISSORS;
+   M[ KEY("it", "Car") ] = PAPER;
+   M[ KEY("it", "Ret") ] = PAPER;
+
+   M[ KEY("jp", "G") ] = ROCK;
+   M[ KEY("jp", "C") ] = SCISSORS;
+   M[ KEY("jp", "P") ] = PAPER;
+
+   M[ KEY("pl", "K") ] = ROCK;
+   M[ KEY("pl", "N") ] = SCISSORS;
+   M[ KEY("pl", "P") ] = PAPER;
+
+   M[ KEY("es", "Pi") ] = ROCK;
+   M[ KEY("es", "Ti") ] = SCISSORS;
+   M[ KEY("es", "Pa") ] = PAPER;
+
+   bool done = false;
+   for (int game=1; !done; ++game) {
+      string lang[2], name[2];
+      for (int i=0; i<2; ++i) {
+         cin >> lang[i] >> name[i];
+      }
+
+      int points[2] = { 0, 0 };
+      for (;;) {
+         string v1, v2;
+         cin >> v1;
+         
+         if (v1 == "-") {
+            break;
+         } else if (v1 == ".") {
+            done = true;
+            break;
+         }
+         cin >> v2;
+         
+         int res = winner( decrypt( lang[0], v1 ), decrypt( lang[1], v2 ) );
+         if (res == P1) ++points[0];
+         else if (res == P2) ++points[1];
+      }
+      
+      printf( "Game #%d:\n", game );
+      printf( "%s: %d point%s\n", name[0].c_str(), points[0], points[0] != 1 ? "s" : "" );
+      printf( "%s: %d point%s\n", name[1].c_str(), points[1], points[1] != 1 ? "s" : "" );
+      if (points[0] == points[1]) {
+         printf( "TIED GAME\n" );
+      } else {
+         printf( "WINNER: %s\n", (points[0] > points[1] ? name[0] : name[1]).c_str() );
+      }
+      printf( "\n" );
+   }
+
+   return 0;
+}

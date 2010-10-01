@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <algorithm>
+
+#define size 1005
+
+using namespace std;
+
+
+struct point
+{
+	int x;
+	int y;
+};
+
+
+point points[size];
+
+int xy[size];
+int yx[size];
+
+int ns[size];
+int ew[size];
+
+int rr[size];
+
+struct xycmp {
+	bool operator()(int ai, int bi) const {
+		point &a = points[ai];
+		point &b = points[bi];
+		return make_pair(a.x, a.y) < make_pair(b.x, b.y);
+	}
+};
+
+struct yxcmp {
+	bool operator()(int ai, int bi) const {
+		point &a = points[ai];
+		point &b = points[bi];
+		return make_pair(a.y, a.x) < make_pair(b.y, b.x);
+	}
+};
+
+int main()
+{
+	while (true)
+	{
+		
+		int N,n;
+		scanf("%d\n",&N);
+		if (N == 0)
+			break;
+		
+		for (n=0; n<N; n++ ) {
+			scanf("%d %d\n",&points[n].x,&points[n].y);
+			xy[n]=n;
+			yx[n]=n;
+		}
+		
+//		for (int i=0; i<N; i++)
+			//printf("(%d,%d)\n", points[i].x, points[i].y);		
+		
+		// sortowanie:
+		sort(xy, xy + N, xycmp());
+		sort(yx, yx + N, yxcmp());
+		
+		//for (int i=0; i<N; i++)
+//			printf("(%d,%d)\n", points[i].x, points[i].y);				
+		
+		
+		// przerabianie WE
+		for (int i=0; i<N; i+=2)
+		{
+			ew[yx[i]]=yx[i+1];
+			ew[yx[i+1]]=yx[i];
+		}
+		
+		// przerabianie NS
+		for (int i=0; i<N; i+=2)
+		{
+			ns[xy[i]]=xy[i+1];
+			ns[xy[i+1]]=xy[i];
+		}
+	
+	
+		//for (int i=0; i<N; i++)
+//			printf("(%d,%d)\n", points[yx[i]].x, points[yx[i]].y);		
+		
+		//printf("Wynik");
+		
+	// for (int i=0; i<N; i++)
+	//		printf("(%d,%d)\n",point[xy[i]].x,point[xy[i]].y);
+		
+		int a = xy[0];
+		int i = 0;
+		int ri;
+		do {
+			a = ns[a];
+			if (a == 0)
+				ri = i;
+			rr[i++] = a;
+			a = ew[a];
+			if (a == 0)
+				ri = i;
+			rr[i++] = a;
+		} while (a != xy[0]);
+		
+		for (int i = 0; i < N; i++) {
+			int rin = ri + 1;
+			if (rin == N)
+				rin = 0;
+			point a = points[rr[ri]];
+			point n = points[rr[rin]];
+			char c;
+			if (a.x == n.x) {
+				c = a.y < n.y ? 'N' : 'S';
+			} else {
+				c = a.x < n.x ? 'E' : 'W';
+			}
+			putc(c, stdout);
+			ri = rin;
+		}
+		putc('\n', stdout);
+	
+	}
+	return 0;
+
+}

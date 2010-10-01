@@ -1,0 +1,72 @@
+#include <iostream>
+
+using namespace std;
+
+struct cislo
+{
+  int c;
+  int p;
+  bool operator< (cislo &cis)
+  {
+    if(c < cis.c || (c == cis.c && p < cis.p))
+      return true;
+    return false;
+  }
+};
+
+void prehod(cislo *p, int zac, int kon)
+{
+  int delka = kon - zac + 1;
+  for(int i = 0; i < delka/2; i++)
+  {
+    cislo temp = p[zac + i];
+    p[zac + i] = p[kon - i];
+    p[kon - i] = temp;
+  }
+}
+
+int main ()
+{
+  cislo nekon;
+  nekon.c = 0x7fffffff;
+  nekon.p = 0x7fffffff;
+  for (;;)
+  {
+    int n;
+    cislo pole[100000];
+    int vystup[100000];
+    cin >> n;
+    if(n == 0) return 0;
+    for (int i = 0; i < n; i++)
+    {
+      int m = 0;
+      cin >> pole[i].c;
+      cin.ignore(1);
+      for(int j = 0; j < i; j++)
+      {
+        if(pole[j].c == pole[i].c)
+          m++;
+      }
+      pole[i].p = m;
+    }
+    for(int i = 0; i < n; i++)
+    {
+      cislo nejmensi(nekon);
+      int index = 0;
+      for(int j = i; j < n; j++)
+      {
+        if(pole[j] < nejmensi)
+        {
+          index = j;
+          nejmensi = pole[j];
+        }
+      }
+      prehod(pole, i, index);
+      vystup[i] = index + 1;
+    }
+    for (int i = 0; i < n; i ++)
+      cout  << vystup[i] << " ";
+    cout << endl;
+  }
+  
+}

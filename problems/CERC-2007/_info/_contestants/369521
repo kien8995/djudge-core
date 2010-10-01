@@ -1,0 +1,162 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<climits>
+#include<cmath>
+#include<algorithm>
+
+using namespace std;
+
+#define PRINTF(args...) printf(args)
+//#define PRINTF(args...) 
+
+#define FOR(i,a,b) for(int i=(a); i<(int)(b); ++i)
+#define FORD(i,a,b) for(int i=(a)-1; i>=(int)(b); --i)
+#define FOREACH(i,C) for(__typeof(C.begin()) i=C.begin(); i!=C.end(); ++i)
+
+const int max_n = 100000;
+const int seed = 1453469261;
+
+struct node {
+//	int val;
+	int label, size;
+	bool rot, used;
+	node *left, *right, *parent;
+};
+
+inline int size(node *p) {
+	if (p) return p->size;
+	else return 0;
+}
+inline void rot(node *p) {
+	if (p) p->rot = !p->rot;
+}
+inline void update(node *p) {
+	p->size = size(p->left) + size(p->right);
+	if (p->used) ++p->size;
+}
+inline void push(node *p) {
+	if (p->rot) {
+		swap(p->left, p->right);
+		rot(p->left);
+		rot(p->right);
+		p->rot = false;
+	}
+}
+void update_all(node *p) {
+	while (p) {
+		update(p);
+		p = p->parent;
+	}
+}
+
+void rotate_left(node *p) {
+	node *q = p->right;
+	push(q);
+	q->parent = p->parent;
+	if (q->parent) {
+		if (p == q->parent->left) q->parent->left = q;
+		else q->parent->right = q;
+	}
+	p->parent = q;
+	p->right = q->left;
+	if (p->right) p->right->parent = p;
+	q->left = p;
+}
+void rotate_right(node *p) {
+	node *q = p->left;
+	push(q);
+	q->parent = p->parent;
+	if (q->parent) {
+		if (p == q->parent->left) q->parent->left = q;
+		else q->parent->right = q;
+	}
+	p->parent = q;
+	p->left = q->right;
+	if (p->left) p->left->parent = p;
+	q->right = p;
+}
+
+void heap_up(node *p) {
+	while (p->parent) {
+		node *q = p->parent;
+		push(q);
+		if (p == q->left) rotate_right(q);
+		else rotate_left(q);
+		update(q);
+	}
+}
+void ctrl_heap_up(node *p) {
+	while (p->parent && p->label < p->parent->label) {
+		node *q = p->parent;
+		push(q);
+		if (p == q->left) rotate_right(q);
+		else rotate_left(q);
+		update(q);
+	}
+}
+void ctrl_heap_down(node *p) {
+	for (;;) {
+		push(p);
+		node *q = p->left;
+		if (p->right && (!q || p->right->label < q->label)) q = p->right;
+		if (!q || p->label <= q->label) break;
+		if (q == p->left) rotate_right(p);
+		else rotate_left(p);
+	}
+	update_all(p);
+}
+
+node nodes[max_n];
+
+struct rec {
+	int i, val;
+};
+rec array[max_n];
+
+inline bool operator<(const rec &a, const rec &b) {
+	return a.val < b.val || a.val == b.val && a.i < b.i;
+}
+
+bool testcase() {
+	int n;
+	scanf("%d", &n);
+	if (!n) return false;
+	FOR(i,0,n) {
+		scanf("%d", &array[i].val);
+		array[i].i = i;
+	}
+	sort(array, array+n);
+//	FOR(i,0,n) nodes[array[i].i].val = i;
+	node *last = 0;
+	FOR(i,0,n) {
+//		PRINTF("%d ", nodes[i].val);
+		nodes[i].label = random();
+		nodes[i].size = 1;
+		nodes[i].rot = false;
+		nodes[i].used = true;
+		nodes[i].left = nodes[i].right = 0;
+		nodes[i].parent = last;
+		if (last) last->right = nodes+i;
+		ctrl_heap_up(nodes+i);
+		last = nodes+i;
+	}
+//	PRINTF("\n");
+	FOR(i,0,n) {
+		node *p = nodes+array[i].i;
+		push(p);
+		heap_up(p);
+		printf("%d ", size(p->left)+i+1);
+		p->used = false;
+		rot(p->left);
+		ctrl_heap_down(p);
+	}
+	printf("\n");
+	return true;
+}
+
+int main() {
+	srandom(seed);
+	while(testcase());
+	return 0;
+}

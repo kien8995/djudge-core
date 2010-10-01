@@ -1,0 +1,127 @@
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <cctype>
+using namespace std;
+#define INFTY 1000000000
+
+int R, C;
+char zemla[120][120];
+char c;
+int myR, myC;
+int best;
+
+const int dR[] = {1, -1, 0, 0};
+const int dC[] = {0, 0, 1, -1};
+
+// B = 1 Y = 2 R = 4 G = 8
+int len[120][120][16];
+
+struct KjeSem {
+  int r, c;
+  int keys;
+};
+
+bool isDoor(int ch) {
+  if (ch == 'B' || ch == 'Y' || ch == 'G' || ch == 'R') return true;
+  return false;
+}
+
+bool isKey(int ch) {
+  if (ch == 'b' || ch == 'y' || ch == 'g' || ch == 'r') return true;
+  return false;
+}
+
+int keyCode(int ch) {
+  ch = toupper(ch);
+  if (ch == 'B') return 1;
+  if (ch == 'Y') return 2;
+  if (ch == 'G') return 4;
+  if (ch == 'R') return 8;
+  return 0;
+}
+
+void search() {
+  int i, j, k;
+  int r, c, thisLen, keys;
+
+  // init
+  for (i=1; i<=R; i++)
+    for (j=1; j<=C; j++)
+      for (k=0; k<16; k++)
+        len[i][j][k] = INFTY;
+  best = INFTY;
+
+  len[myR][myC][0] = 0;
+
+  KjeSem ks, novaya;
+  ks.r = myR;
+  ks.c = myC;
+  ks.keys = 0;
+
+  queue<KjeSem> q;
+  q.push(ks);
+  while (!q.empty()) {
+    ks = q.front(); q.pop();
+    keys = ks.keys;
+    thisLen = len[ks.r][ks.c][ks.keys];
+    for (k=0; k<4; k++) {
+      r = ks.r + dR[k];
+      c = ks.c + dC[k];
+      if (zemla[r][c] == 'X') {
+        // exit found
+        best = thisLen+1;
+        return;
+      }
+      if (zemla[r][c] == '#') continue;
+      if (isDoor(zemla[r][c])) {
+        if ((keyCode(zemla[r][c]) & keys) == 0) continue;
+      }
+      if (isKey(zemla[r][c])) {
+        novaya.keys = keys | keyCode(zemla[r][c]);
+      } else novaya.keys = keys;
+      novaya.r = r;
+      novaya.c = c;
+      if (len[r][c][novaya.keys] > thisLen+1) {
+        len[r][c][novaya.keys] = thisLen+1;
+        q.push(novaya);
+      }
+    }
+    
+  }
+  // jebi ga
+}
+
+int main() {
+  int i, j;
+
+  while (true) {
+    scanf("%d %d\n", &R, &C);
+    if (R==0 && C==0) break; // odjebi
+    for (i=1; i<=R; i++) {
+      fgets(&zemla[i][1], 120, stdin);
+      for (j=1; j<=C; j++) {
+        if (zemla[i][j] == '*') {
+          myR = i;
+          myC = j;
+          zemla[i][j] = '.';
+        }
+      }
+    }
+    // make some nice frame
+    for (i=0; i<=R+1; i++) {
+      zemla[i][0] = zemla[i][C+1] = '#';
+    }
+    for (i=0; i<=C+1; i++) {
+      zemla[0][i] = zemla[R+1][i] = '#';
+    }
+    search();
+    if (best == INFTY) {
+      printf("The poor student is trapped!\n");
+    } else {
+      printf("Escape possible in %d steps.\n", best);
+    }
+  }
+
+  return 0;
+}

@@ -1,0 +1,143 @@
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+    char* j[] = {
+        "cs",
+        "en",
+        "fr",
+        "de",
+        "hu",
+        "it",
+        "jp",
+        "pl",
+        "es"
+    };
+
+    char* k[][2] = {
+        { "Kamen", "" },
+        { "Rock", "" },
+        {"Pierre", "" },
+        {"Stein", "" },
+        {"Ko", "Koe" },
+        {"Sasso", "Roccia"},
+        {"Guu", ""},
+        {"Kamien", ""},
+        {"Piedra", ""}
+    };
+
+    char *n[][2] = {
+        { "Nuzky", "" },
+        { "Scissors", "" },
+        { "Ciseaux", "" },
+        { "Schere", "" },
+        { "Ollo", "Olloo" },
+        { "Forbice", "" },
+        { "Choki" ,"" },
+        { "Nozyce" ,"" },
+        { "Tijera" ,"" }
+    };
+
+    char *p[][2] = {
+        { "Papir", "" },
+        { "Paper", "" },
+        { "Feuille", "" },
+        { "Papier", "" },
+        { "Papir", "" },
+        { "Carta", "Rete" },
+        { "Paa", "" },
+        { "Papier", "" },
+        { "Papel", "" }
+    };
+
+    for(int i=1; ; i++)
+    {
+        char jez1[100], jez2[100];
+        char im1[100], im2[100];
+        char buf1[100], buf2[100];
+
+        scanf(" %s", jez1);
+        if( strcmp( buf1, "." ) == 0)
+            break;
+
+        scanf(" %s", im1);
+        scanf(" %s %s", jez2, im2);
+
+        int j1=-1, j2=-1; // index jezyka
+        for(int ii=0; j1 == -1 || j2 == -1; ii++)
+        {
+            if(strcmp(jez1, j[ii]) == 0)
+                j1 = ii;
+            if(strcmp(jez2, j[ii]) == 0)
+                j2 = ii;
+
+        }
+
+        int co1 = -1, co2 = -1; // co wybral
+        int po1 = 0, po2 = 0; // ile ma pkt
+
+        bool koniec = false;
+        while(1) // wczytuj co wybrali
+        {
+            char b1[100], b2[100];
+            scanf(" %s", b1);
+            if( strcmp(b1, ".") == 0)
+            {
+                koniec = true;
+                break;
+            }
+            if( strcmp(b1, "-") == 0)
+                break;
+            
+            scanf(" %s", b2);
+            co1 = co2 = -1; 
+            for(int i2=0; co1==-1 || co2 == -1; i2++)
+            {
+                if(strcmp(b1, k[i2][0]) == 0 || (strcmp(b1, k[i2][1]) == 0))
+                    co1 = 0;
+                if(strcmp(b1, n[i2][0]) == 0 || strcmp(b1, n[i2][1]) == 0)
+                    co1 = 1;
+                if(strcmp(b1, p[i2][0]) == 0 || strcmp(b1, p[i2][1]) == 0)
+                    co1 = 2;
+                  if(strcmp(b2, k[i2][0]) == 0 || (strcmp(b2, k[i2][1]) == 0))
+                      co2 = 0;
+                  if(strcmp(b2, n[i2][0]) == 0 || strcmp(b2, n[i2][1]) == 0)
+                      co2 = 1;
+                  if(strcmp(b2, p[i2][0]) == 0 || strcmp(b2, p[i2][1]) == 0)
+                      co2 = 2;
+
+            }
+          // printf("%s %s\n", b1, b2); 
+//            printf("dupa: %d %d\n", co1, co2);
+//            if(co2-co1 == 1 || co1-co2 == -2)
+  //              po1 ++;
+    //        else if(co2 == co1) {}
+      //      else po2++;
+               if(co1 == co2) {}
+               else if(co1 == 0 && co2 == 1) po1++;
+               else if(co1 == 0 ) po2++;
+               else if(co1 == 1 && co2 == 2) po1++;
+               else if(co1 == 1) po2++;
+               else if(co1 == 2 && co2 == 0) po1++;
+               else po2++;
+
+        }
+        
+        printf("Game #%d:\n", i);
+        printf("%s: %d ", im1, po1); 
+        if(po1 == 1) printf("point\n"); else printf("points\n");
+        printf("%s: %d ", im2, po2);
+        if(po2 == 1) printf("point\n"); else printf("points\n");
+        if(po1 == po2) printf("TIED GAME\n");
+        else printf("WINNER: %s\n", po1>po2?im1:im2);
+        printf("\n");
+
+
+        if(koniec == true)
+            break;
+    }
+    return 0;
+}

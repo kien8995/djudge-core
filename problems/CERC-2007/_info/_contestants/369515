@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <list>
+
+#define SWAP(a, b) {(a) ^= (b); (b) ^= (a); (a) ^= (b);}
+	
+using namespace std;
+
+vector<int> pole;
+list<int> spole;
+
+//int m;
+void prevrat(int i, int j) {
+//	cout << "pr: " << i << " " << j << endl;
+	for(int a = (j - i + 1) / 2; a > 0; a--) {
+		SWAP(pole[i], pole[j]);
+		i++; j--;
+	}
+}
+
+
+
+void sort() {
+	int ok = 0;
+//	int nm = 1000000;
+	int len = pole.size();
+	for(;ok < len; ok++) {
+		for(int i = ok; i < len; i++) {
+			if(pole[i] == spole.front()) {
+				prevrat(ok, i);
+				cout << i + 1 << ' ';
+//				if(nm > m)
+//					for(; i < len; i++)
+//						nm = (nm > pole[i]) ? pole[i] : nm;
+//				m = nm;
+				spole.pop_front();
+				break;
+			}
+//			nm = (nm > pole[i]) ? pole[i] : nm;
+		}
+
+	}
+
+}
+/*
+void pv(vector<int> &pole) {
+	for(vector<int>::iterator it = pole.begin(); it != pole.end(); ++it)
+		cout << *it << ' ';
+}
+*/
+
+int main(void) {
+	for(;;) {
+		int p;
+		cin >> p;
+		if(p == 0)
+			return 0;
+
+		pole.clear();
+		spole.clear();
+//		m = 1000000;
+//		cout << "p == " << p << endl;
+		for(int a; p > 0; --p) {
+			cin >> a;
+//			m = (m > a) ? a : m;
+			pole.push_back(a);
+			spole.push_back(a);
+		}
+//		cout << "min " << m << endl;
+		spole.sort();
+		sort();
+		cout << endl;
+	}
+	
+	return 0;
+}

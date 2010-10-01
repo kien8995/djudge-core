@@ -1,0 +1,167 @@
+#include <stdio.h>
+
+#define COORD(x,y) ((x)*C + (y))
+#define BC(x,y) ((x)*16 + (y))
+#define XOREGY(A,B) (A) = (A) ? !(B) : (B)
+
+bool def_coeffs[256][256];
+bool **coeffs = new bool*[256];
+
+int C, R;
+int RC;
+
+bool variables[256];
+bool rights[256];
+
+bool solve()
+{
+/*	for (int i = 0; i < RC; i++) {
+		for (int j = 0; j < RC; j++) {
+			printf("%d ", coeffs[i][j]);
+		}
+		printf("\n");
+	}
+	printf(" *** \n");*/
+	
+	int x,y,z; int xs;
+	
+	xs = 0;
+	for (x=0; x<RC; x++)
+	{
+		/*
+		for (int i = 0; i < RC; i++) {
+			for (int j = 0; j < RC; j++) {
+				printf("%d ", coeffs[i][j]);
+			}
+			printf("\n");
+		}
+		printf(" *** \n");
+	*/
+		for (y=xs; (y<RC) && !coeffs[y][x]; ++y);
+		
+		if (y >= RC) 
+		{
+			
+		}
+		 else {
+			 
+			if (y!=xs)
+			{
+				bool tmp2 = rights[xs];
+				rights[xs] = rights[y];
+				rights[y] = tmp2;
+				
+				/*bool* tmp1 = coeffs[x];
+				coeffs[x] = coeffs[y];
+				coeffs[y] = tmp1;*/
+				
+				bool tmp1;
+				for (int i = 0; i < 256; ++i) {
+					tmp1 = coeffs[xs][i];
+					coeffs[xs][i] = coeffs[y][i];
+					coeffs[y][i] = tmp1;
+				}
+					
+			}
+			
+			for (y=xs+1; y<RC; ++y) if (coeffs[y][x])
+			{
+				for (z=xs; z<RC; z++) XOREGY(coeffs[y][z], coeffs[xs][z]);
+				XOREGY(rights[y], rights[xs]);
+			}
+		 	xs++;
+		 }
+	}
+	
+	for (z = xs; z < RC; ++z) {
+		if (rights[z]) {return false;}
+	}
+	
+	
+	for (int i=0; i<RC; ++i) variables[i] = 0;
+
+	for (--xs; xs>=0; --xs)
+	{
+		for (x=0; !coeffs[xs][x]; ++x);
+		variables[x] = rights[xs];
+		for (z = x+1; z < RC; ++z) 
+		{
+			bool tmp = coeffs[x][z] && variables[z];
+			XOREGY(variables[x], tmp);
+		}
+	}
+	
+	return true;
+}
+
+int main()
+{ 
+	for (int i=0; i<256; ++i) coeffs[i]= new bool[256];
+	
+	for (int i=0; i<256; ++i) for (int j=0; j<256; ++j) def_coeffs[i][j]=false;
+	for (int x=0; x<16; ++x)
+		for (int y=0; y<16; ++y)
+		{
+			int o = BC(x, y);
+			def_coeffs[o][o] = true;
+			if (x>0)
+			{
+				int a = BC(x-1, y);
+				def_coeffs[o][a] = true;
+				def_coeffs[a][o] = true;
+			}
+			if (y>0)
+			{
+				int a = BC(x, y-1);
+				def_coeffs[o][a] = true;
+				def_coeffs[a][o] = true;
+			}		
+		}
+	
+	
+	while (scanf("%d %d ", &R, &C) && R)
+	{
+		RC = R*C;
+		
+		for (int x1=0; x1<R; ++x1 )
+			for (int y1=0; y1<C; ++y1 )
+			{
+				for (int x2=0; x2<R; ++x2 )
+					for (int y2=0; y2<C; ++y2 )
+					{
+					
+						coeffs[COORD(x1, y1)][COORD(x2, y2)] = def_coeffs[BC(x1, y1)][BC(x2, y2)];
+						
+						//printf(">> %d,%d - %d,%d = %d\n", x1, y1, x2, y2, coeffs[COORD(x1, y1)][COORD(x2, y2)]);
+					}				
+			}
+		
+		char buf[70];
+		for (int x=0; x<R; x++)
+		{
+			fgets(buf, 69, stdin);
+			//%printf(">> %s", buf);
+			
+			for (int y=0; y<C; y++)
+			{
+				rights[COORD(x,y)] = buf[y] == 'X';
+			}
+			
+		}
+		
+		if (solve())
+		{
+			int s = 0;
+			for (int i=0; i<RC; ++i) 
+			{
+			//	printf(">> %d \n", variables[i]);
+				s+=variables[i] ? 1 : 0;
+			}
+			printf("You have to tap %d tiles.\n", s);
+		}
+		else printf("Damaged billboard.\n");
+	
+	}
+	
+	return 0;
+}

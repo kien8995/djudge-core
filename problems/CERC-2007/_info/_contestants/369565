@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int mat[1010][2];
+int pun[1010][2];
+vector<pair<pair<int, int>, int> > w,g;
+
+int main(){
+		while(1){
+		
+			int N;
+			scanf("%d", &N);
+			if(N==0) break;
+			w.clear();
+			g.clear();
+			int x=10000000,y=1000000,indeks;
+			for(int i=0; i<N; i++){
+				int a, b;
+				scanf("%d %d", &a, &b);
+				pun[i][0]=a;
+				pun[i][1]=b;
+				if(a<x || (a==x && b<y) ){
+					x=a;
+					y=b;
+					indeks=i;
+				}
+				w.push_back(make_pair(make_pair(a, b), i));
+				g.push_back(make_pair(make_pair(b, a), i));
+			}
+			sort(w.begin(),w.end());
+			sort(g.begin(),g.end());
+			for(int i=0; i<w.size(); i+=2){
+				mat[w[i].second][0]=w[i+1].second;
+				mat[w[i+1].second][0]=w[i].second;
+			}
+			for(int i=0; i<g.size(); i+=2){
+				mat[g[i].second][1]=g[i+1].second;
+				mat[g[i+1].second][1]=g[i].second;
+			}
+			//for(int i=0;i<N;i++) printf("%d %d\n",mat[i][0],mat[i][1]);
+			//fflush(stdout);
+			int done=0,pop=mat[indeks][1];
+			bool ok=false;
+			
+			while(true){
+				if(indeks==0) ok=true;
+				if(ok) done++;
+				if(mat[indeks][1]!=pop){
+					if(ok){
+						if(pun[indeks][0]-pun[mat[indeks][1]][0]>0) printf("W");
+						else printf("E");
+					}	
+					pop=indeks;
+					indeks=mat[indeks][1];
+				}
+				else{
+					if(ok){
+						if(pun[indeks][1]-pun[mat[indeks][0]][1]>0) printf("S");
+						else printf("N");
+					}	
+					pop=indeks;
+					indeks=mat[indeks][0];
+				}
+				if(done==N) break;
+			}
+			printf("\n");
+		}
+
+
+}

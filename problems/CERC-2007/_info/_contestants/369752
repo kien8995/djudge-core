@@ -1,0 +1,181 @@
+#include <cstdio>
+#include <string>
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+int DIV(int a, int b) //return a DIV b
+{
+	if(a>=0 && b>=0)
+		return a/b;
+	else
+	{
+		if(a>=0 && b<0)
+		{
+			b=-b;
+			return -(a/b);
+		}
+		else
+		{
+			if(a<0 && b>=0)
+			{
+				if((-a)%b==0)
+					return -((-a)%b);
+				else
+					return -((-a)%b+1);
+			}
+			else // a<0 && b<0
+			{
+				if((-a)%(-b)==0)
+					return (-a)/(-b);
+				else
+					return ((-a)/(-b)+1);
+			}
+		}
+	}
+}
+int MOD(int a, int b)
+{
+	int c=DIV(a, b);
+	return a-(c*b);
+}
+/////////////////////////////////////////////////////////////////////////////////
+int from(int base, string what)
+{
+	int odp=0;
+	int power=1;
+	int mn=1;
+	if(what[0]=='-')
+	{
+		mn=-1;
+		what.erase(what.begin());
+	}
+	for(int i=what.size()-1; i>=0; --i)
+	{
+		odp+=(  (what[i]-'0') *power);
+		power*=(base);
+	}
+	return mn*odp;
+}
+string to(int base, int what)
+{
+	string odp;
+	if(what==0)
+		return "0";
+	while(what!=0)
+	{
+		//odp+=(what%base+'0');
+		//what/=base;
+		odp+=(MOD(what, base)+'0');
+		what=DIV(what, base);
+	}
+	reverse(odp.begin(), odp.end());
+	return odp;
+}
+int dajBase(char* skad)
+{
+	int rez=0;
+	int pow=1;
+	int SZ=strlen(skad);
+	if(skad[0]=='t')
+	{
+		for(int i=SZ-1; i>=3; i--)
+		{
+			rez+=(pow*(skad[i]-'0'));
+			pow*=10;
+		}
+	}
+	else // skad[0]=='f'
+	{
+		for(int i=SZ-1; i>=5; i--)
+		{
+			rez+=(pow*(skad[i]-'0'));
+			pow*=10;
+		}
+	}
+	return rez;
+}
+string IntToString(int what) // ZAL: what>=0
+{
+	char buf[20];
+	sprintf(buf,"%d",what);
+	//printf("aa%saa",buf);
+	string odp;
+	/*
+	if(what==0)
+		return "0";
+	while(what>0)
+	{
+		odp+=(what%10+'0');
+		what/=10;
+	}
+	reverse(odp.begin(), odp.end());
+	return odp;
+	*/
+	return buf;
+}			
+int main()
+{
+	char skad[100];
+	scanf("%s", skad);
+	while(skad[0]!='e')
+	{
+		int N;
+		scanf("%d", &N);
+		//========= miel
+		int base=dajBase(skad);
+		base=-base;
+		//	printf("base=%d\n", base); //-------TU
+		if(skad[0]=='t')
+		{
+			printf("%s\n", to(base, N).c_str());
+		}
+		else // FROM TRANSLATION
+		{
+			/*if(N<0)
+			{
+				N=-N;
+				string liczba=IntToString(N);
+				reverse(liczba.begin(), liczba.end());
+				liczba+='-';
+				reverse(liczba.begin(), liczba.end());
+				cout<<"p"<<liczba<<"p";
+				cout<<base<<" "<<liczba<<" "<<from(base, liczba)<<endl;
+				printf("%d\n", from(base, liczba));
+			}
+			else*/
+			{
+				string liczba=IntToString(N);
+				//liczba.erase(liczba.begin());
+				//cout<<"p"<<liczba<<"p";
+				//cout<<base<<" "<<liczba<<" "<<from(base, liczba)<<endl;
+				printf("%d\n", from(base, liczba));
+			}
+		}
+		//=============
+		scanf("%s", skad);
+	}
+	/*for(int j=2; j<=10; j++)
+	{
+	for(int i=0; i<=1000000; i++)
+	{
+		string rez=to(-j, i);
+		int rez2=-from(-j, rez);
+		if(rez2!=i)
+		{
+			cout<<j<<' '<<i<<endl;
+			//break;
+		}
+	}
+	}*/	
+	
+	/*
+	printf("%d\n", MOD(-10,-2));
+	printf("%d\n", DIV(10,-2));
+	printf("%d\n", MOD(-5,-2));
+	printf("%d\n", DIV(-5,-2));
+	*/
+	return 0;
+}

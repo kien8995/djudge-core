@@ -1,0 +1,143 @@
+//{{{
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <list>
+#include <map>
+#include <set>
+#include <queue>
+#include <cstring>
+using namespace std;
+
+#define FOR(I,A,B) for(int I=(A);I<(B);I++)
+#define FORD(I,A,B) for(int I=(A);I>=(B);I--)
+#define REP(I,N) for(int I=0;I<(N);I++)
+#define VAR(V,init) __typeof(init) V=(init)
+#define FOREACH(I,C) for(VAR(I,(C).begin());I!=(C).end();I++)
+#define CLR(A,v) memset((A),v,sizeof((A)))
+
+
+#define ALL(X) (X).begin(), (X).end()
+
+#define PB push_back
+
+#define MP make_pair
+#define FI first
+
+#define SE second
+//}}}
+const int nmx=1010,lmx=20010,pmx=10000;
+int X[nmx],Y[nmx];
+int n;
+int NE[4][nmx];
+int TG[2][nmx];
+char G[nmx];
+vector <pair<int,int> > XS[lmx] ,YS[lmx];
+vector <int> test;
+char ZN[4]={'N','E','S','W'};
+int TOG[nmx];
+bool WPR[nmx];
+
+
+void print(int v)
+{
+	if (WPR[v]) return;
+	WPR[v]=true;
+	printf("%c",G[v]);
+	print( NE[TG[TOG[v]][v]][v] );
+}
+
+void go(int v,bool dir)
+{
+	if (G[v]) return;
+	TOG[v]= dir?0:1;
+	if (!dir)
+	{	
+		G[v]=ZN[TG[1][v]];
+		go( NE[TG[1][v]][v] , !dir);
+	}
+	else
+	{
+		G[v]=ZN[TG[0][v]];
+		go( NE[TG[0][v]][v] , !dir);
+	}
+}
+
+
+
+
+
+
+int main() 
+{
+	int st;
+	for(;;)
+	{	
+		st=-1;
+		scanf("%d",&n);
+		if (n==0) break;
+		REP(i,n) scanf("%d%d",X+i,Y+i);
+		REP(i,lmx) { XS[i].clear(); YS[i].clear(); }
+		REP(i,n) {X[i]+=pmx; Y[i]+=pmx;}
+		REP(i,n)
+		{
+			YS[ Y[i] ].PB(MP(X[i],i));
+			XS[ X[i] ].PB(MP(Y[i],i));
+		}
+		REP(i,lmx)
+		{
+			sort(ALL(XS[i]));
+			sort(ALL(YS[i]));
+		}
+		CLR(WPR,0);
+		CLR(G,0);
+		CLR(NE,-1);
+		CLR(TG,-1);
+		REP(y,lmx)
+		{
+			int len=YS[y].size();
+			FOR(i,1,len)
+			{
+				NE[3][ YS[y][i].SE ]  = YS[y][i-1].SE;
+				NE[1][ YS[y][i-1].SE ]= YS[y][i].SE;
+			}
+		}
+		REP(x,lmx)
+		{
+			int len=XS[x].size();
+			FOR(i,1,len)
+			{
+				NE[2][ XS[x][i].SE ]  = XS[x][i-1].SE;
+				NE[0][ XS[x][i-1].SE ]= XS[x][i].SE;
+			}
+		}
+		int a;
+		FORD(y,lmx-1,0)
+		{
+			int len=YS[y].size();
+			REP(i,len)
+			{
+				a=YS[y][i].SE;
+				if (st==-1) st=a;
+				if (TG[0][a] == -1)
+				{
+					TG[0][a]=2;
+					TG[0][ NE[2][a] ] = 0;
+				}
+				if (TG[1][a] == -1)
+				{
+					TG[1][a]=1;
+					TG[1][ NE[1][a] ] = 3;
+				}
+			}
+		}
+		go(st,0);		
+		print(0);
+		printf("\n");
+	}	
+	return 0;
+}

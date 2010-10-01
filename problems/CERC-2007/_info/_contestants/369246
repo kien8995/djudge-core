@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <ctype.h>
+
+char b[105][105];
+int v[105][105][16];
+int R, C;
+struct _q {char x, y, k; } q[105*105*16]; int qs, qe;
+
+int main(void) {
+  int s[2];
+  while (scanf("%d%d", &R, &C), R) {
+    for (int i=0;i<R;i++)
+      for (int j=0;j<C;j++) {
+	char ch;
+	while (ch=getchar(), isspace(ch)) ;
+	b[i][j]=ch;
+	if (ch=='*') s[0]=i, s[1]=j;
+	for (int k=0;k<16;k++) v[i][j][k]=0;
+      }
+
+    q[0].x=s[0]; q[0].y=s[1]; q[0].k=0; qs=0; qe=1; v[s[0]][s[1]][0]=0;
+    while (qs<qe) {
+      _q act=q[qs++];
+      static int dx[]={1,-1,0,0}, dy[]={0,0,-1,1};
+      for (int i=0;i<=4;i++) {
+	  int nx=act.x+dx[i], ny=act.y+dy[i];
+	  if (nx<0 || nx>=R || ny<0 || ny>=C || b[nx][ny]=='#') continue;
+	  if (b[nx][ny]=='X') {
+	    printf("Escape possible in %d steps.\n", v[act.x][act.y][act.k]+1); qe=qs+1;
+	    goto next;
+	  }
+	  int k=act.k;
+	  if (b[nx][ny]=='b') k|=1;
+	  if (b[nx][ny]=='y') k|=2;
+	  if (b[nx][ny]=='r') k|=4;
+	  if (b[nx][ny]=='g') k|=8;
+	  if (b[nx][ny]=='B' && (!(k&1))) continue;
+	  if (b[nx][ny]=='Y' && (!(k&2))) continue;
+	  if (b[nx][ny]=='R' && (!(k&4))) continue;
+	  if (b[nx][ny]=='G' && (!(k&8))) continue;
+	  if (v[nx][ny][k]) continue;
+	  v[nx][ny][k]=v[act.x][act.y][act.k]+1;
+	  q[qe].x=nx; q[qe].y=ny; q[qe].k=k; qe++;
+	}
+
+    }
+next:
+    if (qs>=qe) puts("The poor student is trapped!");
+  }
+  return 0;
+}

@@ -1,0 +1,282 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int n;
+int v[1000][2];
+char path[10000][4];
+char stp[4];
+int sum[4];
+int ipa;
+int which;
+
+int find(int id, char dir){ 
+	int f = 0;
+	int idx = -1;
+	int best;
+//	printf("find: id = %d; dir = %c;\t", id, dir);
+	switch (dir) {
+		case 'w':
+			best = -2000000;
+			for (int i = 0; i < n; i++) 
+				if (v[i][1] == v[id][1] && v[i][0] != v[id][0]) {
+					if (v[i][0] < v[id][0] && v[i][0] > best) {
+						best = v[i][0];
+						idx = i;
+					}
+				}
+			break;
+		case 'n':
+			best = 2000000;
+			for (int i = 0; i < n; i++) {
+				if (v[i][0] == v[id][0] && v[i][1] != v[id][1]) {
+					if (v[i][1] > v[id][1] && v[i][1] < best) {
+						best = v[i][1];
+						idx = i;
+					}
+				}
+			}
+			break;
+		case 'e':
+			best = 2000000;
+			for (int i = 0; i < n; i++) {
+				if (v[i][1] == v[id][1] && v[i][0] != v[id][0]) {
+					if (v[i][0] > v[id][0] && v[i][0] < best) {
+						best = v[i][0];
+						idx = i;
+					}
+				}
+			}
+			break;
+		case 's':
+			best = -2000000;
+			for (int i = 0; i < n; i++) {
+				if (v[i][0] == v[id][0] && v[i][1] != v[id][1]) {
+					if (v[i][1] < v[id][1] && v[i][1] > best) {
+						best = v[i][1];
+						idx = i;
+					}
+				}
+			}
+	}
+//	printf("return = %d; x = %d; y = %d\n", idx, v[idx][0], v[idx][1]);
+	return idx;
+}
+
+int findnext(int last, char lastdir) {
+	int val;
+
+	if (lastdir == 'w') {
+		val = find(last, 's');
+		if (val != -1) {
+			path[ipa][which] = 's';
+			ipa++;
+			sum[which] += 1;
+			return val;
+		}
+		val = find(last, 'n');
+		if (val != -1) {
+			path[ipa][which] = 'n';
+			ipa++;
+			sum[which] += 2;
+			return val;
+		}
+	}
+	if (lastdir == 'n') {
+		val = find(last, 'w');
+		if (val != -1) {
+			path[ipa][which] = 'w';
+			ipa++;
+			sum[which] += 1;
+			return val;
+		}
+		val = find(last, 'e');
+		if (val != -1) {
+			path[ipa][which] = 'e';
+			ipa++;
+			sum[which] += 2;
+			return val;
+		}
+	}
+	if (lastdir == 'e') {
+		val = find(last, 'n');
+		if (val != -1) {
+			path[ipa][which] = 'n';
+			ipa++;
+			sum[which] += 1;
+			return val;
+		}
+		val = find(last, 's');
+		if (val != -1) {
+			path[ipa][which] = 's';
+			ipa++;
+			sum[which] += 2;
+			return val;
+		}
+	}
+	if (lastdir == 's') {
+		val = find(last, 'e');
+		if (val != -1) {
+			path[ipa][which] = 'e';
+			ipa++;
+			sum[which] += 1;
+			return val;
+		}
+		val = find(last, 'w');
+		if (val != -1) {
+			path[ipa][which] = 'w';
+			ipa++;
+			sum[which] += 2;
+			return val;
+		}
+	}
+	
+	return -1;
+}
+
+int main() {
+	int d;
+
+	while (1) {
+		scanf("%d", &n);
+		if (n == 0) break;
+		for (int i = 0; i < n; i++) {
+			scanf("%d%d", &v[i][0], &v[i][1]);
+		}
+		int x, y;
+		int cx, cy;
+		x = v[0][0];
+		y = v[0][1];
+		int steps;
+		int found = 0;
+		int next;
+		int now = 0;
+	
+		while (1) { // while path not found
+			// to west	
+//			printf("trying west\n");
+
+			stp[0] = stp[1] = stp[2] = stp[3] = 1;
+			sum[0] = sum[1] = sum[2] = sum[3] = 0;
+			steps = 0;
+			int w = find(0, 'w');
+			now = w;
+			ipa = 0;
+			which = 0;
+			path[ipa][0] = 'w';
+			ipa++;
+			
+			if (w != -1) {
+				cx = v[w][0]; cy = v[w][1];
+				while (cx != v[0][0] || cy != v[0][1]) {
+					next = findnext(now, path[ipa-1][0]);
+					if (next == -1) break;
+					now = next;
+					cx = v[now][0];
+					cy = v[now][1];
+					stp[0]++;
+				}
+			//	if (steps == n) found = 1;
+			}
+			//if (found) break;
+
+//			printf("trying north\n");
+			now = 0;
+		//	steps = 0;
+			which = 1;
+			ipa =0;
+			path[ipa][1] = 'n';
+			ipa++;
+			w = find(0, 'n');
+			now = w;
+			if (w != -1) {
+				cx = v[w][0]; cy = v[w][1];
+				while (cx != v[0][0] || cy != v[0][1]) {
+//					printf("now = %d\n", now);
+					next = findnext(now, path[ipa-1][1]);
+					if (next == -1) break;
+					now = next;
+					cx = v[now][0];
+					cy = v[now][1];
+					stp[1]++;
+				}
+		//		if (steps == n) found = 1;
+			}
+		//	if (found) break;
+
+//			printf("trying east\n");
+			now = 0;
+		//	steps = 0;
+			ipa = 0;
+			which = 2;
+			path[ipa][which] = 'e';
+			ipa++;
+			w = find(0, 'e');
+			now = w;
+			if (w != -1) {
+				cx = v[w][0]; cy = v[w][1];
+				while (cx != v[0][0] || cy != v[0][1]) {
+//					printf("now = %d\n", now);
+					next = findnext(now, path[ipa-1][2]);
+					if (next == -1) break;
+					now = next;
+					
+					cx = v[now][0];
+					cy = v[now][1];
+					stp[2]++;
+				}
+		//		if (steps == n) found = 1;
+			}
+		//	if (found) break;
+
+//			printf("trying south\n");
+			ipa = 0;
+			which = 3;
+			path[ipa][which] = 's';
+			ipa++;
+			now = 0;
+		//	steps = 0;
+			w = find(0, 's');
+			now = w;
+			if (w != -1) {
+				cx = v[w][0]; cy = v[w][1];
+				while (cx != v[0][0] || cy != v[0][1]) {
+					next = findnext(now, path[ipa-1][3]);
+					if (next == -1) break;
+					now  = next;
+					cx = v[now][0];
+					cy = v[now][1];
+					stp[3]++;
+				}
+				//if (steps == n) found = 1;
+			}
+			break;
+		}
+/*
+		printf("0:\n");
+		for (int z = 0; z < stp[0]; z++) {
+			printf("%c ", path[z][0]);
+		}
+		printf("\n1:\n");
+		for (int z = 0; z < stp[1]; z++) {
+			printf("%c ", path[z][1]);
+		}
+		printf("\n2:\n");
+		for (int z = 0; z < stp[2]; z++) {
+			printf("%c ", path[z][2]);
+		}
+		printf("\n3:\n");
+		for (int z = 0; z < stp[3]; z++) {
+			printf("%c ", path[z][3]);
+		}
+		printf("\n");
+*/
+		int bestone = 0;
+		for (int i = 0; i < 4; i++)
+			if (sum[i] > sum[bestone]) bestone = i;
+		for (int i = 0; i < stp[bestone]; i++) 
+			printf("%c", toupper(path[i][bestone]));	
+		printf("\n");
+	}
+	return 0;
+}

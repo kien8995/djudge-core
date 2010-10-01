@@ -1,0 +1,118 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+
+
+using namespace std;
+
+string toNormal(int radix, int number) {
+	string result = "";
+	
+	while (number > 0) {
+		result = char(48 + (number % radix)) + result;
+		number /= radix;		
+	}
+	
+	if (result == "") result = "0";
+	
+	return result;
+}
+
+
+int to(int radix, int number) {
+	int result = 0;
+	
+	if (number == 0) {return 0;}
+	
+	
+	int currentValue = (number > 0)? 1 : radix;
+	while (number / currentValue >= abs(radix)) {
+		
+		currentValue *= (radix * radix);
+	}
+	//cout << "after cycle" << endl;
+	//cout << currentValue << endl;
+	
+	if (abs(currentValue) > abs(number)) {
+		result = abs(currentValue);
+	} else if (number % currentValue == 0) {
+		result = abs(number);
+	} else {
+		result = abs((number / currentValue + 1) * currentValue);
+	}
+	
+	//cout << "result: " << result << endl;
+	
+	if (number > 0) {
+		return result + to(radix, number - result);
+	} else {
+		return result + to(radix, number + result);
+	}
+}
+
+int from(int radix /*negative*/, int number) {
+	int result = 0;
+	int currentValue = 1;
+	
+	while (number > 0) {
+		result += (number % 10) * currentValue;
+		currentValue *= radix;
+		number /= 10;
+	}
+	
+	return result;
+}
+
+int main() {
+	/*cout << toNormal(2, 30) << endl;
+	return 0;*/
+	/*cout << to(-10, 234) << endl;
+	return 0;*/
+	
+	
+	
+	
+	
+	
+	string s;
+
+	for (;;) {
+		getline(cin, s);
+		if (s=="end") {break;}
+
+		if (s[0] == 't') {
+			istringstream stream1;
+			stream1.str(s);
+			char c;
+			stream1 >> c;
+			stream1 >> c;
+			int radix;
+			int number;
+			stream1 >> radix;
+			stream1 >> number;
+			
+			//cout << "to radix: " << radix << " number: " << number << endl;
+			cout << toNormal(abs(radix), to(radix, number)) << endl;
+		} else {
+			
+			
+			istringstream stream1;
+			stream1.str(s);
+			char c;
+			stream1 >> c;
+			stream1 >> c;
+			stream1 >> c;
+			stream1 >> c;
+			int radix;
+			int number;
+			stream1 >> radix;
+			stream1 >> number;
+			
+			//cout << "from radix: " << radix << " number: " << number << endl;
+			cout << from(radix, number) << endl;
+		}
+	}
+
+
+	return 0;
+}

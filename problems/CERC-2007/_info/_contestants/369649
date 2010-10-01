@@ -1,0 +1,151 @@
+#include <cstdio>
+#include <map>
+#include <queue>
+#include <vector>
+using namespace std;
+#define REP(i,n) for(int i = 0; i<n;i++)
+char tab[220][220];
+int byl[10100];
+int wartosc_bramy[10100];
+
+typedef pair<int,int> p2;
+
+queue<int> q;
+map<p2,int> m;
+map<char,int> wartosci;
+int licznik_bram;
+char odw[220][220];
+char typ_bramy[220];
+int wejscia_bram[10100];
+vector<p2> wyjscia_bram[10100];
+int negacja[10100];
+
+void obrysuj_brame(int x, int y) {
+    int do_x=x,do_y=y;
+    int liczba_wejsc=0;
+    while(tab[do_x][y]=='#') do_x++;
+    while(tab[x][do_y]=='#') do_y++;
+    do_x--; do_y--;
+    for(int i = x; i<=do_x;i++) {
+	for(int j = y; j<=do_y;j++) {
+	    //wejscia
+	    if(j==y && tab[i][j-1]=='=') liczba_wejsc++;
+	    //wyjscia
+	    if(j==do_y && ( tab[i][j+1]=='=' || tab[i][j+1]=='o')) {
+//		if(tab[i][j+1]=='o') negacja[licznik_bram]=1;
+		wyjscia_bram[licznik_bram].push_back(p2(i,j+1));
+//		if(tab[i][j+1]=='o') wyjscia_bram[licznik_bram][1]++;
+	    }
+	    odw[i][j]=licznik_bram;
+	    if(tab[i][j]!=' ' && tab[i][j]!='#') typ_bramy[licznik_bram] = tab[i][j];	    
+	}
+    }
+    wejscia_bram[licznik_bram]=liczba_wejsc;
+    licznik_bram++;
+}
+void szukaj_bram() {
+    REP(i,220) {
+	REP(j,220) {
+	    if(odw[i][j])continue;
+	    if(tab[i][j]=='#') obrysuj_brame(i,j);
+	}
+    }       
+}
+
+int dfs[220][220][5][5];
+
+int r_x[]={1,0,-1,0};
+int r_y[]={0,1,0,-1};
+
+void go(int x, int y, int wart,int pop_x=-1, int pop_y=-1) {
+    if(x<0 || x>=220 || y<0 || y>=220) return ;
+    int dx = x-pop_x;
+    int dy = y-pop_y;
+    if (pop_x < 0) dx = dy = 0;
+    if(dfs[x][y][dx+2][dy+2]==1)return;
+    dfs[x][y][dx+2][dy+2]=1;
+
+//    printf("jestesmy w %d %d z %d\n",x,y,wart);
+
+    if(odw[x][y]) {
+	int jaka_brama = odw[x][y];
+	if(wartosc_bramy[jaka_brama]==-1) wartosc_bramy[jaka_brama]=wart;
+	else if(typ_bramy[jaka_brama]=='&') wartosc_bramy[jaka_brama]&=wart;
+	else if(typ_bramy[jaka_brama]=='1') wartosc_bramy[jaka_brama]|=wart;
+	else if(typ_bramy[jaka_brama]=='=') wartosc_bramy[jaka_brama]^=wart;
+//	printf("zmniejszam bramie: %d na %d %d \n",jaka_brama,x,y);
+	wejscia_bram[jaka_brama]--;
+	if(wejscia_bram[jaka_brama]==0) { 
+	    if(negacja[jaka_brama]) wartosc_bramy[jaka_brama] = 1-wartosc_bramy[jaka_brama];
+	    q.push(jaka_brama);
+	}
+
+	return ;		
+    }
+    if(tab[x][y]=='=') {
+	go(x,y+1,wart,x,y);	
+	return;
+    }else if(tab[x][y]=='+') {
+	REP(i,4) go(x+r_x[i],y+r_y[i],wart,x,y);    
+    }else if(tab[x][y]=='x') {	
+	if(x==pop_x) go(x,y+(y-pop_y),wart,x,y);
+	else go(x+(x-pop_x),y,wart,x,y);
+    }else if(tab[x][y]>='A'&& tab[x][y]<='Z') {
+	wartosci[tab[x][y]]=wart;
+    }    
+    else if(tab[x][y]=='-') {
+	go(x,y+1,wart,x,y);
+	go(x,y-1,wart,x,y);
+    }
+    else if(tab[x][y]=='|') {
+	go(x+1,y,wart,x,y);
+	go(x-1,y,wart,x,y);
+    }else if(tab[x][y]=='o') {
+	go(x,y+1,1-wart,x,y);
+    }
+
+}
+
+int solve() {
+    wartosci.clear();
+    REP(i,10100) wartosc_bramy[i]=-1,negacja[i]=0;
+    REP(i,220) REP(j,220) odw[i][j]=0,tab[i][j]=' ';
+    REP(i,220)REP(j,220)REP(a,5)REP(b,5)dfs[i][j][a][b]=0;
+    while(!q.empty())q.pop();
+    licznik_bram = 1;
+    m.clear();
+    gets(tab[0]);
+    if(tab[0][0]=='*')return 0;
+    int j = 1;
+    
+    while(1) {
+//	printf("%d\n",j);
+	gets(tab[j++]);
+	if(tab[j-1][0]=='*') break;	
+    }
+//    puts("wczytralem");
+//    REP(i,30) { REP(j,30) printf("%c ",tab[i][j]); puts("");}
+    REP(i,220) REP(j,220) if(tab[i][j]=='\0' || tab[i][j]=='*') tab[i][j]=' ';
+    szukaj_bram();    
+    REP(i,220) REP(j,220) {
+	if(!odw[i][j] && (tab[i][j]=='0' || tab[i][j]=='1')) go(i,j+1,tab[i][j]-'0');
+    }        
+    while(!q.empty()) {
+	int kto = q.front();
+	q.pop();
+//	printf("odwiedzam brame: %d z %d\n",kto,wartosc_bramy[kto]);
+	REP(i,wyjscia_bram[kto].size()) 
+		go(wyjscia_bram[kto][i].first,wyjscia_bram[kto][i].second, wartosc_bramy[kto]);
+	wyjscia_bram[kto].clear();
+    }
+    for(map<char,int>::iterator it = wartosci.begin(); it!=wartosci.end(); it++) {
+	printf("%c=%d\n",it->first,it->second);
+    }
+    puts("");
+//    REP(i,30) { REP(j,30) printf("%d ",odw[i][j]); puts("");}   
+    return 1;
+}
+int main() {
+    while(solve()) {
+    }
+}

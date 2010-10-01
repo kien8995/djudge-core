@@ -1,0 +1,147 @@
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+
+class punk  {
+	public:
+		int x,y,index;
+		bool operator<(const punk &rhs) const {
+			if (x == rhs.x) return y < rhs.y;
+			return x < rhs.x;
+		}
+};
+
+class punk2 {
+	public:
+		int x,y,index;
+		bool operator<(const punk2&rhs)const {
+			if(y == rhs.y) return x < rhs.x;
+			return y < rhs.y;
+		}
+};
+
+int tab[100000];
+int ile_ok;
+
+class wie {
+	public:
+		int x,y;
+		int odwiedzony;
+		int index;
+		wie *sasiedzi[5];
+		int ile_s;
+		wie():ile_s(0), odwiedzony(0) {}
+		void add(wie *nowy)  {
+			sasiedzi[ile_s++] = nowy;
+		}
+		void go() {
+			odwiedzony = 1;
+			tab[ile_ok++] = index;
+			for(int i=0;i<ile_s;i++) {
+				if(sasiedzi[i]->odwiedzony)continue;
+				sasiedzi[i]->go();
+			}
+		}
+};
+
+void do_it(int n) {
+	ile_ok = 0;
+	punk pkt[n];
+	punk2 pkt2[n];
+	wie graf[n];	
+	for(int i=0;i<n;i++) {
+		graf[i].index = i;
+		scanf("%i %i",&pkt[i].x, &pkt[i].y);
+		pkt2[i].index = i;
+		pkt2[i].x = pkt[i].x;
+		pkt2[i].y = pkt[i].y;
+		graf[i].x = pkt[i].x;
+		graf[i].y = pkt[i].y;
+		pkt[i].index = i;
+	}
+
+	sort(pkt, pkt+n);
+	sort(pkt2, pkt2 + n);
+
+	for(int i=0;i<n;i++) {
+		int start = i;
+		int stop = i+1;
+		while(stop < n && pkt[stop].x == pkt[start].x) stop ++;
+		for(int j=start;j<stop;j+=2) {
+			graf[pkt[j].index].add(&graf[pkt[j+1].index]);
+			graf[pkt[j+1].index].add(&graf[pkt[j].index]);
+		}
+		i = stop - 1;
+	}
+	for(int i=0;i<n;i++) {
+		int start = i;
+		int stop = i+1;
+		while(stop < n && pkt2[stop].y == pkt2[stop].y) stop ++;
+		for(int j=start;j<stop;j+=2) {
+			graf[pkt2[j].index].add(&graf[pkt2[j+1].index]);
+			graf[pkt2[j+1].index].add(&graf[pkt2[j].index]);
+		}
+		i = stop - 1;
+	}
+
+
+	graf[0].go();
+	for(int i=0;i<n;i++) {
+		pkt[tab[i]].x = graf[i].x;
+		pkt[tab[i]].y = graf[i].y;
+		pkt[tab[i]].index = i;
+	}
+	int best = 0;
+	for(int i=1;i<n;i++) {
+		if(pkt[best].x < pkt[i].x) {
+			best = i;
+		}
+	}
+
+	int nx = best + 1;
+	int prev = best - 1 + n;
+	nx %= n;
+	prev %= n;
+	int my;
+	
+	bool rev = 0;
+
+	if(pkt[best].x == pkt[nx].x) {
+		if(pkt[nx].y > pkt[best].y) rev = 1;
+
+	}
+	else {
+		if(pkt[prev].y < pkt[best].y) rev = 1;
+	}
+
+	int delta = 1;
+	if(rev) delta = -1;
+	int pr = 0;
+	for(int i=0;i<n;i++) {
+		if(pkt[i].index == 0) {pr = i; break;}
+	}
+	for(int i=0;i<n;i++) {
+		int nx = pr + delta + n;
+		nx %= n;
+		if(pkt[nx].x == pkt[pr].x) {
+			if(pkt[nx].y > pkt[pr].y) printf("N");
+			else printf("S");
+			//TODO y
+		}
+		if(pkt[nx].y == pkt[pr].y) {
+			if(pkt[nx].x > pkt[pr].x) printf("E");
+			else printf("W");
+			//TODO y;
+		}
+		pr = nx;
+	}
+	printf("\n");
+}
+
+int main() {
+	int n;scanf("%i",&n);
+	while(n) {
+		do_it(n);
+		scanf("%i",&n);
+	}
+}

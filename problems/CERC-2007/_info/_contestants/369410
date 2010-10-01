@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cstdio>
+#include <set>
+#include <map>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <complex>
+#include <queue>
+#include <string>
+#include <cstdlib>
+#include <bitset>
+#include <cstring>
+using namespace std;
+
+typedef pair<int, int> PI;
+#define REP(i,n) for (int i=0; i<int(n); i++)
+#define FOR(i,a,n) for (int i=a; i<int(n); i++)
+#define FORD(i,n) for (int i=int(n)-1; i>=0; i--)
+#define FOREACH(it,a) for (__typeof(a.begin()) it=a.begin(); it!=a.end(); it++)
+struct F {
+    int x, y, z;
+    F (int xx, int yy, int zz) : x(xx), y(yy), z(zz) {};
+    F() {
+        x = 0; y = 0; z = 0;
+    }
+};
+int main() {
+    int r, c;
+    char a[110][110];
+    int vz[128][128][16];
+    int h[]={0, 1, 0,-1};
+    int g[]={1, 0,-1, 0};
+    while (scanf("%d %d", &r, &c) == 2) {
+        if (!r && !c) break;
+
+        int zx=0, zy=0;
+        REP(i,r) {
+            scanf("%s", a[i]);
+            REP(j,c) if (a[i][j] == '*') {
+                zx = i; zy = j;
+            }
+        }
+        REP(i,r) REP(j,c) REP(k,16) vz[i][j][k] = -1;
+
+        queue<F> q;
+        vz[zx][zy][0] = 0;
+        int res = -1;
+        for (q.push(F(zx, zy, 0)); !q.empty(); q.pop()) {
+            F tmp = q.front();
+            int s=tmp.x, t=tmp.y, k=tmp.z;
+            if (a[s][t] == 'X') {
+                res = vz[s][t][k];
+                break;
+            }
+            REP(l,4)  {
+                int u=s+h[l], v=t+g[l];
+                if (u<0 || u>=r || v<0 || v>=c) continue;
+                if (a[u][v] == '#') continue;
+                bool ok = false;
+                bitset<4> b(k);
+                if (a[u][v] == '.' || a[u][v] == '*' || a[u][v] == 'X') ok = true;
+                if (a[u][v] == 'R' && b[0]) ok = true;
+                if (a[u][v] == 'Y' && b[1]) ok = true;
+                if (a[u][v] == 'G' && b[2]) ok = true;
+                if (a[u][v] == 'B' && b[3]) ok = true;
+                if (a[u][v] == 'r') { b[0] = true; ok = true; }
+                if (a[u][v] == 'y') { b[1] = true; ok = true; }
+                if (a[u][v] == 'g') { b[2] = true; ok = true; }
+                if (a[u][v] == 'b') { b[3] = true; ok = true; }
+                if (!ok) continue;
+                
+                int rr = b.to_ulong();
+                if (vz[u][v][rr] == -1) {
+                    q.push(F(u, v, rr));
+                    vz[u][v][rr] = vz[s][t][k] + 1;
+                }
+            }
+        }
+
+        if (res==-1) printf("The poor student is trapped!\n");
+        else printf("Escape is possible in %d steps.\n", res);
+    }
+} 

@@ -1,0 +1,44 @@
+#include <map>
+#include <cstdio>
+#include <string>
+
+using namespace std;
+
+int main() {
+	map<string,int> g;
+	g["Kamen"] = 0; g["Rock"] = 0; g["Pierre"] = 0; g["Stein"] = 0; g["Ko"] = 0;
+	g["Koe"] = 0; g["Sasso"] = 0; g["Roccia"] = 0; g["Guu"] = 0; g["Kamien"] = 0;
+	g["Piedra"] = 0;
+	g["Papir"] = 1; g["Paper"] = 1; g["Feuille"] = 1; g["Papier"] = 1; g["Carta"] = 1; g["Rete"] = 1; g["Paa"] = 1; g["Papel"] = 1;
+	
+	g["Nuzky"] = 2; g["Scissors"] = 2; g["Ciseaux"] = 2; g["Schere"] = 2; g["Ollo"] = 2; g["Olloo"] = 2; g["Forbice"] = 2; g["Choki"] = 2; g["Nozyce"] = 2; g["Tijera"] = 2;
+	
+	
+	char s[100];
+	int n = 0;
+	while (true) {
+		scanf("%s", s); scanf("%s ", s); string name(s);
+		scanf("%s", s); scanf("%s ", s); string name2(s);
+		int w1 = 0, w2 = 0;
+		while (scanf("%s ",s) && s[0] != '.' && s[0] != '-') {
+			string s1(s);
+			scanf("%s ",s);
+			string s2(s);
+			if (g[s1] == (g[s2] + 1) % 3)
+				++w1;
+			if (g[s2] == (g[s1] + 1) % 3)
+				++w2;
+		}
+		
+		printf("Game #%d:\n", ++n);
+		printf("%s: %d point%s\n", name.c_str(), w1, w1 == 1 ? "" : "s");
+		printf("%s: %d point%s\n", name2.c_str(), w2, w2 == 1 ? "" : "s");
+		if (w1 > w2) printf("WINNER: %s\n\n", name.c_str());
+		else if (w1 < w2) printf("WINNER: %s\n\n", name2.c_str());
+		else printf("TIED GAME\n\n");
+		
+		if (s[0] == '.')
+			break;
+	}
+	return 0;
+}

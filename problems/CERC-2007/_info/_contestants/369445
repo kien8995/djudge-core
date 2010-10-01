@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+using namespace std;
+
+bool orig_tab[18][18];
+bool tab[18][18];
+
+inline void click(int x, int y)
+{
+	tab[x+1][y+1]^=1;
+	tab[x][y+1]^=1;
+	tab[x+2][y+1]^=1;
+	tab[x+1][y+2]^=1;
+	tab[x+1][y]^=1;
+}
+
+int main()
+{
+	while(1)
+	{
+		int R, C;
+		int min_cl=1000000;
+		scanf("%i %i", &R, &C);
+		if(R==0 && C==0)
+			break;
+		for(int i=0; i<R; i++)
+		for(int j=0; j<C; j++)
+		{
+			char ch;
+			scanf(" %c", &ch);
+			orig_tab[i+1][j+1]=(ch=='X');
+		}
+		//init
+		for(int K=0; K<(1<<C); K++)
+		{
+			int clicks=0;
+			for(int i=0; i<R; i++)
+			for(int j=0; j<C; j++)
+				tab[i+1][j+1]=orig_tab[i+1][j+1];
+			for(int i=0; i<C; i++)
+				if(K&(1<<i))
+				{
+				//	click(0, i);
+					tab[1][i+1]^=1;
+					tab[0][i+1]^=1;
+					tab[2][i+1]^=1;
+					tab[1][i+2]^=1;
+					tab[1][i]^=1;
+					clicks++;
+				}
+			for(int i=1; i<R; i++)
+			for(int j=0; j<C; j++)
+			{
+				if(tab[i][j+1])
+				{
+//					click(i, j);
+					tab[i+1][j+1]^=1;
+					tab[i][j+1]^=1;
+					tab[i+2][j+1]^=1;
+					tab[i+1][j+2]^=1;
+					tab[i+1][j]^=1;
+					clicks++;
+				}
+			}
+			int sum=0;
+			for(int i=0; i<C; i++)
+				sum+=tab[R][i+1];
+			if(sum==0)
+				min_cl=min(min_cl, clicks);
+		}
+		if(min_cl==1000000)
+			printf("Damaged billboard.\n");
+		else printf("You have to tap %i tiles.\n", min_cl);
+
+	}
+}

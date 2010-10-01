@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
+vector<int> res;
+
+int main () {
+	char tmp[1000];
+	scanf("%s",tmp);
+	while (tmp[0] != 'e') {
+		int r, n;
+		if (tmp[0] == 't') {
+			sscanf(tmp + 2,"%d",&r);
+			scanf("%d",&n);
+			res.clear();
+			
+			while (n != 0) {
+				if (n > 0) res.push_back(abs(n) % (abs(r))); else res.push_back((abs(r) - (abs(n) % abs(r))) % abs(r));
+				if (n > 0) n /= r;
+				else {
+					if (abs(n) % abs(r) == 0) n /= r;
+					else n = n/r + 1;
+				}
+			}
+			
+			while(res.size()!=0){
+				printf("%d",res.back());
+				res.pop_back();
+			}
+			printf("\n");
+		}else {
+			sscanf(tmp + 4,"%d",&r);
+			char d[1000];
+			scanf("%s",d);
+			int cur = strlen(d), mul = 1, res = 0;
+			while (cur--) {
+				res += mul * (d[cur]-'0');
+				mul *= r;
+			}
+			printf("%d\n",res);
+		}
+			
+		scanf("%s",tmp);
+	}
+	return 0;
+}

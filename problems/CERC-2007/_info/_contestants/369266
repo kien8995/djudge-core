@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <string>
+#include <map>
+
+#define REP(a, b) for(int a=0; a<(b); a++)
+
+using namespace std;
+
+char buf[100], buf2[100], buf3[100];;
+
+string A[12] = {string("Kamen"), string("Rock"), string("Pierre"), string("Stein"),
+	string("Ko"),string("Koe"), string("Sasso"), string("Roccia"), string("Guu"),
+	string("Kamien"), string("Piedra")};
+	
+	string B[11] = {string("Nuzky"), string("Scissors"), string("Ciseaux"), string("Schere"),
+		string("Ollo"),string("Olloo"), string("Forbice"), string("Choki"), string("Nozyce"),
+		string("Tijera")};
+
+		string C[11] = {string("Papir"), string("Paper"), string("Feuille"), string("Papier"),
+			string("Papir"),string("Carta"), string("Rete"), string("Paa"), string("Papier"),
+			string("Papel")};
+
+map<string, int> mapa;
+
+int main() {
+	REP(i, 12) mapa[A[i]] = 1;
+	REP(i, 11) mapa[B[i]] = 2;
+	REP(i, 11) mapa[C[i]] = 3;
+	for(int d = 1;;d++) {
+		fgets(buf, 100, stdin);
+		string name1, name2;
+		sscanf(buf, "%s %s", buf2, buf3);
+		name1 = string(buf3);
+		fgets(buf, 100, stdin);
+		sscanf(buf, "%s %s", buf2, buf3);
+		name2 = string(buf3);
+		int p1 = 0, p2 = 0;
+		while(true) {
+			fgets(buf, 100, stdin);
+			if (buf[0]=='.' || buf[0]=='-') break;
+			sscanf(buf, "%s %s", buf2, buf3);
+			int a1 = mapa[string(buf2)], a2 = mapa[string(buf3)];
+			if (a1==a2) continue;
+			if ((a1%3)+1==a2) p1++;
+			else p2++;
+		}
+		printf("Game #%d:\n", d);
+		printf("%s: %d point", name1.c_str(), p1);
+		if (p1!=1) printf("s");
+		printf("\n%s: %d point", name2.c_str(), p2);
+		if (p2!=1) printf("s");
+		printf("\n");
+		if(p1==p2) printf("TIED GAME\n\n");
+		else if(p1<p2) printf("WINNER: %s\n\n", name2.c_str());
+		else printf("WINNER: %s\n\n", name1.c_str());
+		if (buf[0]=='.') break;
+	}
+	return 0;
+}

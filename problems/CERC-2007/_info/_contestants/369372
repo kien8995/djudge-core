@@ -1,0 +1,102 @@
+#include<cstdio>
+
+int t;
+int ile;
+int dwa[20];
+int n,m,wynik;
+char wejscie[20][20];
+bool linia[20],nlinia[20];
+bool temporal;
+int main()
+{
+	while(1)
+	{
+		scanf("%d%d",&n,&m);
+		if (n==0)
+			return 0;
+		int mx=1;
+		dwa[0]=1;
+		for (int i=0; i<m; i++)
+		{
+			mx*=2;
+			dwa[i+1]=mx;
+		}
+		int tmp;
+		for (int i=0; i<n; i++)
+			scanf("%s",wejscie[i]);
+		wynik=10000000;
+		for (int i=0; i<mx; i++)
+		{
+			ile = 0;
+			tmp=i;
+			for (int j=0; j<m; j++)
+				if (wejscie[0][j]=='X')
+					linia[j]=1;
+				else
+					linia[j]=0;
+			for (int k=0; k<n; k++)
+			{
+//				if (i==20)
+//				{
+//					for (int j=0; j<m; j++)
+//						printf("%d",(tmp&dwa[j])>0);
+//					printf(" - tmp&dwa[j]\n");
+///					for (int j=0; j<m; j++)
+//						printf("%d",linia[j]);
+//					printf(" - linia[j]\n");
+//				}
+				if (k<n-1)
+					for (int j=0; j<m; j++)
+						if (wejscie[k+1][j]=='X')
+							nlinia[j]=1;
+						else
+							nlinia[j]=0;
+
+				for (int j=0; j<m; j++)
+				{
+					if (tmp&dwa[j])
+					{
+						ile++;
+						if (j>0)
+							linia[j-1]=!linia[j-1];
+						if (j<m)
+							linia[j+1]=!linia[j+1];
+						linia[j]=!linia[j];
+						nlinia[j]=!nlinia[j];
+					}
+//					if (i==20)
+//					printf("%d",nlinia[j]);
+				}
+//				if (i==20)
+//				printf(" - nlinia[j]\n\n");
+
+				tmp=0;
+				temporal=0;
+				for (int j=0; j<m; j++)
+					if (linia[j])
+					{
+						temporal=1;
+						break;
+					}
+				for (int j=0; j<m; j++)
+				{
+					if (linia[j])
+						tmp|=dwa[j];
+					linia[j]=nlinia[j];
+				}
+			}
+			if (temporal)
+				ile=1000002;
+//			printf(" - ");
+//			for (int j=0; j<m; j++)
+//				printf("%d",linia[j]);
+//			printf(" - %d :%d\n",ile,i);
+			wynik<?=ile;
+		}
+		if (wynik<1000000)
+			printf("You have to tap %d tiles.\n",wynik);
+		else
+			printf("Damaged billboard.\n");
+	}
+	return 0;
+}

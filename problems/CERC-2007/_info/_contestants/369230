@@ -1,0 +1,111 @@
+#include <cstdio>
+#include <algorithm>
+#include <list>
+#include <set>
+#include <queue>
+#include <map>
+#include <string>
+#include <cstring>
+using namespace std;
+
+#define REP(i,n) for(int i = 0; i < (n); ++i)
+#define FOR(i,a,b) for(int i = (a); i <= (b); ++i)
+#define FORD(i,a,b) for(int i = (a); i >= (b); --i)
+#define PRINTF(args...) printf(args)
+// #define PRINTF(args...)
+
+
+
+char nar[100];
+char name1[100];
+char name2[100];
+char ite1[100];
+char ite2[100];
+int wyn1, wyn2;
+
+map<string,int>mapa;
+
+
+
+int main() 
+{
+  mapa["Kamen"]=0;
+  mapa["Rock"]=0;
+  mapa["Pierre"]=0;
+  mapa["Stein"]=0;
+  mapa["Ko"]=0;
+  mapa["Koe"]=0;
+  mapa["Sasso"]=0;
+  mapa["Roccia"]=0;
+  mapa["Guu"]=0;
+  mapa["Kamien"]=0;
+  mapa["Piedra"]=0;
+
+  mapa["Nuzky"]=1;
+  mapa["Scissors"]=1;
+  mapa["Ciseaux"]=1;
+  mapa["Schere"]=1;
+  mapa["Ollo"]=1;
+  mapa["Olloo"]=1;
+  mapa["Forbice"]=1;
+  mapa["Choki"]=1;
+  mapa["Nozyce"]=1;
+  mapa["Tijera"]=1;
+  
+  mapa["Papir"]=2;
+  mapa["Paper"]=2;
+  mapa["Feuille"]=2;
+  mapa["Papier"]=2;
+  mapa["Papir"]=2;
+  mapa["Carta"]=2;
+  mapa["Rete"]=2;
+  mapa["Paa"]=2;
+  mapa["Papier"]=2;
+  mapa["Papel"]=2;
+
+  scanf("%s", nar);
+  for(int cases=1; true; cases++)
+  {
+    wyn1=0;
+    wyn2=0;
+
+    scanf("%s", name1);
+    if (strcmp(nar, ".")==0)
+      return 0;
+
+    scanf("%s %s", nar, name2);
+    while(true)
+    {
+      scanf("%s %s", ite1, ite2);
+      if(strcmp(ite1,"-")==0 or strcmp(ite1,".")==0) //TODO koniec
+      {
+        printf("Game #%d:\n", cases);
+        printf("%s: %d point%s\n", name1, wyn1, (wyn1!=1 ? "s":""));
+        printf("%s: %d point%s\n", name2, wyn2, (wyn2!=1 ? "s":""));
+        if(wyn1==wyn2)
+          printf("TIED GAME\n\n");
+        else
+          printf("WINNER: %s\n\n", (wyn1>wyn2 ? name1 : name2));
+        if(strcmp(ite1,".")==0)
+        {
+          return 0;
+        }
+        break;
+      }
+
+      int co1=mapa[ite1];
+      int co2=mapa[ite2];
+      if(co1==co2)
+        continue;
+      else if(co1==((co2+1)%3))
+        wyn2++;
+      else
+        wyn1++;
+    }
+  }
+  
+}
+
+
+
+

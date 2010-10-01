@@ -1,0 +1,99 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <map>
+#include <string>
+using namespace std;
+#define REP(i,n)	for(int i=0,_n=(n);i<_n;++i)
+#define REPD(i,n)	for(int i=(n-1);i>=0;--i)
+#define FOR(i,s,k)	for(int i=(s),_k=(k);i<=_k;++i)
+#define FORD(i,s,k)	for(int i=(s),_k=(k);i>=_k;--i)
+#define FORE(it,q)	for(__typeof((q).begin())it=(q).begin();it!=(q).end();++it)
+#define FORED(it,q)	for(__typeof((q).rbegin())it=(q).rbegin();it!=(q).rend();++it)
+#define FOREACH(it,f,l)	for(__typeof(f)it=f;it!=l;++it)
+#define FOREACHD(it,f,l)	for(__typeof(f)it=l;it--!=f;)
+
+map<string, int> M;
+
+void prep() {
+	M.insert(make_pair("Kamen",0));
+	M.insert(make_pair("Rock",0));
+	M.insert(make_pair("Pierre",0));
+	M.insert(make_pair("Stein",0));
+	M.insert(make_pair("Ko",0));
+	M.insert(make_pair("Koe",0));
+	M.insert(make_pair("Sasso",0));
+	M.insert(make_pair("Roccia",0));
+	M.insert(make_pair("Guu",0));
+	M.insert(make_pair("Kamien",0));
+	M.insert(make_pair("Piedra",0));
+	M.insert(make_pair("Nuzky", 1));
+	M.insert(make_pair("Scissors",1));
+	M.insert(make_pair("Ciseaux",1));
+	M.insert(make_pair("Schere",1));
+	M.insert(make_pair("Ollo",1));
+	M.insert(make_pair("Olloo",1));
+	M.insert(make_pair("Forbice",1));
+	M.insert(make_pair("Choki",1));
+	M.insert(make_pair("Nozyce",1));
+	M.insert(make_pair("Tijera",1));
+	M.insert(make_pair("Papir",2));
+	M.insert(make_pair("Paper",2));
+	M.insert(make_pair("Feuille",2));
+	M.insert(make_pair("Papier",2));
+	M.insert(make_pair("Carta",2));
+	M.insert(make_pair("Rete",2));
+	M.insert(make_pair("Paa",2));
+	M.insert(make_pair("Papel",2));
+}
+
+int val(char *s) {
+	return M[string(s)];
+}
+
+int win(int a, int b) {
+	if(a==b) return 2;
+	if(a==0 && b==1 || a==1 && b==2 || a==2 && b==0) return 0;
+	return 1;
+}
+
+int T=0;
+
+bool testcase() {
+	char lang[10],name1[100],name2[100];
+	scanf("%s",lang);
+	scanf("%s",name1);
+	scanf("%s%s", lang, name2);
+
+	char a[100],b[100];
+	int ile1=0,ile2=0;
+	bool koniec=1;
+	while(1) {
+		scanf("%s",a);
+		if(a[0]=='-') break;
+		else if(a[0]=='.') { koniec=0; break; }
+		scanf("%s",b);
+		int x = win(val(a),val(b));
+		if(x==0) ++ile1;
+		else if(x==1) ++ile2;
+	}
+	
+	printf("Game #%d:\n", ++T);
+	printf("%s: %d %s\n", name1, ile1, (ile1==1)?"point":"points");
+	printf("%s: %d %s\n", name2, ile2, (ile2==1)?"point":"points");
+	if(ile1==ile2) printf("TIED GAME\n");
+	else if(ile1<ile2) printf("WINNER: %s\n", name2);
+	else printf("WINNER: %s\n", name1);
+	printf("\n");
+	return koniec;
+}
+
+
+int main() {
+prep();
+	while(testcase());
+	return 0;
+}
+

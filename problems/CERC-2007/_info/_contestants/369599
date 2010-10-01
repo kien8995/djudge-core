@@ -1,0 +1,93 @@
+var i,j,k,l,m,n,o,p,q,r:longint;
+    hatv:array [2..10,0..20] of longint;
+    s,s2,s3,s4:string;
+    h:integer;
+    
+function hatvv(r,q:longint):longint;
+var i,p:longint;
+begin
+   if hatv[r,q]=2000000000 then begin
+    p:=1;
+    for i:=1 to q do p:=p*r;
+    hatv[r,q]:=p;
+    hatvv:=p;
+   end else hatvv:=hatv[r,q];
+end;
+    
+begin
+   for i:=2 to 10 do
+    for j:=0 to 20 do hatv[i,j]:=2000000000;
+   while true do begin
+    readln(s);
+    case s[1] of 
+     't':begin
+          s2:=copy(s,pos('-',s)+1,pos(' ',s)-pos('-',s)-1);
+          val(s2,r,h);
+          s2:=copy(s,pos(' ',s)+1,50);
+          val(s2,n,h);
+          s3:='';
+          if n=0 then writeln(0);
+          if n>0 then begin
+           i:=-1;
+           m:=0;
+           while (n>0) or (m>0) do begin
+            inc(i);
+            l:=n mod r;
+            n:=n div r;
+            l:=l+m;
+            if i mod 2=0 then begin
+             str(l mod r,s4);
+             s3:=s4+s3;
+             m:=l div r;
+            end;
+            if i mod 2=1 then begin
+             if l=0 then begin m:=0; s3:='0'+s3; end else begin
+              str((r-l mod r) mod r,s4);
+              m:=1;
+              s3:=s4+s3;
+             end;
+            end;
+           end;
+           writeln(s3);
+          end;
+          if n<0 then begin
+           n:=-n;
+           i:=-1;
+           m:=0;
+           while (n>0) or (m>0) do begin
+            inc(i);
+            l:=n mod r;
+            n:=n div r;
+            l:=l+m;
+            if i mod 2=1 then begin
+             str(l mod r,s4);
+             s3:=s4+s3;
+             m:=l div r;
+            end;
+            if i mod 2=0 then begin
+             if l=0 then begin m:=0; s3:='0'+s3; end else begin
+              str((r-l mod r) mod r,s4);
+              m:=1;
+              s3:=s4+s3;
+             end;
+            end;
+           end;
+           writeln(s3);
+          end;
+         end;
+     'f':begin
+          s2:=copy(s,pos('-',s)+1,pos(' ',s)-pos('-',s)-1);
+          val(s2,r,h);
+          s2:=copy(s,pos(' ',s)+1,50);
+          o:=0;
+          for i:=length(s2) downto 1 do begin
+           j:=length(s2)-i;
+           val(s2[i],l,h);
+           if (j mod 2=0) then o:=o+l*hatvv(r,j) else o:=o-l*hatvv(r,j);
+          end;
+          writeln(o);
+         end;
+     'e':halt(0);
+    end; 
+   end;
+end.

@@ -1,0 +1,260 @@
+#include<iostream>
+#include<map>
+#include<string>
+#include<utility>
+#include<vector>
+using namespace std;
+
+map<string,map<int, vector<string> > > info;
+
+
+int getn(string state, string val)
+{
+	//int found = 0;
+	for (int type = 0; type < 3; type++)
+	{
+		for (unsigned int i = 0; i < info[state][type].size(); i++)
+	{
+		if (info[state][type][i] == val)
+			return type;
+	}
+		}
+	
+	// problem
+	return 0;
+}
+
+int main()
+{
+	map<int, vector<string> > cs;
+	vector<string> csv;
+	csv.push_back("Papir");
+	
+	vector<string> csvq;
+	csvq.push_back("Nuzky");
+	
+	vector<string> csvw;
+	csvw.push_back("Kamen");
+	cs[0] = csv;
+	cs[1] = csvq;
+	cs[2] = csvw;
+	
+	map<int, vector<string> > en;
+	vector<string> enpap;
+	enpap.push_back("Paper");
+	
+	vector<string> ennuz;
+	ennuz.push_back("Scissors");
+	
+	vector<string> enroc;
+	enroc.push_back("Rock");
+	en[0] = enpap;
+	en[1] = ennuz;
+	en[2] = enroc;
+	
+	map<int, vector<string> > fr;
+	vector<string> frpap;
+	frpap.push_back("Feuille");
+	
+	vector<string> frnuz;
+	frnuz.push_back("Ciseaux");
+	
+	vector<string> frroc;
+	frroc.push_back("Pierre");
+	fr[0] = frpap;
+	fr[1] = frnuz;
+	fr[2] = frroc;
+	map<int, vector<string> > de;
+	vector<string> depap;
+	depap.push_back("Papier");
+	
+	vector<string> denuz;
+	denuz.push_back("Schere");
+	
+	vector<string> deroc;
+	deroc.push_back("Stein");
+	de[0] = depap;
+	de[1] = denuz;
+	de[2] = deroc;
+	map<int, vector<string> > hu;
+	vector<string> hupap;
+	hupap.push_back("Papir");
+	
+	vector<string> hunuz;
+	hunuz.push_back("Ollo");
+	hunuz.push_back("Olloo");
+	
+	vector<string> huroc;
+	huroc.push_back("Ko");
+	huroc.push_back("Koe");
+	hu[0] = hupap;
+	hu[1] = hunuz;
+	hu[2] = huroc;
+	map<int, vector<string> > it;
+	vector<string> itpap;
+	itpap.push_back("Carta");
+	itpap.push_back("Rete");
+	
+	vector<string> itnuz;
+	itnuz.push_back("Forbice");
+	
+	vector<string> itroc;
+	itroc.push_back("Sasso");
+	itroc.push_back("Roccia");
+	it[0] = itpap;
+	it[1] = itnuz;
+	it[2] = itroc;
+	map<int, vector<string> > jp;
+	vector<string> jppap;
+	jppap.push_back("Paa");
+	
+	vector<string> jpnuz;
+	jpnuz.push_back("Choki");
+	
+	vector<string> jproc;
+	jproc.push_back("Guu");
+	jp[0] = jppap;
+	jp[1] = jpnuz;
+	jp[2] = jproc;
+	map<int, vector<string> > pl;
+	vector<string> plpap;
+	plpap.push_back("Papier");
+	
+	vector<string> plnuz;
+	plnuz.push_back("Nozyce");
+	
+	vector<string> plroc;
+	plroc.push_back("Kamien");
+	pl[0] = plpap;
+	pl[1] = plnuz;
+	pl[2] = plroc;
+	map<int, vector<string> > es;
+	vector<string> espap;
+	espap.push_back("Papel");
+	
+	vector<string> esnuz;
+	esnuz.push_back("Tijera");
+	
+	vector<string> esroc;
+	esroc.push_back("Piedra");
+	es[0] = espap;
+	es[1] = esnuz;
+	es[2] = esroc;
+	
+	info["cs"] = cs;
+	info["en"] = en;
+	info["fr"] = fr;
+	info["de"] = de;
+	info["hu"] = hu;
+	info["it"] = it;
+	info["jp"] = jp;
+	info["pl"] = pl;
+	info["es"] = es;
+		
+	
+	// input
+	int gamen = 1;
+	string s;
+	string players[2];
+	string states[2];
+	int wins[2];
+	int player = 0;
+	string curgame[2];
+	while (cin >> s)
+	{
+		//cout << "deb: " <<s << endl;
+		if (s == ".")
+		{
+			//cout << "tecla";	break;
+			
+			// write out last
+			if (gamen > 1 )
+				cout << endl;
+			cout << "Game #" << gamen << ":" << endl;
+			for (int i = 0 ; i < 2; i++)
+			{
+				cout << players[i] << ": " << wins[i] << " point";
+				if (wins[i] != 1)
+					cout << "s";
+				cout << endl;
+			}
+			if (wins[1] == wins[0])
+				cout << "TIED GAME" << endl;
+			else
+			{
+				if (wins[1] > wins[0])
+				{
+					cout << "WINNER: " << players[1] << endl;
+				}
+				else
+					cout << "WINNER: " << players[0] << endl;
+			}
+			
+			break;
+		}
+		if (s == "-")
+		{
+			// write oyut
+			if (gamen > 1 )
+				cout << endl;
+			cout << "Game #" << gamen << ":" << endl;
+			for (int i = 0 ; i < 2; i++)
+			{
+				cout << players[i] << ": " << wins[i] << " point";
+				if (wins[i] != 1)
+					cout << "s";
+				cout << endl;
+			}
+			if (wins[1] == wins[0])
+				cout << "TIED GAME" << endl;
+			else
+			{
+				if (wins[1] > wins[0])
+				{
+					cout << "WINNER: " << players[1] << endl;
+				}
+				else
+					cout << "WINNER: " << players[0] << endl;
+			}
+				
+			gamen++;
+			player = 0;
+			wins[0] = 0;
+			wins[1]  = 0;
+			continue;
+		}
+		if (player != 2)
+		{
+			//cin >> s;
+			states[player] = s;
+			cin >> s;
+			players[player] = s;
+			player++;
+		}
+		else
+		{
+			//cin >> s;
+			curgame[0] = s;
+			cin >> s;
+			curgame[1] =s ;
+			if (getn(states[0], curgame[0]) > getn(states[1], curgame[1]) )
+			{
+				if (getn(states[1], curgame[1]) == 0 && getn(states[0], curgame[0]) == 2)
+					wins[1]++;
+				else
+					wins[0]++;
+			}
+			else
+				if (getn(states[0], curgame[0]) < getn(states[1], curgame[1]) )
+				{
+					if (getn(states[0], curgame[0]) == 0 && getn(states[1], curgame[1]) == 2)
+						wins[0]++;
+					else
+						wins[1]++;
+				}
+		}
+		
+	}
+	
+	return 0;
+}

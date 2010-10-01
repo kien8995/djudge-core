@@ -1,0 +1,113 @@
+#include <algorithm>
+#include <cstring>
+#include <cstdio>
+
+#define maxn 1001
+
+using namespace std;
+
+struct pt {
+  int x, y, i;
+  pt() {}
+  pt( int a, int b, int c ) { x=a; y=b; i=c; }
+};
+
+struct cmpx {
+  bool operator()( const pt &a, const pt &b ) {
+    if( a.x == b.x ) return a.y < b.y;
+    return a.x < b.x;
+  }
+};
+
+struct cmpy {
+  bool operator()( const pt &a, const pt &b ) {
+    if( a.y == b.y ) return a.x < b.x;
+    return a.y < b.y;
+  }
+};
+
+struct cmpi {
+  bool operator()( const pt &a, const pt &b ) {
+    return a.i < b.i;
+  }
+};
+
+char smjer[] = "NSEW";
+int n, gdje[maxn][2], koja[maxn][2];
+pt points[maxn];
+
+int load() {
+  scanf( "%d", &n );
+  for( int i = 0; i < n; ++i ) {
+    scanf( "%d%d", &points[i].x, &points[i].y );
+    points[i].i = i;
+  }
+  return n;
+}
+
+void solve() {
+  sort( points, points+n, cmpx() );
+
+  memset( gdje, -1, sizeof gdje );
+
+  for( int i = 0; i < n; ++i ) {
+    if( i+1 < n && points[i].x == points[i+1].x ) {
+      if( gdje[ points[i].i ][ 0 ] != -1 ) continue;
+
+      gdje[ points[i].i ][ 0 ] = 0;
+      koja[ points[i].i ][ 0 ] = points[i+1].i;
+
+      gdje[ points[i+1].i ][ 0 ] = 1;
+      koja[ points[i+1].i ][ 0 ] = points[i].i;
+    }
+  }
+
+  sort( points, points+n, cmpy() );
+
+  for( int i = 0; i < n; ++i ) {
+    if( i+1 < n && points[i].y == points[i+1].y ) {
+      if( gdje[ points[i].i ][ 1 ] != -1 ) continue;
+
+      gdje[ points[i].i ][ 1 ] = 0;
+      koja[ points[i].i ][ 1 ] = points[i+1].i;
+
+      gdje[ points[i+1].i ][ 1 ] = 1;
+      koja[ points[i+1].i ][ 1 ] = points[i].i;
+    }
+  }
+}
+
+void output() {
+  int dir = 0, curr = 0, area = 0, next;
+
+  sort( points, points+n, cmpi() );
+
+  for( ;; ) {
+    next = koja[curr][dir];
+    area += points[ curr ].x * points[ next ].y - points[ next ].x * points[curr].y;
+    curr = next;
+    if( curr == 0 ) break;
+    dir = 1-dir;
+  }
+
+  if( area > 0 ) dir = 1;
+  else dir = 0;
+
+  curr = 0;
+  for( ;; ) {
+    printf( "%c", smjer[ 2*dir + gdje[curr][dir] ] );
+    next = koja[curr][dir];
+    curr = next;
+    if( curr == 0 ) break;
+    dir = 1-dir;
+  }
+  printf( "\n" );
+}
+
+int main(void) {
+  while( load() ) {
+    solve();
+    output();
+  }
+  return 0;
+}

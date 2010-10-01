@@ -1,0 +1,98 @@
+#include <cstdio>
+#include <cstring>
+
+char buf[200];
+char ciag[200];
+int all[25];
+
+void generate(int base) {
+	int akt = 1;
+	for(int i=0; i<25; i++) {
+		all[i] = akt;
+		akt*=base;
+	}
+}
+
+int tab[25];
+
+int fillBigger(int n, int base) {
+	int maxfill = 0;
+	for(int i = 0; ; i+=2) {
+		maxfill += all[i]*(base-1-tab[i]);
+		if (maxfill>=n) {
+			while(i>=0) {
+			for(int j = 0; j <= base-1-tab[i]; j++) {
+				if (maxfill-all[i]*(base-1-tab[i])+all[i]*j>=n) {
+					maxfill -= all[i]*(base-1-tab[i]);
+					n -= all[i]*j;
+					tab[i]+=j;
+					break;
+				}
+			}
+			i-=2;
+			}
+			break;
+		}
+	}
+	return n;
+}
+
+int fillSmaller(int n, int base) {
+	int maxfill = 0;
+	for(int i = 1; ; i+=2) {
+		maxfill += all[i]*(base-1-tab[i]);
+		if (maxfill<=n) {
+			while(i>=0) {
+				for(int j = 0; j <= base-1-tab[i]; j++) {
+					if (maxfill-all[i]*(base-1-tab[i])+all[i]*j<=n) {
+						maxfill -= all[i]*(base-1-tab[i]);
+						n -= all[i]*j;
+						tab[i]+=j;
+						break;
+					}
+				}
+				i-=2;
+			}
+			break;
+		}
+	}
+	return n;
+}
+
+int main() {
+	while(true) {
+		fgets(	buf, 200, stdin);
+		if(buf[0]=='e') break;
+		int base;
+		if(buf[0]=='f') {
+			sscanf(buf+5, "%d %s", &base, ciag);
+			base *= -1;
+			generate(base);
+			int len = strlen(ciag);
+			int ret = 0;
+			for(int pos = 0; pos < len; pos++){
+				ret += (ciag[pos]-'0')*all[len-pos-1];
+			}
+			printf("%d\n", ret);
+		} else {
+			int n;
+			sscanf(buf+3, "%d %d", &base, &n);
+			base *= -1;
+			generate(base);
+			for(int i =0 ; i < 25; i++) tab[i] = 0;
+			while(n!=0) {
+				if(n>0) n = fillBigger(n, -base);
+				else n = fillSmaller(n, -base);
+			}
+			bool print = false;
+			for(int i = 24; i >=0; i--) if (print || tab[i]!=0) {
+				printf("%d", tab[i]);
+				print = true;
+			}
+			if(!print) printf("0");
+			printf("\n");
+		}
+	}
+	return 0;
+}
+

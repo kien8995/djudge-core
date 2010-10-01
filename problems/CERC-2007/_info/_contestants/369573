@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <locale.h>
+#include <limits.h>
+
+void convert_from(int base, char *number)
+{
+	int dec = 0;
+	int dec2 = 0;
+	int len = strlen(number);
+	char *number2 = number+1;
+	number[len+1] = 0;
+	while (*number) {
+		dec *=base*base;
+		dec += *number - '0';
+		number+=2;
+	}
+	while (*number2) {
+		dec2 *= base*base;
+		dec2 += *number2 - '0';
+		number2+=2;
+	}
+	if (len % 2 == 1)
+		dec = dec - base*dec2;
+	else
+		dec = -base*dec - dec2;
+	printf("%i\n", dec);
+}
+
+void convert_to(int base, int number)
+{
+	char bnumber[100] = {0};
+	int idx = 0;
+	int i, len;
+
+	while (number) {
+		int rem = number % base;
+		int tmp = number;
+		if (rem < 0)
+			rem += base;
+		tmp = number - rem;
+		number = tmp / (-base);
+/*		printf("rem: %i, tmp: %i, number: %i\n", rem, tmp, number);*/
+		bnumber[idx] = rem + '0';
+		idx++;
+	}
+
+	len = strlen(bnumber);
+	for (i=len-1; i>=0; i--)
+		printf("%c", bnumber[i]);
+	printf("\n");
+}
+
+int main(void)
+{
+	int ni, i, j, k, m, n, N;
+	int from, decnum;
+	char number[100];
+	setlocale(LC_ALL, "C");
+
+	while (1) {
+		char tmp[100];
+		int base;
+		scanf("%[a-z]", tmp);
+		if (strcmp(tmp, "end") == 0)
+			break;
+		if (strcmp(tmp, "from") == 0)
+			from = 1;
+		else
+			from = 0;
+
+
+
+		if (from) {
+			scanf("-%d %[0-9-]\n", &base, number);
+			convert_from(base, number);
+		}
+		else {
+			scanf("-%d %d\n", &base, &decnum);
+			convert_to(base, decnum);
+		}
+	}
+
+	return 0;
+}

@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+string ime1, ime2;
+string lan1, lan2;
+string line;
+int stop,sc1,sc2,end;
+int el1,el2;
+
+string words[3][11]={
+{"Kamen","Rock","Pierre","Stein","Ko","Koe","Sasso","Roccia","Guu","Kamien","Piedra"},
+{"Nuzky","Scissors","Ciseaux","Schere","Ollo","Olloo","Forbice","Choki","Nozyce","Tijera",""},
+{"Papir","Paper","Feuille","Papier","Papir","Carta","Rete","Paa","Papier","Papel",""}
+};
+
+int najdi(string bes) {
+	int i,j;
+	for (i=0;i<3;i++) {
+		for (j=0;j<11;j++) {
+			if (words[i][j]==bes) { return i; }
+		}
+	}
+	return -1;
+}
+
+int main(void){
+	int st=1;
+	end=0;
+	
+	while (end==0) {
+		cin >> lan1 >> ime1;
+		cin >> lan2 >> ime2;
+		stop=0;
+		sc1=0; sc2=0;
+	
+		printf("Game #%d:\n",st);
+	
+		while (stop==0) {
+			cin >> line;
+			if (line[0]=='-') { break; }
+			if (line[0]=='.') { end=1; break; }
+			el1=najdi(line);
+			cin >> line;
+			el2=najdi(line);
+			
+			//printf("%d : %d\n",el1,el2);
+			
+			if (el1==el2) { continue; }
+			if (el1==0 && el2==1) sc1++;
+			if (el1==0 && el2==2) sc2++;
+			if (el1==1 && el2==0) sc2++;
+			if (el1==1 && el2==2) sc1++;
+			if (el1==2 && el2==0) sc1++;
+			if (el1==2 && el2==1) sc2++;
+			
+		}
+		
+		printf("%s: %d point",ime1.c_str(),sc1);
+		if (sc1!=1) { printf("s"); } printf("\n");
+		printf("%s: %d point",ime2.c_str(),sc2);
+		if (sc2!=1) { printf("s"); } printf("\n");
+		
+		if (sc1==sc2) { printf("TIED GAME\n\n"); }
+		else {
+			printf("WINNER: ");
+			if (sc1>sc2) { printf("%s\n\n",ime1.c_str()); }
+			if (sc2>sc1) { printf("%s\n\n",ime2.c_str()); }
+		}
+		st++;
+	}
+	
+	return 0;
+}

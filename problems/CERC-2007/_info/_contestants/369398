@@ -1,0 +1,113 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+typedef struct 
+{
+  int nar;
+  string jmeno;
+  int vyt;
+} bojovnik;
+
+int main ()
+{
+  string ref[9] [3] = {{"Kamen", "Nuzky", "Papir"},{"Rock","Scissors","Paper"},{"Pierre","Ciseaux","Feuille"},{"Stein","Schere","Papier"},{"KoKoe","OlloOlloo","Papir"},{"SassoRoccia","Forbice","CartaRete"},{"Guu","Choki","Paa"},{"Kamien","Nozyce","Papier"},{"Piedra","Tijera","Papel"}};
+  string nar[9] = {"cs", "en", "fr", "de", "hu", "it", "jp", "pl", "es"};
+  int game = 1;
+  for (;;)
+  {
+    bool konec = false;
+    bojovnik pole[2];
+    pole[0].vyt = 0;
+    pole[1].vyt = 0;
+    int kolik = 0;
+    string temp;
+    cin >> temp;
+    cin.ignore(1);
+      //prvni
+    for (int i = 0; i < 9; i++)
+      if (temp == nar[i]) pole[0].nar = i;
+    cin >> pole[0].jmeno;
+    cin.ignore(1);
+    cin >> temp;
+    cin.ignore(1);
+      //druhy
+    for (int i = 0; i < 9; i++)
+      if (temp == nar[i]) pole[1].nar = i;
+    cin >> pole[1].jmeno;
+    cin.ignore(1);
+    
+    while (cin.peek() != '-')
+    {
+      kolik ++;
+      if (cin.peek() == '.')
+      {
+        konec = true;
+        break;
+      }
+      cin >> temp;    
+ 
+      int co = 5;
+      for (int i = 0; i < 3; i++)
+      {
+        if (ref[pole[0].nar] [i].find(temp,0) != string::npos) co = i;
+      }
+      cin.ignore(1);
+      cin >> temp;
+      for (int i = 0; i < 3; i++)
+      {
+        if (ref[pole[1].nar] [i].find(temp,0) != string::npos )
+        {
+          if(co == 2 && i == 0)
+            pole[0].vyt ++;
+          else if(co == 0 && i == 2)
+            pole[1].vyt ++;
+          else switch(co - i)
+          {
+            case 1:
+              pole[1].vyt ++;
+              break;
+            case -1:
+              pole[1].vyt ++;
+              break;
+          }
+/*          if (co < i)
+          {
+            pole[0].vyt ++;
+          }else
+          if (co == 2 && i == 0)
+          {
+            pole[0].vyt ++;
+          }else
+          if (co > i)
+          {
+            pole[1].vyt ++;
+          }else
+          if (i == 2 && co == 0)
+          {
+            pole[1].vyt ++;
+          }*/
+        }
+      }
+      cin.ignore(1);
+    }
+    //vypis
+    cout << "Game #" << game << ':' << endl;
+    if (pole[0].vyt != 1)
+      cout << pole[0].jmeno << ": " << pole[0].vyt << " points" << endl;
+    else
+      cout << pole[0].jmeno << ": " << pole[0].vyt << " point" << endl;
+    if (pole[1].vyt != 1) 
+      cout << pole[1].jmeno << ": " << pole[1].vyt << " points" << endl;
+    else
+      cout << pole[1].jmeno << ": " << pole[1].vyt << " point" << endl;        
+    if (pole[0].vyt == pole[1].vyt) cout << "TIED GAME" << endl;
+    else if (pole[0].vyt > pole[1].vyt) cout << "WINNER: " << pole[0].jmeno << endl;    
+    else cout << "WINNER: "<< pole[1].jmeno << endl;
+    if (!konec) cout << endl;
+    game ++;
+    cin.ignore (2);
+    if (konec) return 0;
+  }
+}

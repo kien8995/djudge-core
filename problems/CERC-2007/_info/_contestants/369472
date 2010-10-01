@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
+int myabs(int i) {
+	if (i < 0) return -i;
+	return i;
+}
+
+
+int main() {
+	
+	char buf[50];
+	int base;
+	int orig;
+	char sorig[100];
+
+	while (1) {
+		scanf("%s", buf);
+		if (strcmp(buf, "end") == 0) return 0;
+		if (sscanf(buf, "to-%d", &base)) {
+			int oorig;
+			int res[1000];
+			scanf("%d", &orig);
+			//printf("%d do %d\n", orig, base);
+			oorig = orig;
+			int i = 0;
+			if (orig == 0) { printf("0\n"); continue; }
+			while (orig != 0) {
+				//printf("%d", orig % base);
+				res[i++] = myabs(orig % base);
+				orig /= base;
+			}
+			/*for (int j = i - 1; j >= 0; j--) {
+				printf("%d", res[j]);
+			}
+			printf("---");*/
+			if (oorig >= 0){
+				for (int j = 0; j < i; j++) {
+					if (j % 2) {
+						if (res[j]) {
+							if (i < j+2) {i = j+2;
+							res[j+1] = 0;}
+							res[j + 1]++;
+							res[j] = base - res[j];
+						}
+					} else {
+						if (res[j] == base) {
+							res[j + 1]++;
+						}
+					}
+				}
+			} else {
+				for (int j = 0; j < i; j++) {
+					if (!(j % 2)) {
+						if (res[j]) {
+							if (i < j+2) {i = j+2;
+							res[j+1] = 0;}
+							res[j + 1]++;
+							res[j] = base - res[j];
+						}
+					} else {
+						if (res[j] == base) {
+							res[j + 1]++;
+						}
+					}
+				}
+
+			}
+			for (int j = i - 1; j >= 0; j--) {
+				printf("%d", res[j]);
+			}
+			printf("\n");
+		} else if (sscanf(buf, "from-%d", &base)) {
+			//printf("z %d\n", base);
+			scanf("%s", &sorig);
+			int Q = 1;
+			int res = 0;
+			for (int i = strlen(sorig) - 1; i >= 0; i--) {
+				//printf("%dx%d..%d  ", Q, sorig[i] - '0', res);
+				res += Q * (sorig[i] - '0');
+				Q *= (-1) * base;
+			}
+			printf("%d\n", res);
+
+		}
+
+
+
+
+
+
+
+
+	}
+
+	return 0;
+}

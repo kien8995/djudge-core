@@ -1,0 +1,95 @@
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <cctype>
+#include <queue>
+using namespace std;
+
+#define FOR(i,a,b) for (int i = (a); i < (b); ++i)
+
+inline int two(int n) { return 1 << n; }
+inline int test(int n, int b) { return n & two(b); }
+inline void set(int & n, int b) { n |= two(b); }
+
+int dr[4] = {-1, 0, 1, 0};
+int dc[4] = {0, 1, 0, -1};
+
+int R, C;
+char lab[150][150];
+
+bool state[150][150][16];
+
+int color(char c)
+{
+	c = toupper(c);
+	if (c == 'B') return 0;
+	if (c == 'Y') return 1;
+	if (c == 'R') return 2;
+	if (c == 'G') return 3;
+}
+
+inline bool door(char c) { return c >= 'A' && c <= 'Z'; }
+inline bool key(char c) { return c >= 'a' && c <= 'z'; }
+
+struct pos { int r, c, k, step; };
+	
+int main()
+{
+	while (1)
+	{
+		scanf("%d %d ", &R, &C);
+		if (!R && !C) break;
+	
+		FOR(i, 0, R) scanf("%s ", lab[i]);
+
+		pos temp;
+		FOR(i, 0, R)
+			FOR(j, 0, C)
+			{
+				if (lab[i][j] == '*')
+				{
+					temp.r = i;
+					temp.c = j;
+					temp.k = 0;
+					temp.step = 0;
+					lab[i][j] = '.';
+				}
+				FOR(k, 0, two(4))
+					state[i][j][k] = false;
+			}
+		
+		state[temp.r][temp.c][temp.k] = true;
+		queue<pos> manage;
+		manage.push(temp);
+		
+		int res = -1;
+		while (!manage.empty())
+		{
+			pos start = manage.front();
+			manage.pop();
+			
+			FOR(d, 0, 4)
+			{
+				temp = start;
+				temp.r += dr[d];
+				temp.c += dc[d];
+				if (temp.r < 0 || temp.r >= R || temp.c < 0 || temp.c >= C) continue;
+				++temp.step;
+				
+				if (lab[temp.r][temp.c] == 'X') { res = temp.step; break; }
+				if (lab[temp.r][temp.c] == '#') continue;
+				if (door(lab[temp.r][temp.c]) && !test(temp.k, color(lab[temp.r][temp.c]))) continue;
+				if (key(lab[temp.r][temp.c])) set(temp.k, color(lab[temp.r][temp.c]));
+				
+				if (state[temp.r][temp.c][temp.k]) continue;
+				state[temp.r][temp.c][temp.k] = true;
+				manage.push(temp);
+			}
+			if (res != -1) break;
+		}
+		if (res == -1) printf("The poor student is trapped!\n");
+		else printf("Escape possible in %d steps.\n", res);
+	}
+
+	return 0;
+}

@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	vector<unsigned int> bsz(1<<16,-1);
+	bsz[0]=0;
+	for(unsigned int i=1;i<(1<<16);++i)
+	{
+		bsz[i]=bsz[i>>1]+(i&1);
+	}
+  unsigned int r, c;
+  char sor[20];
+  while(scanf("%d %d", &r, &c), r+c)
+  {
+    vector<unsigned int> t(c,0);
+    for(unsigned int j=0;j<r;++j)
+    {
+      scanf("%s", sor);
+      for(unsigned int i=0;i<c;++i)
+      {
+        t[j]<<=1;
+        if(sor[i]=='X')
+          t[j]|=1;
+      }
+    }
+    unsigned int h=1<<c;
+		unsigned int m=~((~0)<<c);
+		unsigned int min=257;
+
+		for(unsigned int i=0;i<h;++i)
+		{
+			unsigned int w=i;
+			unsigned int p=0, tp;
+			unsigned int cur=0;
+			for(unsigned int j=0;j<r;++j)
+			{
+				cur+=bsz[w];
+				tp=w;
+				w=(t[j] ^ p ^ w ^ (w>>1) ^ ((w<<1) & m));
+			  p=tp;
+			}
+			if(w==0)
+			{
+				if(cur<min) min=cur;
+			}
+		}
+		if(min==257)
+		{
+			printf("Damaged billboard.\n");
+		}
+		else {
+			printf("You have to tap %d tiles.\n", min);
+		}
+  }
+  return 0;
+}

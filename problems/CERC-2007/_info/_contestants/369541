@@ -1,0 +1,211 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <stack>
+using namespace std;
+#define REP(i,n)	for(int i=0,_n=(n);i<_n;++i)
+#define REPD(i,n)	for(int i=(n-1);i>=0;--i)
+#define FOR(i,s,k)	for(int i=(s),_k=(k);i<=_k;++i)
+#define FORD(i,s,k)	for(int i=(s),_k=(k);i>=_k;--i)
+#define FORE(it,q)	for(__typeof((q).begin())it=(q).begin();it!=(q).end();++it)
+#define FORED(it,q)	for(__typeof((q).rbegin())it=(q).rbegin();it!=(q).rend();++it)
+#define FOREACH(it,f,l)	for(__typeof(f)it=f;it!=l;++it)
+#define FOREACHD(it,f,l)	for(__typeof(f)it=l;it--!=f;)
+
+const double X = -3216541;
+const double PLUS = -3216542;
+const double MINUS = -3216543;
+const double MUL = -3216544;
+const double DIV = -3216545;
+const double LBR = -3216546;
+const double RBR = -3216547;
+
+//const double PI = M_PI;
+//const double PI25 = 2.5 * M_PI;
+
+inline int pr(double c) {
+	if (c == LBR || c == RBR) return 0;
+	else if (c == PLUS || c == MINUS) return 1;
+	else return 2;
+}
+
+vector<double> * trans(char * s) {
+	/*fprintf(stderr, "\"%s\"\n", s);*/
+	vector<double> * v = new vector<double>();
+	while (*s != '\0') {
+		if (*s == '+') v->push_back(PLUS);
+		else if (*s == '-') v->push_back(MINUS);
+		else if (*s == '*') v->push_back(MUL);
+		else if (*s == '/') v->push_back(DIV);
+		else if (*s == '(') v->push_back(LBR);
+		else if (*s == ')') v->push_back(RBR);
+		else if (*s == 'x') v->push_back(X);
+		else {
+			double num = 0;
+			while (isdigit(*s)) {
+				num *= 10;
+				num += (*s - '0');
+				++s;
+			}
+			if (*s == '.') {
+				++s;
+				double d = 0.1;
+				while (isdigit(*s)) {
+					num += d * (*s - '0');
+					++s;
+					d *= 0.1;
+				}
+			}
+			v->push_back(num);
+			--s;
+		}
+		++s;
+	}
+	/*FORE(it, *v) {
+		fprintf(stderr, "-- %d\n", *it);
+	}*/
+	return v;
+}
+
+vector<double> * onp(vector<double> * v) {
+	vector<double> * res = new vector<double>();
+	stack<double> st;
+	FORE(it, *v) {
+		if (*it >= 0 || *it == X) res->push_back(*it);
+		else if (*it == LBR) st.push(*it);
+		else if (*it == RBR) {
+			while (st.top() != LBR) {
+				res->push_back(st.top());
+				st.pop();
+			}
+			st.pop();
+		} else {
+			int prior = pr(*it);
+			while (!st.empty() && pr(st.top()) >= prior) {
+				res->push_back(st.top());
+				st.pop();
+			}
+			st.push(*it);
+		}
+	}
+	while (!st.empty()) {
+		res->push_back(st.top());
+		st.pop();
+	}
+	/*FORE(it, *res) {
+		fprintf(stderr, "%d\n", *it);
+	}*/
+	return res;
+}
+
+vector<double> * _R;
+vector<double> * _T;
+
+double compute(vector<double> * v, double x) {
+	stack<double> st;
+	FORE(it, *v) {
+		double v;
+		if (*it == PLUS) {
+			v = st.top();
+			st.pop();
+			v += st.top();
+			st.pop();
+			st.push(v);
+		} else if (*it == MINUS) {
+			v = -st.top();
+			st.pop();
+			v += st.top();
+			st.pop();
+			st.push(v);
+		} else if (*it == MUL) {
+			v = st.top();
+			st.pop();
+			v *= st.top();
+			st.pop();
+			st.push(v);
+		} else if (*it == DIV) {
+			v = 1/st.top();
+			st.pop();
+			v *= st.top();
+			st.pop();
+			st.push(v);
+		} else if (*it == X) {
+			st.push(x);
+		} else {
+			st.push(*it);
+		}
+	}
+	
+	return st.top();
+}
+
+double R(double x) {
+	return compute(_R, x);
+}
+
+double T(double x) {
+	return compute(_T, x);
+}
+
+bool testcase() {
+	double H, B;
+	scanf("%lf%lf\n", &H, &B);
+	if (H == 0.0 && B == 0.0) return false;
+	char __R[1001], __T[1001];
+	gets(__R);
+	gets(__T);
+	
+	vector<double> * tmp = trans(__R);
+	_R = onp(tmp);
+	delete tmp;
+	tmp = trans(__T);
+	_T = onp(tmp);
+	delete tmp;
+	 
+	double step = 0.00005;
+	double sum = 0.0;
+	double V = 0.0;
+	
+	for (double y = step ; y <= H ; y += step) {
+		double midR = 0.5 * (R(y) + R(y-step));
+		double partV = 2.5 * midR * midR * step;
+		if (y > B) {
+			double midR_T = midR - 0.5 * (T(y) + T(y-step));
+			partV -= 2.5 * midR_T *midR_T * step;
+		}
+		sum += partV * (y - step/2.0);
+		V += partV;
+	}
+	
+	/*printf("%lf / %lf = %lf\n", sum, V, sum/V);*/
+	
+	double prev = sum / V;
+	double addV = 0.0;
+	for (double y = B + step ; y <= H ; y += step) {
+		double midR_T = 0.5 * (R(y) + R(y-step) - T(y) - T(y-step));
+		double partV = midR_T * midR_T * step;
+		sum += partV * (y - step/2.0);
+		V += partV;
+		if (sum/V > prev) {
+			printf("Pour %.3lf litres / %.3lf cm of water.\n", M_PI * addV/1000, (y-B-step));
+			delete _R;
+			delete _T;
+			return true;
+		}
+		prev = sum/V;
+		addV += partV;
+	}
+	delete _R;
+	delete _T;
+	
+	return 1;
+}
+
+
+int main() {
+	while(testcase());
+	return 0;
+}
+

@@ -1,0 +1,114 @@
+#include <cstdio>
+#include <map>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+map<string, int> ny;
+vector<vector<pair<string, string> > > tab(9, vector<pair<string, string> >(3));
+
+void maketab()
+{
+  ny["cs"]=0;
+  ny["en"]=1;
+  ny["fr"]=2;
+  ny["de"]=3;
+  ny["hu"]=4;
+  ny["it"]=5;
+  ny["jp"]=6;
+  ny["pl"]=7;
+  ny["es"]=8;
+  tab[0][0].first="Kamen";
+  tab[0][1].first="Nuzky";
+  tab[0][2].first="Papir";
+  tab[1][0].first="Rock";
+  tab[1][1].first="Scissors";
+  tab[1][2].first="Paper";
+  tab[2][0].first="Pierre";
+  tab[2][1].first="Ciseaux";
+  tab[2][2].first="Feuille";
+  tab[3][0].first="Stein";
+  tab[3][1].first="Schere";
+  tab[3][2].first="Papier";
+  tab[4][0].first="Ko";
+  tab[4][0].second="Koe";
+  tab[4][1].first="Ollo";
+  tab[4][1].second="Olloo";
+  tab[4][2].first="Papir";
+  tab[5][0].first="Sasso";
+  tab[5][0].second="Roccia";
+  tab[5][1].first="Forbice";
+  tab[5][2].first="Carta";
+  tab[5][2].second="Rete";
+  tab[6][0].first="Guu";
+  tab[6][1].first="Choki";
+  tab[6][2].first="Paa";
+  tab[7][0].first="Kamien";
+  tab[7][1].first="Nozyce";
+  tab[7][2].first="Papier";
+  tab[8][0].first="Piedra";
+  tab[8][1].first="Tijera";
+  tab[8][2].first="Papel";
+}
+
+int tk(int l, string s)
+{
+//  printf("%d %s\n", l, s.c_str());
+  for (int i=0; i<3; ++i)
+  {
+    if (s==tab[l][i].first || s==tab[l][i].second) return i;
+  }
+  return -1;
+}
+
+int main()
+{
+  maketab();
+  char l1[3]; char l2[3];
+  char n1[25]; char n2[25];
+  char k1[10]; char k2[10];
+  int nnn(0);
+  while(true)
+  {
+    ++nnn;
+    scanf("%s %s\n%s %s\n", l1, n1, l2, n2);
+    int la1=ny[string(l1)];
+//    printf("%s %d\n", l1, la1);
+    int la2=ny[string(l2)];
+//    printf("%s %d\n", l2, la2);
+    int p1(0), p2(0);
+    while(k1[0]=getchar(), (k1[0]!='-') && (k1[0]!='.'))
+    {
+      scanf("%s %s\n", k1+1, k2);
+      int b=tk(la1, string(k1));
+//      printf("aadasfasdf: %d\n", b);
+      int j=tk(la2, string(k2));
+//      printf("aadasfasdg: %d\n", j);
+      switch ((b-j+3)%3)
+      {
+        case 0: break;
+        case 1: ++p2; break;
+        case 2: ++p1; break;
+      }
+    }
+    printf("Game #%d:\n", nnn);
+    if (p1==1)
+      printf("%s: 1 point\n", n1);
+    else
+      printf("%s: %d points\n", n1, p1);
+    if (p2==1)
+      printf("%s: 1 point\n", n2);
+    else
+      printf("%s: %d points\n", n2, p2);
+    if (p1==p2)
+      printf("TIED GAME\n");
+    else if (p1>p2)
+      printf("WINNER: %s\n", n1);
+    else
+      printf("WINNER: %s\n", n2);
+    printf("\n");
+    if(k1[0]=='.') break;
+//    if(k1[0]=='-') continue;
+  }
+}

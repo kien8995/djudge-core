@@ -1,0 +1,144 @@
+#include <cstdio>
+#include <cmath>
+#include <vector>
+#include <cstring>
+
+using namespace std;
+
+
+vector<int> p;
+int NN;
+int R;
+int a;
+int tmp;
+char N[100];
+char we[8];
+
+
+void ToDec()
+{
+	int n = strlen(N);
+	int dec = 0;
+	for (int i = n-1; i >= 0; i--)
+	{
+		dec += ((N[i]-48) * (int)pow((double)R, (int)n-i-1));
+		//printf("    N[i]:%d i: %d R: %d wyr: %d dec: %d pow: %d\n",N[i]-48,i,R,((N[i]-'0') * (int)pow((double)R, (int)n-i-1)),dec, (int)pow((double)R, (int)n-i-1));
+	}
+	printf("%d\n", dec);
+}
+
+
+void ToNeg()
+{
+/*	int i = 0;
+	int a;
+	int tnn = NN;
+	p.clear();
+	tmp = pow((double)R, i);
+	while (abs(tmp) < abs(NN))
+	{
+		p.push_back(tmp);
+		i++;
+		tmp = pow((double)R, (int)i);
+	}
+	
+	p.push_back(tmp);
+	
+
+	for (int j = p.size()-1; j >= 0; j--)
+	{
+		if (NN < 0 && p[j] < 0)
+		{
+			a = 0;
+			tnn = NN;
+			while (tnn < 0)
+			{
+				tnn -= p[j];
+				a++;
+			} 
+		}
+		else if (NN < 0 && p[j] > 0)
+		{
+			a = 0;
+			tnn = NN;
+			while (tnn < 0)
+			{
+				tnn += p[j];
+				a++;
+			} 
+		}
+		else if (NN > 0 && p[j] > 0)
+		{
+			a = 0;
+			tnn = NN;
+			while (tnn > 0)
+			{
+				tnn -= p[j];
+				a++;
+			} 			
+		}
+		else
+		{
+			a = 0;
+			tnn = NN;
+			while (tnn > 0)
+			{
+				tnn += p[j];
+				a++;
+			} 		
+		}
+		
+		//a = NN/p[j];
+		printf("%d", a);
+		NN -= a*p[j];
+	}
+	printf("\n");*/
+	
+	// NN - liczba w dec do konwersji
+	// R - podstawa (ujemna!)
+	int mxdr = 2000000;
+	int mx = mxdr * (-R);
+	int tab[1000];
+	int cnt = 0;
+	int v = NN;
+	for (int i = 0; v; i++) {
+		tab[cnt++] = (v + mx) % (-R);
+		v = -((v + mx) / (-R) - mxdr);
+	}
+	while (--cnt >= 0) {
+		printf("%d", tab[cnt]);
+	}
+	printf("\n");
+}
+
+
+int main()
+{
+	scanf("%s", we);
+	//printf("pow -10 0 : %d\n\n", (int)pow((double)-10,3));
+	while (strcmp(we, "end") != 0)
+	{
+		if (we[0] == 't')	// do ujemnego
+		{
+			if (we[4] == 0)
+				R = 48 - we[3];
+			else
+				R = (48 - we[3]) * 10;
+			scanf("%d", &NN);
+			//printf("R: %d N: %d\n",R, NN);
+			ToNeg();
+		}
+		else	// do dec
+		{
+			if (we[6] == 0)
+				R = 48 - we[5];
+			else
+				R = (48 - we[5]) * 10;
+			scanf("%s", N);
+			//printf("R: %d N: %s\n",R, N);
+			ToDec();
+		}
+		scanf("%s",we);
+	}
+	return 0;
+}

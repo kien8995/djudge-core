@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <map>
+#include <string>
+
+#define K	0
+#define N 1
+#define P 2
+
+using namespace std;
+
+int main()
+{
+
+		map<string, map<string,int> > lang;
+		map<string, int> words;
+	
+		words["Kamen"]=K;
+		words["Nuzky"]=N;
+		words["Papir"]=P;
+		lang["cs"]=words;
+		words.clear();
+		
+		words["Rock"]=K;
+		words["Scissors"]=N;
+		words["Paper"]=P;
+		lang["en"]=words;
+		words.clear();
+		
+		words["Pierre"]=K;
+		words["Ciseaux"]=N;
+		words["Feuille"]=P;
+		lang["fr"]=words;
+		words.clear();
+		
+		words["Stein"]=K;
+		words["Schere"]=N;
+		words["Papier"]=P;
+		lang["de"]=words;
+		words.clear();
+		
+		words["Ko"]=K;
+		words["Koe"]=K;
+		words["Ollo"]=N;
+		words["Olloo"]=N;
+		words["Papir"]=P;
+		lang["hu"]=words;
+		words.clear();
+		
+		words["Sasso"]=K;
+		words["Roccia"]=K;
+		words["Forbice"]=N;
+		words["Carta"]=P;
+		words["Rete"]=P;
+		lang["it"]=words;
+		words.clear();
+
+		words["Guu"]=K;
+		words["Choki"]=N;
+		words["Paa"]=P;
+		lang["jp"]=words;
+		words.clear();
+	
+		words["Kamien"]=K;
+		words["Nozyce"]=N;
+		words["Papier"]=P;
+		lang["pl"]=words;
+		words.clear();
+
+		words["Piedra"]=K;
+		words["Tijera"]=N;
+		words["Papel"]=P;
+		lang["es"]=words;
+		words.clear();
+
+		char first[1000],second[1000];
+
+		char buf[100];
+		int game=1;
+		do {
+			char lang1[1000],name1[1000],lang2[1000],name2[1000];
+			int pt1=0,pt2=0;
+			
+			scanf(" %s %s %s %s ",lang1,name1,lang2,name2);
+			
+			map<string,int> *dict1,*dict2;
+			map<string, map<string, int> >::iterator it;
+			
+			dict1=&lang[string(lang1)];
+			dict2=&lang[string(lang2)];
+			
+			
+			while (scanf(" %s ",first),*first!='-' && *first!='.') {
+				scanf(" %s ",second);
+				
+				int t1,t2;
+				
+				t1=(*dict1)[string(first)];
+				t2=(*dict2)[string(second)];
+				
+//			printf("%s %d - %s %d\n",first,t1,second,t2);
+
+				if (t1==t2) {
+					;
+				} else {
+					if (t1==N && t2==P)
+						++pt1;
+					if (t1==K && t2==N)
+						++pt1;
+					if (t1==P && t2==K)
+						++pt1;
+					if (t2==N && t1==P)
+						++pt2;
+					if (t2==K && t1==N)
+						++pt2;
+					if (t2==P && t1==K)
+						++pt2;
+				}
+			}
+			
+			printf("Game #%d:\n",game++);
+			
+
+			if (pt1==1)
+				printf("%s: %d point\n",name1,pt1);
+			else
+				printf("%s: %d points\n",name1,pt1);
+			
+			if (pt2==1)
+				printf("%s: %d point\n",name1,pt2);
+			else
+				printf("%s: %d points\n",name1,pt2);
+			
+			if (pt1==pt2)
+				printf("TIED GAME\n\n");
+			else if (pt1>pt2)
+				printf("WINNER: %s\n\n",name1);
+			else
+				printf("WINNER: %s\n\n",name2);
+			
+		} while (*first=='-');
+	
+	
+	return 0;
+}

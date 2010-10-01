@@ -15,7 +15,7 @@
   compiler-name   = "GNU C++ Compiler 3.4.2"
   file-extension  = ".cc"
   compile-command = "g++ %name%ext -o %name.exe -O -march=pentium4m -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE -DDJUDGE"
-  run-command     = "%name.exe"
+  run-command     = "./%name.exe"
 />
 
 </Languages>

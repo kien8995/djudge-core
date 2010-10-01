@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <queue>
+
+using namespace std;
+
+#define FOR(q,n) for(int q=0;q<n;q++)
+
+#define MAX 150
+
+queue<int> fronta;
+char data[MAX][MAX];
+char s[MAX];
+
+int r,c;
+int sx,sy;
+int ex,ey;
+
+int used[MAX][MAX][33];
+
+
+int init(){
+    scanf("%d %d\n",&r,&c);
+    if (r==0 && c==0) return 0;
+
+    FOR(q,r) {
+        scanf("%s",s);
+
+        FOR(w,c) data[q+1][w+1]=s[w];
+    }
+
+    FOR(w,c+5) data[0][w]='#';
+    FOR(w,c+5) data[r+1][w]='#';
+    FOR(q,r+5) data[q][0]='#';
+    FOR(q,r+5) data[q][c+1]='#';
+
+    r+=2; c+=2;
+    FOR(q,r) FOR(w,c) if (data[q][w]=='*') {sx=q; sy=w; }
+    FOR(q,r) FOR(w,c) if (data[q][w]=='X') {ex=q; ey=w; }
+    FOR(q,r+5)
+        FOR(w,c+5)
+         FOR(e,32) used[q][w][e]=0;
+
+    return 1;
+}
+
+void try__(int x,int y,int keys,int l){
+    if (data[x][y]=='#') return;
+    if (data[x][y]=='b') keys|=1;
+    if (data[x][y]=='y') keys|=2;
+    if (data[x][y]=='r') keys|=4;
+    if (data[x][y]=='g') keys|=8;
+    if (data[x][y]=='B' && !(keys&1)) return;
+    if (data[x][y]=='Y' && !(keys&2)) return;
+    if (data[x][y]=='R' && !(keys&4)) return;
+    if (data[x][y]=='G' && !(keys&8)) return;
+    if (used[x][y][keys]) return;
+    used[x][y][keys]=l;
+//    printf("add point %d %d %d \n",x,y,keys);
+    fronta.push(x);
+    fronta.push(y);
+    fronta.push(keys);
+}
+
+
+void try_(int x,int y,int keys){
+    int l=used[x][y][keys]+1;
+try__(x-1,y,keys,l);
+try__(x+1,y,keys,l);
+try__(x,y-1,keys,l);
+try__(x,y+1,keys,l);
+}
+
+void solve(){
+//    printf("from %d %d to %d %d \n",sx,sy,ex,ey);
+    used[sx][sy][0]=1;
+    while (!fronta.empty()) fronta.pop();
+    fronta.push(sx);
+    fronta.push(sy);
+    fronta.push(0);
+
+
+    while (!fronta.empty()) {
+        int x,y,k;
+        x=fronta.front(); fronta.pop();
+        y=fronta.front(); fronta.pop();
+        k=fronta.front(); fronta.pop();
+        if (x==ex && y==ey) break;
+        try_(x,y,k);
+    }
+
+  FOR(t,32) if (used[ex][ey][t]) {
+      printf("Escape possible in %d steps.\n",used[ex][ey][t]-1);
+      return ;
+  }
+
+ printf("The poor student is trapped!\n");
+}
+
+
+int main(){
+    while (init()) solve();
+
+}

@@ -1,0 +1,189 @@
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<cctype>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<numeric>
+
+using namespace std;
+
+#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
+#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define REP(i, n) for(int i=0; i<(n); i++)
+#define ALL(x) (x).begin(), (x).end()
+#define MP make_pair
+#define PB push_back
+#define X first
+#define Y second
+#define FI first
+#define SE second
+#define FORE(i, c) for(__typeof((c).begin()) i = (c).begin(); i!=(c).end(); ++i)
+#define SIZE(x) ((int)(x).size())
+
+typedef vector<int> VI;
+typedef long long ll;
+
+typedef pair<int, int> PII;
+
+typedef double D;
+typedef pair<D, D> PDD;
+typedef pair<PDD, D> okrag;
+
+
+inline D sqr(D d)
+{
+    return d*d;
+}
+
+D d(PDD a, PDD b)
+{
+    return sqrt(sqr(a.X - b.X) + sqr(a.Y - b.Y));
+}
+
+pair<int, pair<PDD, PDD> > przec(okrag o1, okrag o2)
+{
+    D odl=d(o1.X, o2.X);
+
+    if(odl > o1.Y + o2.Y + 1e-9 || odl < fabsl(o1.Y-o2.Y) - 1e-9)
+	return MP(0, MP(MP(0.0, 0.0), MP(0.0, 0.0)));
+    D x = (sqr(o1.X.X - o2.X.X) + sqr(o1.X.Y - o2.X.Y) - sqr(o2.Y) + sqr(o1.Y))/(2.0*odl);
+    D y = sqrtl(fabsl(sqr(o1.Y)-sqr(x)));
+    PDD wek = MP((o2.X.X-o1.X.X)/odl, (o2.X.Y-o1.X.Y)/odl);
+    PDD p = MP(o1.X.X+wek.X*x, o1.X.Y + wek.Y*x), wyn;
+    swap(wek.X,wek.Y); wek.X=-wek.X;
+
+    p.X += wek.X*y; p.Y += wek.Y*y;
+    wyn = p;
+
+    p.X -= 2.0*wek.X*y; p.Y -= 2.0*wek.Y*y;
+    if( fabsl(odl-o1.Y-o2.Y) < 1e-9 || fabsl(odl-fabsl(o1.Y-o2.Y)) < 1e-9)
+	return MP(1, MP(wyn, p));
+    else
+	return MP(2, MP(wyn, p));
+}
+
+inline okrag mkok(PII a, int r)
+{
+    okrag ret;
+    ret.X.X = a.X;
+    ret.X.Y = a.Y;
+    ret.Y = r;
+    return ret;
+}
+
+#define PI 3.141592653589793238462643383279502884197169399
+
+struct event
+{
+    D x;
+    int pocz, co;
+    int operator<(const event& e) const
+    {
+	return x < e.x;
+    }
+};
+
+int kk(PII* p, int n, int r, int sr)
+{
+    int czyjest[2000];
+    pair<int, pair<PDD, PDD> > wyn;
+    okrag sso;
+    sso = mkok(p[sr], r);
+    PDD p1, p2;
+    D t1, t2;
+    PDD srodek;
+    srodek = MP((D)p[sr].X, (D)p[sr].Y);
+    vector<event> ee;
+    event e;
+    REP(i, n)
+    {
+	czyjest[i] = 0;
+	if(i == sr) continue;
+	wyn = przec(sso, mkok(p[i], r));
+//	printf("przec %lf %lf  i %lf %lf to  %lf %lf i %lf %lf\n", sso.X.X, sso.X.Y, 
+	if(wyn.X == 0) continue;
+	p1 = wyn.Y.X;
+	p2 = wyn.Y.Y;
+	if(wyn.X == 1)
+	    p2 = p1;
+	t1 = atan2(p1.Y-srodek.Y, p1.X - srodek.X);
+	t2 = atan2(p2.Y-srodek.Y, p2.X - srodek.X);
+	if(t2 + PI + 1e-9 > t1 || t2 - PI + 1e-9 > t1)
+	    swap(t1, t2);
+	if(sr == 4 && i == 1)
+	{
+/*	    printf("%d %d   %d %d\n", p[sr].X, p[sr].Y, p[i].X, p[i].Y);
+	    printf("%d %lf %lf   %lf %lf\n", wyn.X, p1.X, p1.Y, p2.X, p2.Y);
+	    printf("%d %d\n", p[i].X, p[i].Y);
+	    printf("%lf %lf\n", p2.X, p2.Y);
+	    printf("%lf %lf\n", t1, t2);*/
+	}
+	e.x = t1;
+	e.pocz = 1;
+	e.co = i;
+	ee.PB(e);
+	e.x = t1+2.0*PI;
+	ee.PB(e);
+
+	e.x = t2+1e-9;
+	e.pocz = 0;
+	ee.PB(e);
+	e.x = t2+2.0*PI+1e-9;
+	ee.PB(e);
+    }
+    sort(ALL(ee));
+    int akt, wynb;
+    wynb = akt = 0;
+    
+    FORE(it, ee)
+    {
+//	printf("kolko %d %d\n", it->co, it->pocz);
+	if(it->pocz == 1)
+	{
+	    czyjest[it->co] = 1;
+	    akt ++;
+	}
+	else if(czyjest[it->co])
+	{
+	    czyjest[it->co] = 0;
+	    akt --;
+	}
+	if(akt > wynb) wynb = akt;
+    }
+    return wynb +1;
+}
+
+void cell(int n, int r)
+{
+    PII p[2000];
+    REP(i, n)
+	scanf("%d%d",&p[i].X, &p[i].Y);
+    if(r == 0)
+    {
+	printf("It is possible to cover 1 points.\n");
+	return;
+    }
+    int best, akt;
+    best = 0;
+    REP(i, n)
+    {
+	akt = kk(p, n, r, i);
+	if(akt > best)
+	     best = akt;
+    }
+    printf("It is possible to cover %d points.\n", best);
+}
+
+int main()
+{
+    int n, r;
+    while(scanf("%d%d",&n, &r) && (n || r))
+	cell(n ,r);
+    return 0;
+}

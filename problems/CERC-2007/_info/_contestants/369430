@@ -1,0 +1,220 @@
+#include <stdio.h>
+#include <algorithm>
+
+using namespace std;
+
+int n;
+typedef struct point_t {
+	int x;
+	int y;
+	int eredetipos;
+	int xpos;
+	int ypos;
+};
+point_t point_x[1100];
+point_t point_y[1100];
+
+char megold[1100];
+int megoldpos;
+int megold_startpos;
+
+bool cmp_x(point_t a, point_t b) {
+	if (a.x < b.x) return true;
+	if (b.x < a.x) return false;
+	return (a.y < b.y);
+}
+
+bool cmp_y(point_t a, point_t b) {
+	if (a.y < b.y) return true;
+	if (b.y < a.y) return false;
+	return (a.x < b.x);
+}
+
+int main() {
+	while (scanf("%d", &n) && n) {
+		int i;
+		megoldpos = 0;
+		for (i = 0; i < n; i++) {
+			scanf("%d %d ", &point_x[i].x, &point_x[i].y);
+			point_x[i].eredetipos = i;
+		}
+		sort(point_x, point_x + n, cmp_x);
+		for (i = 0; i < n; i++)
+			point_x[i].xpos = i;
+		for (i = 0; i < n; i++)
+			point_y[i] = point_x[i];
+		sort(point_y, point_y + n, cmp_y);
+		for (i = 0; i < n; i++) {
+			point_y[i].ypos = i;
+			point_x[point_y[i].xpos].ypos = i;
+		}
+		
+/*		for (i = 0; i < n; ++i) {
+			printf(" @ %d %d %d\n", point_x[i].eredetipos, point_x[i].xpos, point_x[i].ypos);
+		}
+		for (i = 0; i < n; ++i) {
+			printf(" # %d %d %d\n", point_y[i].eredetipos, point_y[i].xpos, point_y[i].ypos);
+		}
+*/		
+		point_t point_akt = point_x[n-1];
+		point_t point_finish = point_x[n-1];
+		char ir_akt = 'W';
+		point_t point_try;
+		int index;
+		do {
+//			printf(" ! %d (%d %d)\n", point_akt.eredetipos, point_akt.x, point_akt.y);
+			if (point_akt.eredetipos == 0) {
+				megold_startpos = megoldpos;
+			}
+			if (ir_akt == 'W') {
+				index = point_akt.xpos - 1;
+				if (index >= 0) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'S';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.ypos - 1;
+				if (index >= 0) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'W';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.xpos + 1;
+				if (index < n) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'N';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+			}
+			if (ir_akt == 'N') {
+				index = point_akt.ypos - 1;
+				if (index >= 0) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'W';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.xpos + 1;
+				if (index < n) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'N';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.ypos + 1;
+				if (index < n) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'E';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+			}
+			if (ir_akt == 'E') {
+				index = point_akt.xpos + 1;
+				if (index < n) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'N';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.ypos + 1;
+				if (index < n) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'E';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.xpos - 1;
+				if (index >= 0) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'S';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+			}
+			if (ir_akt == 'S') {
+				index = point_akt.ypos + 1;
+				if (index < n) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'E';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.xpos - 1;
+				if (index >= 0) {
+					point_try = point_x[index];
+					if (point_try.x == point_akt.x) {
+						point_akt = point_try;
+						ir_akt = 'S';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+				
+				index = point_akt.ypos - 1;
+				if (index >= 0) {
+					point_try = point_y[index];
+					if (point_try.y == point_akt.y) {
+						point_akt = point_try;
+						ir_akt = 'W';
+						megold[megoldpos++] = ir_akt;
+						continue;
+					}
+				}
+			}
+		} while (point_akt.eredetipos != point_finish.eredetipos);
+		
+/*		for (i = 0; i < n; ++i) {
+			printf(" %c", megold[i]);
+		}
+		printf(" %d\n", megold_startpos);
+*/		for (i = megold_startpos; i < n; ++i) {
+			printf("%c", megold[i]);
+		}
+		for (i = 0; i < megold_startpos; ++i) {
+			printf("%c", megold[i]);
+		}
+		printf("\n");
+	}
+	return 0;
+}

@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+
+#define MAX_N 200
+#define MAXMAX 2000000000
+int R,C;
+char buff[MAX_N][MAX_N];
+int len[17][MAX_N][MAX_N];
+int Q[17][MAX_N*MAX_N * 17][2];
+int p[17],k[17];
+int conv(char a)
+{
+	if(a=='B')	return 8;
+	if(a=='Y')  return 4;
+	if(a=='R') return 2;
+	if(a=='G') return 1;
+	if(a=='#') return 16;
+	if(a=='.') return 0;
+	if(a=='b')	return 8;
+	if(a=='y')  return 4;
+	if(a=='r') return 2;
+	if(a=='g') return 1;
+	if(a=='*') return 0;
+	if(a=='X') return 0;
+	return 0;
+}
+void one(int nx,int ny,int ox,int oy,int i)
+{
+		if(nx>=0 && ny>=0 && nx<R && ny<C)
+				{
+					//printf("%d %d %d %d\n",nx,ny,ox,oy);
+					char val = buff[nx][ny];
+					if(islower(buff[nx][ny]))
+					{
+						int newP= i | conv( buff[nx][ny] );
+						if(len[newP][nx][ny]>len[i][ox][oy]+1)
+						{
+							
+								len[newP][nx][ny]=len[i][ox][oy]+1;
+								Q[ newP ][ k[newP] ][0]=nx;
+								Q[ newP ][ k[newP] ][1]=ny;
+								k[newP]++;
+						}
+					}
+					else
+						if(val!='#' && (!isupper(val) || (conv(val) & i) == conv(val) ))
+						{
+							//printf("%d %d %d %d\n",nx,ny,ox,oy);
+							if(len[i][nx][ny]>len[i][ox][oy]+1)
+							{
+							
+								len[i][nx][ny]=len[i][ox][oy]+1;
+								Q[ i ][ k[ i ] ][0]=nx;
+								Q[ i ][ k[ i ] ][1]=ny;
+								k[ i ]++;
+							}
+						}
+				}
+}
+void solve()
+{
+	int x,y;
+	for(int i1=0;i1<R;i1++)
+		for(int i2=0;i2<C;i2++)
+			if(buff[i1][i2]=='*')
+				{
+					x=i1;
+					y=i2;
+				}
+
+for(int i1=0;i1<R;i1++)
+		for(int i2=0;i2<C;i2++)
+			for(int i3=0;i3<17;i3++)
+				len[i3][i1][i2]=MAXMAX;
+	for(int i1=0;i1<17;i1++)
+		{
+			p[i1]=0;k[i1]=0;
+		}
+	Q[0][0][0]=x;
+	Q[0][0][1]=y;
+	len[0][x][y]=0;
+	k[0]++;
+	while(1)
+	{
+		int all=0;
+		for(int i=0;i<16;i++)
+			while(p[i]<k[i])
+			{
+				all=1;
+				int cx=Q[i][p[i]][0];
+				int cy=Q[i][p[i]][1];
+				//printf("s1s %d %d\n",cx,cy);
+				p[i]++;
+				one(cx-1,cy,cx,cy,i);
+				one(cx+1,cy,cx,cy,i);
+				one(cx,cy-1,cx,cy,i);
+  			one(cx,cy+1,cx,cy,i);
+				}
+		if(all==0)
+			break;
+	}
+	int small=MAXMAX;
+	for(int i1=0;i1<R;i1++)
+		for(int i2=0;i2<C;i2++)
+			if(buff[i1][i2]=='X')
+				{
+					for(int i3=0;i3<16;i3++)
+						if(len[i3][i1][i2]<small)
+							small=len[i3][i1][i2];
+				}
+	if(small<MAXMAX && small>=0)
+		printf("Escape possible in %d steps.\n",small);
+	else
+		printf("The poor student is trapped!\n");
+}
+int main()
+{
+	char buffeee[10];
+	while(1)
+	{
+		scanf("%d %d",&R,&C);
+		if(R==0 && C==0)
+			return 0;
+		for(int i=0;i<R;i++)
+			scanf("%s",buff[i]);
+		solve();
+	}
+	return 0;
+}
+

@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <map>
+#include <string>
+
+#define		F(i, n)			for (i = 0; i < n; i++)
+#define		Fcon(i, n, con)		for (i = 0; i < n && (con); i++)
+#define		Clear(m)		memset(m, 0, sizeof(m))
+#define		MIN(a, b)		((a) < (b) ? (a) : (b))
+#define		brkon(con1, con2)	if ((con1) && (con2)) break
+
+using namespace std;
+
+int main()
+{
+	char names[2][25];
+	char game[2][20];
+	int p[2], c[2];
+	bool end = false;
+	map <string, int> m;
+	int gn = 0;
+	int i;
+
+	m["Kamen"] = 1;
+	m["Rock"] = 1;
+	m["Pierre"] = 1;
+	m["Stein"] = 1;
+	m["Ko"] = 1;
+	m["Koe"] = 1;
+	m["Sasso"] = 1;
+	m["Roccia"] = 1;
+	m["Guu"] = 1;
+	m["Kamien"] = 1;
+	m["Piedra"] = 1;
+	m["Nuzky"] = 2;
+	m["Scissors"] = 2;
+	m["Ciseaux"] = 2;
+	m["Schere"] = 2;
+	m["Ollo"] = 2;
+	m["Olloo"] = 2;
+	m["Forbice"] = 2;
+	m["Choki"] = 2;
+	m["Nozyce"] = 2;
+	m["Tijera"] = 2;
+	m["Papir"] = 0;
+	m["Paper"] = 0;
+	m["Feuille"] = 0;
+	m["Papier"] = 0;
+	m["Papir"] = 0;
+	m["Carta"] = 0;
+	m["Rete"] = 0;
+	m["Paa"] = 0;
+	m["Papier"] = 0;
+	m["Papel"] = 0;
+
+	do
+	{
+		gn++;
+		F(i, 2)
+			scanf("%*s %s", names[i]);
+		Clear(p);
+		while (1)
+		{
+			Fcon(i, 2, strcmp(game[i-1], "-") != 0 && strcmp(game[i-1], ".") != 0)
+			{
+				scanf("%s", game[i]);
+				//printf("game[%d] = %s\n", i, game[i]);
+				if (strcmp(game[i-1], "-") != 0 && strcmp(game[i-1], ".") != 0)
+				{
+					string s(game[i]);
+					c[i] = m[s];
+					//printf("c = %d\n", c[i]);
+				}
+			}
+
+			if (i >= 2 && c[0] != c[1])
+			{
+				if (c[0] == 0 && c[1] == 1)
+					p[0]++;
+				else if (c[0] == 1 && c[1] == 2)
+					p[0]++;
+				else if (c[0] == 2 && c[1] == 0)
+					p[0]++;
+				else if (c[1] == 0 && c[0] == 1)
+					p[1]++;
+				else if (c[1] == 1 && c[0] == 2)
+					p[1]++;
+				else if (c[1] == 2 && c[0] == 0)
+					p[1]++;
+			}
+			else if (i < 2)
+			{
+				i--;
+				if (strcmp(game[i], ".") == 0)
+					end = true;
+				break;
+			}
+		}
+
+		printf("Game #%d:\n%s: %d point%s\n%s: %d point%s\n", gn, names[0], p[0], p[0] == 1 ? "" : "s", names[1], p[1], p[1] == 1 ? "" : "s");
+		if (p[0] == p[1])
+			printf("TIED GAME\n");
+		else if (p[0] < p[1])
+			printf("WINNER: %s\n", names[1]);
+		else
+			printf("WINNER: %s\n", names[0]);
+		if (!end)
+			printf("\n");
+	} while (!end);
+
+	return 0;
+}

@@ -1,0 +1,106 @@
+#include <cstdio>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+struct vect
+{
+	double x, y;
+	int val;
+	bool operator<(const vect & a) const
+	{
+		double w = atan2(y, x) - atan2(a.y , a.x);
+		if(w!=0) return w>0;
+		else return val>a.val;
+	}
+	vect(){}
+	vect(double _x, double _y):x(_x),y(_y){}
+	vect rot1() const
+	{return vect(y,-x);}
+	vect rot2() const
+	{return vect(-y,x);}
+	vect operator-(const vect & a) const
+	{
+		return vect(x-a.x,y-a.y);
+	}
+	vect operator+(const vect & a) const
+	{
+		return vect(x+a.x,y+a.y);
+	}
+	double dist2() const
+	{
+		return x*x+y*y;
+	}
+	vect operator/(double b) const
+	{
+		return vect(x/b,y/b);
+	}
+	vect norm() const
+	{
+		return (*this)/sqrt(dist2());
+	}
+	vect operator*(double b) const
+	{
+		return vect(x*b, y*b);
+	}
+	
+};
+
+vect tab[2000];
+vect q[4000];
+int jeden()
+{
+	int n; double r; scanf("%d %lf", &n, &r);
+	if(n==0) return 0;
+	for(int i = 0; i<n; i++)
+	{
+		scanf("%lf%lf", &tab[i].x, &tab[i].y);
+	}
+	int maxi = 0;
+	for(int i = 0; i<n; i++)
+	{
+		int ile = 0;
+		for(int j = 0; j<n; j++) if(i!=j && (tab[i]-tab[j]).dist2()<=4.0*r*r)
+		{
+			vect a = tab[j]-tab[i];
+			vect b = a.rot1().norm();
+			//printf("a-> %lf %lf\n", a.x,a.y);
+			//printf("b-> %lf %lf\n", b.x,b.y);
+			q[ile]=a/2.0 + b*sqrt(r*r-0.25*a.dist2());
+			q[ile++].val = -(j+1);
+			q[ile]=a/2.0 - b*sqrt(r*r-0.25*a.dist2());
+			q[ile++].val = (j+1);
+		}
+		
+		
+		sort(q,q+ile);
+		//printf("====%d: %lf %lf\n", i, tab[i].x, tab[i].y);
+		//for(int j = 0; j<ile ;j++) printf("%lf %lf -> %d\n", q[j].x,q[j].y, q[j].val);
+		int open=1;
+		for(int j = 0; j<n; j++) tab[j].val = 0;
+		for(int j = 0; j<ile;j++)
+		{
+			if(q[j].val>0)
+			tab[q[j].val-1].val=1;
+			else if(!tab[-q[j].val-1].val) open++;
+		}
+		if(open>maxi) maxi = open;
+		for(int j = 0; j<ile; j++)
+		{
+			//printf("now %d\n", open);
+			if(q[j].val>0) open++;
+			else open--;
+			if(open>maxi) maxi = open;
+		}
+		//printf("now %d\n", open);
+		
+	}
+	printf("It is possible to cover %d points.\n", maxi);
+	return 1;
+}
+
+int main()
+{
+	while(jeden());
+	return 0;
+}

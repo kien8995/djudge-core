@@ -1,0 +1,39 @@
+#include <cstdio>
+using namespace std;
+
+void konwert(int b, int n)
+{
+  if (n == 0) return;
+  int c = n % b;
+  c += b;
+  c %= b;
+  konwert(b, -((n-c)/b));
+  printf("%d", c);
+}
+
+int main()
+{
+  while (42) {
+    scanf(" ");
+    int c = getchar();
+    if (c == 'e') break;
+    if (c == 't') {
+      int b, n;
+      scanf("o-%d %d", &b, &n);
+      if (n == 0) puts("0");
+      else konwert(b, n), puts("");
+    } else {
+      int b;
+      char n[1234];
+      scanf("rom-%d %s", &b, n);
+      int r = 0;
+      int i = 0;
+      while (n[i] != '\0') {
+	r *= -b;
+	r += n[i] - '0';
+	i++;
+      }
+      printf("%d\n", r);
+    }
+  }
+}

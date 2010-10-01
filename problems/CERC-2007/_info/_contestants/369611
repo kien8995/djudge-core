@@ -1,0 +1,94 @@
+#include<cmath>
+#include<vector>
+#include<set>
+#include<map>
+#include<string>
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<deque>
+#include<algorithm>
+using namespace std;
+
+#define ll long long
+
+char s[10], w;
+ll from, to, ret, ret2, ex, na[50];
+
+int main()
+{
+	while (1)
+	{
+		memset(na, 0, sizeof na);
+		//cout << "idem" << endl;
+		w = getchar();
+		if (w == 'e') break;
+		//cout << "idem2" << w << endl;
+		if (w == 'f')
+		{
+			getchar(),getchar(),getchar();
+			cin >> from ; scanf ("%s", s);			
+//scanf ("%ld %s", &from, &s);
+			getchar();
+			ret = 0; to = 1;
+			for (int i = strlen(s) -1; i >= 0; --i)
+			{
+				ret += (s[i]-'0') * to;
+				to *= from;
+			}
+			//cout << ret << endl;
+		}
+		else
+		{
+			getchar();
+			cin >> from >> to;
+			//cout << from << " "<< to << endl;
+			getchar();
+			ret = ret2 = 0;
+			int k = 0;
+			if (to == 0) { printf ("0\n"); continue;}
+			if (to > 0)
+			{
+				while ((abs(from)-1)*pow((double)abs(from), (double)(2*k)) < to) k++;
+				ex = 2*k;
+			}
+			else
+			{
+				//cout << "idem" << endl;
+				while ((abs(from)-1)*pow((double)(from), (double)(2*k+1)) > to) k++;
+				//cout << "idem" << endl;
+				ex = 2*k+1;
+			}
+			ll pom = 1;
+			for (ll pos = 0; pos <= ex + 1; pos++)
+			{
+				na[pos] = 1*pom;
+				//cout << pos << " na "<< na[pos] << endl;
+				pom *= from;
+			}
+			//cout << ex << endl;
+			for (ll pos = ex; pos >=0; pos--)
+			{
+				if (na[pos]>0)
+				{
+					ll p = 0;
+					while (ret+p*na[pos] < to && (p + 1) < abs(from)) p++;
+					ret += p*na[pos];
+					ret2 = ret2*10 + p;
+					//cout << ret << " " << p << endl;
+				}
+				else
+				{
+					ll p = 0;
+					while (ret+p*na[pos] > to && (p + 1) < abs(from)) p++;
+					ret += p*na[pos];
+					ret2 = ret2*10 + p;
+					//cout << ret << " " << p << endl;
+				}
+			}
+			cout << ret2 << endl;
+		}
+	}
+	return 0;
+}

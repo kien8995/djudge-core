@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+struct _b {
+  int x; int y;
+  int s[2];
+  char d[2];
+} b[1005];
+int N;
+
+struct _z {
+  short x; short y; int b;
+  bool operator<(const _z& b) const { return y<b.y || (y==b.y && x<b.x); }
+} z[1005];
+
+int main(void) {
+  while (scanf("%d", &N), N) {
+    for (int i=0;i<N;i++) scanf("%d%d", &b[i].x, &b[i].y);
+
+    for (int i=0;i<N;i++) z[i].x=b[i].x, z[i].y=b[i].y, z[i].b=i;
+    sort(z, z+N);
+    for (int i=0;i<N;i+=2) {
+      b[z[i].b].s[0]=z[i+1].b; b[z[i].b].d[0]='E';
+      b[z[i+1].b].s[0]=z[i].b; b[z[i+1].b].d[0]='W';
+    }
+    int bb=z[0].b; int s=1;
+
+    for (int i=0;i<N;i++) z[i].x=b[i].y, z[i].y=b[i].x, z[i].b=i;
+    sort(z, z+N);
+    for (int i=0;i<N;i+=2) {
+      b[z[i].b].s[1]=z[i+1].b; b[z[i].b].d[1]='N';
+      b[z[i+1].b].s[1]=z[i].b; b[z[i+1].b].d[1]='S';
+    }
+
+    int seen=0;
+    for(;;) {
+      if (seen) putchar(b[bb].d[s]);
+      bb=b[bb].s[s];
+      s=1-s;
+      if (!bb) {
+	if (!seen) seen=1;
+	else break;
+      }
+    }
+    putchar('\n');
+  }
+  return 0;
+}
