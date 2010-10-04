@@ -12,9 +12,9 @@ import djudge.judge.SubmissionResult;
 import djudge.judge.TestDescription;
 import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
+import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.ValidationResult;
 import djudge.judge.dexecutor.ExecutionResult;
-import djudge.judge.validator.ValidationFailEnum;
-import djudge.judge.validator.ValidationResult;
 
 public class HtmlWorks 
 {

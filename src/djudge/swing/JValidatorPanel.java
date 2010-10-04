@@ -19,8 +19,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import djudge.judge.AbstractDescription;
-import djudge.judge.validator.ValidatorDescription;
-import djudge.judge.validator.ValidatorType;
+import djudge.judge.checker.ValidatorDescription;
+import djudge.judge.checker.ValidatorType;
 
 public class JValidatorPanel extends JPanel implements ActionListener, DocumentListener
 {

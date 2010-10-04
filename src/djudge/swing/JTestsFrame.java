@@ -19,10 +19,10 @@ import javax.swing.JTextArea;
 
 import utils.FileWorks;
 import djudge.judge.ProblemDescription;
+import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.dvalidator.LocalValidator;
 import djudge.judge.dvalidator.ValidatorTask;
-import djudge.judge.validator.ValidationResult;
-import djudge.judge.validator.ValidationResultEnum;
 
 public class JTestsFrame extends JFrame implements ActionListener
 {
