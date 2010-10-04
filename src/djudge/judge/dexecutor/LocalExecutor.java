@@ -1,4 +1,4 @@
-/* $Id: LocalExecutor.java 125 2010-09-30 13:46:51Z altdotua $ */
+/* $Id$ */
 
 package djudge.judge.dexecutor;
 
@@ -11,16 +11,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import utils.FileWorks;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
+import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.DistributedFileset;
 
 public class LocalExecutor
 {
-	public static final String stdErrorFileName = "stderr.txt";
-	public static final String stdOutputFileName = "stdout.txt";
+	private final static Logger log = Logger.getLogger(Compiler.class);
+	
+	public final static String standardErrorFileName = "stderr.txt";
+	
+	public final static String standardOutputFileName = "stdout.txt";
 	
 	private void executeWindowsNT(ExecutorTask task, String workDir, ExecutionResult res)
 	{
@@ -62,12 +68,12 @@ public class LocalExecutor
 		if (files.outputFilename != null && files.outputFilename != "")
 			cmd.append(" -o \"" + files.outputFilename + "\" ");
 		else
-			cmd.append(" -o \"" + stdOutputFileName + "\" ");
+			cmd.append(" -o \"" + standardOutputFileName + "\" ");
 
 		if (files.errorFilename != null && files.errorFilename != "")
 			cmd.append(" -e \"" + files.errorFilename + "\" ");
 		else
-			cmd.append(" -e \"" + stdErrorFileName + "\" ");
+			cmd.append(" -e \"" + standardErrorFileName + "\" ");
 
 		// FIXME
 		cmd = new StringBuffer("run.exe " + cmd + " \"" + pr.getCommand(workDir) + "\"");
@@ -177,7 +183,7 @@ public class LocalExecutor
 			}
 			else
 			{
-				res.outputGenerated = new File(workDir + stdOutputFileName).length();
+				res.outputGenerated = new File(workDir + standardOutputFileName).length();
 			}
 
 			if (task.returnDirectoryContent)
@@ -259,9 +265,9 @@ public class LocalExecutor
 		}
 		else
 		{
-			cmd.append(" -O " + quote(stdOutputFileName));
+			cmd.append(" -O " + quote(standardOutputFileName));
 			params.add("-O");
-			params.add(stdOutputFileName);
+			params.add(standardOutputFileName);
 		}
 
 		if (files.errorFilename != null && files.errorFilename != "")
@@ -272,9 +278,9 @@ public class LocalExecutor
 		}
 		else
 		{
-			cmd.append(" -E " + quote(stdErrorFileName));
+			cmd.append(" -E " + quote(standardErrorFileName));
 			params.add("-E");
-			params.add(stdErrorFileName);
+			params.add(standardErrorFileName);
 		}
 
 		// FIXME
@@ -293,7 +299,7 @@ public class LocalExecutor
 			}
 			catch (Exception exc)
 			{
-				System.out.println("!!! Exception catched (while waiting for external runner): " + exc);
+				log.fatal("Unknown exception catched (while waiting for external runner)", exc);
 			}
 
 			int retValue = process.exitValue();
@@ -375,9 +381,9 @@ public class LocalExecutor
 				}
 				out.close();
 			}
-			catch (Exception exc)
+			catch (IOException ex)
 			{
-				System.out.println("!!! IOException catched (while parsing runner's stdout): " + exc);
+				log.error("IOException catched (while parsing runner's stdout)", ex);
 			}
 			
 			res.exitCode = retValue;
@@ -391,7 +397,7 @@ public class LocalExecutor
 			}
 			else
 			{
-				res.outputGenerated = new File(workDir + stdOutputFileName).length();
+				res.outputGenerated = new File(workDir + standardOutputFileName).length();
 			}
 
 			if (task.returnDirectoryContent)
@@ -400,12 +406,13 @@ public class LocalExecutor
 				res.files.readDirectory(workDir);
 			}
 		}
-		catch (IOException exc)
+		catch (IOException ex)
 		{
-			System.out.println("!!! IOException catched: " + exc);
+			log.error("IOException catched (while parsing runner's stdout)", ex);
 		}
 		FileWorks.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
-		System.out.println("Result: " + res.getResult());
+		log.info("Command: " + cmd.toString());
+		log.info("Result: " + res.getResult());
 	}	
 	
 	public ExecutionResult execute(ExecutorTask task)

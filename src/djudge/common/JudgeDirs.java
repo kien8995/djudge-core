@@ -13,6 +13,11 @@ public class JudgeDirs
 		rootDirectory = FileWorks.getAbsolutePath(".") + "/";
 	}	
 	
+	public static String getRootDir()
+	{
+		return rootDirectory;
+	}
+	
 	public static String getWorkDir()
 	{
 		return rootDirectory + "work/";
