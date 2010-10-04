@@ -28,13 +28,13 @@ public class ValidationResult extends XMLSerializable
 	private ValidationFailEnum fail = ValidationFailEnum.Undefined;
 
 	/* External validator's exit code */
-	int exitCode = 0;
+	private int exitCode = 0;
 
 	/* Validator-generated text */
 	private String[] validatorOutput = new String[] {"undefined"};
 
 	/* Runtime information (for external validators) */
-	RunnerResult runInfo = null;
+	private RunnerResult runInfo = null;
 
 	/* Name of validator */
 	private String validatorName = "undefined";
@@ -49,7 +49,7 @@ public class ValidationResult extends XMLSerializable
 		setValidatorOutput(new String[0]);
 		result = ValidationResultEnum.Undefined;
 		setFail(ValidationFailEnum.Undefined);
-		runInfo = new RunnerResult();
+		setRunInfo(new RunnerResult());
 	}
 
 	/* Creates ValidationResult instance from XML element */
@@ -150,5 +150,25 @@ public class ValidationResult extends XMLSerializable
 	public ValidationFailEnum getFail()
 	{
 		return fail;
+	}
+
+	public void setExitCode(int exitCode)
+	{
+		this.exitCode = exitCode;
+	}
+
+	public int getExitCode()
+	{
+		return exitCode;
+	}
+
+	public void setRunInfo(RunnerResult runInfo)
+	{
+		this.runInfo = runInfo;
+	}
+
+	public RunnerResult getRunInfo()
+	{
+		return runInfo;
 	}
 }

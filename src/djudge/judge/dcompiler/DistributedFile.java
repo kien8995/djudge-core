@@ -3,7 +3,7 @@
 package djudge.judge.dcompiler;
 
 import djudge.filesystem.RemoteFS;
-import djudge.judge.dvalidator.RemoteFile;
+import djudge.judge.dchecker.RemoteFile;
 import utils.FileWorks;
 
 public class DistributedFile

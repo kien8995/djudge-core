@@ -24,9 +24,9 @@ import djudge.judge.dexecutor.ExecutorLimits;
 import djudge.judge.dexecutor.ExecutorProgram;
 import djudge.judge.dexecutor.ExecutorTask;
 import djudge.judge.dexecutor.LocalExecutor;
-import djudge.judge.dvalidator.LocalValidator;
-import djudge.judge.dvalidator.RemoteFile;
-import djudge.judge.dvalidator.ValidatorTask;
+import djudge.judge.dchecker.LocalChecker;
+import djudge.judge.dchecker.RemoteFile;
+import djudge.judge.dchecker.ValidatorTask;
 
 public class Judge
 {
@@ -121,7 +121,7 @@ public class Judge
 			task.testOutput.filename = FileWorks.concatPaths(testsDir, test.getOutputMask());
 			task.testOutput.fIsPresent = false;
 			// validation
-			ValidationResult vres = LocalValidator.validate(task);
+			ValidationResult vres = LocalChecker.validate(task);
 			res.setValidationInfo(vres);
 		}
 		else

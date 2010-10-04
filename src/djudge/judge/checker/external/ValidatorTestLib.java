@@ -15,13 +15,13 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 
 	protected void processData() 
 	{
-		if (res.runInfo.state == RunnerResultEnum.OK)
+		if (res.getRunInfo().state == RunnerResultEnum.OK)
 		{
 			res.setResult(ValidationResultEnum.OK);
 		}
-		else if (res.runInfo.state == RunnerResultEnum.NonZeroExitCode)
+		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode)
 		{
-			switch (res.runInfo.exitCode)
+			switch (res.getRunInfo().exitCode)
 			{
 			case 1:
 			case 3:

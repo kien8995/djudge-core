@@ -27,17 +27,17 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 	
 	public ValidatorExternalAbstract(String exeName)
 	{
-		exeFilename = exeName;
+		setExeFilename(exeName);
 	}
 	
 	@Override
 	public ValidationResult validateOutput(String input, String output, String answer)
 	{
 		res = new ValidationResult(this.toString());
-		File f = new File(exeFilename);
+		File f = new File(getExeFilename());
 		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
-			log.error("Error. Cannot find validator executable file: " + exeFilename);
+			log.error("Error. Cannot find validator executable file: " + getExeFilename());
 			res.setResult(ValidationResultEnum.InternalError);
 			res.setFail(ValidationFailEnum.ValidatorNoExeFile);
 		}
@@ -84,17 +84,17 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		Runner runner = new Runner(limits, files);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
-		String cmd = exeFilename + " " + input + " " + answer + " " + output;
+		String cmd = getExeFilename() + " " + input + " " + answer + " " + output;
 		
 		// TODO: FIMXE
-		if (exeFilename.endsWith(".jar"))
+		if (getExeFilename().endsWith(".jar"))
 		{
-			cmd = "java -cp " + exeFilename + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
+			cmd = "java -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
 		}
 		
 		try
 		{
-			res.runInfo = runner.run(cmd);
+			res.setRunInfo(runner.run(cmd));
 		}
 		catch (Exception exc)
 		{
@@ -105,7 +105,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		
 		if (res.getResult() == ValidationResultEnum.Undefined)
 		{
-			res.exitCode = res.runInfo.exitCode;
+			res.setExitCode(res.getRunInfo().exitCode);
 			res.setFail(ValidationFailEnum.OK);
 			
 			ArrayList<String> tmp = new ArrayList<String>();
@@ -129,12 +129,12 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 				res.getValidatorOutput()[tmp.size()] = "[" + this.toString() + "]";
 			}
 			
-			if (res.runInfo.state != RunnerResultEnum.OK && res.runInfo.state != RunnerResultEnum.NonZeroExitCode)
+			if (res.getRunInfo().state != RunnerResultEnum.OK && res.getRunInfo().state != RunnerResultEnum.NonZeroExitCode)
 			{
-				log.error("Validator error - " + res.runInfo.state);
+				log.error("Validator error - " + res.getRunInfo().state);
 				res.setResult(ValidationResultEnum.InternalError);
 				
-				switch (res.runInfo.state)
+				switch (res.getRunInfo().state)
 				{
 				case MemoryLimitExceeded:
 					res.setFail(ValidationFailEnum.ValidatorMLE);
