@@ -1,8 +1,14 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.internal;
 
 import java.io.*;
+
+import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.ValidatorAbstract;
+import djudge.judge.checker.ValidatorLimits;
 
 import utils.StringWorks;
 

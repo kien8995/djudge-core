@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.external;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,11 @@ import org.apache.log4j.Logger;
 
 import utils.FileWorks;
 
+import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.ValidatorAbstract;
+import djudge.judge.checker.ValidatorLimits;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.executor.Runner;

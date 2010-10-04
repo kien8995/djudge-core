@@ -1,7 +1,9 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.external;
 
+import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.executor.RunnerResultEnum;
 
 public class ValidatorTestLibJava extends ValidatorExternalAbstract
