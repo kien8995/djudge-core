@@ -1,6 +1,7 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.internal;
+
 
 /*
  * Compares output and answer files as sequences of floating point numbers

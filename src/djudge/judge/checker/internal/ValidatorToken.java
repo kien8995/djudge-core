@@ -1,9 +1,10 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.internal;
 
 import java.io.IOException;
 import java.io.BufferedReader;
+
 
 /* 
  * Compares files token-by-token

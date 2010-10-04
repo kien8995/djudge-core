@@ -1,9 +1,10 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 
 /* Compares files line-by-line */
 public class ValidatorString extends ValidatorInternalAbstract

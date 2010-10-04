@@ -2,6 +2,16 @@
 
 package djudge.judge.checker;
 
+import djudge.judge.checker.external.ValidatorExitCode;
+import djudge.judge.checker.external.ValidatorExitCodeExtended;
+import djudge.judge.checker.external.ValidatorTestLib;
+import djudge.judge.checker.external.ValidatorTestLibJava;
+import djudge.judge.checker.internal.ValidatorFloat;
+import djudge.judge.checker.internal.ValidatorInt32;
+import djudge.judge.checker.internal.ValidatorSortedToken;
+import djudge.judge.checker.internal.ValidatorString;
+import djudge.judge.checker.internal.ValidatorToken;
+
 public class Validator
 {
 	public final static String XMLRootElement = "validator";

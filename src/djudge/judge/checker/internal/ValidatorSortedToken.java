@@ -1,11 +1,12 @@
 /* $Id$ */
 
-package djudge.judge.checker;
+package djudge.judge.checker.internal;
 
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.Vector;
+
 
 public class ValidatorSortedToken extends ValidatorToken 
 {
