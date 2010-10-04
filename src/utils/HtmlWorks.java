@@ -78,7 +78,7 @@ public class HtmlWorks
 			try
 			{
 				s.append("<td>" + (validationInfo.getFail() + " - ") 
-						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(validationInfo.getValidatorOutput()))  + "</td>");
+						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(validationInfo.getCheckerOutput()))  + "</td>");
 			}
 			catch (Exception e)
 			{

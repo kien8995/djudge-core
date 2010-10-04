@@ -2,7 +2,7 @@
 
 package djudge.judge.checker;
 
-/* Possible results of validation process */
+/* Possible results of check process */
 public enum CheckerResultEnum 
 {
 	/* Result accepted */

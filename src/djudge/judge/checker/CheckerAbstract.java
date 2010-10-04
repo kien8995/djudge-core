@@ -28,7 +28,7 @@ public abstract class CheckerAbstract
 	 */
 	public abstract CheckerResult validateOutput(String input, String output, String answer);
 
-	public void setExeFilename(String exeFilename)
+	public void setExecutableFilename(String exeFilename)
 	{
 		this.exeFilename = exeFilename;
 	}

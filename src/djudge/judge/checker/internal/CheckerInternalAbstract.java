@@ -4,6 +4,8 @@ package djudge.judge.checker.internal;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
@@ -15,6 +17,8 @@ import utils.StringWorks;
 /* Abstract class for all internal (built-in) validators */
 public abstract class CheckerInternalAbstract extends CheckerAbstract implements CheckerLimits 
 {
+	private final static Logger log = Logger.getLogger(CheckerInternalAbstract.class);
+	
 	/* Readers for corresponding files */
 	BufferedReader judgeInput, judgeAnswer, programOutput;
 	
@@ -29,7 +33,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 		{
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoInputFileError);
-			res.setValidatorOutput(new String[]{"Cannot find input file: " + judgeInputFile});
+			res.setCheckerOutput(new String[]{"Cannot find input file: " + judgeInputFile});
 			res.setResultDetails("Cannot find input file: " + judgeInputFile);
 			return res;
 		}
@@ -40,7 +44,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 		{
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoOutputFileError);
-			res.setValidatorOutput(new String[]{"Cannot find answer file: " + judgeAnswerFile});
+			res.setCheckerOutput(new String[]{"Cannot find answer file: " + judgeAnswerFile});
 			res.setResultDetails("Cannot find answer file: " + judgeAnswerFile);
 			return res;
 		}
@@ -51,13 +55,13 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 		{
 			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
-			res.setValidatorOutput(new String[] {"Cannot find program's output file: " + programOutputFile});
+			res.setCheckerOutput(new String[] {"Cannot find program's output file: " + programOutputFile});
 			res.setResultDetails("Cannot find program's output file: " + programOutputFile);
 			return res;
 		}
 		
 		// All files are present, validating data
-		res.setValidatorOutput(new String[2]);
+		res.setCheckerOutput(new String[2]);
 		
 		try
 		{
@@ -67,10 +71,12 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			programOutput = new BufferedReader(new FileReader(programOutputFile));
 			processData();
 		}
-		catch (Exception exc)
+		catch (Exception ex)
 		{
+			log.warn("Unknown exception", ex);
 			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
+			res.setResultDetails(ex.toString());
 		}
 		
 		return res;		
@@ -95,8 +101,8 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 					guess = getToken(programOutput);
 					if (guess == null)
 					{
-						res.getValidatorOutput()[0] = "Wrong Answer";
-						res.getValidatorOutput()[1] = "Answer too short: token #" + cTokens + " not founded";
+						res.getCheckerOutput()[0] = "Wrong Answer";
+						res.getCheckerOutput()[1] = "Answer too short: token #" + cTokens + " not founded";
 						res.setResult(CheckerResultEnum.WrongAnswer);
 						return;
 					}
@@ -104,16 +110,16 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 					{
     					if (!compareTokens(correct, guess))
     					{
-    						res.getValidatorOutput()[0] = "Wrong Answer";
-    						res.getValidatorOutput()[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "' [answer] [" + this.toString()+"]";
+    						res.getCheckerOutput()[0] = "Wrong Answer";
+    						res.getCheckerOutput()[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "' [answer] [" + this.toString()+"]";
     						res.setResult(CheckerResultEnum.WrongAnswer);
     						return;
     					}
 					}
 					catch (Exception e)
 					{
-						res.getValidatorOutput()[0] = "Wrong Answer [" + e + "]";
-						res.getValidatorOutput()[1] = "Token #" + cTokens
+						res.getCheckerOutput()[0] = "Wrong Answer [" + e + "]";
+						res.getCheckerOutput()[1] = "Token #" + cTokens
 								+ ": [etalon] '"
 								+ StringWorks.truncate(correct.toString())
 								+ "' != '"
@@ -125,8 +131,8 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 				}
 				catch (Exception exc)
 				{
-					res.getValidatorOutput()[0] = "Don't know:" + exc;
-					res.getValidatorOutput()[1] = "Token '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "'";
+					res.getCheckerOutput()[0] = "Don't know:" + exc;
+					res.getCheckerOutput()[1] = "Token '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "'";
 					res.setResult(CheckerResultEnum.InternalError);
 					return;				
 				}
@@ -134,8 +140,8 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			// if output still contains tokens
 			if ((correct = getToken(programOutput)) != null)
 			{
-				res.getValidatorOutput()[0] = "Wrong Answer";
-				res.getValidatorOutput()[1] = "Extra token: '" + StringWorks.truncate(correct.toString()) + "'";				
+				res.getCheckerOutput()[0] = "Wrong Answer";
+				res.getCheckerOutput()[1] = "Extra token: '" + StringWorks.truncate(correct.toString()) + "'";				
 				res.setResult(CheckerResultEnum.WrongAnswer);
 				return;
 			}				
@@ -143,12 +149,12 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 		catch (Exception exc)
 		{
 			exc.printStackTrace();
-			res.setFail(CheckerFailEnum.ValidatorFail);
+			res.setFail(CheckerFailEnum.CheckerFail);
 			res.setResult(CheckerResultEnum.InternalError);
 			return;
 		}
-		res.getValidatorOutput()[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(guess.toString()) + "\"" : "");
-		res.getValidatorOutput()[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
+		res.getCheckerOutput()[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(guess.toString()) + "\"" : "");
+		res.getCheckerOutput()[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
 		res.setResult(CheckerResultEnum.OK);
 	}
 

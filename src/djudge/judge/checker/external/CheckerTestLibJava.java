@@ -2,15 +2,19 @@
 
 package djudge.judge.checker.external;
 
+import org.apache.log4j.Logger;
+
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.executor.RunnerResultEnum;
 
 public class CheckerTestLibJava extends CheckerExternalAbstract
 {
-	public CheckerTestLibJava(String exeFilename)
+	private final static Logger log = Logger.getLogger(CheckerTestLibJava.class);
+	
+	public CheckerTestLibJava(String executableFilename)
 	{
-		super(exeFilename);
+		super(executableFilename);
 	}
 
 	protected void processData() 
@@ -34,15 +38,15 @@ public class CheckerTestLibJava extends CheckerExternalAbstract
 				break;
 			
 			default:
-				System.out.println("rr2");
-				res.setFail(CheckerFailEnum.ValidatorFail);
+				log.warn("Checker failed");
+				res.setFail(CheckerFailEnum.CheckerFail);
 				res.setResult(CheckerResultEnum.InternalError);
 			}
 		}
 		else
 		{
-			System.out.println("rr");
-			res.setFail(CheckerFailEnum.ValidatorFail);
+			log.warn("Checker failed");
+			res.setFail(CheckerFailEnum.CheckerFail);
 			res.setResult(CheckerResultEnum.InternalError);
 		}
 	}
@@ -50,6 +54,6 @@ public class CheckerTestLibJava extends CheckerExternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator.TestLib";
+		return "Checker-TestLib";
 	}
 }
