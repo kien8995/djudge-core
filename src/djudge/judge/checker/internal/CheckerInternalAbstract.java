@@ -30,6 +30,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoInputFileError);
 			res.setValidatorOutput(new String[]{"Cannot find input file: " + judgeInputFile});
+			res.setResultDetails("Cannot find input file: " + judgeInputFile);
 			return res;
 		}
 		
@@ -40,6 +41,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoOutputFileError);
 			res.setValidatorOutput(new String[]{"Cannot find answer file: " + judgeAnswerFile});
+			res.setResultDetails("Cannot find answer file: " + judgeAnswerFile);
 			return res;
 		}
 		
@@ -49,7 +51,8 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 		{
 			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
-			res.setValidatorOutput(new String[]{"Cannot find program's output file: " + programOutputFile});
+			res.setValidatorOutput(new String[] {"Cannot find program's output file: " + programOutputFile});
+			res.setResultDetails("Cannot find program's output file: " + programOutputFile);
 			return res;
 		}
 		
