@@ -2,7 +2,7 @@
 
 package djudge.judge.checker.external;
 
-import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.executor.*;
 
@@ -26,7 +26,7 @@ public class ValidatorExitCodeExtended extends ValidatorExternalAbstract
 				
 			case 3 : 
 				res.setResult(ValidationResultEnum.InternalError);
-				res.setFail(ValidationFailEnum.ValidatorFail);
+				res.setFail(CheckerFailEnum.ValidatorFail);
 				break;
 				
 			default : 
@@ -36,7 +36,7 @@ public class ValidatorExitCodeExtended extends ValidatorExternalAbstract
 		else
 		{
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.ValidatorFail);			
+			res.setFail(CheckerFailEnum.ValidatorFail);			
 		}
 	}
 }

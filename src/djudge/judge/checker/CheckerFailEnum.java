@@ -6,7 +6,7 @@ package djudge.judge.checker;
  * Enumeration that represents possible causes
  * why the validation process failed to finish 
  */
-public enum ValidationFailEnum 
+public enum CheckerFailEnum 
 {
 	/* Unknown reason */
 	Undefined,
