@@ -2,7 +2,7 @@
 
 package djudge.judge;
 
-import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.dexecutor.ExecutionResultEnum;
 
 class TestResultEnumFactory
@@ -42,7 +42,7 @@ class TestResultEnumFactory
 		return TestResultEnum.Undefined;
 	}
 	
-	static TestResultEnum getResult(ValidationResultEnum res)
+	static TestResultEnum getResult(CheckerResultEnum res)
 	{
 		switch (res)
 		{

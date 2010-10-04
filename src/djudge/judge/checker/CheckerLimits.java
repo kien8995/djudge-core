@@ -2,7 +2,7 @@
 
 package djudge.judge.checker;
 
-public interface ValidatorLimits
+public interface CheckerLimits
 {
 	// 60 sec
 	final int VALIDATOR_MAX_RUNNING_TIME = 60000;

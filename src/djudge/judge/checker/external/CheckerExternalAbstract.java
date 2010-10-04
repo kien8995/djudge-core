@@ -10,64 +10,64 @@ import org.apache.log4j.Logger;
 import utils.FileWorks;
 
 import djudge.judge.checker.CheckerFailEnum;
-import djudge.judge.checker.ValidationResult;
-import djudge.judge.checker.ValidationResultEnum;
-import djudge.judge.checker.ValidatorAbstract;
-import djudge.judge.checker.ValidatorLimits;
+import djudge.judge.checker.CheckerResult;
+import djudge.judge.checker.CheckerResultEnum;
+import djudge.judge.checker.CheckerAbstract;
+import djudge.judge.checker.CheckerLimits;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.executor.Runner;
 import djudge.judge.executor.RunnerResultEnum;
 
-public abstract class ValidatorExternalAbstract extends ValidatorAbstract implements ValidatorLimits
+public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {
-	private static final Logger log = Logger.getLogger(ValidatorAbstract.class);
+	private static final Logger log = Logger.getLogger(CheckerAbstract.class);
 	
 	String validatorOutputFile;
 	
-	public ValidatorExternalAbstract(String exeName)
+	public CheckerExternalAbstract(String exeName)
 	{
 		setExeFilename(exeName);
 	}
 	
 	@Override
-	public ValidationResult validateOutput(String input, String output, String answer)
+	public CheckerResult validateOutput(String input, String output, String answer)
 	{
-		res = new ValidationResult(this.toString());
+		res = new CheckerResult(this.toString());
 		File f = new File(getExeFilename());
-		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find validator executable file: " + getExeFilename());
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
 		}
 		
 		// Checking whether input file exists
 		f = new File(input);
-		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find input file: " + input);
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoInputFileError);
 			return res;
 		}
 		
 		// Checking whether output file exists 
 		f = new File(output);
-		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
 			log.error("Error. Cannot find output file: " + output);
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoOutputFileError);
 			return res;
 		}
 		
 		// Checking whether answer file exists
 		f = new File(answer);
-		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
+		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
 			log.debug("Cannot answer file: " + answer);
-			res.setResult(ValidationResultEnum.WrongAnswer);
+			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
 			return res;
 		}
@@ -78,8 +78,8 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		
 		ExecutorFiles files = new ExecutorFiles(validatorOutputFile);
 		
-		ExecutorLimits limits = new ExecutorLimits(ValidatorLimits.VALIDATOR_MAX_RUNNING_TIME, 
-				ValidatorLimits.VALIDATOR_MAX_CONSUMED_MEMORY, ValidatorLimits.VALIDATOR_MAX_OUTPUT_SIZE);
+		ExecutorLimits limits = new ExecutorLimits(CheckerLimits.VALIDATOR_MAX_RUNNING_TIME, 
+				CheckerLimits.VALIDATOR_MAX_CONSUMED_MEMORY, CheckerLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
 		Runner runner = new Runner(limits, files);
 		
@@ -99,11 +99,11 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		catch (Exception exc)
 		{
 			log.error("Exception while running external validator", exc);
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
 		}
 		
-		if (res.getResult() == ValidationResultEnum.Undefined)
+		if (res.getResult() == CheckerResultEnum.Undefined)
 		{
 			res.setExitCode(res.getRunInfo().exitCode);
 			res.setFail(CheckerFailEnum.OK);
@@ -132,7 +132,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 			if (res.getRunInfo().state != RunnerResultEnum.OK && res.getRunInfo().state != RunnerResultEnum.NonZeroExitCode)
 			{
 				log.error("Validator error - " + res.getRunInfo().state);
-				res.setResult(ValidationResultEnum.InternalError);
+				res.setResult(CheckerResultEnum.InternalError);
 				
 				switch (res.getRunInfo().state)
 				{

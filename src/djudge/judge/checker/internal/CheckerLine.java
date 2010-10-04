@@ -7,7 +7,7 @@ import java.io.IOException;
 
 
 /* Compares files line-by-line */
-public class ValidatorString extends ValidatorInternalAbstract
+public class CheckerLine extends CheckerInternalAbstract
 {
 	@Override
 	protected String getToken(BufferedReader rd) throws IOException

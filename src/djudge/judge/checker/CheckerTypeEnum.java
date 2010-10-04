@@ -3,7 +3,7 @@
 package djudge.judge.checker;
 
 /* Enumeration for possible types of validators */
-public enum ValidatorType
+public enum CheckerTypeEnum
 {
 	/**
 	 * Line-by-line comparing (whitespace is counted)
@@ -39,10 +39,10 @@ public enum ValidatorType
 	ExternalExitCodeExtended,
 	Unknown;
 	
-	public static ValidatorType parse(String str)
+	public static CheckerTypeEnum parse(String str)
 	{
-		ValidatorType res = ValidatorType.Unknown;
-		for (ValidatorType curr : ValidatorType.values())
+		CheckerTypeEnum res = CheckerTypeEnum.Unknown;
+		for (CheckerTypeEnum curr : CheckerTypeEnum.values())
 		{
 			if (curr.toString().equals(str))
 			{

@@ -10,8 +10,8 @@ import org.w3c.dom.NodeList;
 import utils.StringWorks;
 
 import djudge.common.XMLSerializable;
-import djudge.judge.checker.Validator;
-import djudge.judge.checker.ValidatorDescription;
+import djudge.judge.checker.Checker;
+import djudge.judge.checker.CheckerDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 
@@ -21,7 +21,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	protected ExecutorLimits ownLimits;
 	
-	protected ValidatorDescription ownValidator;
+	protected CheckerDescription ownValidator;
 	
 	protected String inputMask;
 	final String inputMaskAttributeName = "input-mask";
@@ -69,14 +69,14 @@ public abstract class AbstractDescription extends XMLSerializable
 		
 		outputMask = elem.getAttribute(outputMaskAttributeName);
 		
-		list = elem.getElementsByTagName(Validator.XMLRootElement);
+		list = elem.getElementsByTagName(Checker.XMLRootElement);
         if (list.getLength() > 0)
         {
         	for (int i = 0; i < list.getLength(); i++)
         	{
             	if (list.item(i).getParentNode().equals(elem))
             	{
-            		ownValidator = new ValidatorDescription((Element)list.item(i), problemInfo);
+            		ownValidator = new CheckerDescription((Element)list.item(i), problemInfo);
             	}
         	}
         }
@@ -155,9 +155,9 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	public abstract ExecutorLimits getWorkLimits();
 	
-	public abstract ValidatorDescription getWorkValidator();
+	public abstract CheckerDescription getWorkValidator();
 
-	public void setValidator(ValidatorDescription vd)
+	public void setValidator(CheckerDescription vd)
 	{
 		ownValidator = vd;
 	}

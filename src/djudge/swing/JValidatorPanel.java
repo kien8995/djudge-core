@@ -19,8 +19,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import djudge.judge.AbstractDescription;
-import djudge.judge.checker.ValidatorDescription;
-import djudge.judge.checker.ValidatorType;
+import djudge.judge.checker.CheckerDescription;
+import djudge.judge.checker.CheckerTypeEnum;
 
 public class JValidatorPanel extends JPanel implements ActionListener, DocumentListener
 {
@@ -65,7 +65,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 		c.weighty = 1;
 		c.insets = new Insets(2, 5, 2, 5);
 		
-		cbTypes = new JComboBox(ValidatorType.values());
+		cbTypes = new JComboBox(CheckerTypeEnum.values());
 		cbTypes.setPreferredSize(sz);
 		cbTypes.addActionListener(this);
 		add(cbTypes, c);
@@ -110,7 +110,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	public void setData(AbstractDescription desc)
 	{
 		this.desc = desc;
-		ValidatorDescription limits = desc.getWorkValidator();
+		CheckerDescription limits = desc.getWorkValidator();
 		cbTypes.setSelectedItem(limits.type);
 		txtFile.setText(limits.getExeName());
 		txtParam.setText(limits.param);
@@ -119,7 +119,7 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	public void updateType()
 	{
 		String strType = cbTypes.getSelectedItem().toString();
-		ValidatorType type = ValidatorType.parse(strType);
+		CheckerTypeEnum type = CheckerTypeEnum.parse(strType);
 		txtFile.setEnabled(false);
 		txtParam.setEnabled(false);
 		if (type.isParametrized())
@@ -135,8 +135,8 @@ public class JValidatorPanel extends JPanel implements ActionListener, DocumentL
 	private void saveData()
 	{
 		String strType = cbTypes.getSelectedItem().toString();
-		ValidatorType type = ValidatorType.parse(strType);
-		ValidatorDescription vd = new ValidatorDescription(desc.getContestID(),
+		CheckerTypeEnum type = CheckerTypeEnum.parse(strType);
+		CheckerDescription vd = new CheckerDescription(desc.getContestID(),
 				desc.getProblemID(), type, txtParam.getText(), txtFile.getText());
 		if (!vd.equals(desc.getWorkValidator()))
 		{

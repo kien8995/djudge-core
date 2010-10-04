@@ -12,7 +12,7 @@ import djudge.judge.SubmissionResult;
 import djudge.judge.TestDescription;
 import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
-import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.CheckerResult;
 import djudge.judge.dexecutor.ExecutionResult;
 
 public class HtmlWorks 
@@ -64,7 +64,7 @@ public class HtmlWorks
 		TestResultEnum judgement = res.getResult();
 		ExecutionResult RunInfo = res.getRuntimeInfo();
 		int TestNum = res.getTestNumber();
-		ValidationResult validationInfo = res.getValidationInfo(); 
+		CheckerResult validationInfo = res.getValidationInfo(); 
 		
 		StringBuffer s = new StringBuffer();
 		String color = getJudgementColor(judgement);

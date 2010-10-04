@@ -3,12 +3,12 @@
 package djudge.judge.checker.external;
 
 import djudge.judge.checker.CheckerFailEnum;
-import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.executor.*;
 
-public class ValidatorExitCode extends ValidatorExternalAbstract
+public class CheckerExitCode extends CheckerExternalAbstract
 {
-	public ValidatorExitCode(String exeFile) 
+	public CheckerExitCode(String exeFile) 
 	{
 		super(exeFile);
 	}
@@ -17,15 +17,15 @@ public class ValidatorExitCode extends ValidatorExternalAbstract
 	{
 		if (res.getRunInfo().state == RunnerResultEnum.OK)
 		{
-			res.setResult(ValidationResultEnum.OK);
+			res.setResult(CheckerResultEnum.OK);
 		}
 		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode)
 		{
-			res.setResult(ValidationResultEnum.WrongAnswer);
+			res.setResult(CheckerResultEnum.WrongAnswer);
 		}
 		else
 		{
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.ValidatorFail);
 		}
 	}

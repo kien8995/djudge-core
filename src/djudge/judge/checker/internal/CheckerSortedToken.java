@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 
-public class ValidatorSortedToken extends ValidatorToken 
+public class CheckerSortedToken extends CheckerToken 
 {
 	protected Object getToken(BufferedReader rd) throws IOException
 	{
