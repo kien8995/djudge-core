@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 import utils.FileWorks;
 
 import djudge.judge.ProblemDescription;
-import djudge.judge.validator.ValidationResult;
-import djudge.judge.validator.Validator;
+import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.Validator;
 
 public class LocalValidator
 {

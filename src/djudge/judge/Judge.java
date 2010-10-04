@@ -13,6 +13,7 @@ import utils.JudgeDirectory;
 
 import djudge.common.JudgeDirs;
 import djudge.filesystem.RemoteFS;
+import djudge.judge.checker.ValidationResult;
 import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.CompilerResult;
 import djudge.judge.dcompiler.CompilerTask;
@@ -26,7 +27,6 @@ import djudge.judge.dexecutor.LocalExecutor;
 import djudge.judge.dvalidator.LocalValidator;
 import djudge.judge.dvalidator.RemoteFile;
 import djudge.judge.dvalidator.ValidatorTask;
-import djudge.judge.validator.ValidationResult;
 
 public class Judge
 {
