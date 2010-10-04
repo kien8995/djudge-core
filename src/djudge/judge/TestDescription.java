@@ -7,9 +7,9 @@ import org.w3c.dom.Document;
 
 import utils.XmlWorks;
 
+import djudge.judge.checker.ValidatorDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.ValidatorDescription;
 
 public class TestDescription extends AbstractDescription
 {

@@ -10,10 +10,10 @@ import org.w3c.dom.NodeList;
 import utils.StringWorks;
 
 import djudge.common.XMLSerializable;
+import djudge.judge.checker.Validator;
+import djudge.judge.checker.ValidatorDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.Validator;
-import djudge.judge.validator.ValidatorDescription;
 
 public abstract class AbstractDescription extends XMLSerializable
 {

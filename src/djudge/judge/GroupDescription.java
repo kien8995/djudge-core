@@ -10,8 +10,8 @@ import org.w3c.dom.NodeList;
 import utils.PrintfFormat;
 import utils.XmlWorks;
 
+import djudge.judge.checker.ValidatorDescription;
 import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.validator.ValidatorDescription;
 
 public class GroupDescription extends AbstractDescription
 {

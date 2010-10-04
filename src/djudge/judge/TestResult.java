@@ -8,11 +8,11 @@ import org.w3c.dom.NodeList;
 
 import utils.XmlWorks;
 
+import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.dexecutor.ExecutionResult;
 import djudge.judge.dexecutor.ExecutionResultEnum;
 import djudge.judge.executor.RunnerResult;
-import djudge.judge.validator.ValidationResult;
-import djudge.judge.validator.ValidationResultEnum;
 
 public class TestResult extends AbstractResult
 {
