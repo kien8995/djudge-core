@@ -4,14 +4,14 @@ package djudge.judge.checker;
 
 /*
  * Enumeration that represents possible causes
- * why the validation process failed to finish 
+ * why the check process failed to finish 
  */
 public enum CheckerFailEnum 
 {
 	/* Unknown reason */
 	Undefined,
 	
-	/* Validation succeeded */
+	/* Check succeeded */
 	OK,
 	
 	/* Input file not found */
@@ -23,20 +23,20 @@ public enum CheckerFailEnum
 	/* Answer (contestant-generated) file not found */
 	NoAnswerFileError,
 	
-	/* Unknown validator type */
-	ValidatorNotFounded,
+	/* Unknown checker type */
+	CheckerNotFound,
 	
-	/* Validator failed to terminate normally */
-	ValidatorFail,
+	/* Checker failed to terminate normally */
+	CheckerFail,
 	
-	/* Validator's executable file not found */
-	ValidatorNoExeFile,
+	/* Checker's executable file not found */
+	CheckerNoExeFile,
 	
-	/* External validator failed to run in limits */
-	ValidatorTLE,
-	ValidatorMLE,
-	ValidatorOLE,
+	/* External checker failed to run in limits */
+	CheckerTLE,
+	CheckerMLE,
+	CheckerOLE,
 	
 	/* Validator finished crashed during execution */
-	ValidatorCrash
+	CheckerCrash
 }

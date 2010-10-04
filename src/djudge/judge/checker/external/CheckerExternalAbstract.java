@@ -25,9 +25,9 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 	
 	String validatorOutputFile;
 	
-	public CheckerExternalAbstract(String exeName)
+	public CheckerExternalAbstract(String executableName)
 	{
-		setExeFilename(exeName);
+		setExecutableFilename(executableName);
 	}
 	
 	@Override
@@ -39,7 +39,9 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		{
 			log.error("Error. Cannot find validator executable file: " + getExeFilename());
 			res.setResult(CheckerResultEnum.InternalError);
-			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
+			res.setFail(CheckerFailEnum.CheckerNoExeFile);
+			res.setResultDetails("Error. Cannot find validator executable file: " + getExeFilename());
+			return res;
 		}
 		
 		// Checking whether input file exists
@@ -49,6 +51,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			log.error("Error. Cannot find input file: " + input);
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoInputFileError);
+			res.setResultDetails("Error. Cannot find input file: " + input);
 			return res;
 		}
 		
@@ -59,6 +62,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			log.error("Error. Cannot find output file: " + output);
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.NoOutputFileError);
+			res.setResultDetails("Error. Cannot find output file: " + output);
 			return res;
 		}
 		
@@ -69,12 +73,13 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			log.debug("Cannot answer file: " + answer);
 			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
+			res.setResultDetails("Cannot answer file: " + answer);
 			return res;
 		}
 		
 		// All files are present, executing external validator
 		validatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
-		res.setValidatorOutput(new String[0]);
+		res.setCheckerOutput(new String[0]);
 		
 		ExecutorFiles files = new ExecutorFiles(validatorOutputFile);
 		
@@ -100,7 +105,8 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		{
 			log.error("Exception while running external validator", exc);
 			res.setResult(CheckerResultEnum.InternalError);
-			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
+			res.setFail(CheckerFailEnum.CheckerNoExeFile);
+			res.setResultDetails("Exception while running validator: " + exc.toString());
 		}
 		
 		if (res.getResult() == CheckerResultEnum.Undefined)
@@ -120,13 +126,14 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			{
 				// FIXME
 				log.error("Unknown error", exc);
+				res.setResultDetails(exc.toString());
 			}
 			finally
 			{
-				res.setValidatorOutput(new String[tmp.size()+1]);
+				res.setCheckerOutput(new String[tmp.size()+1]);
 				for (int i = 0; i < tmp.size(); i++)
-					res.getValidatorOutput()[i] = tmp.get(i);
-				res.getValidatorOutput()[tmp.size()] = "[" + this.toString() + "]";
+					res.getCheckerOutput()[i] = tmp.get(i);
+				res.getCheckerOutput()[tmp.size()] = "[" + this.toString() + "]";
 			}
 			
 			if (res.getRunInfo().state != RunnerResultEnum.OK && res.getRunInfo().state != RunnerResultEnum.NonZeroExitCode)
@@ -137,23 +144,24 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 				switch (res.getRunInfo().state)
 				{
 				case MemoryLimitExceeded:
-					res.setFail(CheckerFailEnum.ValidatorMLE);
+					res.setFail(CheckerFailEnum.CheckerMLE);
 					break;
 					
 				case TimeLimitExceeeded:
-					res.setFail(CheckerFailEnum.ValidatorTLE);
+					res.setFail(CheckerFailEnum.CheckerTLE);
 					break;
 					
 				case OutputLimitExceeded:
-					res.setFail(CheckerFailEnum.ValidatorOLE);
+					res.setFail(CheckerFailEnum.CheckerOLE);
 					break;
 					
 				case RuntimeErrorCrash:
 				case RuntimeErrorAccessViolation:
 				case RuntimeErrorGeneral:
-					res.setFail(CheckerFailEnum.ValidatorCrash);
+					res.setFail(CheckerFailEnum.CheckerCrash);
 					break;
 				}
+				res.setResultDetails(res.getRunInfo().state.toString());
 			}
 			else
 			{

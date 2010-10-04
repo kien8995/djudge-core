@@ -2,15 +2,19 @@
 
 package djudge.judge.checker.external;
 
+import org.apache.log4j.Logger;
+
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.executor.*;
 
 public class CheckerExitCode extends CheckerExternalAbstract
 {
-	public CheckerExitCode(String exeFile) 
+	private static final Logger log = Logger.getLogger(CheckerExitCode.class);
+	
+	public CheckerExitCode(String executableFilename)
 	{
-		super(exeFile);
+		super(executableFilename);
 	}
 	
 	protected void processData()
@@ -25,8 +29,9 @@ public class CheckerExitCode extends CheckerExternalAbstract
 		}
 		else
 		{
+			log.error(res.getRunInfo().state);
 			res.setResult(CheckerResultEnum.InternalError);
-			res.setFail(CheckerFailEnum.ValidatorFail);
+			res.setFail(CheckerFailEnum.CheckerFail);
 		}
 	}
 }

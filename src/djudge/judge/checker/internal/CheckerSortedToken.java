@@ -39,6 +39,6 @@ public class CheckerSortedToken extends CheckerToken
 	@Override
 	public String toString()
 	{
-		return "Validator-Token";
+		return "Checker-Token";
 	}
 }

@@ -15,46 +15,46 @@ import djudge.judge.executor.RunnerResult;
 
 /*
  * Class that encapsulates information about single test's 
- * validation process
+ * checking process
  */
 public class CheckerResult extends XMLSerializable
 {
 	private static final Logger log = Logger.getLogger(CheckerResult.class);
 	
 	/* XML root element name for this structure (inherited from XMLSerializable) */
-	public final static String XMLRootElement = "validator";
+	public final static String XMLRootElement = "checker";
 
-	/* Validation result */
+	/* Check result */
 	private CheckerResultEnum result = CheckerResultEnum.Undefined;
 	private final static String resultAttributeName = "result";
 
-	/* If validation failed, this consists the reason */
+	/* If check failed, this consists the reason */
 	private CheckerFailEnum fail = CheckerFailEnum.Undefined;
 	private final static String failAttributeName = "fail";
 
-	/* External validator's exit code */
+	/* External checker's exit code */
 	private int exitCode = 0;
 
-	/* Validator-generated text */
-	private String[] validatorOutput = new String[] {"undefined"};
-	private final static String validatorOutputAttributeName = "output";
+	/* Checker-generated text */
+	private String[] checkerOutput = new String[] {"undefined"};
+	private final static String checkerOutputAttributeName = "output";
 
-	/* Runtime information (for external validators) */
+	/* Runtime information (for external checkers) */
 	private RunnerResult runInfo = null;
 
-	/* Name of validator */
-	private String validatorName = "undefined";
-	private final static String validatorNameAttributeName = "type";
+	/* Name of checker */
+	private String checkerName = "undefined";
+	private final static String checkerNameAttributeName = "type";
 	
-	/* Detailed result of validation */
+	/* Detailed result of check */
 	String resultDetails = "";
 	private final static String resultDetailsAttributeName = "result-details";
 
-	/* Creates new empty ValidationResult structure */
+	/* Creates new empty CheckResult structure */
 	public CheckerResult(String name)
 	{
-		setValidatorName(name);
-		setValidatorOutput(new String[0]);
+		setCheckerName(name);
+		setCheckerOutput(new String[0]);
 		result = CheckerResultEnum.Undefined;
 		setFail(CheckerFailEnum.Undefined);
 		setRunInfo(new RunnerResult());
@@ -76,11 +76,11 @@ public class CheckerResult extends XMLSerializable
 			Element res = doc.createElement(XMLRootElement);
 			res = doc.createElement(XMLRootElement);
 			
-			res.setAttribute(validatorNameAttributeName, validatorName);
+			res.setAttribute(checkerNameAttributeName, checkerName);
 			res.setAttribute(resultAttributeName, getResult().toString());
 			res.setAttribute(failAttributeName, getFail().toString());
-			res.setAttribute(validatorOutputAttributeName, StringEscapeUtils.escapeXml(StringWorks
-					.ArrayToString(getValidatorOutput())));
+			res.setAttribute(checkerOutputAttributeName, StringEscapeUtils.escapeXml(StringWorks
+					.ArrayToString(getCheckerOutput())));
 			res.setAttribute(resultDetailsAttributeName, resultDetails);
 			
 			doc.appendChild(res);
@@ -98,11 +98,12 @@ public class CheckerResult extends XMLSerializable
 	{
 		try
 		{
-    		validatorName = elem.getAttribute(validatorNameAttributeName);
+    		checkerName = elem.getAttribute(checkerNameAttributeName);
     		result = CheckerResultEnum.valueOf(elem.getAttribute(resultAttributeName));
     		fail = CheckerFailEnum.valueOf(elem.getAttribute(failAttributeName));
-    		validatorOutput = elem.getAttribute(validatorOutputAttributeName).split("\n");
+    		checkerOutput = elem.getAttribute(checkerOutputAttributeName).split("\n");
     		resultDetails = elem.getAttribute(resultDetails);
+    		
     		return true;
 		}
 		catch (Exception ex)
@@ -132,24 +133,24 @@ public class CheckerResult extends XMLSerializable
 		this.result = res;
 	}
 
-	public void setValidatorOutput(String[] validatorOutput)
+	public void setCheckerOutput(String[] validatorOutput)
 	{
-		this.validatorOutput = validatorOutput;
+		this.checkerOutput = validatorOutput;
 	}
 
-	public String[] getValidatorOutput()
+	public String[] getCheckerOutput()
 	{
-		return validatorOutput;
+		return checkerOutput;
 	}
 
-	public void setValidatorName(String validatorName)
+	public void setCheckerName(String checkerName)
 	{
-		this.validatorName = validatorName;
+		this.checkerName = checkerName;
 	}
 
 	public String getValidatorName()
 	{
-		return validatorName;
+		return checkerName;
 	}
 
 	public void setFail(CheckerFailEnum fail)

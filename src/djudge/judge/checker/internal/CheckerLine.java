@@ -24,6 +24,6 @@ public class CheckerLine extends CheckerInternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator-String";
+		return "Checker-String";
 	}
 }

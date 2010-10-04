@@ -193,9 +193,9 @@ public class JTestsFrame extends JFrame implements ActionListener
 		String msg = "<html><h2 align='center'>" + vRes.getResult() + "</h2>\n";
 		msg += "Validator: " + vRes.getValidatorName() + "\n";
 		msg += "Validator's output: \n";
-		for (int i = 0; i < vRes.getValidatorOutput().length; i++)
+		for (int i = 0; i < vRes.getCheckerOutput().length; i++)
 		{
-			msg += vRes.getValidatorOutput()[i] + "\n";
+			msg += vRes.getCheckerOutput()[i] + "\n";
 		}
 		JOptionPane.showMessageDialog(this, msg, "Result",
 				vRes.getResult() == CheckerResultEnum.OK ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);

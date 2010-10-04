@@ -45,6 +45,6 @@ public class CheckerToken extends CheckerInternalAbstract
 	@Override
 	public String toString()
 	{
-		return "Validator-Token";
+		return "Checker-Token";
 	}
 }

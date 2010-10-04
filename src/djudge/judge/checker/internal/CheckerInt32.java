@@ -17,6 +17,6 @@ public class CheckerInt32 extends CheckerToken
 	@Override
 	public String toString()
 	{
-		return "Validator-Int32";
+		return "Checker-Int32";
 	}
 }

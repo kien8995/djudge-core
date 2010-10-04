@@ -42,6 +42,6 @@ public class CheckerFloat extends CheckerToken
 	@Override
 	public String toString()
 	{
-		return "Validator-Float ["  + epsilon + ", abs: " + fAbsolute + ", rel: " + fRelative + "]";
+		return "Checker-Float ["  + epsilon + ", abs: " + fAbsolute + ", rel: " + fRelative + "]";
 	}
 }
