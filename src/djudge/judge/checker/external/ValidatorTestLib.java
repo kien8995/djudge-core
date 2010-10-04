@@ -2,7 +2,7 @@
 
 package djudge.judge.checker.external;
 
-import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.executor.RunnerResultEnum;
 
@@ -35,14 +35,14 @@ public class ValidatorTestLib extends ValidatorExternalAbstract
 			
 			default:
 				System.out.println("rr2");
-				res.setFail(ValidationFailEnum.ValidatorFail);
+				res.setFail(CheckerFailEnum.ValidatorFail);
 				res.setResult(ValidationResultEnum.InternalError);
 			}
 		}
 		else
 		{
 			System.out.println("rr");
-			res.setFail(ValidationFailEnum.ValidatorFail);
+			res.setFail(CheckerFailEnum.ValidatorFail);
 			res.setResult(ValidationResultEnum.InternalError);
 		}
 	}

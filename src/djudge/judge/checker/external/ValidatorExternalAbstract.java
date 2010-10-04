@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import utils.FileWorks;
 
-import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.ValidationResult;
 import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.checker.ValidatorAbstract;
@@ -39,7 +39,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		{
 			log.error("Error. Cannot find validator executable file: " + getExeFilename());
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.ValidatorNoExeFile);
+			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
 		}
 		
 		// Checking whether input file exists
@@ -48,7 +48,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		{
 			log.error("Error. Cannot find input file: " + input);
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.NoInputFileError);
+			res.setFail(CheckerFailEnum.NoInputFileError);
 			return res;
 		}
 		
@@ -58,7 +58,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		{
 			log.error("Error. Cannot find output file: " + output);
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.NoOutputFileError);
+			res.setFail(CheckerFailEnum.NoOutputFileError);
 			return res;
 		}
 		
@@ -68,7 +68,7 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		{
 			log.debug("Cannot answer file: " + answer);
 			res.setResult(ValidationResultEnum.WrongAnswer);
-			res.setFail(ValidationFailEnum.OK);
+			res.setFail(CheckerFailEnum.OK);
 			return res;
 		}
 		
@@ -100,13 +100,13 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 		{
 			log.error("Exception while running external validator", exc);
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.ValidatorNoExeFile);
+			res.setFail(CheckerFailEnum.ValidatorNoExeFile);
 		}
 		
 		if (res.getResult() == ValidationResultEnum.Undefined)
 		{
 			res.setExitCode(res.getRunInfo().exitCode);
-			res.setFail(ValidationFailEnum.OK);
+			res.setFail(CheckerFailEnum.OK);
 			
 			ArrayList<String> tmp = new ArrayList<String>();
 			try
@@ -137,27 +137,27 @@ public abstract class ValidatorExternalAbstract extends ValidatorAbstract implem
 				switch (res.getRunInfo().state)
 				{
 				case MemoryLimitExceeded:
-					res.setFail(ValidationFailEnum.ValidatorMLE);
+					res.setFail(CheckerFailEnum.ValidatorMLE);
 					break;
 					
 				case TimeLimitExceeeded:
-					res.setFail(ValidationFailEnum.ValidatorTLE);
+					res.setFail(CheckerFailEnum.ValidatorTLE);
 					break;
 					
 				case OutputLimitExceeded:
-					res.setFail(ValidationFailEnum.ValidatorOLE);
+					res.setFail(CheckerFailEnum.ValidatorOLE);
 					break;
 					
 				case RuntimeErrorCrash:
 				case RuntimeErrorAccessViolation:
 				case RuntimeErrorGeneral:
-					res.setFail(ValidationFailEnum.ValidatorCrash);
+					res.setFail(CheckerFailEnum.ValidatorCrash);
 					break;
 				}
 			}
 			else
 			{
-				res.setFail(ValidationFailEnum.OK);
+				res.setFail(CheckerFailEnum.OK);
 				processData();
 			}
 		}

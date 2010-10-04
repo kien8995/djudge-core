@@ -25,7 +25,7 @@ public class ValidationResult extends XMLSerializable
 	private ValidationResultEnum result = ValidationResultEnum.Undefined;
 
 	/* If validation failed, this consists the reason */
-	private ValidationFailEnum fail = ValidationFailEnum.Undefined;
+	private CheckerFailEnum fail = CheckerFailEnum.Undefined;
 
 	/* External validator's exit code */
 	private int exitCode = 0;
@@ -48,7 +48,7 @@ public class ValidationResult extends XMLSerializable
 		setValidatorName(name);
 		setValidatorOutput(new String[0]);
 		result = ValidationResultEnum.Undefined;
-		setFail(ValidationFailEnum.Undefined);
+		setFail(CheckerFailEnum.Undefined);
 		setRunInfo(new RunnerResult());
 	}
 
@@ -90,7 +90,7 @@ public class ValidationResult extends XMLSerializable
 		{
     		setValidatorName(elem.getAttribute("type"));
     		result = ValidationResultEnum.valueOf(elem.getAttribute("result"));
-    		setFail(ValidationFailEnum.valueOf(elem.getAttribute("fail")));
+    		setFail(CheckerFailEnum.valueOf(elem.getAttribute("fail")));
     		setValidatorOutput(elem.getAttribute("output").split("\n"));
     		resultDetails = elem.getAttribute("result-details");
     		return true;
@@ -142,12 +142,12 @@ public class ValidationResult extends XMLSerializable
 		return validatorName;
 	}
 
-	public void setFail(ValidationFailEnum fail)
+	public void setFail(CheckerFailEnum fail)
 	{
 		this.fail = fail;
 	}
 
-	public ValidationFailEnum getFail()
+	public CheckerFailEnum getFail()
 	{
 		return fail;
 	}

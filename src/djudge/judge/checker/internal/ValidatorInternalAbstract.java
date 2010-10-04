@@ -4,7 +4,7 @@ package djudge.judge.checker.internal;
 
 import java.io.*;
 
-import djudge.judge.checker.ValidationFailEnum;
+import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.ValidationResult;
 import djudge.judge.checker.ValidationResultEnum;
 import djudge.judge.checker.ValidatorAbstract;
@@ -28,7 +28,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.NoInputFileError);
+			res.setFail(CheckerFailEnum.NoInputFileError);
 			res.setValidatorOutput(new String[]{"Cannot find input file: " + judgeInputFile});
 			return res;
 		}
@@ -38,7 +38,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			res.setResult(ValidationResultEnum.InternalError);
-			res.setFail(ValidationFailEnum.NoOutputFileError);
+			res.setFail(CheckerFailEnum.NoOutputFileError);
 			res.setValidatorOutput(new String[]{"Cannot find answer file: " + judgeAnswerFile});
 			return res;
 		}
@@ -48,7 +48,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		if (!f.exists() && res.getResult() == ValidationResultEnum.Undefined)
 		{
 			res.setResult(ValidationResultEnum.WrongAnswer);
-			res.setFail(ValidationFailEnum.OK);
+			res.setFail(CheckerFailEnum.OK);
 			res.setValidatorOutput(new String[]{"Cannot find program's output file: " + programOutputFile});
 			return res;
 		}
@@ -58,7 +58,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		
 		try
 		{
-			res.setFail(ValidationFailEnum.OK);			
+			res.setFail(CheckerFailEnum.OK);			
 			judgeInput = new BufferedReader(new FileReader(judgeInputFile));
 			judgeAnswer = new BufferedReader(new FileReader(judgeAnswerFile));
 			programOutput = new BufferedReader(new FileReader(programOutputFile));
@@ -67,7 +67,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		catch (Exception exc)
 		{
 			res.setResult(ValidationResultEnum.WrongAnswer);
-			res.setFail(ValidationFailEnum.OK);
+			res.setFail(CheckerFailEnum.OK);
 		}
 		
 		return res;		
@@ -140,7 +140,7 @@ public abstract class ValidatorInternalAbstract extends ValidatorAbstract implem
 		catch (Exception exc)
 		{
 			exc.printStackTrace();
-			res.setFail(ValidationFailEnum.ValidatorFail);
+			res.setFail(CheckerFailEnum.ValidatorFail);
 			res.setResult(ValidationResultEnum.InternalError);
 			return;
 		}
