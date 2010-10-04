@@ -9,14 +9,14 @@ package djudge.judge.checker;
 public abstract class ValidatorAbstract 
 {
 	// Provides information about validation result
-	ValidationResult res;
+	protected ValidationResult res;
 	
 	// executable filename (for external validator)
-	String exeFilename;
+	private String exeFilename;
 	
 	public String getExeFile()
 	{
-		return exeFilename;
+		return getExeFilename();
 	}
 	
 	/**
@@ -27,4 +27,14 @@ public abstract class ValidatorAbstract
 	 * @return object of type ValidationResult 
 	 */
 	public abstract ValidationResult validateOutput(String input, String output, String answer);
+
+	public void setExeFilename(String exeFilename)
+	{
+		this.exeFilename = exeFilename;
+	}
+
+	public String getExeFilename()
+	{
+		return exeFilename;
+	}
 }

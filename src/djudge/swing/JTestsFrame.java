@@ -21,8 +21,8 @@ import utils.FileWorks;
 import djudge.judge.ProblemDescription;
 import djudge.judge.checker.ValidationResult;
 import djudge.judge.checker.ValidationResultEnum;
-import djudge.judge.dvalidator.LocalValidator;
-import djudge.judge.dvalidator.ValidatorTask;
+import djudge.judge.dchecker.LocalChecker;
+import djudge.judge.dchecker.ValidatorTask;
 
 public class JTestsFrame extends JFrame implements ActionListener
 {
@@ -189,7 +189,7 @@ public class JTestsFrame extends JFrame implements ActionListener
 		vTask.testInput = pd.getJudgeInputFilepath(groupNumber, testNumber);
 		vTask.testOutput = pd.getJudgeOutputFilepath(groupNumber, testNumber);*/
 		//throw new Exception();
-		ValidationResult vRes = LocalValidator.validate(vTask);
+		ValidationResult vRes = LocalChecker.validate(vTask);
 		String msg = "<html><h2 align='center'>" + vRes.getResult() + "</h2>\n";
 		msg += "Validator: " + vRes.getValidatorName() + "\n";
 		msg += "Validator's output: \n";

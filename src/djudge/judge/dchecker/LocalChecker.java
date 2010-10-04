@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.dvalidator;
+package djudge.judge.dchecker;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,9 +14,9 @@ import djudge.judge.ProblemDescription;
 import djudge.judge.checker.ValidationResult;
 import djudge.judge.checker.Validator;
 
-public class LocalValidator
+public class LocalChecker
 {
-	private static final Logger log = Logger.getLogger(LocalValidator.class);
+	private static final Logger log = Logger.getLogger(LocalChecker.class);
 	
 	public static ValidationResult validate(ValidatorTask task)
 	{

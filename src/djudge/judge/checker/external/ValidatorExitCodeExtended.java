@@ -15,10 +15,10 @@ public class ValidatorExitCodeExtended extends ValidatorExternalAbstract
 	
 	protected void processData()
 	{
-		if (res.runInfo.state == RunnerResultEnum.OK) res.setResult(ValidationResultEnum.OK);
-		else if (res.runInfo.state == RunnerResultEnum.NonZeroExitCode) 
+		if (res.getRunInfo().state == RunnerResultEnum.OK) res.setResult(ValidationResultEnum.OK);
+		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode) 
 		{
-			switch (res.runInfo.exitCode)
+			switch (res.getRunInfo().exitCode)
 			{
 			case 1 : 
 				res.setResult(ValidationResultEnum.PresentationError); 

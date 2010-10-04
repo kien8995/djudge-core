@@ -6,7 +6,9 @@ import java.io.File;
 import java.util.Random;
 import java.util.Vector;
 
-import djudge.judge.dvalidator.RemoteFile;
+import djudge.common.JudgeDirs;
+import djudge.judge.dchecker.RemoteFile;
+
 import utils.FileWorks;
 
 // FIXME: this is just a stub
@@ -38,12 +40,12 @@ public class RemoteFS
 	public static String saveToRemoteStorage(RemoteFile file)
 	{
 		String name = getUID();
-		while (new File("./temp/" + name).exists())
+		while (new File(JudgeDirs.getTempDir() + name).exists())
 		{
 			name = getUID();
 		}
-		FileWorks.saveToFile(file, "./temp/" + name);
-		files.add("./temp/" + name);
+		FileWorks.saveToFile(file, JudgeDirs.getTempDir() + name);
+		files.add(JudgeDirs.getTempDir() + name);
 		return "./temp/" + name;
 	}
 	

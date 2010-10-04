@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.dvalidator;
+package djudge.judge.dchecker;
 
 public class RemoteFile
 {
