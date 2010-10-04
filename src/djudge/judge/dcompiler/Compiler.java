@@ -9,6 +9,7 @@ import org.w3c.dom.*;
 
 import utils.FileWorks;
 
+import djudge.common.JudgeDirs;
 import djudge.common.Loggable;
 
 import javax.xml.parsers.*;
@@ -28,7 +29,7 @@ public class Compiler extends Loggable
 	
 	public static void setupCompiler()
 	{
-		setupCompiler("./languages.xml");
+		setupCompiler(JudgeDirs.getRootDir() + "languages.xml");
 	}
 	
 	public static void setupCompiler(String filename)
@@ -57,30 +58,34 @@ public class Compiler extends Loggable
 	
 	/**
 	 * 
-	 * @param file - Path to source file
-	 * @param LanguageID - Language id (or '%AUTO%' for auto)
+	 * @param filename - Path to source file
+	 * @param languageID - Language id (or '%AUTO%' for auto)
 	 * @return {@link CompilationInfo}
 	 */
-	public static CompilerResult compile(String file, String LanguageID)
+	public static CompilerResult compile(String filename, String languageID)
 	{
+		log.debug("Trying to compile " + filename + " as " + languageID);
 		CompilerTask task = new CompilerTask();
-		task.languageId = LanguageID;
-		task.files = new DistributedFileset(file);
+		task.languageId = languageID;
+		task.files = new DistributedFileset(filename);
 		return compile(task);
 	}
 	
 	public static CompilerResult compile(CompilerTask task)
 	{
-		String LanguageID = task.languageId;
+		String languageId = task.languageId;
 		CompilerResult res = new CompilerResult();
 		String file = task.files.map.keySet().toArray(new String[0])[0];
 		log.info("Compiling file " + file + ", language " + task.languageId);
 		
 		// Empty ID
-		if (LanguageID == null || LanguageID == "")
+		if (languageId == null || languageId == "")
+		{
+			log.warn("Empty language ID");
 			res.result = CompilationResult.UnknownCompiler;
+		}
 		// Automatic language
-		else if (LanguageID.equalsIgnoreCase("%AUTO%"))
+		else if (languageId.equalsIgnoreCase("%AUTO%"))
 		{
 			String native_output[] = new String[0];
 			Object[] LangId = languages.keySet().toArray();
@@ -88,6 +93,7 @@ public class Compiler extends Loggable
 			for (int i = 0; (i < LangId.length) && (res.result != CompilationResult.OK); i++)
 			{
 				Language lng = languages.get(LangId[i]);
+				log.info("Trying to compile " + task.files.getFile() + " as " + lng.getID());
 				res = lng.compile(task);
 				if (Extension.equals(lng.getExtension()))
 					native_output = res.getCompilerOutput();
@@ -97,28 +103,20 @@ public class Compiler extends Loggable
 		}
 		else
 		{
-			Language lang = languages.get(LanguageID);
+			Language lang = languages.get(languageId);
 			// No language
 			if (lang == null)
+			{
 				res.result = CompilationResult.UnknownCompiler;
+				log.warn("Unknown language ID: " + languageId);
+			}
 			// OK
 			else
+			{
 				res = lang.compile(task);
+			}
 		}
 		
 		return res;
-	}
-	
-	public static void showInfo()
-	{
-		System.out.println("                              Languages Info");
-		Object[] LangId = languages.keySet().toArray();
-		for (int i = 0; i < LangId.length; i++)
-		{
-			System.out.println("********************************************************************************");
-			((Language)languages.get(LangId[i])).ShowInfo();
-		}
-		System.out.println("********************************************************************************");			
-		System.out.println("                              Total " + LangId.length + " Languages\n");
 	}
 }
