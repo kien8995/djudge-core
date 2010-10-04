@@ -2,11 +2,11 @@
 
 package utils;
 
-import java.io.*;
 import java.util.ArrayList;
+import java.io.*;
 
 import djudge.common.Deployment;
-import djudge.judge.dvalidator.RemoteFile;
+import djudge.judge.dchecker.RemoteFile;
 
 public class FileWorks
 {
