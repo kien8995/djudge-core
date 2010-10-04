@@ -6,7 +6,7 @@ package djudge.judge.checker.internal;
 /*
  * Compares output and answer files as sequences of 32-bit signed integers
  */
-public class ValidatorInt32 extends ValidatorToken 
+public class CheckerInt32 extends CheckerToken 
 {
 	@Override
 	protected boolean compareTokens(Object a, Object b)

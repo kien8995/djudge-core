@@ -7,7 +7,7 @@ package djudge.judge.checker.internal;
  * Compares output and answer files as sequences of floating point numbers
  * Comparison is done using either relative, either absolute error (or both)   
  */
-public class ValidatorFloat extends ValidatorToken
+public class CheckerFloat extends CheckerToken
 {
 	/* Error */
 	double epsilon;
@@ -16,12 +16,12 @@ public class ValidatorFloat extends ValidatorToken
 	
 	boolean fAbsolute = true;
 	
-	public ValidatorFloat(double eps)
+	public CheckerFloat(double eps)
 	{
 		this.epsilon = eps;
 	}
 	
-	public ValidatorFloat(double eps, boolean doRelativeCheck, boolean doAbsoluteCheck)
+	public CheckerFloat(double eps, boolean doRelativeCheck, boolean doAbsoluteCheck)
 	{
 		this.epsilon = eps;
 		fRelative = doRelativeCheck;

@@ -7,7 +7,7 @@ import org.w3c.dom.Document;
 
 import utils.XmlWorks;
 
-import djudge.judge.checker.ValidatorDescription;
+import djudge.judge.checker.CheckerDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 
@@ -110,7 +110,7 @@ public class TestDescription extends AbstractDescription
 		}
 	}
 	
-	protected ValidatorDescription getActualValidator()
+	protected CheckerDescription getActualValidator()
 	{
 		if (hasOwnValidator())
 		{
@@ -170,7 +170,7 @@ public class TestDescription extends AbstractDescription
 	}
 
 	@Override
-	public ValidatorDescription getWorkValidator()
+	public CheckerDescription getWorkValidator()
 	{
 		return getActualValidator();
 	}

@@ -16,13 +16,13 @@ import djudge.judge.executor.RunnerResult;
  * Class that encapsulates information about single test's 
  * validation process
  */
-public class ValidationResult extends XMLSerializable
+public class CheckerResult extends XMLSerializable
 {
 	/* XML root element name for this structure (inherited from XMLSerializable) */
 	public final static String XMLRootElement = "validator";
 
 	/* Validation result */
-	private ValidationResultEnum result = ValidationResultEnum.Undefined;
+	private CheckerResultEnum result = CheckerResultEnum.Undefined;
 
 	/* If validation failed, this consists the reason */
 	private CheckerFailEnum fail = CheckerFailEnum.Undefined;
@@ -43,17 +43,17 @@ public class ValidationResult extends XMLSerializable
 	String resultDetails = "";
 
 	/* Creates new empty ValidationResult structure */
-	public ValidationResult(String name)
+	public CheckerResult(String name)
 	{
 		setValidatorName(name);
 		setValidatorOutput(new String[0]);
-		result = ValidationResultEnum.Undefined;
+		result = CheckerResultEnum.Undefined;
 		setFail(CheckerFailEnum.Undefined);
 		setRunInfo(new RunnerResult());
 	}
 
 	/* Creates ValidationResult instance from XML element */
-	public ValidationResult(Element elem)
+	public CheckerResult(Element elem)
 	{
 		super(elem);
 	}
@@ -89,7 +89,7 @@ public class ValidationResult extends XMLSerializable
 		try
 		{
     		setValidatorName(elem.getAttribute("type"));
-    		result = ValidationResultEnum.valueOf(elem.getAttribute("result"));
+    		result = CheckerResultEnum.valueOf(elem.getAttribute("result"));
     		setFail(CheckerFailEnum.valueOf(elem.getAttribute("fail")));
     		setValidatorOutput(elem.getAttribute("output").split("\n"));
     		resultDetails = elem.getAttribute("result-details");
@@ -112,12 +112,12 @@ public class ValidationResult extends XMLSerializable
 		return resultDetails;
 	}
 
-	public ValidationResultEnum getResult()
+	public CheckerResultEnum getResult()
 	{
 		return result;
 	}
 
-	public void setResult(ValidationResultEnum res)
+	public void setResult(CheckerResultEnum res)
 	{
 		this.result = res;
 	}

@@ -8,8 +8,8 @@ import org.w3c.dom.NodeList;
 
 import utils.XmlWorks;
 
-import djudge.judge.checker.ValidationResult;
-import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.CheckerResult;
+import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.dexecutor.ExecutionResult;
 import djudge.judge.dexecutor.ExecutionResultEnum;
 import djudge.judge.executor.RunnerResult;
@@ -20,7 +20,7 @@ public class TestResult extends AbstractResult
 	
 	private ExecutionResult runResult;
 	
-	private ValidationResult validationResult;
+	private CheckerResult validationResult;
 	
 	private int testNumber;
 	final String testNumberAttributeName = "num";
@@ -58,7 +58,7 @@ public class TestResult extends AbstractResult
 			result = TestResultEnum.Undefined;
 			resultDetails = "Run: null";
 		}
-		else if (validationResult != null && validationResult.getResult() != ValidationResultEnum.OK)
+		else if (validationResult != null && validationResult.getResult() != CheckerResultEnum.OK)
 		{
 			result = TestResultEnumFactory.getResult(validationResult.getResult()); 
 			resultDetails = "Validation: " + validationResult.getResultDetails();
@@ -88,7 +88,7 @@ public class TestResult extends AbstractResult
 		updateResult();
 	}
 
-	public void setValidationInfo(ValidationResult validationResult)
+	public void setValidationInfo(CheckerResult validationResult)
 	{
 		this.validationResult = validationResult;
 		updateResult();
@@ -104,7 +104,7 @@ public class TestResult extends AbstractResult
 		return testNumber;
 	}
 	
-	public ValidationResult getValidationInfo()
+	public CheckerResult getValidationInfo()
 	{
 		return validationResult;
 	}
@@ -157,14 +157,14 @@ public class TestResult extends AbstractResult
         	runResult = new ExecutionResult();
         }
 		
-		NodeList vals = elem.getElementsByTagName(ValidationResult.XMLRootElement);
+		NodeList vals = elem.getElementsByTagName(CheckerResult.XMLRootElement);
         if (vals.getLength() > 0)
         {
-        	validationResult = new ValidationResult((Element)vals.item(0));
+        	validationResult = new CheckerResult((Element)vals.item(0));
         }
         else
         {
-        	validationResult = new ValidationResult("@STR");
+        	validationResult = new CheckerResult("@STR");
         }
 		
 		return true;

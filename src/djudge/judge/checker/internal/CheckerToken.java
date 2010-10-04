@@ -10,7 +10,7 @@ import java.io.BufferedReader;
  * Compares files token-by-token
  * i.e., it skips whitespace characters
  */
-public class ValidatorToken extends ValidatorInternalAbstract 
+public class CheckerToken extends CheckerInternalAbstract 
 {
 	//TODO: review code
 	@Override

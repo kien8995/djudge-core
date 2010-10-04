@@ -13,7 +13,7 @@ import utils.JudgeDirectory;
 
 import djudge.common.JudgeDirs;
 import djudge.filesystem.RemoteFS;
-import djudge.judge.checker.ValidationResult;
+import djudge.judge.checker.CheckerResult;
 import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.CompilerResult;
 import djudge.judge.dcompiler.CompilerTask;
@@ -121,12 +121,12 @@ public class Judge
 			task.testOutput.filename = FileWorks.concatPaths(testsDir, test.getOutputMask());
 			task.testOutput.fIsPresent = false;
 			// validation
-			ValidationResult vres = LocalChecker.validate(task);
+			CheckerResult vres = LocalChecker.validate(task);
 			res.setValidationInfo(vres);
 		}
 		else
 		{
-			res.setValidationInfo(new ValidationResult(""));
+			res.setValidationInfo(new CheckerResult(""));
 		}
 		return res;
 	}

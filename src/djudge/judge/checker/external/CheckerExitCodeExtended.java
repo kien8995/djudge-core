@@ -3,39 +3,39 @@
 package djudge.judge.checker.external;
 
 import djudge.judge.checker.CheckerFailEnum;
-import djudge.judge.checker.ValidationResultEnum;
+import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.executor.*;
 
-public class ValidatorExitCodeExtended extends ValidatorExternalAbstract
+public class CheckerExitCodeExtended extends CheckerExternalAbstract
 {
-	public ValidatorExitCodeExtended(String exeFile) 
+	public CheckerExitCodeExtended(String exeFile) 
 	{
 		super(exeFile);
 	}
 	
 	protected void processData()
 	{
-		if (res.getRunInfo().state == RunnerResultEnum.OK) res.setResult(ValidationResultEnum.OK);
+		if (res.getRunInfo().state == RunnerResultEnum.OK) res.setResult(CheckerResultEnum.OK);
 		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode) 
 		{
 			switch (res.getRunInfo().exitCode)
 			{
 			case 1 : 
-				res.setResult(ValidationResultEnum.PresentationError); 
+				res.setResult(CheckerResultEnum.PresentationError); 
 				break;
 				
 			case 3 : 
-				res.setResult(ValidationResultEnum.InternalError);
+				res.setResult(CheckerResultEnum.InternalError);
 				res.setFail(CheckerFailEnum.ValidatorFail);
 				break;
 				
 			default : 
-				res.setResult(ValidationResultEnum.WrongAnswer);
+				res.setResult(CheckerResultEnum.WrongAnswer);
 			}
 		}
 		else
 		{
-			res.setResult(ValidationResultEnum.InternalError);
+			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.ValidatorFail);			
 		}
 	}

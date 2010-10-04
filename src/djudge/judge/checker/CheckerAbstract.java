@@ -6,10 +6,10 @@ package djudge.judge.checker;
  * Base class for all validators
  * @author alt
  */
-public abstract class ValidatorAbstract 
+public abstract class CheckerAbstract 
 {
 	// Provides information about validation result
-	protected ValidationResult res;
+	protected CheckerResult res;
 	
 	// executable filename (for external validator)
 	private String exeFilename;
@@ -26,7 +26,7 @@ public abstract class ValidatorAbstract
 	 * @param answer Program output file
 	 * @return object of type ValidationResult 
 	 */
-	public abstract ValidationResult validateOutput(String input, String output, String answer);
+	public abstract CheckerResult validateOutput(String input, String output, String answer);
 
 	public void setExeFilename(String exeFilename)
 	{

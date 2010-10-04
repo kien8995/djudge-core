@@ -11,14 +11,14 @@ import org.apache.log4j.Logger;
 import utils.FileWorks;
 
 import djudge.judge.ProblemDescription;
-import djudge.judge.checker.ValidationResult;
-import djudge.judge.checker.Validator;
+import djudge.judge.checker.CheckerResult;
+import djudge.judge.checker.Checker;
 
 public class LocalChecker
 {
 	private static final Logger log = Logger.getLogger(LocalChecker.class);
 	
-	public static ValidationResult validate(ValidatorTask task)
+	public static CheckerResult validate(ValidatorTask task)
 	{
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         String id = dateFormat.format(new Date()) + "_val";
@@ -27,7 +27,7 @@ public class LocalChecker
         try
         {
         	ProblemDescription pd = new ProblemDescription(task.contestId, task.problemId);
-        	ValidationResult res = new Validator(pd.getTestValidator(task.groupNumber, task.testNumber)).validateOutput(task.testInput.filename, task.testOutput.filename, workDir + "answer.txt");
+        	CheckerResult res = new Checker(pd.getTestValidator(task.groupNumber, task.testNumber)).validateOutput(task.testInput.filename, task.testOutput.filename, workDir + "answer.txt");
         	return res;
         }
         catch (Exception e)

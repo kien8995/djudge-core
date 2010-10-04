@@ -16,7 +16,7 @@ import djudge.common.JudgeDirs;
 import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
-import djudge.judge.checker.ValidatorDescription;
+import djudge.judge.checker.CheckerDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
 
@@ -131,8 +131,8 @@ public class ProblemDescription extends AbstractDescription
 		{
 			checkerExe = Deployment.isOSWinNT() ? "check.exe" : "check.o";
 		}
-		ownValidator = new ValidatorDescription(problemInfo.contestID,
-				problemInfo.problemID, ValidatorDescription.StringToType(checker), checkerParam, checkerExe);
+		ownValidator = new CheckerDescription(problemInfo.contestID,
+				problemInfo.problemID, CheckerDescription.StringToType(checker), checkerParam, checkerExe);
 		
 		groups = new GroupDescription[1];
 		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, elem.getAttribute("score"));
@@ -180,10 +180,10 @@ public class ProblemDescription extends AbstractDescription
 		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo, inputFileMask, outputFileMask, testset.getAttribute("score"));
 	}
 	
-	private ValidatorDescription parsePcmsValidator(Element validatorElement)
+	private CheckerDescription parsePcmsValidator(Element validatorElement)
 	{
 		// TODO Auto-generated method stub
-		ValidatorDescription res = null;
+		CheckerDescription res = null;
 		try
 		{
 			String type = validatorElement.getAttribute("type");
@@ -196,15 +196,15 @@ public class ProblemDescription extends AbstractDescription
 					String executableId = exeElement.getAttribute("executable-id");
 					if ("x86.exe.win32".equalsIgnoreCase(executableId))
 					{
-						res = new ValidatorDescription(problemInfo.contestID,
-								problemInfo.problemID, ValidatorDescription
+						res = new CheckerDescription(problemInfo.contestID,
+								problemInfo.problemID, CheckerDescription
 										.StringToType("%TESTLIB"), "",
 								exeElement.getAttribute("file"));
 					}
 					else if ("java.check".equalsIgnoreCase(executableId))
 					{
-						res = new ValidatorDescription(problemInfo.contestID,
-								problemInfo.problemID, ValidatorDescription
+						res = new CheckerDescription(problemInfo.contestID,
+								problemInfo.problemID, CheckerDescription
 										.StringToType("%TESTLIB_JAVA"), "",
 								exeElement.getAttribute("file"));
 					}
@@ -327,12 +327,12 @@ public class ProblemDescription extends AbstractDescription
 		return groups[groupNumber].getActualLimits();
 	}
 	
-	public ValidatorDescription getTestValidator(int groupNumber, int testNumber)
+	public CheckerDescription getTestValidator(int groupNumber, int testNumber)
 	{
 		return groups[groupNumber].tests.get(testNumber).getActualValidator();
 	}
 	
-	public ValidatorDescription getGroupValidator(int groupNumber)
+	public CheckerDescription getGroupValidator(int groupNumber)
 	{
 		return groups[groupNumber].getActualValidator();
 	}
@@ -399,7 +399,7 @@ public class ProblemDescription extends AbstractDescription
 		return substituteMask(getOutputMask(), groupNumber);
 	}
 	
-	public ValidatorDescription getActualValidator()
+	public CheckerDescription getActualValidator()
 	{
 		return ownValidator;
 	}
@@ -428,7 +428,7 @@ public class ProblemDescription extends AbstractDescription
 	}
 
 	@Override
-	public ValidatorDescription getWorkValidator()
+	public CheckerDescription getWorkValidator()
 	{
 		return getActualValidator();
 	}
