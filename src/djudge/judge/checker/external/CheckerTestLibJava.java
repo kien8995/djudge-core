@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResultEnum;
-import djudge.judge.executor.RunnerResultEnum;
+import djudge.judge.executor.ExecutionResultEnum;
 
 public class CheckerTestLibJava extends CheckerExternalAbstract
 {
@@ -19,11 +19,11 @@ public class CheckerTestLibJava extends CheckerExternalAbstract
 
 	protected void processData() 
 	{
-		if (res.getRunInfo().state == RunnerResultEnum.OK)
+		if (res.getRunInfo().result == ExecutionResultEnum.OK)
 		{
 			res.setResult(CheckerResultEnum.OK);
 		}
-		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode)
+		else if (res.getRunInfo().result == ExecutionResultEnum.NonZeroExitCode)
 		{
 			switch (res.getRunInfo().exitCode)
 			{

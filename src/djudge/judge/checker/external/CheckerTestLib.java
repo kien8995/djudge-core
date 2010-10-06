@@ -4,12 +4,12 @@ package djudge.judge.checker.external;
 
 import org.apache.log4j.Logger;
 
+import djudge.common.Review;
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResultEnum;
-import djudge.judge.executor.RunnerResultEnum;
+import djudge.judge.executor.ExecutionResultEnum;
 
-// TODO: review
-public class CheckerTestLib extends CheckerExternalAbstract
+@Review public class CheckerTestLib extends CheckerExternalAbstract
 {
 	private final static Logger log = Logger.getLogger(CheckerTestLib.class);
 	
@@ -20,12 +20,12 @@ public class CheckerTestLib extends CheckerExternalAbstract
 
 	protected void processData() 
 	{
-		if (res.getRunInfo().state == RunnerResultEnum.OK)
+		if (res.getRunInfo().result == ExecutionResultEnum.OK)
 		{
 			res.setResult(CheckerResultEnum.OK);
 			res.setResultDetails("OK: Accepted");
 		}
-		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode)
+		else if (res.getRunInfo().result == ExecutionResultEnum.NonZeroExitCode)
 		{
 			System.out.println("Valiator's exit code: " + res.getRunInfo().exitCode);
 			switch (res.getRunInfo().exitCode)

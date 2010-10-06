@@ -19,7 +19,7 @@ import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.judge.dcompiler.DistributedFileset;
 
-public class LocalExecutor implements RunnerLinuxExitCodes
+public class LocalExecutor implements ExecutorLinuxExitCodes
 {
 	private final static Logger log = Logger.getLogger(LocalExecutor.class);
 	

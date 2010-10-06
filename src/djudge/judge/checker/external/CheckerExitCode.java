@@ -19,17 +19,17 @@ public class CheckerExitCode extends CheckerExternalAbstract
 	
 	protected void processData()
 	{
-		if (res.getRunInfo().state == RunnerResultEnum.OK)
+		if (res.getRunInfo().result == ExecutionResultEnum.OK)
 		{
 			res.setResult(CheckerResultEnum.OK);
 		}
-		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode)
+		else if (res.getRunInfo().result == ExecutionResultEnum.NonZeroExitCode)
 		{
 			res.setResult(CheckerResultEnum.WrongAnswer);
 		}
 		else
 		{
-			log.error(res.getRunInfo().state);
+			log.error(res.getRunInfo().result);
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.CheckerFail);
 		}

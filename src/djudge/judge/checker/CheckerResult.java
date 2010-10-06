@@ -11,7 +11,7 @@ import utils.StringTools;
 import utils.XmlTools;
 
 import djudge.common.XMLSerializable;
-import djudge.judge.executor.RunnerResult;
+import djudge.judge.executor.ExecutionResult;
 
 /*
  * Class that encapsulates information about single test's 
@@ -40,7 +40,7 @@ public class CheckerResult extends XMLSerializable
 	private final static String checkerOutputAttributeName = "output";
 
 	/* Runtime information (for external checkers) */
-	private RunnerResult runInfo = null;
+	private ExecutionResult runInfo = null;
 
 	/* Name of checker */
 	private String checkerName = "undefined";
@@ -57,7 +57,7 @@ public class CheckerResult extends XMLSerializable
 		setCheckerOutput(new String[0]);
 		result = CheckerResultEnum.Undefined;
 		setFail(CheckerFailEnum.Undefined);
-		setRunInfo(new RunnerResult());
+		setRunInfo(new ExecutionResult());
 	}
 
 	/* Creates ValidationResult instance from XML element */
@@ -173,12 +173,12 @@ public class CheckerResult extends XMLSerializable
 		return exitCode;
 	}
 
-	public void setRunInfo(RunnerResult runInfo)
+	public void setRunInfo(ExecutionResult runInfo)
 	{
 		this.runInfo = runInfo;
 	}
 
-	public RunnerResult getRunInfo()
+	public ExecutionResult getRunInfo()
 	{
 		return runInfo;
 	}

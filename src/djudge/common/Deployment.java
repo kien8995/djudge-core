@@ -18,6 +18,11 @@ package djudge.common;
 	{
 		return os.indexOf("mac") >= 0;
 	}
+	
+	public static boolean isOSSupported()
+	{
+		return isOSWinNT() || isOSLinux();
+	}
 
 	public static boolean useLinks()
 	{

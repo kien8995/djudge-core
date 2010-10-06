@@ -17,10 +17,10 @@ public class CheckerExitCodeExtended extends CheckerExternalAbstract
 		super(executableFilename);
 	}
 	
-	protected void processData()
+	public void processData()
 	{
-		if (res.getRunInfo().state == RunnerResultEnum.OK) res.setResult(CheckerResultEnum.OK);
-		else if (res.getRunInfo().state == RunnerResultEnum.NonZeroExitCode) 
+		if (res.getRunInfo().result == ExecutionResultEnum.OK) res.setResult(CheckerResultEnum.OK);
+		else if (res.getRunInfo().result == ExecutionResultEnum.NonZeroExitCode) 
 		{
 			switch (res.getRunInfo().exitCode)
 			{
@@ -40,10 +40,10 @@ public class CheckerExitCodeExtended extends CheckerExternalAbstract
 		}
 		else
 		{
-			res.setResultDetails("Unknown error: " + res.getRunInfo().state);
+			res.setResultDetails("Unknown error: " + res.getRunInfo().result);
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.CheckerFail);
-			log.error(res.getRunInfo().state);
+			log.error(res.getRunInfo().result);
 		}
 	}
 }
