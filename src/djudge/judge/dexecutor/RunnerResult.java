@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.executor;
+package djudge.judge.dexecutor;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
