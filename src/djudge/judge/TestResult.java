@@ -12,7 +12,6 @@ import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.executor.ExecutionResult;
 import djudge.judge.executor.ExecutionResultEnum;
-import djudge.judge.executor.RunnerResult;
 
 public class TestResult extends AbstractResult
 {
@@ -147,7 +146,7 @@ public class TestResult extends AbstractResult
 		score = Integer.parseInt(elem.getAttribute(scoreAttributeName));
 		resultDetails = elem.getAttribute(resultDetailsAttributeName);
 		
-		NodeList runs = elem.getElementsByTagName(RunnerResult.XMLRootElement);
+		NodeList runs = elem.getElementsByTagName(ExecutionResult.XMLRootElement);
         if (runs.getLength() > 0)
         {
         	runResult = new ExecutionResult((Element)runs.item(0));

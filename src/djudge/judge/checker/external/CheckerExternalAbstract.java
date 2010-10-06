@@ -16,8 +16,8 @@ import djudge.judge.checker.CheckerAbstract;
 import djudge.judge.checker.CheckerLimits;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
+import djudge.judge.executor.ExecutionResultEnum;
 import djudge.judge.executor.Runner;
-import djudge.judge.executor.RunnerResultEnum;
 
 public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {
@@ -136,12 +136,12 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 				res.getCheckerOutput()[tmp.size()] = "[" + this.toString() + "]";
 			}
 			
-			if (res.getRunInfo().state != RunnerResultEnum.OK && res.getRunInfo().state != RunnerResultEnum.NonZeroExitCode)
+			if (res.getRunInfo().result != ExecutionResultEnum.OK && res.getRunInfo().result != ExecutionResultEnum.NonZeroExitCode)
 			{
-				log.error("Validator error - " + res.getRunInfo().state);
+				log.error("Validator error - " + res.getRunInfo().result);
 				res.setResult(CheckerResultEnum.InternalError);
 				
-				switch (res.getRunInfo().state)
+				switch (res.getRunInfo().result)
 				{
 				case MemoryLimitExceeded:
 					res.setFail(CheckerFailEnum.CheckerMLE);
@@ -161,7 +161,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 					res.setFail(CheckerFailEnum.CheckerCrash);
 					break;
 				}
-				res.setResultDetails(res.getRunInfo().state.toString());
+				res.setResultDetails(res.getRunInfo().result.toString());
 			}
 			else
 			{

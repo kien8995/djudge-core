@@ -12,12 +12,13 @@ import utils.FileTools;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
+import djudge.common.Review;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.common_data_structures.ExecutorSecurityLimits;
 
 // TODO: merge this class with LocalExecutor
-public class Runner implements RunnerLinuxExitCodes
+public class Runner implements ExecutorLinuxExitCodes
 {
 	private static final Logger log = Logger.getLogger(Runner.class);
 	
@@ -30,7 +31,6 @@ public class Runner implements RunnerLinuxExitCodes
 	private String saveOutputTo;
 	
 	private boolean fRedirect = false;
-	
 	
 	@SuppressWarnings("unused")
 	private ExecutorSecurityLimits security = new ExecutorSecurityLimits();
@@ -63,9 +63,9 @@ public class Runner implements RunnerLinuxExitCodes
 		this.homeDirectory = null;
 	}
 	
-	public RunnerResult runWinNT(String command)
+	@Review private ExecutionResult runWinNT(String command)
 	{
-		StringBuffer cmd = new StringBuffer();
+	/*	StringBuffer cmd = new StringBuffer();
 		
 		cmd.append(" -Xifce ");
 		
@@ -204,15 +204,11 @@ public class Runner implements RunnerLinuxExitCodes
 			System.out.println("!!! IOException catched: " + exc);
 		}
 		return res;
+		*/
+		return new ExecutionResult();
 	}
 	
-	@SuppressWarnings("unused")
-	private String quote(String param)
-	{
-		return param.contains(" ") ? "\"" + param + "\"" : param;
-	}
-	
-	public RunnerResult runLinux(String command)
+	/*private ExecutionResult runLinux(String command)
 	{
 		Vector<String> params = new Vector<String>();		
 		if (homeDirectory != null)
@@ -239,7 +235,7 @@ public class Runner implements RunnerLinuxExitCodes
 			params.add("-p");
 		}
 		
-		/* Redirecting I/O stream */
+		// Redirecting I/O stream
 		if (files.inputFilename != null && files.inputFilename != "")
 		{
 			params.add("-I");
@@ -373,13 +369,14 @@ public class Runner implements RunnerLinuxExitCodes
 		}
 		return res;
 	}
+*/
 	
-	public RunnerResult run(String command)
+	public ExecutionResult run(String command)
 	{
-		if (Deployment.isOSWinNT())
-			return runWinNT(command);
-		else if (Deployment.isOSLinux())
-			return runLinux(command);
+		if (Deployment.isOSSupported())
+		{
+			return null;
+		}
 		else
 		{
 			log.fatal("Error. Your OS in not supported");
