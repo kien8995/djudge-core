@@ -440,7 +440,7 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
         }
         else
         {
-        	// TODO: do someting
+        	log.fatal("Your OS is not supported");
         }
         
         // TODO: probable enable this in release version
