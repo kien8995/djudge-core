@@ -17,8 +17,8 @@ import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.checker.CheckerDescription;
-import djudge.judge.dexecutor.ExecutorFiles;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorFiles;
+import djudge.judge.executor.ExecutorLimits;
 
 public class ProblemDescription extends AbstractDescription 
 {

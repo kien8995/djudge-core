@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResultEnum;
-import djudge.judge.dexecutor.RunnerResultEnum;
 import djudge.judge.executor.*;
 
 public class CheckerExitCodeExtended extends CheckerExternalAbstract

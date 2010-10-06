@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.dexecutor;
+package djudge.judge.executor;
 
 import djudge.judge.dcompiler.DistributedFileset;
 

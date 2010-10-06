@@ -29,7 +29,7 @@ import djudge.judge.Judge;
 import djudge.judge.JudgeTaskDescription;
 import djudge.judge.JudgeTaskResult;
 import djudge.judge.ProblemDescription;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 {

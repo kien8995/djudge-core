@@ -12,8 +12,8 @@ import utils.StringTools;
 import djudge.common.XMLSerializable;
 import djudge.judge.checker.Checker;
 import djudge.judge.checker.CheckerDescription;
-import djudge.judge.dexecutor.ExecutorFiles;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorFiles;
+import djudge.judge.executor.ExecutorLimits;
 
 public abstract class AbstractDescription extends XMLSerializable
 {

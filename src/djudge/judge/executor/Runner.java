@@ -1,7 +1,7 @@
 /* $Id$ */
 
 // TODO: review this class (old version used)
-package djudge.judge.dexecutor;
+package djudge.judge.executor;
 
 import java.io.*;
 import java.util.Vector;

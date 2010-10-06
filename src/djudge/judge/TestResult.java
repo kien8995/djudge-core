@@ -10,9 +10,9 @@ import utils.XmlTools;
 
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
-import djudge.judge.dexecutor.ExecutionResult;
-import djudge.judge.dexecutor.ExecutionResultEnum;
-import djudge.judge.dexecutor.RunnerResult;
+import djudge.judge.executor.ExecutionResult;
+import djudge.judge.executor.ExecutionResultEnum;
+import djudge.judge.executor.RunnerResult;
 
 public class TestResult extends AbstractResult
 {

@@ -11,7 +11,7 @@ import utils.StringTools;
 import utils.XmlTools;
 
 import djudge.common.XMLSerializable;
-import djudge.judge.dexecutor.RunnerResult;
+import djudge.judge.executor.RunnerResult;
 
 /*
  * Class that encapsulates information about single test's 

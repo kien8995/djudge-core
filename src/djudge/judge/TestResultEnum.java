@@ -3,7 +3,7 @@
 package djudge.judge;
 
 import djudge.judge.checker.CheckerResultEnum;
-import djudge.judge.dexecutor.ExecutionResultEnum;
+import djudge.judge.executor.ExecutionResultEnum;
 
 class TestResultEnumFactory
 {

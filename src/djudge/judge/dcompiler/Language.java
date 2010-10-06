@@ -11,11 +11,11 @@ import org.w3c.dom.Element;
 import utils.FileTools;
 
 import djudge.common.JudgeDirs;
-import djudge.judge.dexecutor.ExecutorFiles;
-import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.dexecutor.ExecutorProgram;
-import djudge.judge.dexecutor.ExecutorTask;
-import djudge.judge.dexecutor.LocalExecutor;
+import djudge.judge.executor.ExecutorFiles;
+import djudge.judge.executor.ExecutorLimits;
+import djudge.judge.executor.ExecutorProgram;
+import djudge.judge.executor.ExecutorTask;
+import djudge.judge.executor.LocalExecutor;
 
 /**
  * Describes programming language

@@ -13,7 +13,7 @@ import djudge.judge.TestDescription;
 import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
 import djudge.judge.checker.CheckerResult;
-import djudge.judge.dexecutor.ExecutionResult;
+import djudge.judge.executor.ExecutionResult;
 
 public class HtmlTools 
 {

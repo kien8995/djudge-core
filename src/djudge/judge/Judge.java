@@ -16,16 +16,16 @@ import djudge.judge.checker.CheckerResult;
 import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.CompilerResult;
 import djudge.judge.dcompiler.CompilerTask;
-import djudge.judge.dexecutor.ExecutionResult;
-import djudge.judge.dexecutor.ExecutionResultEnum;
-import djudge.judge.dexecutor.ExecutorFiles;
-import djudge.judge.dexecutor.ExecutorLimits;
-import djudge.judge.dexecutor.ExecutorProgram;
-import djudge.judge.dexecutor.ExecutorTask;
-import djudge.judge.dexecutor.LocalExecutor;
 import djudge.judge.dchecker.LocalChecker;
 import djudge.judge.dchecker.RemoteFile;
 import djudge.judge.dchecker.ValidatorTask;
+import djudge.judge.executor.ExecutionResult;
+import djudge.judge.executor.ExecutionResultEnum;
+import djudge.judge.executor.ExecutorFiles;
+import djudge.judge.executor.ExecutorLimits;
+import djudge.judge.executor.ExecutorProgram;
+import djudge.judge.executor.ExecutorTask;
+import djudge.judge.executor.LocalExecutor;
 import djudge.remotefs.RemoteFS;
 
 public class Judge
