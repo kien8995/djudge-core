@@ -12,7 +12,7 @@ import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.dexecutor.ExecutionResult;
 import djudge.judge.dexecutor.ExecutionResultEnum;
-import djudge.judge.executor.RunnerResult;
+import djudge.judge.dexecutor.RunnerResult;
 
 public class TestResult extends AbstractResult
 {

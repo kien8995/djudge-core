@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.executor;
+package djudge.judge.dexecutor;
 
 /**
  * Enumeration with possible run results
