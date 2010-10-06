@@ -14,10 +14,12 @@ import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.checker.CheckerAbstract;
 import djudge.judge.checker.CheckerLimits;
-import djudge.judge.common_data_structures.ExecutorFiles;
-import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.executor.ExecutionResultEnum;
-import djudge.judge.executor.Runner;
+import djudge.judge.executor.ExecutorFiles;
+import djudge.judge.executor.ExecutorLimits;
+import djudge.judge.executor.ExecutorProgram;
+import djudge.judge.executor.ExecutorTask;
+import djudge.judge.executor.LocalExecutor;
 
 public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {
@@ -86,7 +88,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		ExecutorLimits limits = new ExecutorLimits(CheckerLimits.VALIDATOR_MAX_RUNNING_TIME, 
 				CheckerLimits.VALIDATOR_MAX_CONSUMED_MEMORY, CheckerLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
-		Runner runner = new Runner(limits, files);
+		//Runner runner = new Runner(limits, files);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = getExeFilename() + " " + input + " " + answer + " " + output;
@@ -99,7 +101,13 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		
 		try
 		{
-			res.setRunInfo(runner.run(cmd));
+			ExecutorProgram program = new ExecutorProgram(cmd);
+			
+			ExecutorTask task = new ExecutorTask(program, limits, files);
+			
+			LocalExecutor runner = new LocalExecutor();
+			
+			res.setRunInfo(runner.execute(task));
 		}
 		catch (Exception exc)
 		{

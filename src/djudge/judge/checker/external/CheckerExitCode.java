@@ -17,7 +17,7 @@ public class CheckerExitCode extends CheckerExternalAbstract
 		super(executableFilename);
 	}
 	
-	protected void processData()
+	public void processData()
 	{
 		if (res.getRunInfo().result == ExecutionResultEnum.OK)
 		{

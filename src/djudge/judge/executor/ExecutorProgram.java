@@ -10,6 +10,16 @@ public class ExecutorProgram
 	
 	public String command = "";
 	
+	public ExecutorProgram()
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+	public ExecutorProgram(String cmd)
+	{
+		command = cmd;
+	}	
+	
 	public String getCommand()
 	{
 		return command;
