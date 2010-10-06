@@ -8,8 +8,8 @@ import org.w3c.dom.NodeList;
 
 import djudge.common.XMLSerializable;
 
-import utils.StringWorks;
-import utils.XmlWorks;
+import utils.StringTools;
+import utils.XmlTools;
 
 public class ExecutorLimits extends XMLSerializable implements Comparable<ExecutorLimits>
 {
@@ -82,7 +82,7 @@ public class ExecutorLimits extends XMLSerializable implements Comparable<Execut
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(timeLimitAttributeName, "" + timeLimit);
@@ -105,15 +105,15 @@ public class ExecutorLimits extends XMLSerializable implements Comparable<Execut
 		
 		tempStr = elem.getAttribute(timeLimitAttributeName);
 		if (tempStr != "")
-			timeLimit = StringWorks.strToTimeLimit(tempStr);
+			timeLimit = StringTools.strToTimeLimit(tempStr);
 
 		tempStr = elem.getAttribute(memoryLimitAttributeName);
 		if (tempStr != "")
-			memoryLimit = StringWorks.StrToMemoryLimit(tempStr);
+			memoryLimit = StringTools.StrToMemoryLimit(tempStr);
 		
 		tempStr = elem.getAttribute(outputLimitAttributeName);
 		if (tempStr != "")
-			outputLimit = StringWorks.StrToMemoryLimit(tempStr);
+			outputLimit = StringTools.StrToMemoryLimit(tempStr);
 			
 		NodeList securityElement = elem.getElementsByTagName(ExecutorSecurityLimits.XMLRootElement);
         if (securityElement.getLength() > 0)

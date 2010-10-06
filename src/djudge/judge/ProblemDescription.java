@@ -9,8 +9,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
 import utils.PrintfFormat;
-import utils.StringWorks;
-import utils.XmlWorks;
+import utils.StringTools;
+import utils.XmlTools;
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.exceptions.DJudgeXmlCorruptedException;
@@ -47,7 +47,7 @@ public class ProblemDescription extends AbstractDescription
 		{
 			problemRoot = JudgeDirs.getProblemsDir() + contestID + "/" + problemID + "/";
 			String problemXML = problemRoot + "problem.xml";
-			readXML(XmlWorks.getDocumentE(problemXML).getDocumentElement());
+			readXML(XmlTools.getDocumentE(problemXML).getDocumentElement());
 		} catch (SAXParseException e)
 		{
 			throw new DJudgeXmlCorruptedException();
@@ -119,9 +119,9 @@ public class ProblemDescription extends AbstractDescription
 		
 		// Limits
 		ownLimits = new ExecutorLimits();
-		ownLimits.outputLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("output-limit"));
-		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(elem.getAttribute("memory-limit"));
-		ownLimits.timeLimit = StringWorks.strToTimeLimit(elem.getAttribute("time-limit"));
+		ownLimits.outputLimit = StringTools.StrToMemoryLimit(elem.getAttribute("output-limit"));
+		ownLimits.memoryLimit = StringTools.StrToMemoryLimit(elem.getAttribute("memory-limit"));
+		ownLimits.timeLimit = StringTools.strToTimeLimit(elem.getAttribute("time-limit"));
 		
 		// Validator
 		String checker = elem.getAttribute("checker");
@@ -164,9 +164,9 @@ public class ProblemDescription extends AbstractDescription
 		
 		// Limits
 		ownLimits = new ExecutorLimits();
-		ownLimits.outputLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("output-limit"));
-		ownLimits.memoryLimit = StringWorks.StrToMemoryLimit(testset.getAttribute("memory-limit"));
-		ownLimits.timeLimit = StringWorks.strToTimeLimit(testset.getAttribute("time-limit"));
+		ownLimits.outputLimit = StringTools.StrToMemoryLimit(testset.getAttribute("output-limit"));
+		ownLimits.memoryLimit = StringTools.StrToMemoryLimit(testset.getAttribute("memory-limit"));
+		ownLimits.timeLimit = StringTools.strToTimeLimit(testset.getAttribute("time-limit"));
 		
 		list = elem.getElementsByTagName("verifier");
 		Element validatorElement = (Element) list.item(0);
@@ -235,7 +235,7 @@ public class ProblemDescription extends AbstractDescription
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		problemInfo.appendXml(doc, res);

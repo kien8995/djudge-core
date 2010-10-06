@@ -29,7 +29,7 @@ import djudge.acmcontester.structures.LanguageData;
 import djudge.acmcontester.structures.ProblemData;
 import djudge.utils.xmlrpc.HashMapSerializer;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 public class JTestPanel extends JPanel implements ActionListener, Updateble
 {
@@ -175,7 +175,7 @@ public class JTestPanel extends JPanel implements ActionListener, Updateble
 		{
 			String filename = fd.getDirectory() + fd.getFile();
 			jtfFile.setText(filename);
-			String content = FileWorks.readFile(filename);
+			String content = FileTools.readFile(filename);
 			jtaSource.setText(content);
 		}
 	}

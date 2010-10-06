@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
 
 import djudge.common.XMLSerializable;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 public class ExecutorSecurityLimits extends XMLSerializable
 {
@@ -27,7 +27,7 @@ public class ExecutorSecurityLimits extends XMLSerializable
 	public Document getXML()
 	{
 		// TODO Auto-generated method stub
-		return XmlWorks.getDocument();
+		return XmlTools.getDocument();
 	}
 
 	@Override

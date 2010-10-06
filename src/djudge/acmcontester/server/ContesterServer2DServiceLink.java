@@ -11,8 +11,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
-import utils.FileWorks;
-import utils.XmlWorks;
+import utils.FileTools;
+import utils.XmlTools;
 
 import db.LanguagesDataModel;
 import db.ProblemsDataModel;
@@ -51,8 +51,8 @@ public class ContesterServer2DServiceLink extends Thread
 		sd.judgement = tr.getJudgement();
 		sd.xml = tr.getXml();
 		//FIXME
-		FileWorks.saveToFile(sd.xml, "./temp/xml.xml");
-		Element elem = XmlWorks.getDocument("./temp/xml.xml").getDocumentElement();
+		FileTools.saveToFile(sd.xml, "./temp/xml.xml");
+		Element elem = XmlTools.getDocument("./temp/xml.xml").getDocumentElement();
 		int maxMemory = Integer.parseInt(elem.getAttribute("max-memory"));
 		int maxTime = Integer.parseInt(elem.getAttribute("max-time"));
 		int wrongTest = Integer.parseInt(elem.getAttribute("wrong-test"));

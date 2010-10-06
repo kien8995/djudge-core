@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
@@ -219,7 +219,7 @@ public class Runner implements RunnerLinuxExitCodes
 		if (homeDirectory != null)
 		{
 			params.add("-d");
-			params.add(FileWorks.getAbsolutePath(homeDirectory));
+			params.add(FileTools.getAbsolutePath(homeDirectory));
 		}
 		
 		if (limits.timeLimit > 0)

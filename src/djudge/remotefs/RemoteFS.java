@@ -1,18 +1,19 @@
 /* $Id$ */
 
-package djudge.filesystem;
+package djudge.remotefs;
 
 import java.io.File;
 import java.util.Random;
 import java.util.Vector;
 
+import djudge.common.ImplementMe;
 import djudge.common.JudgeDirs;
 import djudge.judge.dchecker.RemoteFile;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 // FIXME: this is just a stub
-public class RemoteFS
+@ImplementMe public class RemoteFS
 {
 	private static Vector<String> files = new Vector<String>();
 	
@@ -24,7 +25,7 @@ public class RemoteFS
 	public static void clearSession()
 	{
 		for (int i = 0; i < files.size(); i++)
-			FileWorks.deleteFile(files.get(i));
+			FileTools.deleteFile(files.get(i));
 		files.clear();
 	}
 	
@@ -44,19 +45,19 @@ public class RemoteFS
 		{
 			name = getUID();
 		}
-		FileWorks.saveToFile(file, JudgeDirs.getTempDir() + name);
+		FileTools.saveToFile(file, JudgeDirs.getTempDir() + name);
 		files.add(JudgeDirs.getTempDir() + name);
-		return "./temp/" + name;
+		return JudgeDirs.getTempDir() + name;
 	}
 	
 	public static String readContent(String filename)
 	{
-		return FileWorks.readFile(filename);
+		return FileTools.readFile(filename);
 	}
 	
 	public static boolean writeContent(String content, String filename)
 	{
-		FileWorks.saveToFile(content, filename);
+		FileTools.saveToFile(content, filename);
 		return true;
 	}
 }

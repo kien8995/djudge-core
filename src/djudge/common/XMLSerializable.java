@@ -15,7 +15,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import djudge.exceptions.DJudgeXmlException;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 /**
  * @author alt
@@ -53,7 +53,7 @@ public abstract class XMLSerializable
 		boolean result = false;
 		try
 		{
-			result = readXML((Element) XmlWorks.getDocument(filename)
+			result = readXML((Element) XmlTools.getDocument(filename)
 					.getDocumentElement());
 		}
 		catch (Exception ex)
@@ -68,7 +68,7 @@ public abstract class XMLSerializable
 		boolean result = false;
 		try
 		{
-			XmlWorks.saveXmlToFile(getXML(), filename);
+			XmlTools.saveXmlToFile(getXML(), filename);
 		}
 		catch (Exception ex)
 		{

@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import org.w3c.dom.*;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.common.JudgeDirs;
 
@@ -88,7 +88,7 @@ public class Compiler
 		{
 			String native_output[] = new String[0];
 			Object[] LangId = languages.keySet().toArray();
-			String Extension = FileWorks.getExtension(file);
+			String Extension = FileTools.getExtension(file);
 			for (int i = 0; (i < LangId.length) && (res.result != CompilationResult.OK); i++)
 			{
 				Language lng = languages.get(LangId[i]);

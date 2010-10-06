@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import djudge.common.XMLSerializable;
 
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 public class RunnerResult extends XMLSerializable implements Comparable<RunnerResult>
 {
@@ -58,7 +58,7 @@ public class RunnerResult extends XMLSerializable implements Comparable<RunnerRe
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(timeAttributeName, "" + time);

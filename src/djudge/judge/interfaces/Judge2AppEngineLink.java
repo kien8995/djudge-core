@@ -7,9 +7,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.FileWorks;
-import utils.HtmlWorks;
-import utils.XmlWorks;
+import utils.FileTools;
+import utils.HtmlTools;
+import utils.XmlTools;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -127,13 +127,13 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 			printout = new DataOutputStream(urlConn.getOutputStream());
 
 			String content = "action=post&id=" + id 
-					+ "&xml=" + URLEncoder.encode(XmlWorks.formatDoc(xml), "UTF-8");
+					+ "&xml=" + URLEncoder.encode(XmlTools.formatDoc(xml), "UTF-8");
 
 			printout.writeBytes(content);
 			printout.flush();
 			printout.close();
 
-			FileWorks.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + ".xml", XmlWorks.formatDoc(xml));			
+			FileTools.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + ".xml", XmlTools.formatDoc(xml));			
 			
 			input = new DataInputStream(urlConn.getInputStream());
 			while (null != input.readLine());
@@ -175,7 +175,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 			{
 				try
 				{
-					Document doc = XmlWorks.getDocumentFromString(content);
+					Document doc = XmlTools.getDocumentFromString(content);
 					Element elem = doc.getDocumentElement();
 					String id = elem.getAttribute("id");
 					String problemId = elem.getAttribute("problem_id");
@@ -188,7 +188,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 					// TODO: fix this
 					String sourceCode = StringEscapeUtils.unescapeXml(sc)
 							.replace((char) 234, '\n');
-					FileWorks.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + ".txt", sourceCode);
+					FileTools.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + ".txt", sourceCode);
 					System.out.println(contestId);
 					System.out.println(problemId);
 					System.out.println(languageId);
@@ -215,7 +215,7 @@ public class Judge2AppEngineLink extends Thread implements JudgeLinkInterface
 					JudgeTaskResult res = Judge.judgeTask(
 							new JudgeTaskDescription(task), params);
 					callback.reportSubmissionJudged(judgeLinkId, res);
-					FileWorks.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + "-report.html", HtmlWorks.problemToHtml(res.res, new ProblemDescription(task.getContest(), task.getProblem())));
+					FileTools.writeFileContent("./dumps/sources/judge/" + logDir + "/" + id + "-report.html", HtmlTools.problemToHtml(res.res, new ProblemDescription(task.getContest(), task.getProblem())));
 					if (postXml(res.res.getXML(), id))
 					{
 						res.submittedTime = new Date();

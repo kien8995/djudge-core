@@ -5,7 +5,7 @@ package djudge.judge;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.judge.checker.CheckerDescription;
 import djudge.judge.dexecutor.ExecutorFiles;
@@ -68,7 +68,7 @@ public class TestDescription extends AbstractDescription
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		writeOwnXML(doc, res);

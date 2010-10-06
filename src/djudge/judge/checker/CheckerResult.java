@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.StringWorks;
-import utils.XmlWorks;
+import utils.StringTools;
+import utils.XmlTools;
 
 import djudge.common.XMLSerializable;
 import djudge.judge.executor.RunnerResult;
@@ -70,7 +70,7 @@ public class CheckerResult extends XMLSerializable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		try
 		{
 			Element res = doc.createElement(XMLRootElement);
@@ -79,7 +79,7 @@ public class CheckerResult extends XMLSerializable
 			res.setAttribute(checkerNameAttributeName, checkerName);
 			res.setAttribute(resultAttributeName, getResult().toString());
 			res.setAttribute(failAttributeName, getFail().toString());
-			res.setAttribute(checkerOutputAttributeName, StringEscapeUtils.escapeXml(StringWorks
+			res.setAttribute(checkerOutputAttributeName, StringEscapeUtils.escapeXml(StringTools
 					.ArrayToString(getCheckerOutput())));
 			res.setAttribute(resultDetailsAttributeName, resultDetails);
 			

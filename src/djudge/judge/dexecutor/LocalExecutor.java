@@ -13,7 +13,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
@@ -30,9 +30,9 @@ public class LocalExecutor implements RunnerLinuxExitCodes
 	private void executeWindowsNT(ExecutorTask task, String workDir, ExecutionResult res)
 	{
 		// preparing `crutch`
-		FileWorks.copyFile(workDir + "invoke.dll",  JudgeDirs.getToolsDir() + "winnt/invoke.dll");
-		FileWorks.copyFile(workDir + "run.exe", JudgeDirs.getToolsDir() + "winnt/run.exe");
-		FileWorks.copyFile(workDir + "crutch.exe", JudgeDirs.getToolsDir() + "winnt/crutch.exe");
+		FileTools.copyFile(workDir + "invoke.dll",  JudgeDirs.getToolsDir() + "winnt/invoke.dll");
+		FileTools.copyFile(workDir + "run.exe", JudgeDirs.getToolsDir() + "winnt/run.exe");
+		FileTools.copyFile(workDir + "crutch.exe", JudgeDirs.getToolsDir() + "winnt/crutch.exe");
 		
 		ExecutorFiles files = task.files;
 		ExecutorLimits limits = task.limits;
@@ -168,9 +168,9 @@ public class LocalExecutor implements RunnerLinuxExitCodes
 			}
 			
 			// Cleaning crutch
-			FileWorks.deleteFile(workDir + "invoke.dll");
-			FileWorks.deleteFile(workDir + "run.exe");
-			FileWorks.deleteFile(workDir + "crutch.exe");			
+			FileTools.deleteFile(workDir + "invoke.dll");
+			FileTools.deleteFile(workDir + "run.exe");
+			FileTools.deleteFile(workDir + "crutch.exe");			
 			
 			res.exitCode = retValue;
 			res.memoryConsumed = mem;
@@ -197,7 +197,7 @@ public class LocalExecutor implements RunnerLinuxExitCodes
 		{
 			System.out.println("!!! IOException catched: " + exc);
 		}
-		FileWorks.saveToFile(cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
+		FileTools.saveToFile(cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
 	}
 	
 	private String quote(String param)
@@ -230,9 +230,9 @@ public class LocalExecutor implements RunnerLinuxExitCodes
 			params.add("" + (2 * limits.timeLimit) + "ms");
 		}
 		
-		cmd.append(" -d " + quote(FileWorks.getAbsolutePath(workDir)));
+		cmd.append(" -d " + quote(FileTools.getAbsolutePath(workDir)));
 		params.add("-d");
-		params.add(FileWorks.getAbsolutePath(workDir));
+		params.add(FileTools.getAbsolutePath(workDir));
 		
 		// verbose param (for debug)
 		// cmd.append(" -v ");
@@ -411,7 +411,7 @@ public class LocalExecutor implements RunnerLinuxExitCodes
 		{
 			log.error("IOException catched (while parsing runner's stdout)", ex);
 		}
-		FileWorks.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
+		FileTools.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
 		log.info("Command: " + cmd.toString());
 		log.info("Result: " + res.getResult() + " exit code: " + res.getExitCode());
 	}	

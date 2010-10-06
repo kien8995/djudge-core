@@ -8,7 +8,7 @@ import java.util.Date;
 
 import org.w3c.dom.Element;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.common.JudgeDirs;
 import djudge.judge.dexecutor.ExecutorFiles;
@@ -60,13 +60,13 @@ public class Language
 		{
 			task.files.unpack(tempDir);
 			String fileNameExt = task.files.getFile();
-			String fileName = FileWorks.getNameOnly(tempDir + fileNameExt);
-			String fileDirNameExt = FileWorks.getAbsolutePath(tempDir + fileNameExt);
+			String fileName = FileTools.getNameOnly(tempDir + fileNameExt);
+			String fileDirNameExt = FileTools.getAbsolutePath(tempDir + fileNameExt);
 			
 			String fileDirNameExtComp = tempDir + fileName + info.getExtension();
 			
 			if (!fileNameExt.equals(fileName + info.getExtension()))
-				FileWorks.copyFile(fileDirNameExtComp, fileDirNameExt);
+				FileTools.copyFile(fileDirNameExtComp, fileDirNameExt);
 			
 			StringBuffer cmd = new StringBuffer(info.getCompileCommand());
 			int i1;
@@ -104,10 +104,10 @@ public class Language
 			}
 			StringBuilder sb = new StringBuilder();
 			String fStdout = res.compilerExecution.files.map.get("stdout.txt").fsName;
-			String sStdout = FileWorks.readFile(fStdout);
+			String sStdout = FileTools.readFile(fStdout);
 			sb.append(sStdout);
 			String fStderr = res.compilerExecution.files.map.get("stderr.txt").fsName;
-			String sStderr = FileWorks.readFile(fStderr);
+			String sStderr = FileTools.readFile(fStderr);
 			sb.append(sStderr);
 			res.setCompilerOutput(new String[]{sb.toString()});
 			
@@ -121,7 +121,7 @@ public class Language
 			System.out.println("Exception in DJLanguage: " + exc);
 			exc.printStackTrace();
 		}
-		FileWorks.deleteDirectory(tempDir);
+		FileTools.deleteDirectory(tempDir);
 		return res;
 	}
 	

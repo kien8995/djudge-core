@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
 
 import djudge.common.XMLSerializable;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 public class CompilationInfo extends XMLSerializable implements Serializable 
 {
@@ -61,7 +61,7 @@ public class CompilationInfo extends XMLSerializable implements Serializable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(stateAttributeName, "" + state);

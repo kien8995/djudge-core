@@ -25,7 +25,7 @@ import djudge.judge.JudgeTaskResult;
 import djudge.judge.interfaces.JudgeLinkCallbackInterface;
 import djudge.judge.interfaces.JudgeLinkInterface;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 class JudgeConnectionInfo
 {
@@ -88,7 +88,7 @@ public class JudgeConnector extends JFrame implements JudgeLinkCallbackInterface
 	public JudgeConnector(String configFilename) throws Exception
 	{
 		/* Connections setup */
-		Document doc = XmlWorks.getDocument(configFilename);
+		Document doc = XmlTools.getDocument(configFilename);
 		Element rootElem = doc.getDocumentElement();
 		NodeList nodeList = rootElem.getElementsByTagName("connection");
 		connections = new JudgeConnectionInfo[nodeList.getLength()];

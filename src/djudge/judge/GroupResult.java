@@ -6,8 +6,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import utils.StringWorks;
-import utils.XmlWorks;
+import utils.StringTools;
+import utils.XmlTools;
 
 public class GroupResult extends AbstractResult
 {
@@ -60,7 +60,7 @@ public class GroupResult extends AbstractResult
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(groupNumberAttributeName, "" + groupNumber);
@@ -81,8 +81,8 @@ public class GroupResult extends AbstractResult
 	@Override
 	public boolean readXML(Element elem)
 	{
-		groupNumber = StringWorks.parseInt(elem.getAttribute(groupNumberAttributeName), 0);
-		score = StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0);
+		groupNumber = StringTools.parseInt(elem.getAttribute(groupNumberAttributeName), 0);
+		score = StringTools.parseInt(elem.getAttribute(scoreAttributeName), 0);
 		resultDetails = elem.getAttribute(resultDetailsAttributeName);
 
 		NodeList tests = elem.getElementsByTagName(TestResult.XMLRootElement);

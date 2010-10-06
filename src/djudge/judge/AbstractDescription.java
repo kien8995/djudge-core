@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 
-import utils.StringWorks;
+import utils.StringTools;
 
 import djudge.common.XMLSerializable;
 import djudge.judge.checker.Checker;
@@ -63,7 +63,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	{
 		NodeList list;
 		
-		setScore(StringWorks.parseInt(elem.getAttribute(scoreAttributeName), 0));
+		setScore(StringTools.parseInt(elem.getAttribute(scoreAttributeName), 0));
 		
 		inputMask = elem.getAttribute(inputMaskAttributeName);
 		
