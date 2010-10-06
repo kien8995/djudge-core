@@ -375,7 +375,15 @@ public class Runner implements ExecutorLinuxExitCodes
 	{
 		if (Deployment.isOSSupported())
 		{
-			return null;
+			LocalExecutor executor = new LocalExecutor();
+			
+			ExecutorTask task = new ExecutorTask(
+					new ExecutorProgram(),
+					limits,
+					files
+					);
+			
+			return executor.execute(task);
 		}
 		else
 		{
