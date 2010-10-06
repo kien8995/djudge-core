@@ -7,12 +7,11 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import utils.DirectoryResult;
-import utils.FileWorks;
-import utils.HtmlWorks;
+import utils.FileTools;
+import utils.HtmlTools;
 import utils.JudgeDirectory;
 
 import djudge.common.JudgeDirs;
-import djudge.filesystem.RemoteFS;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.CompilerResult;
@@ -27,6 +26,7 @@ import djudge.judge.dexecutor.LocalExecutor;
 import djudge.judge.dchecker.LocalChecker;
 import djudge.judge.dchecker.RemoteFile;
 import djudge.judge.dchecker.ValidatorTask;
+import djudge.remotefs.RemoteFS;
 
 public class Judge
 {
@@ -113,12 +113,12 @@ public class Judge
 			}
 			RemoteFile rf = new RemoteFile();
 			rf.fIsPresent = false;
-			rf.filename = FileWorks.concatPaths(exRes.tempDir, filename);
+			rf.filename = FileTools.concatPaths(exRes.tempDir, filename);
 			task.programOutput.filename = RemoteFS.saveToRemoteStorage(rf);
 			task.programOutput.fIsPresent = false;
-			task.testInput.filename = FileWorks.concatPaths(testsDir, test.getInputMask());
+			task.testInput.filename = FileTools.concatPaths(testsDir, test.getInputMask());
 			task.testInput.fIsPresent = false;
-			task.testOutput.filename = FileWorks.concatPaths(testsDir, test.getOutputMask());
+			task.testOutput.filename = FileTools.concatPaths(testsDir, test.getOutputMask());
 			task.testOutput.fIsPresent = false;
 			// validation
 			CheckerResult vres = LocalChecker.validate(task);
@@ -139,8 +139,8 @@ public class Judge
 			desc.overrideParams(params);
 			JudgeDirectory jd = new JudgeDirectory(desc);
 			DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
-			String s = HtmlWorks.directoryResultToHtml(res, desc);
-			FileWorks.saveToFile(s, desc.problemRoot + "rep.html");
+			String s = HtmlTools.directoryResultToHtml(res, desc);
+			FileTools.saveToFile(s, desc.problemRoot + "rep.html");
 		}
 		catch (Exception e)
 		{
@@ -196,8 +196,8 @@ public class Judge
 		String filesrc = JudgeDirs.getTempDir() + "Main" + ".xml";
 		String filesrc2 = JudgeDirs.getTempDir() + task.tid + ".xml";
 		
-		FileWorks.saveToFile(task.tsourcecode, filesrc);
-		FileWorks.saveToFile(task.tsourcecode, filesrc2);
+		FileTools.saveToFile(task.tsourcecode, filesrc);
+		FileTools.saveToFile(task.tsourcecode, filesrc2);
 		
 		try
 		{
@@ -299,7 +299,7 @@ public class Judge
 			{
 				filename = "output.txt";
 			}
-			FileWorks.copyFile(FileWorks.concatPaths(testsDir, test.getOutputMask()), FileWorks.concatPaths(exRes.tempDir, filename));
+			FileTools.copyFile(FileTools.concatPaths(testsDir, test.getOutputMask()), FileTools.concatPaths(exRes.tempDir, filename));
 		}
 		return res;
 	}	

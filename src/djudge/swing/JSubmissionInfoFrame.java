@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 
 import org.apache.commons.codec.binary.Base64;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.acmcontester.admin.AdminClient;
 import djudge.acmcontester.structures.SubmissionData;
@@ -48,7 +48,7 @@ public class JSubmissionInfoFrame extends JFrame
 		};
 		
 		jtpTabs.add("Info", new JColumnsPanel(td));
-		jtpTabs.add("Test result", new JSubmissionResultPanel(new SubmissionResult(XmlWorks.getDocumentFromString(data.xml))));	
+		jtpTabs.add("Test result", new JSubmissionResultPanel(new SubmissionResult(XmlTools.getDocumentFromString(data.xml))));	
 		jtpTabs.add("Source code", new JSourceCodePanel(new String(Base64.decodeBase64(data.sourceCode.getBytes()))));
 		jtpTabs.add("Raw log", new JSourceCodePanel(data.xml));
 		

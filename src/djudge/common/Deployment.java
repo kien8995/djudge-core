@@ -1,7 +1,6 @@
 package djudge.common;
 
-// FIXME
-public class Deployment
+@ImplementMe public class Deployment
 {
 	static final String os = System.getProperty("os.name").toLowerCase();
 

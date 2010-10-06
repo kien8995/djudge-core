@@ -15,7 +15,7 @@ import djudge.judge.TestResultEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.dexecutor.ExecutionResult;
 
-public class HtmlWorks 
+public class HtmlTools 
 {
 	public static String getHeaderColor()
 	{
@@ -78,7 +78,7 @@ public class HtmlWorks
 			try
 			{
 				s.append("<td>" + (checkInfo.getFail() + " - ") 
-						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(checkInfo.getCheckerOutput()))  + "</td>");
+						+ StringEscapeUtils.escapeHtml(StringTools.ArrayToString(checkInfo.getCheckerOutput()))  + "</td>");
 			}
 			catch (Exception e)
 			{

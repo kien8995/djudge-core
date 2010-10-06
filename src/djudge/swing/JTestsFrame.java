@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import utils.FileWorks;
+import utils.FileTools;
 import djudge.judge.ProblemDescription;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
@@ -115,8 +115,8 @@ public class JTestsFrame extends JFrame implements ActionListener
 	
 	protected void loadData()
 	{
-		String input = FileWorks.readFile(pd.getJudgeInputFilepath(groupNumber, testNumber));
-		String output = FileWorks.readFile(pd.getJudgeOutputFilepath(groupNumber, testNumber));
+		String input = FileTools.readFile(pd.getJudgeInputFilepath(groupNumber, testNumber));
+		String output = FileTools.readFile(pd.getJudgeOutputFilepath(groupNumber, testNumber));
 		txtInput.setText(input);
 		txtOutput.setText(output);
 	}

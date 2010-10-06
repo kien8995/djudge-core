@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import djudge.common.XMLSerializable;
 
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 public class ExecutorFiles extends XMLSerializable
 {
@@ -62,7 +62,7 @@ public class ExecutorFiles extends XMLSerializable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(inputFilenameAttributeName, inputFilename);

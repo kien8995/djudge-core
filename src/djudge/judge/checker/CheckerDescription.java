@@ -5,7 +5,7 @@ package djudge.judge.checker;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
@@ -182,7 +182,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 
 		res.setAttribute(typeAttributteName, type.toString());

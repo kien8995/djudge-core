@@ -2,7 +2,7 @@
 
 package utils;
 
-public class StringWorks 
+public class StringTools 
 {
 	public static int parseInt(String str, int defaultValue)
 	{

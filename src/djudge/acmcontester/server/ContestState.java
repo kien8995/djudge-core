@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-import utils.FileWorks;
+import utils.FileTools;
 import djudge.acmcontester.structures.ContestStatusEnum;
 
 public class ContestState
@@ -62,7 +62,7 @@ public class ContestState
 			res += getContestTimeElapsed() + "\n";
 			res += getContestTimeLeft() + "\n";
 			res += state + "\n";
-			FileWorks.saveToFile(res, "./data/contest-settings.txt");
+			FileTools.saveToFile(res, "./data/contest-settings.txt");
 			return true;
 		}
 		
@@ -70,7 +70,7 @@ public class ContestState
 		{
 			try
 			{
-	            String str[] = FileWorks.readFile("./data/contest-settings.txt").split("\n");
+	            String str[] = FileTools.readFile("./data/contest-settings.txt").split("\n");
 	            contestTimeElapsed = Long.parseLong(str[0]);
 	            lastLeftTime = Long.parseLong(str[1]);
 	            state = ContestStatusEnum.valueOf(str[2]);

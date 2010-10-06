@@ -35,8 +35,8 @@ public class Scripts
     		
     		DirectoryResult res = j.judge(JudgeDirs.getProblemsDir() + contestId + "/" + problemId +"/solutions/");
     		String html = "<h1>Problem " + problemId + " (" + contestId + ") [ " + Calendar.getInstance().getTime() +  "]</h1>"
-    						+ HtmlWorks.directoryResultToHtml(res, desc);
-    		FileWorks.saveToFile(html, JudgeDirs.getProblemsDir() + contestId + "/" + problemId +"/report.html");
+    						+ HtmlTools.directoryResultToHtml(res, desc);
+    		FileTools.saveToFile(html, JudgeDirs.getProblemsDir() + contestId + "/" + problemId +"/report.html");
     		return res;
 		}
 		catch (DJudgeXmlCorruptedException e)
@@ -73,7 +73,7 @@ public class Scripts
 			if (list[j].startsWith("_") || !(new File(contestPath + list[j]).exists()) || !(new File(contestPath + list[j]).isDirectory())) continue;
 			s.append("<h4><a href='./"+list[j]+"/report.html'>Problem " + list[j] + "<a></h4>");
 			s.append("<table border=1>\n");
-			s.append("<tr bgcolor=" + HtmlWorks.getHeaderColor() + ">");
+			s.append("<tr bgcolor=" + HtmlTools.getHeaderColor() + ">");
 				s.append("<th>#</th>");
 				s.append("<th>File</th>");
 				s.append("<th>Judgement</th>");
@@ -88,19 +88,19 @@ public class Scripts
 			{
 				//String str = HtmlWorks.directoryResultToHtml(dr.res.get(i));
 				SubmissionResult t = dr.res.get(i);
-				String color = HtmlWorks.getJudgementColor(t.getJudgement());
+				String color = HtmlTools.getJudgementColor(t.getJudgement());
 				s.append("<tr bgcolor=" + color +">");
 					s.append("<td>" + (i+1) + "</td>");
 					s.append("<td><a href=#" + (i+1) + ">" + t.comment + "</a></td>");
 					s.append("<td>" + t.getJudgement() + "</td>");
 					s.append("<td>" + t.getScore() + "</td>");
-					s.append("<td>" + HtmlWorks.formatRuntime(t.getMaxTime()) + "</td>");
-					s.append("<td>" + HtmlWorks.formatMemorySize(t.getMaxMemory()) + "</td>");
+					s.append("<td>" + HtmlTools.formatRuntime(t.getMaxTime()) + "</td>");
+					s.append("<td>" + HtmlTools.formatMemorySize(t.getMaxMemory()) + "</td>");
 					//s.append("<td>" + formatRuntime(t.getTotalTime()) + "</td>");
 				s.append("</tr>\n");
 			}
 			s.append("</table>\n");
 		}
-		FileWorks.saveToFile(s.toString(), contestPath + "report.html");
+		FileTools.saveToFile(s.toString(), contestPath + "report.html");
 	}
 }

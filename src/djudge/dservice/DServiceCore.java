@@ -12,7 +12,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 import djudge.dservice.interfaces.DServiceNativeInterface;
-import djudge.filesystem.RemoteFS;
+import djudge.remotefs.RemoteFS;
 
 public class DServiceCore extends DServiceDBLayer implements DServiceNativeInterface
 {

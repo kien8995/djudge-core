@@ -25,9 +25,9 @@ import djudge.common.JudgeDirs;
 import djudge.exceptions.DJudgeXmlException;
 
 import sun.font.Script;
-import utils.FileWorks;
+import utils.FileTools;
 import utils.Scripts;
-import utils.XmlWorks;
+import utils.XmlTools;
 
 @SuppressWarnings("unused")
 public class AnswerGenerator

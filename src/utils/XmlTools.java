@@ -14,9 +14,9 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import javax.xml.parsers.*;
 
-public class XmlWorks
+public class XmlTools
 {
-	private static final Logger log = Logger.getLogger(XmlWorks.class);
+	private static final Logger log = Logger.getLogger(XmlTools.class);
 
 	public static Document getDocument(String filename)
 	{
@@ -104,6 +104,6 @@ public class XmlWorks
 
 	public static void saveXmlToFile(Document doc, String file)
 	{
-		FileWorks.saveToFile(formatDoc(doc), file);
+		FileTools.saveToFile(formatDoc(doc), file);
 	}
 }

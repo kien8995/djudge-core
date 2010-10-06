@@ -12,7 +12,7 @@ import djudge.judge.checker.CheckerResultEnum;
 import djudge.judge.checker.CheckerAbstract;
 import djudge.judge.checker.CheckerLimits;
 
-import utils.StringWorks;
+import utils.StringTools;
 
 /* Abstract class for all internal (built-in) validators */
 public abstract class CheckerInternalAbstract extends CheckerAbstract implements CheckerLimits 
@@ -111,7 +111,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
     					if (!compareTokens(correct, guess))
     					{
     						res.getCheckerOutput()[0] = "Wrong Answer";
-    						res.getCheckerOutput()[1] = "Token #" + cTokens + ": [etalon] '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "' [answer] [" + this.toString()+"]";
+    						res.getCheckerOutput()[1] = "Token #" + cTokens + ": [etalon] '" + StringTools.truncate(correct.toString()) + "' != '" + StringTools.truncate(guess.toString()) + "' [answer] [" + this.toString()+"]";
     						res.setResult(CheckerResultEnum.WrongAnswer);
     						return;
     					}
@@ -121,9 +121,9 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 						res.getCheckerOutput()[0] = "Wrong Answer [" + e + "]";
 						res.getCheckerOutput()[1] = "Token #" + cTokens
 								+ ": [etalon] '"
-								+ StringWorks.truncate(correct.toString())
+								+ StringTools.truncate(correct.toString())
 								+ "' != '"
-								+ StringWorks.truncate(guess.toString())
+								+ StringTools.truncate(guess.toString())
 								+ "' [answer] [" + this.toString() + "]";
 						res.setResult(CheckerResultEnum.WrongAnswer);
 						return;
@@ -132,7 +132,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 				catch (Exception exc)
 				{
 					res.getCheckerOutput()[0] = "Don't know:" + exc;
-					res.getCheckerOutput()[1] = "Token '" + StringWorks.truncate(correct.toString()) + "' != '" + StringWorks.truncate(guess.toString()) + "'";
+					res.getCheckerOutput()[1] = "Token '" + StringTools.truncate(correct.toString()) + "' != '" + StringTools.truncate(guess.toString()) + "'";
 					res.setResult(CheckerResultEnum.InternalError);
 					return;				
 				}
@@ -141,7 +141,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			if ((correct = getToken(programOutput)) != null)
 			{
 				res.getCheckerOutput()[0] = "Wrong Answer";
-				res.getCheckerOutput()[1] = "Extra token: '" + StringWorks.truncate(correct.toString()) + "'";				
+				res.getCheckerOutput()[1] = "Extra token: '" + StringTools.truncate(correct.toString()) + "'";				
 				res.setResult(CheckerResultEnum.WrongAnswer);
 				return;
 			}				
@@ -153,7 +153,7 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			res.setResult(CheckerResultEnum.InternalError);
 			return;
 		}
-		res.getCheckerOutput()[0] = "OK" + (cTokens == 1 ? "\"" + StringWorks.truncate(guess.toString()) + "\"" : "");
+		res.getCheckerOutput()[0] = "OK" + (cTokens == 1 ? "\"" + StringTools.truncate(guess.toString()) + "\"" : "");
 		res.getCheckerOutput()[1] = "" + cTokens + " token(s) compared [" + this.toString() +  "]";				
 		res.setResult(CheckerResultEnum.OK);
 	}

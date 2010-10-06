@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.judge.CheckParams;
 import djudge.judge.Judge;
@@ -41,7 +41,7 @@ public class JudgeDirectory
 			if (!files[i].isDirectory())
 				if (files[i].getName().charAt(0) != '_')
 				{
-					SubmissionResult sr = Judge.judgeSourceFile(FileWorks
+					SubmissionResult sr = Judge.judgeSourceFile(FileTools
 							.getAbsolutePath(files[i].getAbsolutePath()),
 							"%AUTO%", desc, new CheckParams());
 					res.setProblemResult(i, sr);

@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 
 import djudge.common.XMLSerializable;
@@ -57,7 +57,7 @@ public class CompilerResult extends XMLSerializable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		res.setAttribute("compiler-output", StringEscapeUtils.escapeXml(compilerOutput.length > 0 && compilerOutput[0] != null ? compilerOutput[0] : ""));
 		doc.appendChild(res);

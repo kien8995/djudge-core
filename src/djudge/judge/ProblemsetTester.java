@@ -23,9 +23,9 @@ import org.w3c.dom.Element;
 
 import djudge.common.JudgeDirs;
 
-import utils.FileWorks;
+import utils.FileTools;
 import utils.Scripts;
-import utils.XmlWorks;
+import utils.XmlTools;
 
 @SuppressWarnings("unused")
 public class ProblemsetTester

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.io.*;
 import org.apache.log4j.Logger;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
@@ -78,7 +78,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		}
 		
 		// All files are present, executing external validator
-		validatorOutputFile = FileWorks.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
+		validatorOutputFile = FileTools.getAbsolutePath(f.getParentFile() + "/" + "validator.output");
 		res.setCheckerOutput(new String[0]);
 		
 		ExecutorFiles files = new ExecutorFiles(validatorOutputFile);

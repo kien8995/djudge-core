@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import utils.PrintfFormat;
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.judge.checker.CheckerDescription;
 import djudge.judge.dexecutor.ExecutorLimits;
@@ -59,7 +59,7 @@ public class GroupDescription extends AbstractDescription
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		writeOwnXML(doc, res);

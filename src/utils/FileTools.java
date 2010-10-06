@@ -5,11 +5,15 @@ package utils;
 import java.util.ArrayList;
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import djudge.common.Deployment;
 import djudge.judge.dchecker.RemoteFile;
 
-public class FileWorks
+public class FileTools
 {
+	private static final Logger log = Logger.getLogger(FileTools.class);
+	
 	public static boolean deleteFile(String filename)
 	{
 		File f = new File(filename);
@@ -217,7 +221,7 @@ public class FileWorks
 	    return res;
 	}
 	
-	public static void saveToFile(String s, String filename)
+	public static boolean saveToFile(String s, String filename)
 	{
 		try
 		{
@@ -226,6 +230,7 @@ public class FileWorks
             PrintWriter writer = new PrintWriter(new FileOutputStream(filename));
             writer.print(s);
             writer.close();
+            return true;
 		}
 		catch(FileNotFoundException ex)
 	    {
@@ -235,7 +240,8 @@ public class FileWorks
 	    {
 	    	System.out.println("Exception in FileWorks.saveToFile: " + e.getMessage());
 	    	e.printStackTrace();
-	    }		
+	    }
+	    return false;
 	}
 	
 	public static void saveToFile(RemoteFile file, String filename)

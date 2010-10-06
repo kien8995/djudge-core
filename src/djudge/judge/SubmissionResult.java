@@ -8,7 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.acmcontester.admin.AdminClient;
 import djudge.judge.dcompiler.CompilationInfo;
@@ -78,7 +78,7 @@ public class SubmissionResult extends AbstractResult
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 		
 		res.setAttribute(scoreAttributeName, "" + score);

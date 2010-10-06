@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import utils.XmlWorks;
+import utils.XmlTools;
 
 import djudge.common.XMLSerializable;
 import djudge.judge.dcompiler.DistributedFileset;
@@ -63,7 +63,7 @@ public class ExecutionResult extends XMLSerializable
 	@Override
 	public Document getXML()
 	{
-		Document doc = XmlWorks.getDocument();
+		Document doc = XmlTools.getDocument();
 		Element res = doc.createElement(XMLRootElement);
 
 		res.setAttribute(timeAttributeName, "" + timeConsumed);

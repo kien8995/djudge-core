@@ -2,7 +2,7 @@
 
 package djudge.common;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 /* 
  * Providers paths to different application directories 
@@ -14,7 +14,7 @@ public class JudgeDirs
 	
 	static
 	{
-		rootDirectory = FileWorks.getAbsolutePath(".") + "/";
+		rootDirectory = FileTools.getAbsolutePath(".") + "/";
 	}	
 	
 	public static String getRootDir()

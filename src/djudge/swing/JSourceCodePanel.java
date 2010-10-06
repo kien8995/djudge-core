@@ -17,7 +17,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import utils.FileWorks;
+import utils.FileTools;
 
 import djudge.acmcontester.admin.AdminClient;
 
@@ -48,7 +48,7 @@ public class JSourceCodePanel extends JPanel
 				if (fd.getFile() != null)
 				{
 					String filename = fd.getDirectory() + fd.getFile();
-					FileWorks.saveToFile(code.getText(), filename);
+					FileTools.saveToFile(code.getText(), filename);
 				}			
 			}
 		});
