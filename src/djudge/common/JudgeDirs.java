@@ -4,6 +4,10 @@ package djudge.common;
 
 import utils.FileWorks;
 
+/* 
+ * Providers paths to different application directories 
+ * Now they all are subdirectories of `./`, but this can changed in future
+ */
 public class JudgeDirs
 {
 	final static String rootDirectory;

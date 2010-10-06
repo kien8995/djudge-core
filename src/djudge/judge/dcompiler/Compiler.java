@@ -10,11 +10,10 @@ import org.w3c.dom.*;
 import utils.FileWorks;
 
 import djudge.common.JudgeDirs;
-import djudge.common.Loggable;
 
 import javax.xml.parsers.*;
 
-public class Compiler extends Loggable
+public class Compiler
 {
 	private static final Logger log = Logger.getLogger(Compiler.class);
 	

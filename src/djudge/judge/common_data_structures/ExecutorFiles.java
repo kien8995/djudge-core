@@ -59,11 +59,6 @@ public class ExecutorFiles extends XMLSerializable
 		outputFilename = out;
 	}
 	
-	public void print()
-	{
-		log("Root: " + rootDirectory + " Input:" + inputFilename + " Output: " + outputFilename + " Error: " + errorFilename);
-	}
-	
 	@Override
 	public Document getXML()
 	{

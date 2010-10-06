@@ -2,10 +2,11 @@
 
 package djudge.common;
 
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -18,9 +19,12 @@ import utils.XmlWorks;
 
 /**
  * @author alt
+ * Base class for data classes which are to be serialized and deserialized to XML
  */
-public abstract class XMLSerializable extends Loggable
+public abstract class XMLSerializable
 {
+	private static final Logger log = Logger.getLogger(XMLSerializable.class);
+	
 	public final static String XMLRootElement = "change-me-in-child-class";
 
 	public abstract Document getXML();
@@ -38,10 +42,9 @@ public abstract class XMLSerializable extends Loggable
 		{
 			readXML(elem);
 		}
-		catch (Exception e)
+		catch (Exception ex)
 		{
-			// TODO: fixme
-			e.printStackTrace();
+			log.error("Error parsing XML data", ex);
 		}
 	}
 	
@@ -55,7 +58,7 @@ public abstract class XMLSerializable extends Loggable
 		}
 		catch (Exception ex)
 		{
-			logException(ex.toString());
+			log.error("Error parsing XML data", ex);
 		}
 		return result;
 	}
@@ -69,7 +72,7 @@ public abstract class XMLSerializable extends Loggable
 		}
 		catch (Exception ex)
 		{
-			logException(ex.toString());
+			log.error("Error while data serialzation", ex);
 		}
 		return result;
 	}
@@ -89,9 +92,9 @@ public abstract class XMLSerializable extends Loggable
 			serializer.serialize(doc);
 			res = out.toString();
 		}
-		catch (IOException e)
+		catch (IOException ex)
 		{
-			throw new RuntimeException(e);
+			log.error("Error while converting XML to string", ex);
 		}
 		return res;
 	}
