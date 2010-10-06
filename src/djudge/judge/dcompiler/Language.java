@@ -2,15 +2,14 @@
 
 package djudge.judge.dcompiler;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.w3c.dom.Element;
 
 import utils.FileWorks;
 
-import djudge.common.Loggable;
 import djudge.common.JudgeDirs;
 import djudge.judge.dexecutor.ExecutorFiles;
 import djudge.judge.dexecutor.ExecutorLimits;
@@ -22,7 +21,7 @@ import djudge.judge.dexecutor.LocalExecutor;
  * Describes programming language
  * @author alt
  */
-public class Language extends Loggable
+public class Language
 {
 	LanguageInfoInternal info;
 	

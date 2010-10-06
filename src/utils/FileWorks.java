@@ -83,7 +83,7 @@ public class FileWorks
 	 */
 	public static boolean createLink(String destFilename, String srcFilename)
 	{
-		if (/*Deployment.isOSLinux()*/ false)
+		if (Deployment.isOSLinux() && Deployment.useLinks())
 		{
 			File f = new File(destFilename);
 			f.getParentFile().mkdir();

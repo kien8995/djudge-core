@@ -2,13 +2,12 @@
 
 package djudge.judge;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import djudge.common.Loggable;
 import djudge.judge.dexecutor.ExecutorFiles;
 
-public class GlobalProblemInfo extends Loggable implements Cloneable
+public class GlobalProblemInfo implements Cloneable
 {
 	public String problemID;
 	static final String problemIDAttributeName = "id";
