@@ -1,7 +1,7 @@
 /* $Id$ */
 
 // TODO: review this class (old version used)
-package djudge.judge.executor;
+package djudge.judge.dexecutor;
 
 import java.io.*;
 import java.util.Vector;
@@ -15,9 +15,6 @@ import djudge.common.JudgeDirs;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.common_data_structures.ExecutorSecurityLimits;
-import djudge.judge.dexecutor.RunnerLinuxExitCodes;
-import djudge.judge.dexecutor.RunnerResult;
-import djudge.judge.dexecutor.RunnerResultEnum;
 
 // TODO: merge this class with LocalExecutor
 public class Runner implements RunnerLinuxExitCodes
