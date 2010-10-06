@@ -40,6 +40,4 @@ public class DirectoryResult
 		else
 			res.add(pres);
 	}
-	
-	
 }

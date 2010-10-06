@@ -21,7 +21,7 @@ import djudge.judge.executor.RunnerResultEnum;
 
 public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {
-	private static final Logger log = Logger.getLogger(CheckerAbstract.class);
+	private static final Logger log = Logger.getLogger(CheckerExternalAbstract.class);
 	
 	String validatorOutputFile;
 	

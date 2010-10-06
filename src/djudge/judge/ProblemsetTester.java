@@ -33,6 +33,10 @@ public class ProblemsetTester
 	
 	public static void main(String arg[])
 	{
+		if (arg.length == 0)
+		arg = new String[] {
+				"@SystemTest", "ExternalChecker+LargeOutput"
+		};
 		if (arg.length == 1)
 		{
 			Scripts.generateContestReport(arg[0].toString());
