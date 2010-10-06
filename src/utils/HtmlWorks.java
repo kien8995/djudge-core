@@ -62,23 +62,23 @@ public class HtmlWorks
 	public static String testToHtml(TestResult res, TestDescription desc)
 	{
 		TestResultEnum judgement = res.getResult();
-		ExecutionResult RunInfo = res.getRuntimeInfo();
-		int TestNum = res.getTestNumber();
-		CheckerResult validationInfo = res.getValidationInfo(); 
+		ExecutionResult runInfo = res.getRuntimeInfo();
+		int testNum = res.getTestNumber();
+		CheckerResult checkInfo = res.getCheckInfo(); 
 		
 		StringBuffer s = new StringBuffer();
 		String color = getJudgementColor(judgement);
 		s.append("<tr bgcolor=" + color + ">");
-			s.append("<td>" + (TestNum + 1)  + "</td>");
+			s.append("<td>" + (testNum + 1)  + "</td>");
 			s.append("<td>" + res.getScore()  + "</td>");
-			s.append("<td>" + formatRuntime(RunInfo.timeConsumed) + " of " + formatRuntime(desc.getWorkLimits().timeLimit) + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.memoryConsumed) + " of " + formatMemorySize(desc.getWorkLimits().memoryLimit) + "</td>");
-			s.append("<td>" + formatMemorySize(RunInfo.outputGenerated) + "</td>");
+			s.append("<td>" + formatRuntime(runInfo.timeConsumed) + " of " + formatRuntime(desc.getWorkLimits().timeLimit) + "</td>");
+			s.append("<td>" + formatMemorySize(runInfo.memoryConsumed) + " of " + formatMemorySize(desc.getWorkLimits().memoryLimit) + "</td>");
+			s.append("<td>" + formatMemorySize(runInfo.outputGenerated) + "</td>");
 			s.append("<td>" + judgement  + "</td>");
 			try
 			{
-				s.append("<td>" + (validationInfo.getFail() + " - ") 
-						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(validationInfo.getCheckerOutput()))  + "</td>");
+				s.append("<td>" + (checkInfo.getFail() + " - ") 
+						+ StringEscapeUtils.escapeHtml(StringWorks.ArrayToString(checkInfo.getCheckerOutput()))  + "</td>");
 			}
 			catch (Exception e)
 			{

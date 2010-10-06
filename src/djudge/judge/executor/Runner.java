@@ -1,22 +1,24 @@
-/* $Id: Runner.java 125 2010-09-30 13:46:51Z altdotua $ */
+/* $Id$ */
 
 // TODO: review this class (old version used)
 package djudge.judge.executor;
 
-import java.util.Vector;
 import java.io.*;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 import utils.FileWorks;
 
 import djudge.common.Deployment;
+import djudge.common.JudgeDirs;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
 import djudge.judge.common_data_structures.ExecutorSecurityLimits;
+import djudge.judge.dexecutor.RunnerLinuxExitCodes;
 
 // TODO: merge this class with LocalExecutor
-public class Runner
+public class Runner implements RunnerLinuxExitCodes
 {
 	private static final Logger log = Logger.getLogger(Runner.class);
 	
@@ -257,7 +259,7 @@ public class Runner
 			params.add(files.errorFilename);
 		}
 
-		params.add(0, "./tools/linux/runner");
+		params.add(0, JudgeDirs.getToolsDir() + "linux/runner");
 		params.add(command);
 		
 		String cmd = "";
@@ -291,11 +293,14 @@ public class Runner
 			// Return values of external runner
 			switch (retValue)
 			{
-				case 0: res.state = RunnerResultEnum.OK; break;
-				case -1: res.state = RunnerResultEnum.TimeLimitExceeeded; break;
-				case -2: res.state = RunnerResultEnum.MemoryLimitExceeded; break;
-				case -4: res.state = RunnerResultEnum.RuntimeErrorCrash; break;
-				default: res.state = RunnerResultEnum.Other;
+				case EXIT_OK: res.state = RunnerResultEnum.OK; break;
+				case EXIT_TLE: res.state = RunnerResultEnum.TimeLimitExceeeded; break;
+				case EXIT_MLE: res.state = RunnerResultEnum.MemoryLimitExceeded; break;
+				case EXIT_RE: res.state = RunnerResultEnum.RuntimeErrorCrash; break;
+				case EXIT_OLE: res.state = RunnerResultEnum.OutputLimitExceeded; break;
+				case EXIT_IE: res.state = RunnerResultEnum.InternalError; break;
+				// FIXME
+				default: res.state = RunnerResultEnum.InternalError;
 			}
 			// Parsing runner's output
 			try
@@ -353,17 +358,19 @@ public class Runner
 				if (file != null)
 					file.close();
 			}
-			catch (Exception exc)
+			catch (IOException exc)
 			{
-				log.error("!!! IOException catched (while parsing runner's stdout): ", exc);
+				log.error("IOException catched (while parsing runner's stdout): ", exc);
 			}
 			
 			res.OK(retValue, time, mem, output);
 			
+			log.info(cmd);
+			log.info("Retval: " + retValue);
 		}
 		catch (IOException exc)
 		{
-			log.error("!!! IOException catched: ", exc);
+			log.error("IOException catched: ", exc);
 		}
 		return res;
 	}

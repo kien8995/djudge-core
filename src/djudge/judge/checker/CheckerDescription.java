@@ -20,7 +20,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 	public CheckerTypeEnum type;
 	public static String typeAttributteName = "type";
 
-	private String exeName;
+	private String executableFilename;
 	public static String exeNameAttributteName = "file";
 
 	public String param;
@@ -41,7 +41,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 		problemID = problem;
 		this.type = type;
 		this.param = param;
-		this.exeName = exeName;
+		this.executableFilename = exeName;
 	}
 
 	// v2.0 checker id's
@@ -128,14 +128,14 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 	{
 		this.type = type;
 		this.param = param;
-		this.exeName = exeFile;
+		this.executableFilename = exeFile;
 	}
 
 	public CheckerDescription(String type, String param)
 	{
 		this.type = StringToType(type);
 		this.param = param;
-		this.exeName = Deployment.isOSWinNT() ? "check.exe" : "check.o";
+		this.executableFilename = Deployment.isOSWinNT() ? "check.exe" : "check.o";
 	}
 
 	public CheckerDescription(CheckerTypeEnum type)
@@ -151,7 +151,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 		}
 		if (type.isExternal())
 		{
-			return exeName.compareTo(checker.exeName);
+			return executableFilename.compareTo(checker.executableFilename);
 		}
 		if (type.isParametrized())
 		{
@@ -189,7 +189,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 
 		if (type.isExternal())
 		{
-			res.setAttribute(exeNameAttributteName, exeName);
+			res.setAttribute(exeNameAttributteName, executableFilename);
 		}
 
 		if (type.isParametrized())
@@ -211,16 +211,16 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 	public String getCheckerPath()
 	{
 		return JudgeDirs.getProblemsDir() + contestID + "/" + problemID + "/"
-				+ exeName;
+				+ executableFilename;
 	}
 
 	public void setExeName(String newExe)
 	{
-		exeName = newExe;
+		executableFilename = newExe;
 	}
 
 	public String getExeName()
 	{
-		return exeName;
+		return executableFilename;
 	}
 }

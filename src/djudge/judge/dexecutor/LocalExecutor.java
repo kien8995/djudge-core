@@ -17,12 +17,11 @@ import utils.FileWorks;
 
 import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
-import djudge.judge.dcompiler.Compiler;
 import djudge.judge.dcompiler.DistributedFileset;
 
-public class LocalExecutor
+public class LocalExecutor implements RunnerLinuxExitCodes
 {
-	private final static Logger log = Logger.getLogger(Compiler.class);
+	private final static Logger log = Logger.getLogger(LocalExecutor.class);
 	
 	public final static String standardErrorFileName = "stderr.txt";
 	
@@ -109,7 +108,8 @@ public class LocalExecutor
 				case -2: res.result = ExecutionResultEnum.MemoryLimitExceeded; break;
 				case -3: res.result = ExecutionResultEnum.TimeLimitExceeeded; break;
 				case -4: res.result = ExecutionResultEnum.RuntimeErrorGeneral; break;
-				default: res.result = ExecutionResultEnum.Other;
+				// FIXME
+				default: res.result = ExecutionResultEnum.RuntimeErrorGeneral;
 			}
 			
 			// Parsing runner's output
@@ -314,11 +314,12 @@ public class LocalExecutor
 			// Return values of external runner
 			switch (retValue)
 			{
-				case 0: res.result = ExecutionResultEnum.OK; break;
-				case 1: res.result = ExecutionResultEnum.TimeLimitExceeeded; break;
-				case 2: res.result = ExecutionResultEnum.MemoryLimitExceeded; break;
-				case 3: res.result = ExecutionResultEnum.TimeLimitExceeeded; break;
-				case 4: res.result = ExecutionResultEnum.RuntimeErrorGeneral; break;
+				case EXIT_OK: res.result = ExecutionResultEnum.OK; break;
+				case EXIT_TLE: res.result = ExecutionResultEnum.TimeLimitExceeeded; break;
+				case EXIT_MLE: res.result = ExecutionResultEnum.MemoryLimitExceeded; break;
+				case EXIT_RE: res.result = ExecutionResultEnum.RuntimeErrorGeneral; break;
+				case EXIT_OLE: res.result = ExecutionResultEnum.OutputLimitExceeded; break;
+				case EXIT_IE: res.result = ExecutionResultEnum.InternalError; break;
 				default: res.result = ExecutionResultEnum.Other;
 			}
 			
@@ -412,7 +413,7 @@ public class LocalExecutor
 		}
 		FileWorks.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
 		log.info("Command: " + cmd.toString());
-		log.info("Result: " + res.getResult());
+		log.info("Result: " + res.getResult() + " exit code: " + res.getExitCode());
 	}	
 	
 	public ExecutionResult execute(ExecutorTask task)

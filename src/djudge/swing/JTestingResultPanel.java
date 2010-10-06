@@ -93,10 +93,10 @@ public class JTestingResultPanel extends JPanel
 				data[k][3] = tRes.getMaxMemory();
 				data[k][4] = tRes.getMaxOutput();
 				data[k][5] = tRes.getRuntimeInfo().result;
-				data[k][6] = tRes.getValidationInfo().getResult();
-				data[k][7] = tRes.getValidationInfo().getCheckerOutput();
+				data[k][6] = tRes.getCheckInfo().getResult();
+				data[k][7] = tRes.getCheckInfo().getCheckerOutput();
 				data[k][8] = tRes.getJudgement();
-				data[k][9] = tRes.getValidationInfo().getValidatorName();
+				data[k][9] = tRes.getCheckInfo().getValidatorName();
 				k++;
 			}
 		}

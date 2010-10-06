@@ -104,7 +104,7 @@ public class TestResult extends AbstractResult
 		return testNumber;
 	}
 	
-	public CheckerResult getValidationInfo()
+	public CheckerResult getCheckInfo()
 	{
 		return validationResult;
 	}
