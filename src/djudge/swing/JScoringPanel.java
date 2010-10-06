@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 import javax.swing.JTextField;
 
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class JScoringPanel extends JPanel
 {

@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 import utils.XmlTools;
 
 import djudge.acmcontester.structures.SubmissionData;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class CheckParams// extends XMLSerializable
 {

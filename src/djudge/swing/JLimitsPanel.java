@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import djudge.judge.AbstractDescription;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class JLimitsPanel extends JPanel implements ActionListener
 {

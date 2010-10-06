@@ -11,7 +11,7 @@ import utils.PrintfFormat;
 import utils.XmlTools;
 
 import djudge.judge.checker.CheckerDescription;
-import djudge.judge.dexecutor.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class GroupDescription extends AbstractDescription
 {

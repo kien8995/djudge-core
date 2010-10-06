@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.dexecutor;
+package djudge.judge.executor;
 
 import java.io.File;
 import java.io.BufferedReader;

@@ -16,8 +16,8 @@ import djudge.judge.checker.CheckerAbstract;
 import djudge.judge.checker.CheckerLimits;
 import djudge.judge.common_data_structures.ExecutorFiles;
 import djudge.judge.common_data_structures.ExecutorLimits;
-import djudge.judge.dexecutor.Runner;
-import djudge.judge.dexecutor.RunnerResultEnum;
+import djudge.judge.executor.Runner;
+import djudge.judge.executor.RunnerResultEnum;
 
 public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {

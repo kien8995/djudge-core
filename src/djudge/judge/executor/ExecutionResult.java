@@ -1,6 +1,6 @@
 /* $Id$ */
 
-package djudge.judge.dexecutor;
+package djudge.judge.executor;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
@@ -8,12 +8,13 @@ import org.w3c.dom.Element;
 
 import utils.XmlTools;
 
+import djudge.common.ImplementMe;
 import djudge.common.XMLSerializable;
 import djudge.judge.dcompiler.DistributedFileset;
 
 public class ExecutionResult extends XMLSerializable
 {
-	public final static String XMLRootElement = "runner";
+	public final static String XMLRootElement = "executor";
 	
 	public long timeConsumed;
 	public final static String timeAttributeName = "time";
@@ -34,12 +35,15 @@ public class ExecutionResult extends XMLSerializable
 	public DistributedFileset files;
 	
 	public String runnerOutput;
-	public final static String runnerOutputAttributeName = "runner-output";
+	public final static String runnerOutputAttributeName = "executor-output";
 	
 	public String tempDir;
 	public final static String tempDirAttributeName = "temp-dir";
 	
-	public byte[] getFile(String filename)
+	public String resultDetails = "";
+	public final static String resultDetailsAttributeName = "result-details";
+	
+	@ImplementMe public byte[] getFile(String filename)
 	{
 		//DistributedFile file = files.map.get(filename);
 		return new byte[0]; 
@@ -71,6 +75,7 @@ public class ExecutionResult extends XMLSerializable
 		res.setAttribute(outputAttributeName, "" + outputGenerated);
 		res.setAttribute(exitCodeAttributeName, "" + exitCode);
 		res.setAttribute(resultAttributeName, result.toString());
+		res.setAttribute(resultDetailsAttributeName, resultDetails);
 		res.setAttribute(runnerOutputAttributeName, StringEscapeUtils.escapeXml(runnerOutput));
 		res.setAttribute(tempDirAttributeName, StringEscapeUtils.escapeXml(tempDir));
 		
@@ -97,13 +102,13 @@ public class ExecutionResult extends XMLSerializable
 		exitCode = Integer.parseInt(elem.getAttribute(exitCodeAttributeName));
 		result = ExecutionResultEnum.valueOf(elem.getAttribute(resultAttributeName));
 		runnerOutput = elem.getAttribute(runnerOutputAttributeName);
-		tempDir = elem.getAttribute(tempDirAttributeName);		
+		tempDir = elem.getAttribute(tempDirAttributeName);
+		resultDetails = elem.getAttribute(resultDetailsAttributeName);
 		return true;
 	}
 
 	public String getResultDetails()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return resultDetails;
 	}
 }

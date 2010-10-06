@@ -5,7 +5,7 @@ package djudge.judge;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import djudge.judge.dexecutor.ExecutorFiles;
+import djudge.judge.executor.ExecutorFiles;
 
 public class GlobalProblemInfo implements Cloneable
 {

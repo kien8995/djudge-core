@@ -10,7 +10,7 @@ import utils.XmlTools;
 
 
 import djudge.common.XMLSerializable;
-import djudge.judge.dexecutor.ExecutionResult;
+import djudge.judge.executor.ExecutionResult;
 
 public class CompilerResult extends XMLSerializable
 {
