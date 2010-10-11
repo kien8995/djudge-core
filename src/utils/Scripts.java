@@ -2,8 +2,8 @@
 
 package utils;
 
-import java.util.Arrays;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -13,7 +13,7 @@ import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.ProblemDescription;
 import djudge.judge.SubmissionResult;
-import djudge.judge.common_data_structures.ExecutorLimits;
+import djudge.judge.executor.ExecutorLimits;
 
 public class Scripts 
 {

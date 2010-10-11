@@ -2,7 +2,9 @@
 
 package djudge.judge.executor;
 
-public class ExecutorParameters
+import djudge.common.ImplementMe;
+
+@ImplementMe public class ExecutorParameters
 {
 
 }

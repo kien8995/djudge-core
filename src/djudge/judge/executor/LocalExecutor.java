@@ -230,13 +230,16 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
 			params.add("" + (2 * limits.timeLimit) + "ms");
 		}
 		
-		cmd.append(" -d " + quote(FileTools.getAbsolutePath(workDir)));
-		params.add("-d");
-		params.add(FileTools.getAbsolutePath(workDir));
+		//if (!task.program.command.startsWith("/"))
+		{
+			cmd.append(" -d " + quote(FileTools.getAbsolutePath(workDir)));
+			params.add("-d");
+			params.add(FileTools.getAbsolutePath(workDir));
+		}
 		
 		// verbose param (for debug)
 		// cmd.append(" -v ");
-		// params.add("-v");
+		// params.add("-v");	
 		
 		// setting memory limit
 		if (limits.memoryLimit > 0)
@@ -407,23 +410,28 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
 				res.files.readDirectory(workDir);
 			}
 		}
-		catch (IOException ex)
+		catch (Exception ex)
 		{
 			log.error("IOException catched (while parsing runner's stdout)", ex);
 		}
-		FileTools.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "runner.data");
+		FileTools.saveToFile("Executed command:\n" + cmd.toString() + "\n\n" + res.runnerOutput, workDir + "/runner.data");
 		log.info("Command: " + cmd.toString());
 		log.info("Result: " + res.getResult() + " exit code: " + res.getExitCode());
 	}	
-	
-	public ExecutionResult execute(ExecutorTask task)
+
+	public ExecutionResult execute(ExecutorTask task, String workDir)
 	{
 		ExecutionResult res = new ExecutionResult();
 		
-		/* Generating name for working directory */
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date()) + "_ex";
-        String workDir = JudgeDirs.getWorkDir() + id + "/";
+        /* If no working directory is set */
+        if (null == workDir)
+        {
+    		/* Generating name for working directory */
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+            String id = dateFormat.format(new Date()) + "_ex";
+            
+        	workDir = JudgeDirs.getWorkDir() + id + "/";
+        }
         
         res.tempDir = workDir;
         
@@ -445,7 +453,12 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
         
         // TODO: probable enable this in release version
         //FileWorks.deleteDirectory(workDir);
-        
 		return res;
+	}
+	
+	
+	public ExecutionResult execute(ExecutorTask task)
+	{
+		return execute(task, null);
 	}
 }
