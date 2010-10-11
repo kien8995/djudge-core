@@ -5,10 +5,12 @@ package djudge.judge.checker.external;
 import java.util.ArrayList;
 
 import java.io.*;
+
 import org.apache.log4j.Logger;
 
 import utils.FileTools;
 
+import djudge.judge.ProblemsetTester;
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
@@ -88,8 +90,6 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		ExecutorLimits limits = new ExecutorLimits(CheckerLimits.VALIDATOR_MAX_RUNNING_TIME, 
 				CheckerLimits.VALIDATOR_MAX_CONSUMED_MEMORY, CheckerLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
-		//Runner runner = new Runner(limits, files);
-		
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = getExeFilename() + " " + input + " " + answer + " " + output;
 		
@@ -104,10 +104,12 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			ExecutorProgram program = new ExecutorProgram(cmd);
 			
 			ExecutorTask task = new ExecutorTask(program, limits, files);
+			//task.returnDirectoryContent = true;
 			
 			LocalExecutor runner = new LocalExecutor();
 			
-			res.setRunInfo(runner.execute(task));
+			// FIXME: this may cause problems with distributed files
+			res.setRunInfo(runner.execute(task, f.getParent()));
 		}
 		catch (Exception exc)
 		{
@@ -181,4 +183,9 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 	}
 	
 	protected abstract void processData();
+	
+	public static void main(String[] args)
+	{
+		ProblemsetTester.main(new String[] {"@SystemTest"});
+	}
 }
