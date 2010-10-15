@@ -1,6 +1,6 @@
 =ACM/ICPC=
 
-==European Semifinals==
+==Europe==
 
  * CERC - Central European Regional Contest
  * SEERC - SouthEastern European Regional Contest
@@ -25,3 +25,11 @@
 ||1997||?||?||?||?||?||
 ||1996||?||?||?||?||?||
 ||1995||?||?||?||?||?||
+
+==Northern America==
+
+==Latin America==
+
+==Asia==
+
+==Africa and Middle East==
