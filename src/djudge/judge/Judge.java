@@ -2,14 +2,11 @@
 
 package djudge.judge;
 
-import java.io.File;
 import java.util.Date;
+import java.io.File;
 
 import org.apache.log4j.Logger;
-import utils.DirectoryResult;
 import utils.FileTools;
-import utils.HtmlTools;
-import utils.JudgeDirectory;
 
 import djudge.common.JudgeDirs;
 import djudge.judge.checker.CheckerResult;
@@ -52,7 +49,6 @@ public class Judge
     		}
 		}
 		res.updateResult();
-		
 		return res;
 	}
 	
@@ -77,14 +73,17 @@ public class Judge
 		String testsDir = JudgeDirs.getProblemsDir() + contestId + "/" + problemId + "/" + "tests/";
 		
 		File f = new File(testsDir + test.getInputMask());
-		if (!f.exists())
+		if (!f.exists() || !f.isFile())
 		{
-			res.result = TestResultEnum.IE;
+			String msg = "No test's input file: " + test.getInputMask();
+			res.result = TestResultEnum.ProblemError;
+			res.resultDetails = "No test's input file: " + test.getInputMask();
+			log.error(msg);
 			return res;
 		}
 		
 		String inputTestFilename = test.getInputFilename();
-		if (inputTestFilename == null || "".equals(inputTestFilename) || "stdin".equals(inputTestFilename))
+		if (test.isEmptyInputFilename())
 		{
 			inputTestFilename = "input.txt";
 		}
@@ -111,43 +110,30 @@ public class Judge
 			{
 				filename = "output.txt";
 			}
+			
 			RemoteFile rf = new RemoteFile();
 			rf.fIsPresent = false;
 			rf.filename = FileTools.concatPaths(exRes.tempDir, filename);
+			
 			task.programOutput.filename = RemoteFS.saveToRemoteStorage(rf);
 			task.programOutput.fIsPresent = false;
+			
 			task.testInput.filename = FileTools.concatPaths(testsDir, test.getInputMask());
 			task.testInput.fIsPresent = false;
+			
 			task.testOutput.filename = FileTools.concatPaths(testsDir, test.getOutputMask());
 			task.testOutput.fIsPresent = false;
-			// validation
-			CheckerResult vres = LocalChecker.validate(task);
-			res.setValidationInfo(vres);
+			// output checking
+			CheckerResult vres = LocalChecker.check(task);
+			res.setCheckInfo(vres);
 		}
 		else
 		{
-			res.setValidationInfo(new CheckerResult(""));
+			res.setCheckInfo(new CheckerResult(""));
 		}
 		return res;
 	}
-	
-	public static void checkProblem(String contestId, String problemId, CheckParams params)
-	{
-		try
-		{
-			ProblemDescription desc = new ProblemDescription(contestId, problemId);
-			desc.overrideParams(params);
-			JudgeDirectory jd = new JudgeDirectory(desc);
-			DirectoryResult res = jd.judge(desc.problemRoot + "solutions");
-			String s = HtmlTools.directoryResultToHtml(res, desc);
-			FileTools.saveToFile(s, desc.problemRoot + "rep.html");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
+		
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, CheckParams params)
 	{
 		log.info("Judging file " + file);
@@ -302,5 +288,10 @@ public class Judge
 			FileTools.copyFile(FileTools.concatPaths(testsDir, test.getOutputMask()), FileTools.concatPaths(exRes.tempDir, filename));
 		}
 		return res;
-	}	
+	}
+	
+	public static void main(String[] args)
+	{
+		ProblemsetTester.main(new String[] {"@SystemTest", "ProblemErrors"});
+	}
 }

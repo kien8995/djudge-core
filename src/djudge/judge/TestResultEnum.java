@@ -64,14 +64,39 @@ class TestResultEnumFactory
 
 public enum TestResultEnum
 {
+	// Accepted
 	AC,
+	
+	// Compilation Error	
 	CE,
+	
+	// Wrong Answer
 	WA,
+	
+	// Time Limit Exceeded
 	TLE,
+	
+	// Memory Limit Exceeded
 	MLE,
+	
+	// Output Limit Exceeded
 	OLE,
+	
+	// Runtime Error
 	RE,
+	
+	// Internal Error
 	IE,
+	
+	// Checker Error
+	CheckerError,
+	
+	// Problem Error
+	ProblemError,
+	
+	// Security Violation
 	SV,
-	Undefined
+	
+	// Undefined
+	Undefined,
 }

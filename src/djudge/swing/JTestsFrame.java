@@ -189,7 +189,7 @@ public class JTestsFrame extends JFrame implements ActionListener
 		vTask.testInput = pd.getJudgeInputFilepath(groupNumber, testNumber);
 		vTask.testOutput = pd.getJudgeOutputFilepath(groupNumber, testNumber);*/
 		//throw new Exception();
-		CheckerResult vRes = LocalChecker.validate(vTask);
+		CheckerResult vRes = LocalChecker.check(vTask);
 		String msg = "<html><h2 align='center'>" + vRes.getResult() + "</h2>\n";
 		msg += "Validator: " + vRes.getValidatorName() + "\n";
 		msg += "Validator's output: \n";

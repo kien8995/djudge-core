@@ -87,7 +87,7 @@ public class TestResult extends AbstractResult
 		updateResult();
 	}
 
-	public void setValidationInfo(CheckerResult validationResult)
+	public void setCheckInfo(CheckerResult validationResult)
 	{
 		this.validationResult = validationResult;
 		updateResult();

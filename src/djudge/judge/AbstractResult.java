@@ -73,4 +73,15 @@ public abstract class AbstractResult extends XMLSerializable
 	{
 		return resultDetails;
 	}
+	
+	public final boolean isRuntimeJudgement()
+	{
+		return 
+			result.equals(TestResultEnum.CE) ||
+			result.equals(TestResultEnum.MLE) ||
+			result.equals(TestResultEnum.OLE) ||
+			result.equals(TestResultEnum.RE) ||
+			result.equals(TestResultEnum.SV) ||
+			result.equals(TestResultEnum.TLE);
+	}
 }
