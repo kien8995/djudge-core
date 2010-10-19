@@ -143,7 +143,7 @@ public class GroupDescription extends AbstractDescription
 	{
 		if (hasOwnValidator())
 		{
-			return ownValidator;
+			return ownChecker;
 		}
 		else
 		{

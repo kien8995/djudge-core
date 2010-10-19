@@ -21,7 +21,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	protected ExecutorLimits ownLimits;
 	
-	protected CheckerDescription ownValidator;
+	protected CheckerDescription ownChecker;
 	
 	protected String inputMask;
 	final String inputMaskAttributeName = "input-mask";
@@ -31,6 +31,9 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	private int score = 0;
 	final String scoreAttributeName = "score";
+	
+	private String comment = "";
+	final String commentAttributeName = "comment";
 	
 	String blockName; 
 	
@@ -69,6 +72,8 @@ public abstract class AbstractDescription extends XMLSerializable
 		
 		outputMask = elem.getAttribute(outputMaskAttributeName);
 		
+		comment = elem.getAttribute(commentAttributeName);
+		
 		list = elem.getElementsByTagName(Checker.XMLRootElement);
         if (list.getLength() > 0)
         {
@@ -76,7 +81,7 @@ public abstract class AbstractDescription extends XMLSerializable
         	{
             	if (list.item(i).getParentNode().equals(elem))
             	{
-            		ownValidator = new CheckerDescription((Element)list.item(i), problemInfo);
+            		ownChecker = new CheckerDescription((Element)list.item(i), problemInfo);
             	}
         	}
         }
@@ -98,6 +103,11 @@ public abstract class AbstractDescription extends XMLSerializable
 	{
 		res.setAttribute(scoreAttributeName, "" + getScore());
 		
+		if (hasOwnComment())
+		{
+			res.setAttribute(commentAttributeName, comment);
+		}
+		
 		if (hasOwnInputMask())
 		{
 			res.setAttribute(inputMaskAttributeName, inputMask);
@@ -115,7 +125,7 @@ public abstract class AbstractDescription extends XMLSerializable
 		
         if (hasOwnValidator())
         {
-        	res.appendChild(doc.importNode(ownValidator.getXML().getFirstChild(), true));
+        	res.appendChild(doc.importNode(ownChecker.getXML().getFirstChild(), true));
         }
 	}
 	
@@ -126,7 +136,7 @@ public abstract class AbstractDescription extends XMLSerializable
 	
 	protected boolean hasOwnValidator()
 	{
-		return ownValidator != null;
+		return ownChecker != null;
 	}
 	
 	protected boolean hasOwnInputMask()
@@ -159,7 +169,7 @@ public abstract class AbstractDescription extends XMLSerializable
 
 	public void setValidator(CheckerDescription vd)
 	{
-		ownValidator = vd;
+		ownChecker = vd;
 	}
 
 	public void setLimits(ExecutorLimits newLimits)
@@ -180,5 +190,20 @@ public abstract class AbstractDescription extends XMLSerializable
 	public int getScore()
 	{
 		return score;
+	}
+
+	public void setComment(String comment)
+	{
+		this.comment = comment;
+	}
+
+	public String getComment()
+	{
+		return comment;
+	}
+	
+	public boolean hasOwnComment()
+	{
+		return comment != null && comment.length() > 0;
 	}
 }

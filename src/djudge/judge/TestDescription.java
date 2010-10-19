@@ -114,7 +114,7 @@ public class TestDescription extends AbstractDescription
 	{
 		if (hasOwnValidator())
 		{
-			return ownValidator;
+			return ownChecker;
 		}
 		else
 		{
@@ -187,4 +187,9 @@ public class TestDescription extends AbstractDescription
 		}
 	}	
 	
+	public boolean isEmptyInputFilename()
+	{
+		String inputTestFilename = getInputFilename();
+		return inputTestFilename == null || "".equals(inputTestFilename) || "stdin".equals(inputTestFilename);
+	}
 }

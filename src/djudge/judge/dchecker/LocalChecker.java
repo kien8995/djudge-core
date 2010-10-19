@@ -18,7 +18,7 @@ public class LocalChecker
 {
 	private static final Logger log = Logger.getLogger(LocalChecker.class);
 	
-	public static CheckerResult validate(ValidatorTask task)
+	public static CheckerResult check(ValidatorTask task)
 	{
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         String id = dateFormat.format(new Date()) + "_val";

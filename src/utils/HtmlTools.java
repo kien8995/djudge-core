@@ -12,6 +12,7 @@ import djudge.judge.SubmissionResult;
 import djudge.judge.TestDescription;
 import djudge.judge.TestResult;
 import djudge.judge.TestResultEnum;
+import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.executor.ExecutionResult;
 
@@ -60,13 +61,19 @@ public class HtmlTools
 	}
 	
 	public static String testToHtml(TestResult res, TestDescription desc)
-	{
+	{	
 		TestResultEnum judgement = res.getResult();
 		ExecutionResult runInfo = res.getRuntimeInfo();
 		int testNum = res.getTestNumber();
 		CheckerResult checkInfo = res.getCheckInfo(); 
 		
 		StringBuffer s = new StringBuffer();
+	
+		if (desc.hasOwnComment())
+		{
+			s.append("<tr><td colspan='8' align='center'>" + desc.getComment() + "</td></tr>");			
+		}		
+		
 		String color = getJudgementColor(judgement);
 		s.append("<tr bgcolor=" + color + ">");
 			s.append("<td>" + (testNum + 1)  + "</td>");
@@ -75,15 +82,24 @@ public class HtmlTools
 			s.append("<td>" + formatMemorySize(runInfo.memoryConsumed) + " of " + formatMemorySize(desc.getWorkLimits().memoryLimit) + "</td>");
 			s.append("<td>" + formatMemorySize(runInfo.outputGenerated) + "</td>");
 			s.append("<td>" + judgement  + "</td>");
-			try
+			s.append("<td>"); 
+			if (!res.isRuntimeJudgement())
 			{
-				s.append("<td>" + (checkInfo.getFail() + " - ") 
-						+ StringEscapeUtils.escapeHtml(StringTools.ArrayToString(checkInfo.getCheckerOutput()))  + "</td>");
+    			try
+    			{
+    				if (res.getCheckInfo().getFail() != CheckerFailEnum.OK) 
+    				{
+    					 s.append("" + checkInfo.getFail() + " - ");
+    				}
+    				s.append(StringEscapeUtils.escapeHtml(StringTools.ArrayToString(checkInfo.getCheckerOutput())));
+    			}
+    			catch (Exception e) {}
 			}
-			catch (Exception e)
+			else
 			{
-				s.append("<td></td>");
+				s.append("&nbsp;");
 			}
+			s.append("</td>"); 
 			s.append("<td>" + desc.getInputMask() + " - " + desc.getOutputMask() + " - " + res.getRuntimeInfo().tempDir + "</td>");
 		s.append("</tr>\n");
 		return s.toString();		
@@ -92,13 +108,15 @@ public class HtmlTools
 	public static String testGroupToHtml(GroupResult res, GroupDescription desc)
 	{
 		StringBuffer s = new StringBuffer();
-/*		s.append("<table border=1>");
-		s.append("<tr><td>Group#</td><td>" + (res.getGroupNumber() + 1) + "</td></tr>");
-		s.append("<tr><td>Status</td><td>" + res.getJudgement() + "</td></tr>");
-		s.append("<tr><td>MaxTime</td><td>" + formatRuntime(res.getMaxTime()) + "</td></tr>");
-		s.append("<tr><td>MaxMemory</td><td>" + formatMemorySize(res.getMaxMemory()) + " K</td></tr>");
-		s.append("</table>");*/
-		s.append("<table border=1>");
+		
+		if (desc.hasOwnComment())
+		{
+			s.append(desc.getComment());			
+		}		
+		
+		
+		
+		s.append("<table border=1>");		
 		s.append("<tr><th>Test</th><th>Score</th><th>Time</th><th>Memory</th><th>OutputSize</th><th>Judgement</th><th>Validator</th><th>IO</th></tr>");
 		try
 		{
