@@ -87,15 +87,17 @@ public class Compiler
 		else if (languageId.equalsIgnoreCase("%AUTO%"))
 		{
 			String native_output[] = new String[0];
-			Object[] LangId = languages.keySet().toArray();
-			String Extension = FileTools.getFileExtension(file);
-			for (int i = 0; (i < LangId.length) && (res.result != CompilationResult.OK); i++)
+			Object[] langId = languages.keySet().toArray();
+			String extension = FileTools.getFileExtension(file);
+			for (int i = 0; (i < langId.length) && (res.result != CompilationResult.OK); i++)
 			{
-				Language lng = languages.get(LangId[i]);
-				log.info("Trying to compile " + task.files.getFile() + " as " + lng.getID());
-				res = lng.compile(task);
-				if (Extension.equals(lng.getExtension()))
-					native_output = res.getCompilerOutput();
+				Language lng = languages.get(langId[i]);
+				if (lng.getLanguageInfo().getExtensions().contains(extension))
+				{
+    				log.info("Trying to compile " + task.files.getFile() + " as " + lng.getID());
+    				res = lng.compile(task);
+   					native_output = res.getCompilerOutput();
+				}
 			}
 			if (res.result != CompilationResult.OK && native_output != null && native_output.length > 0)
 				res.setCompilerOutput(native_output);
@@ -117,5 +119,12 @@ public class Compiler
 		}
 		
 		return res;
+	}
+	
+	public static void main(String[] args)
+	{
+		CompilerResult res = Compiler.compile("/home/alt/work/java/djudge/problems/ULM-2007/A/solutions/1.cpp", "%AUTO%");
+		for (String s : res.compilerOutput)
+			System.out.println(s);
 	}
 }

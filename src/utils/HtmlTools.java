@@ -135,10 +135,10 @@ public class HtmlTools
 	{
 		StringBuffer s = new StringBuffer();
 		// ?compiled
-		s.append("<table border=1>");
+		s.append("<table border=1 width='90%'>");
 		s.append("<caption><h3>Results of testing '" + res2.comment + "'</h3></caption>");		
 		ProblemResult res = res2.getProblemResult();
-		if (res.getResult() != TestResultEnum.CE)
+		if (res2.getJudgement() !=  TestResultEnum.CE)
 		{
 			for (int i = 0; i < res.getGroupsCount(); i++)
 			{
@@ -150,11 +150,11 @@ public class HtmlTools
 		else
 		{
 			s.append("<tr><td>Compilation Error</td></tr>");
-			s.append("<tr><td>");
+			s.append("<tr><td><pre>");
 			String str[] = res2.getCompilationInfo().getCompilerOutput();
 			for (int i = 0; i < str.length; i++)
 				s.append(str[i] + "<br>");
-			s.append("</tr></td>");
+			s.append("</pre></tr></td>");
 		}
 		s.append("</table><br>");
 		return s.toString();

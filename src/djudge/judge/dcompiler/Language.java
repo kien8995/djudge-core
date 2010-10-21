@@ -23,9 +23,9 @@ import djudge.judge.executor.LocalExecutor;
  */
 public class Language
 {
-	LanguageInfoInternal info;
+	LanguageInfo info;
 	
-	public LanguageInfoInternal getLanguageInfo()
+	public LanguageInfo getLanguageInfo()
 	{
 		return info;
 	}
@@ -37,10 +37,10 @@ public class Language
 	
 	Language(Element lang)
 	{
-		info = new LanguageInfoInternal(lang);
+		info = new LanguageInfo(lang);
 	}
 	
-	public void ShowInfo()
+	public void showInfo()
 	{
 		info.showInfo();
 	}
@@ -124,15 +124,4 @@ public class Language
 		FileTools.deleteDirectory(tempDir);
 		return res;
 	}
-	
-	/*public static void main(String[] args)
-	{
-		CompilerTask task = new CompilerTask();
-		task.languageId = "GCC";
-		task.files = new DistributedFileset("d:\\1000.cpp");
-		
-		CompilerResult res = Compiler.compile(task);
-		System.out.println(res.result);
-		System.out.println(res.compilerOutput[0]);
-	}*/
 }
