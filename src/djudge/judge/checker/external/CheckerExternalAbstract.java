@@ -91,7 +91,7 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 				CheckerLimits.VALIDATOR_MAX_CONSUMED_MEMORY, CheckerLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
-		String cmd = getExeFilename() + " " + input + " " + answer + " " + output;
+		String cmd = getExeFilename() + " " + input + " " + output + " " + answer;
 		
 		// TODO: FIMXE
 		if (getExeFilename().endsWith(".jar"))

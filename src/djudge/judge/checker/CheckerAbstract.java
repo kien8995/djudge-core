@@ -22,8 +22,8 @@ public abstract class CheckerAbstract
 	/**
 	 * Performs validation of result 
 	 * @param input Judge input file
-	 * @param output Judge output file
-	 * @param answer Program output file
+	 * @param output Program output file
+	 * @param answer Judge output file
 	 * @return object of type ValidationResult 
 	 */
 	public abstract CheckerResult validateOutput(String input, String output, String answer);

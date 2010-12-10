@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 
 import javax.xml.transform.OutputKeys;
@@ -33,6 +34,7 @@ public class ProblemsetTester
 	
 	public static void main(String arg[])
 	{
+		Locale.setDefault(Locale.ENGLISH);
 		if (arg.length == 0)
 		arg = new String[] {
 				"@SystemTest", "ExternalChecker+LargeOutput"
