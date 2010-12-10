@@ -99,8 +99,7 @@ public class Compiler
    					native_output = res.getCompilerOutput();
 				}
 			}
-			if (res.result != CompilationResult.OK && native_output != null && native_output.length > 0)
-				res.setCompilerOutput(native_output);
+			res.setCompilerOutput(native_output);
 		}
 		else
 		{

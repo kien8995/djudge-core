@@ -105,7 +105,7 @@ public class Judge
 			task.groupNumber = test.groupDecription.getGroupNumber();
 			task.testNumber = test.testNumber;
 			task.problemId = problemId;
-			String filename = test.getAnswerFilename();			
+			String filename = test.getAnswerFilename();
 			if (filename == null || "".equals(filename) || "stdout".equals(filename))
 			{
 				filename = "output.txt";

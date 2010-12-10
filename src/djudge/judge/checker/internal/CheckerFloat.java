@@ -31,6 +31,11 @@ public class CheckerFloat extends CheckerToken
 	@Override
 	protected boolean compareTokens(Object answerO, Object outputO)
 	{
+		// to skip non-numerical equal values 
+		String answerStr = answerO.toString();
+		String outputStr = outputO.toString();
+		if (answerStr.equals(outputStr))
+			return true;
 		String answer = answerO.toString();
 		String output = outputO.toString().replace(',', '.');
 		double j, a;
