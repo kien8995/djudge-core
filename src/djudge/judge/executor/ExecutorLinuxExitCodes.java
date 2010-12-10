@@ -11,4 +11,7 @@ public interface ExecutorLinuxExitCodes
 	public final static int EXIT_IE	= 55;
 
 	public final static int EXIT_UNKNOWN = 60;
+
+	// TLE
+	public static final int EXIT_SIGNAL_SIGKILL = 137;
 }

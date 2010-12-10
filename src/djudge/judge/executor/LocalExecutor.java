@@ -26,7 +26,7 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
 	public final static String standardErrorFileName = "stderr.txt";
 	
 	public final static String standardOutputFileName = "stdout.txt";
-	
+
 	private void executeWindowsNT(ExecutorTask task, String workDir, ExecutionResult res)
 	{
 		// preparing `crutch`
@@ -323,6 +323,7 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
 				case EXIT_RE: res.result = ExecutionResultEnum.RuntimeErrorGeneral; break;
 				case EXIT_OLE: res.result = ExecutionResultEnum.OutputLimitExceeded; break;
 				case EXIT_IE: res.result = ExecutionResultEnum.InternalError; break;
+				case EXIT_SIGNAL_SIGKILL: res.result = ExecutionResultEnum.TimeLimitExceeeded; break;
 				default: res.result = ExecutionResultEnum.Other;
 			}
 			
