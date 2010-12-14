@@ -12,7 +12,7 @@ public abstract class CheckerAbstract
 	protected CheckerResult res;
 	
 	// executable filename (for external validator)
-	private String exeFilename;
+	private String checkerExecutableFilename;
 	
 	public String getExeFile()
 	{
@@ -21,20 +21,20 @@ public abstract class CheckerAbstract
 	
 	/**
 	 * Performs validation of result 
-	 * @param input Judge input file
-	 * @param output Program output file
-	 * @param answer Judge output file
+	 * @param input - Judge input file
+	 * @param output - Program output file
+	 * @param answer - Judge output file
 	 * @return object of type ValidationResult 
 	 */
 	public abstract CheckerResult validateOutput(String input, String output, String answer);
 
 	public void setExecutableFilename(String exeFilename)
 	{
-		this.exeFilename = exeFilename;
+		this.checkerExecutableFilename = exeFilename;
 	}
 
 	public String getExeFilename()
 	{
-		return exeFilename;
+		return checkerExecutableFilename;
 	}
 }

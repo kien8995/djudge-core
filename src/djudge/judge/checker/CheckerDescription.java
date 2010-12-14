@@ -2,6 +2,7 @@
 
 package djudge.judge.checker;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -15,6 +16,8 @@ import djudge.judge.GlobalProblemInfo;
 
 public class CheckerDescription extends XMLSerializable implements Cloneable
 {
+	private final static Logger log = Logger.getLogger(CheckerDescription.class);
+	
 	public final static String XMLRootElement = "checker";
 
 	public CheckerTypeEnum type;
@@ -174,7 +177,7 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 		}
 		catch (CloneNotSupportedException exc)
 		{
-			System.out.println("Exception occured while cloning class ValidatorDescription: " + exc);
+			log.error("Exception occured while cloning class ValidatorDescription", exc);
 		}
 		return this;
 	}
