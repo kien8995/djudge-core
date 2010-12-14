@@ -27,7 +27,7 @@ import djudge.judge.executor.ExecutionResultEnum;
 		}
 		else if (res.getRunInfo().result == ExecutionResultEnum.NonZeroExitCode)
 		{
-			System.out.println("Valiator's exit code: " + res.getRunInfo().exitCode);
+			log.info("Checker's exit code: " + res.getRunInfo().exitCode);
 			switch (res.getRunInfo().exitCode)
 			{
 			case 1:

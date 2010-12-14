@@ -15,10 +15,10 @@ public enum CheckerFailEnum
 	OK,
 	
 	/* Input file not found */
-	NoInputFileError,
+	NoJudgeInputFileError,
 	
 	/* Output (judge-generated) file not found */
-	NoOutputFileError,
+	NoJudgeAnswerFileError,
 	
 	/* Answer (contestant-generated) file not found */
 	NoAnswerFileError,

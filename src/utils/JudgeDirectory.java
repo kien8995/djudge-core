@@ -28,7 +28,7 @@ public class JudgeDirectory
 
 	public DirectoryResult judge(String directory)
 	{
-		log.info("Judging directory: " + directory);
+		log.info("Judging directory: " + directory + " started");
 		
 		DirectoryResult res = new DirectoryResult(directory);
 		
@@ -41,11 +41,15 @@ public class JudgeDirectory
 			if (!files[i].isDirectory())
 				if (files[i].getName().charAt(0) != '_')
 				{
+					log.info("Judging file: " + files[i].getName() + " started");
 					SubmissionResult sr = Judge.judgeSourceFile(FileTools
 							.getAbsolutePath(files[i].getAbsolutePath()),
 							"%AUTO%", desc, new CheckParams());
+					log.info("Judging file: " + files[i].getName() + " finished");
 					res.setProblemResult(i, sr);
+					log.info("Judging file: " + files[i].getName() + " finished");
 				}
+		log.info("Judging directory: " + directory + " finished");
 		return res;
 	}
 }

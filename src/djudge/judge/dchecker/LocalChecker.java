@@ -27,7 +27,7 @@ public class LocalChecker
         try
         {
         	ProblemDescription pd = new ProblemDescription(task.contestId, task.problemId);
-        	CheckerResult res = new Checker(pd.getTestValidator(task.groupNumber, task.testNumber)).validateOutput(task.testInput.filename, task.testOutput.filename, workDir + "answer.txt");
+        	CheckerResult res = new Checker(pd.getTestValidator(task.groupNumber, task.testNumber)).validateOutput(task.testInput.filename, workDir + "answer.txt", task.testOutput.filename);
         	return res;
         }
         catch (Exception e)

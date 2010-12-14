@@ -136,7 +136,7 @@ public class Judge
 		
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, CheckParams params)
 	{
-		log.info("Judging file " + file);
+		log.info("Judging file " + file + " started");
 		RemoteFS.startSession();
 		SubmissionResult res = new SubmissionResult(problem);
 		res.setJudgingStarted(new Date());
@@ -158,7 +158,7 @@ public class Judge
 		}
 		RemoteFS.clearSession();
 		res.setJudgingFinished(new Date());
-		log.info("Judgement: " + res.result);
+		log.info("RTN: Judgement of " + file + ": " + res.result);
 		return res;
 	}
 
@@ -292,6 +292,6 @@ public class Judge
 	
 	public static void main(String[] args)
 	{
-		ProblemsetTester.main(new String[] {"@SystemTest", "ProblemErrors"});
+		ProblemsetTester.main(new String[] {"@SystemTest", "ExternalChecker"});
 	}
 }

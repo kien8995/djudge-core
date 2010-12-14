@@ -26,7 +26,7 @@ public class Scripts
 	
 	public static DirectoryResult generateProblemReport(String contestId, String problemId, ExecutorLimits limits)
 	{
-		log.info("Generating report for problem " + contestId + "-" + problemId);
+		log.info("Generating report for problem " + contestId + "-" + problemId + " started");
 		try
 		{
     		ProblemDescription desc = new ProblemDescription(contestId, problemId);
@@ -34,9 +34,11 @@ public class Scripts
     		JudgeDirectory j = new JudgeDirectory(desc);
     		
     		DirectoryResult res = j.judge(JudgeDirs.getProblemsDir() + contestId + "/" + problemId +"/solutions/");
+    		log.info("Generating report for problem " + contestId + "-" + problemId + " finished 1");
     		String html = "<h1>Problem " + problemId + " (" + contestId + ") [ " + Calendar.getInstance().getTime() +  "]</h1>"
     						+ HtmlTools.directoryResultToHtml(res, desc);
     		FileTools.saveToFile(html, JudgeDirs.getProblemsDir() + contestId + "/" + problemId +"/report.html");
+    		log.info("Generating report for problem " + contestId + "-" + problemId + " finished");
     		return res;
 		}
 		catch (DJudgeXmlCorruptedException e)

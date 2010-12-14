@@ -2,15 +2,14 @@
 
 package djudge.judge.checker.external;
 
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.io.*;
 
 import org.apache.log4j.Logger;
 
 import utils.FileTools;
 
-import djudge.judge.ProblemsetTester;
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
@@ -28,6 +27,8 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 	private static final Logger log = Logger.getLogger(CheckerExternalAbstract.class);
 	
 	String validatorOutputFile;
+		
+	protected abstract void processData();
 	
 	public CheckerExternalAbstract(String executableName)
 	{
@@ -35,49 +36,53 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 	}
 	
 	@Override
-	public CheckerResult validateOutput(String input, String output, String answer)
+	public CheckerResult validateOutput(String judgeInputFilename, String generatedOutputFilename, String judgeAnswerFilename)
 	{
 		res = new CheckerResult(this.toString());
 		File f = new File(getExeFilename());
 		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
-			log.error("Error. Cannot find validator executable file: " + getExeFilename());
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.CheckerNoExeFile);
-			res.setResultDetails("Error. Cannot find validator executable file: " + getExeFilename());
+			String msg = "Error. Cannot find validator executable file: " + getExeFilename();
+			log.error(msg);
+			res.setResultDetails(msg);
 			return res;
 		}
 		
 		// Checking whether input file exists
-		f = new File(input);
+		f = new File(judgeInputFilename);
 		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
-			log.error("Error. Cannot find input file: " + input);
 			res.setResult(CheckerResultEnum.InternalError);
-			res.setFail(CheckerFailEnum.NoInputFileError);
-			res.setResultDetails("Error. Cannot find input file: " + input);
+			res.setFail(CheckerFailEnum.NoJudgeInputFileError);
+			String msg = "Error. Cannot find judge input file: " + judgeInputFilename;
+			log.error(msg);
+			res.setResultDetails(msg);
 			return res;
 		}
 		
-		// Checking whether output file exists 
-		f = new File(output);
+		// Checking whether judge answer file exists 
+		f = new File(judgeAnswerFilename);
 		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
-			log.error("Error. Cannot find output file: " + output);
+			String msg = "Error. Cannot find judge answer file: " + judgeAnswerFilename;
 			res.setResult(CheckerResultEnum.InternalError);
-			res.setFail(CheckerFailEnum.NoOutputFileError);
-			res.setResultDetails("Error. Cannot find output file: " + output);
+			res.setFail(CheckerFailEnum.NoJudgeAnswerFileError);
+			res.setResultDetails(msg);
+			log.error(msg);
 			return res;
 		}
 		
-		// Checking whether answer file exists
-		f = new File(answer);
+		// Checking whether generated output file exists
+		f = new File(generatedOutputFilename);
 		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
 		{
-			log.debug("Cannot answer file: " + answer);
 			res.setResult(CheckerResultEnum.WrongAnswer);
 			res.setFail(CheckerFailEnum.OK);
-			res.setResultDetails("Cannot answer file: " + answer);
+			String msg = "Cannot find generated output file: " + generatedOutputFilename;
+			log.debug(msg);
+			res.setResultDetails(msg);
 			return res;
 		}
 		
@@ -91,12 +96,12 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 				CheckerLimits.VALIDATOR_MAX_CONSUMED_MEMORY, CheckerLimits.VALIDATOR_MAX_OUTPUT_SIZE);
 		
 		// FIXME ? quote values? -> like "input" "output" "answer"
-		String cmd = getExeFilename() + " " + input + " " + output + " " + answer;
+		String cmd = getExeFilename() + " " + judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
 		
 		// TODO: FIMXE
 		if (getExeFilename().endsWith(".jar"))
 		{
-			cmd = "java -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  input + " " + answer + " " + output;
+			cmd = "java -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  judgeInputFilename + " " + judgeAnswerFilename + " " + generatedOutputFilename;
 		}
 		
 		try
@@ -113,10 +118,11 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		}
 		catch (Exception exc)
 		{
-			log.error("Exception while running external validator", exc);
+			String msg = "Exception while running external validator"; 
+			log.error(msg, exc);
 			res.setResult(CheckerResultEnum.InternalError);
 			res.setFail(CheckerFailEnum.CheckerNoExeFile);
-			res.setResultDetails("Exception while running validator: " + exc.toString());
+			res.setResultDetails(msg + ": " + exc.toString());
 		}
 		
 		if (res.getResult() == CheckerResultEnum.Undefined)
@@ -180,12 +186,5 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 			}
 		}
 		return res;		
-	}
-	
-	protected abstract void processData();
-	
-	public static void main(String[] args)
-	{
-		ProblemsetTester.main(new String[] {"@SystemTest"});
 	}
 }
