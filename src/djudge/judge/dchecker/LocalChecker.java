@@ -9,7 +9,10 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import utils.FileTools;
+import utils.JudgeDirectory;
 
+import djudge.common.Deployment;
+import djudge.common.JudgeDirs;
 import djudge.judge.ProblemDescription;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.Checker;
@@ -22,7 +25,7 @@ public class LocalChecker
 	{
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         String id = dateFormat.format(new Date()) + "_val";
-        String workDir = FileTools.getAbsolutePath("./work/" + id + "/") + "/";
+        String workDir = JudgeDirs.getWorkDir() + id + "/";
         FileTools.saveToFile(task.programOutput, workDir + "answer.txt");
         try
         {

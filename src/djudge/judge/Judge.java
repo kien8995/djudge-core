@@ -158,7 +158,7 @@ public class Judge
 		}
 		RemoteFS.clearSession();
 		res.setJudgingFinished(new Date());
-		log.info("RTN: Judgement of " + file + ": " + res.result);
+		log.info("Judgement of " + file + ": " + res.result);
 		return res;
 	}
 
@@ -292,6 +292,7 @@ public class Judge
 	
 	public static void main(String[] args)
 	{
-		ProblemsetTester.main(new String[] {"@SystemTest", "ExternalChecker"});
+		//ProblemsetTester.main(new String[] {"@SystemTest", "ExternalChecker"});
+		ProblemsetTester.main(new String[] {"NCPC-2009"});
 	}
 }

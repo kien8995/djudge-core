@@ -78,7 +78,7 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
 		cmd = new StringBuffer("run.exe " + cmd + " \"" + pr.getCommand(workDir) + "\"");
 		cmd = new StringBuffer(workDir + "crutch.exe " + workDir + "  " + cmd);
 		
-		//System.out.println(cmd);
+		log.debug("Executing " + cmd);
 		try
 		{
 			Process process = Runtime.getRuntime().exec(cmd.toString());
@@ -432,6 +432,15 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
             String id = dateFormat.format(new Date()) + "_ex";
             
         	workDir = JudgeDirs.getWorkDir() + id + "/";
+        }
+        else
+        {
+        	// linux porting issue (under code review - issue #13)
+        	if (Deployment.isOSWinNT())
+        	{
+        		if (!workDir.endsWith("\\"))
+        			workDir = workDir + "\\";
+        	}
         }
         
         res.tempDir = workDir;
