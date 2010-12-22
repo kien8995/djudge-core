@@ -34,6 +34,8 @@ public class FileTools
 	@Review
 	public static String getAbsolutePath(String relativePath)
 	{
+		if (Deployment.isOSWinNT())
+			relativePath = relativePath.replace("/", "\\");
 		File f = new File(relativePath);
 		// FIXME
 		String res = f.getAbsolutePath().replace("\\.", "").replace("/.", "");
@@ -104,11 +106,33 @@ public class FileTools
 			{
 				Process process = Runtime.getRuntime().exec(command);
 				process.waitFor();
+				if (process.exitValue() != 0)
+					throw new UnsupportedOperationException();
 				return true;
 			}
 			catch (Exception ex)
 			{
-				log.warn("Link creation failed. Trying to copy file", ex);
+				log.warn("Link creation failed (from " + srcFilename + " to " + destFilename + ")");
+			}
+		}
+		if (Deployment.isOSWinNT() && Deployment.useLinks())
+		{
+			File f = new File(destFilename);
+			f.getParentFile().mkdir();
+
+			String[] command = new String[]{ "fsutil", "hardlink", "create", destFilename , srcFilename};
+
+			try
+			{
+				Process process = Runtime.getRuntime().exec(command);
+				process.waitFor();
+				if (process.exitValue() != 0)
+					throw new UnsupportedOperationException();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				log.warn("Link creation failed (from " + srcFilename + " to " + destFilename + ")");
 			}
 		}
 		// else trying to copy file

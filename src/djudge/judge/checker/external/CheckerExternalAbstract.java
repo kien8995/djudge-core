@@ -98,6 +98,8 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = getExeFilename() + " " + judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
 		
+		System.out.println(cmd);
+		
 		// TODO: FIMXE
 		if (getExeFilename().endsWith(".jar"))
 		{

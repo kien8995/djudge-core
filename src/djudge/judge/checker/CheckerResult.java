@@ -79,6 +79,7 @@ public class CheckerResult extends XMLSerializable
 			res.setAttribute(checkerNameAttributeName, checkerName);
 			res.setAttribute(resultAttributeName, getResult().toString());
 			res.setAttribute(failAttributeName, getFail().toString());
+			System.out.println(getCheckerOutput().length);
 			res.setAttribute(checkerOutputAttributeName, StringEscapeUtils.escapeXml(StringTools
 					.ArrayToString(getCheckerOutput())));
 			res.setAttribute(resultDetailsAttributeName, resultDetails);
