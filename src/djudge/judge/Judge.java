@@ -58,21 +58,18 @@ public class Judge
 		
 		for (int i = 0; i < desc.getTestCount(); i++)
 		{
-			// FIXME: crutch for issue #16
 			for (int rep = 0; rep < 3; rep++)
 			{
 				TestResult tr = res.testResults[i] = judgeTest(desc.tests.get(i), params,  program);
-				String[] checkerOutput = tr.getCheckInfo().getCheckerOutput();
-				if (checkerOutput != null && checkerOutput.length > 1)
-				{
-					if (checkerOutput[0].startsWith("Wrong Answer"))
-						if (checkerOutput[1].startsWith("Answer too short: token #1 not found"))
-						{
-							log.fatal("!!!!!!!!!!!!!!!!!!!");
-							continue;
-						}	
-				}
+				
+				// FIXME START: temp patch for issue #16
+				if (tr.getResult() != TestResultEnum.WA)
+					break;
+				// if judgment is `WA' and no output was generated then repeat run&check
+				if (tr.getRuntimeInfo().outputGenerated == 0L)
+					continue;
 				break;
+				// FIXME END
 			}
 		}
 		res.updateResult();
