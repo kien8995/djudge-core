@@ -2,7 +2,6 @@
 
 package djudge.judge.checker.internal;
 
-
 /*
  * Compares output and answer files as sequences of floating point numbers
  * Comparison is done using either relative, either absolute error (or both)   
@@ -41,7 +40,7 @@ public class CheckerFloat extends CheckerToken
 		double j, a;
 		j = Double.parseDouble(answer);
 		a = Double.parseDouble(output);
-		return (fRelative && Math.abs((a-j)/j) <= epsilon) || (fAbsolute && Math.abs(a-j) <= epsilon);
+		return (fRelative && Math.abs(a-j)/j <= epsilon) || (fAbsolute && Math.abs(a-j) <= epsilon);
 	}
 
 	@Override

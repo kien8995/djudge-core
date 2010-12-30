@@ -49,7 +49,6 @@ public class GroupResult extends AbstractResult
 		
 		if (result == TestResultEnum.AC)
 			score += groupScore;
-			
 	}
 
 	public GroupResult(Element elem)

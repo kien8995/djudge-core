@@ -25,7 +25,7 @@ public class FileTools
 	{
 		File f = new File(file);
 		String name = f.getName();
-		int k = name.indexOf('.');
+		int k = name.lastIndexOf('.');
 		if (k < 0)
 			return "";
 		return name.substring(k, name.length());

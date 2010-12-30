@@ -1,12 +1,7 @@
 <connections>
   <connection
-    url = "http://localhost:8080/"
-    id = "appengine-local"
-    connector-class = "djudge.judge.interfaces.Judge2AppEngineLink"
-  />
-  <connection
-    url = "http://acm-uzh.appspot.com/"
-    id = "appengine-acm-uzh"
+    url = "http://localhost:8080/djudge-web/"
+    id = "local"
     connector-class = "djudge.judge.interfaces.Judge2AppEngineLink"
   />
 </connections>
