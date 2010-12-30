@@ -12,6 +12,41 @@
 		<extension>.java</extension>
 	</language>
 
+	<!-- Free Pascal -->
+	<language
+		id              = "FPC"
+		compiler-name   = "Free Pascal"
+		file-extension  = ".pas"
+		compile-command = "fpc -o%name.exe %name%ext"
+		run-command     = "./%name.exe"
+	>
+	
+		<extension>.pas</extension>
+		<extension>.p</extension>
+	</language>
+
+	<!-- Free Pascal (Delphi mode) -->
+	<language
+		id              = "FPCD"
+		compiler-name   = "Free Pascal"
+		file-extension  = ".pas"
+		compile-command = "fpc -Sd -o%name.exe %name%ext"
+		run-command     = "./%name.exe"
+	>
+		<extension>.dpr</extension>
+	</language>
+
+	<!-- Mono C# -->
+	<language
+		id              = "CS"
+		compiler-name   = "C Sharp"
+		file-extension  = ".cs"
+		compile-command = "mono-csc %name%ext"
+		run-command     = "./%name.exe"
+	>
+		<extension>.cs</extension>
+	</language>
+
 	<!-- GNU C++ Compiler 3.4.2 -->
 	<language
 		id              = "GCC"
@@ -34,6 +69,28 @@
 		run-command     = "perl %name.pl"
 	>
 		<extension>.pl</extension>
+	</language>
+
+	<!-- APE -->
+	<language
+		id              = "APE"
+		compiler-name   = "APE"
+		file-extension  = ".ape"
+		compile-command = "/home/alt/work/java/djudge/problems/BAPC-2009/I/check/apecc.sh %name%ext"
+		run-command     = "./%name"
+	>
+		<extension>.ape</extension>
+	</language>
+
+	<!-- ghc -->
+	<language
+		id              = "GHC"
+		compiler-name   = "Haskell"
+		file-extension  = ".hs"
+		compile-command = "ghc %name%ext -o %name.exe"
+		run-command     = "./%name.exe"
+	>
+		<extension>.hs</extension>
 	</language>
 
 </Languages>

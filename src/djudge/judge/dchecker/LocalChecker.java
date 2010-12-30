@@ -9,9 +9,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import utils.FileTools;
-import utils.JudgeDirectory;
 
-import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.judge.ProblemDescription;
 import djudge.judge.checker.CheckerResult;

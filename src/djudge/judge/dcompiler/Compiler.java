@@ -88,7 +88,7 @@ public class Compiler
 		{
 			String native_output[] = new String[0];
 			Object[] langId = languages.keySet().toArray();
-			String extension = FileTools.getFileExtension(file);
+			String extension = FileTools.getFileExtension(file).toLowerCase();
 			for (int i = 0; (i < langId.length) && (res.result != CompilationResult.OK); i++)
 			{
 				Language lng = languages.get(langId[i]);

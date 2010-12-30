@@ -64,7 +64,7 @@ public class LanguageInfo
 		for (int i = 0; i < exts.getLength(); i++)
 		{
 			Element elem = (Element) exts.item(i);
-			extensions.add(elem.getTextContent());
+			extensions.add(elem.getTextContent().toLowerCase());
 		}
 	}
 	
