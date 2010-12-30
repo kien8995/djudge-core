@@ -31,7 +31,6 @@ import djudge.judge.executor.ExecutionResultEnum;
 			switch (res.getRunInfo().exitCode)
 			{
 			case 1:
-			case 3:
 			case 4:
 				res.setResult(CheckerResultEnum.WrongAnswer);
 				res.setResultDetails("OK: WA");
@@ -40,6 +39,12 @@ import djudge.judge.executor.ExecutionResultEnum;
 			case 2: 
 				res.setResult(CheckerResultEnum.PresentationError);
 				res.setResultDetails("OK: PE");
+				break;
+			
+			case 3:
+				res.setResult(CheckerResultEnum.InternalError);
+				res.setResultDetails("IE: CE");
+				res.setFail(CheckerFailEnum.CheckerFail);
 				break;
 			
 			default:
