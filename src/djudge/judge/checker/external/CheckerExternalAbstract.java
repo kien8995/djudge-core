@@ -2,8 +2,9 @@
 
 package djudge.judge.checker.external;
 
-
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 import java.io.*;
 
 import org.apache.log4j.Logger;
@@ -22,6 +23,7 @@ import djudge.judge.executor.ExecutorProgram;
 import djudge.judge.executor.ExecutorTask;
 import djudge.judge.executor.LocalExecutor;
 
+
 public abstract class CheckerExternalAbstract extends CheckerAbstract implements CheckerLimits
 {
 	private static final Logger log = Logger.getLogger(CheckerExternalAbstract.class);
@@ -38,6 +40,8 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 	@Override
 	public CheckerResult validateOutput(String judgeInputFilename, String generatedOutputFilename, String judgeAnswerFilename)
 	{
+		long startTime = new Date().getTime();
+		
 		res = new CheckerResult(this.toString());
 		File f = new File(getExeFilename());
 		if (!f.exists() && res.getResult() == CheckerResultEnum.Undefined)
@@ -98,12 +102,18 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		// FIXME ? quote values? -> like "input" "output" "answer"
 		String cmd = getExeFilename() + " " + judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
 		
-		System.out.println(cmd);
-		
-		// TODO: FIMXE
+		// FIXME
+		// for external java checkers
 		if (getExeFilename().endsWith(".jar"))
 		{
-			cmd = "java -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  judgeInputFilename + " " + judgeAnswerFilename + " " + generatedOutputFilename;
+			if (getExeFile().endsWith("Check.jar"))
+			{
+				cmd = "java -Xmx512m -Xms128m -Xss128m -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
+			}
+			else
+			{
+				cmd = "java -Xmx512m -Xms128m -Xss128m -jar " + getExeFilename() + " " + judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
+			}
 		}
 		
 		try
@@ -187,6 +197,16 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 				processData();
 			}
 		}
+		
+		long finishTime = new Date().getTime();
+		
+		String[] array = res.getCheckerOutput();
+		Vector<String> vector = new Vector<String>();
+		for (String str: array)
+			vector.add(str);
+		vector.add(((finishTime - startTime) / 1) + " ms");
+		
+		res.setCheckerOutput(vector.toArray(new String[0]));
 		return res;		
 	}
 }

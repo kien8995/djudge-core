@@ -10,7 +10,7 @@ import java.io.IOException;
 public class CheckerLine extends CheckerInternalAbstract
 {
 	@Override
-	protected String getToken(BufferedReader rd) throws IOException
+	protected Object getToken(BufferedReader rd) throws IOException
 	{
 		return rd.readLine();
 	}

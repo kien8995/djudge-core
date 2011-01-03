@@ -42,6 +42,12 @@ public class HtmlTools
 		case AC:
 			res = "#aaffaa";
 			break;
+		
+		case ProblemError: 
+		case IE:
+		case CheckerError:
+			res = "#ffff00";
+			break;
 
 		default:
 			res = "#ffaaaa";

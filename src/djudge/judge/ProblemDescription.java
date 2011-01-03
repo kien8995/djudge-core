@@ -17,6 +17,7 @@ import djudge.exceptions.DJudgeXmlCorruptedException;
 import djudge.exceptions.DJudgeXmlException;
 import djudge.exceptions.DJudgeXmlNotFoundException;
 import djudge.judge.checker.CheckerDescription;
+import djudge.judge.checker.CheckerTypeEnum;
 import djudge.judge.executor.ExecutorFiles;
 import djudge.judge.executor.ExecutorLimits;
 
@@ -76,6 +77,12 @@ public class ProblemDescription extends AbstractDescription
 
 		readCommonXML(elem);
 		readOwnXML(elem);
+		
+		// if no checker set -> apply default checker
+		if (ownChecker == null)
+		{
+			ownChecker = new CheckerDescription(CheckerTypeEnum.InternalToken);
+		}
 
 		String in = problemInfo.programInputFilename = elem
 				.getAttribute("input-file");
@@ -138,7 +145,7 @@ public class ProblemDescription extends AbstractDescription
 		// Validator
 		String checker = elem.getAttribute("checker");
 		String checkerParam = elem.getAttribute("checker-param");
-		String checkerExe = elem.getAttribute("check.exe");
+		String checkerExe = elem.getAttribute("checker-exe");
 		if (checkerExe == null || "".equals(checkerExe))
 		{
 			checkerExe = Deployment.isOSWinNT() ? "check.exe" : "check.o";
@@ -212,6 +219,13 @@ public class ProblemDescription extends AbstractDescription
 		CheckerDescription res = null;
 		try
 		{
+			String checker = validatorElement.getAttribute("checker");
+			String checkerParam = validatorElement.getAttribute("checker-param");			
+			CheckerDescription checkerDescription = new CheckerDescription(checker, checkerParam);
+			
+			if (checkerDescription.type != CheckerTypeEnum.Unknown)
+				return checkerDescription;
+			
 			String type = validatorElement.getAttribute("type");
 			if ("%testlib".equalsIgnoreCase(type))
 			{
@@ -226,7 +240,7 @@ public class ProblemDescription extends AbstractDescription
 						res = new CheckerDescription(problemInfo.contestID,
 								problemInfo.problemID, CheckerDescription
 										.StringToType("%TESTLIB"), "",
-								exeElement.getAttribute("file"));
+								exeElement.getAttribute("file").replace(".exe", Deployment.isOSWinNT() ? ".exe" : ".o"));
 					}
 					else if ("java.check".equalsIgnoreCase(executableId))
 					{
