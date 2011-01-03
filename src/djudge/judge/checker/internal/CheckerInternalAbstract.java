@@ -3,6 +3,8 @@
 package djudge.judge.checker.internal;
 
 import java.io.*;
+import java.util.Date;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -25,6 +27,8 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 	@Override
 	public CheckerResult validateOutput(String judgeInputFile, String generatedOutputFilename, String judgeAnswerFile)
 	{
+		long startTime = new Date().getTime();
+		
 		res = new CheckerResult(this.toString());
 		
 		// Checking whether judge input file exists
@@ -84,6 +88,15 @@ public abstract class CheckerInternalAbstract extends CheckerAbstract implements
 			res.setFail(CheckerFailEnum.OK);
 			res.setResultDetails(ex.toString());
 		}
+		
+		long finishTime = new Date().getTime();
+		
+		String[] array = res.getCheckerOutput();
+		Vector<String> vector = new Vector<String>();
+		for (String str: array)
+			vector.add(str);
+		vector.add(((finishTime - startTime) / 1) + " ms");
+		res.setCheckerOutput(vector.toArray(new String[0]));
 		
 		return res;		
 	}	

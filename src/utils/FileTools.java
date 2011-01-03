@@ -93,6 +93,8 @@ public class FileTools
 	 */
 	public static boolean createLink(String destFilename, String srcFilename)
 	{
+		File fd = new File(destFilename);
+		fd.getParentFile().mkdirs();
 		// Trying to create link
 		if (Deployment.isOSLinux() && Deployment.useLinks())
 		{

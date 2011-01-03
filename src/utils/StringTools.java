@@ -99,9 +99,9 @@ public class StringTools
 			return "<null>";
 		if (s == "")
 			return "<Empty token>";		
-		if (s.length() <= 100)
+		if (s.length() <= 20)
 			return s;
-		return s.substring(0, 100) + "...";
-	}
-	
+		int len = s.length();
+		return s.substring(0, 10) + "..." + s.substring(len - 10, len);
+	}	
 }

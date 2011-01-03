@@ -123,6 +123,10 @@ public class Judge
 			{
 				filename = "output.txt";
 			}
+			else
+			{
+				res.getRuntimeInfo().outputGenerated = new File(FileTools.concatPaths(exRes.tempDir, filename)).length();
+			}
 			
 			RemoteFile rf = new RemoteFile();
 			rf.fIsPresent = false;

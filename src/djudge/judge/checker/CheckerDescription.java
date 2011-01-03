@@ -40,6 +40,9 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 	public CheckerDescription(String contest, String problem,
 			CheckerTypeEnum type, String param, String exeName)
 	{
+/*		System.out.println("==================================");
+		System.out.println(contest + " " + problem + " " + type + " " + param + " " + exeName);
+		System.out.println("==================================");*/
 		contestID = contest;
 		problemID = problem;
 		this.type = type;
@@ -80,6 +83,8 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 			res = CheckerTypeEnum.InternalToken;
 		else if (s.equalsIgnoreCase("@TOKEN_SORTED"))
 			res = CheckerTypeEnum.InternalSortedToken;
+		else if (s.equalsIgnoreCase("@STR_SORTED"))
+			res = CheckerTypeEnum.InternalSortedExact;
 		else if (s.equalsIgnoreCase("@INT"))
 			res = CheckerTypeEnum.InternalInt32;
 		else if (s.equalsIgnoreCase("@INT32"))
@@ -132,6 +137,13 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 		this.type = type;
 		this.param = param;
 		this.executableFilename = exeFile;
+		if (null != param)
+		{
+			if (param.endsWith(".jar"))
+			{
+				this.executableFilename = "check.jar";
+			}
+		}
 	}
 
 	public CheckerDescription(String type, String param)
@@ -139,6 +151,13 @@ public class CheckerDescription extends XMLSerializable implements Cloneable
 		this.type = StringToType(type);
 		this.param = param;
 		this.executableFilename = Deployment.isOSWinNT() ? "check.exe" : "check.o";
+		if (null != param)
+		{
+			if (param.endsWith(".jar"))
+			{
+				this.executableFilename = "check.jar";
+			}
+		}
 	}
 
 	public CheckerDescription(CheckerTypeEnum type)

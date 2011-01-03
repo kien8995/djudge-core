@@ -10,6 +10,8 @@ public enum CheckerTypeEnum
 	 */
 	InternalExact,
 	
+	InternalSortedExact,
+	
 	/**
 	 * Token-by-token comparing  
 	 */

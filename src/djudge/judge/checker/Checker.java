@@ -10,6 +10,7 @@ import djudge.judge.checker.external.CheckerTestLib;
 import djudge.judge.checker.external.CheckerTestLibJava;
 import djudge.judge.checker.internal.CheckerFloat;
 import djudge.judge.checker.internal.CheckerInt32;
+import djudge.judge.checker.internal.CheckerSortedString;
 import djudge.judge.checker.internal.CheckerSortedToken;
 import djudge.judge.checker.internal.CheckerLine;
 import djudge.judge.checker.internal.CheckerToken;
@@ -92,6 +93,10 @@ public class Checker
 
 		case InternalSortedToken:
 			res = (new CheckerSortedToken()).validateOutput(judgeInputFilename, generatedOutputFile, judgeAnswerFilename);
+			break;
+
+		case InternalSortedExact:
+			res = (new CheckerSortedString()).validateOutput(judgeInputFilename, generatedOutputFile, judgeAnswerFilename);
 			break;
 
 		case ExternalPC2:
