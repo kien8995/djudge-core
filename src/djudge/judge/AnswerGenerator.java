@@ -31,8 +31,8 @@ import utils.XmlTools;
 
 @SuppressWarnings("unused")
 public class AnswerGenerator
-{	
-	
+{
+
 	public static void main(String arg[])
 	{
 		if (arg.length == 3)
@@ -47,6 +47,19 @@ public class AnswerGenerator
 		}
 		else
 		{
+			try
+			{
+//				Judge.generateAnswerFiles("/home/alt//work/java/djudge/problems/NEERC-2003-Northern/K/solutions/k_as.dpr", new ProblemDescription("NEERC-2003-Northern", "K"));
+				Judge.generateAnswerFiles("/home/alt/work/java/djudge/problems/NEERC-2003-Northern/D/solutions/d_al.dpr", new ProblemDescription("NEERC-2003-Northern", "D"));
+			}
+			catch (DJudgeXmlException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
 			System.out.println("Wrong arguments");
 		}
 	}

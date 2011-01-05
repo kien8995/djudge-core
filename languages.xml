@@ -93,4 +93,15 @@
 		<extension>.hs</extension>
 	</language>
 
+	<!-- ocaml -->
+	<language
+		id              = "OCAML"
+		compiler-name   = "Ocaml"
+		file-extension  = ".ml"
+		compile-command = "ocamlc -o %name.exe %name%ext"
+		run-command     = "./%name.exe"
+	>
+		<extension>.ml</extension>
+	</language>
+
 </Languages>
