@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import utils.FileTools;
 
+import djudge.common.JudgeDirs;
 import djudge.judge.checker.CheckerFailEnum;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.checker.CheckerResultEnum;
@@ -106,9 +107,13 @@ public abstract class CheckerExternalAbstract extends CheckerAbstract implements
 		// for external java checkers
 		if (getExeFilename().endsWith(".jar"))
 		{
-			if (getExeFile().endsWith("Check.jar"))
+			if (getExeFile().endsWith("Check.jar") || this.getClass().equals(CheckerTestLibJava.class))
 			{
-				cmd = "java -Xmx512m -Xms128m -Xss128m -cp " + getExeFilename() + " ru.ifmo.testlib.CheckerFramework Check" + " " +  judgeInputFilename + " " + generatedOutputFilename + " " + judgeAnswerFilename;
+				cmd = "java -Xmx512m -Xms128m -Xss128m -cp " + getExeFilename()
+						+ ":" + JudgeDirs.getToolsDir() + "checkers/testlib4j.jar"
+						+ " ru.ifmo.testlib.CheckerFramework Check" + " "
+						+ judgeInputFilename + " " + generatedOutputFilename
+						+ " " + judgeAnswerFilename;
 			}
 			else
 			{
