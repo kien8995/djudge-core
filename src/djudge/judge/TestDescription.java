@@ -25,6 +25,11 @@ public class TestDescription extends AbstractDescription
 		blockName = "test";
 	}
 	
+	public InteractionDescription getInteractionDescription()
+	{
+		return groupDecription.getInteractionDescription();
+	}
+	
 	public TestDescription(GroupDescription gd, int number, GlobalProblemInfo problemInfo)
 	{
 		groupDecription = gd;

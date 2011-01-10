@@ -27,8 +27,10 @@ public class ProblemDescription extends AbstractDescription
 
 	int groupsCount;
 	GroupDescription[] groups;
-
+	
 	protected String problemRoot;
+	
+	private InteractionDescription interactionDescription = new InteractionDescription();
 
 	{
 		blockName = "problem";
@@ -207,6 +209,14 @@ public class ProblemDescription extends AbstractDescription
 		// ownValidator = new ValidatorDescription(problemInfo.contestID,
 		// problemInfo.problemID, ValidatorDescription.StringToType("%TESTLIB"),
 		// "", "check.exe");
+		list = elem.getElementsByTagName("interaction");
+		if (list.getLength() > 0)
+		{
+			interactionDescription = new InteractionDescription(elem);
+		}		
+
+		ownChecker = parsePcmsValidator(validatorElement);
+
 
 		groups = new GroupDescription[1];
 		groups[0] = new GroupDescription(this, 0, testsCount, problemInfo,
@@ -526,6 +536,16 @@ public class ProblemDescription extends AbstractDescription
 		 * problemInfo.programInputFilename = params.inputFilename;
 		 * problemInfo.programOutputFilename = params.outputFilename;
 		 */
+	}
+
+	public void setInteractionDescription(InteractionDescription interactionDescription)
+	{
+		this.interactionDescription = interactionDescription;
+	}
+
+	public InteractionDescription getInteractionDescription()
+	{
+		return interactionDescription;
 	}
 
 }
