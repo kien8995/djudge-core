@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import djudge.common.JudgeDirs;
+import djudge.exceptions.DJudgeXmlException;
 
 import utils.FileTools;
 import utils.Scripts;
@@ -49,7 +50,15 @@ public class ProblemsetTester
 		}
 		else
 		{
-			System.out.println("Wrong arguments");
+			try
+			{
+				Judge.generateAnswerFiles(arg[2], new ProblemDescription(arg[0], arg[1]));
+			}
+			catch (DJudgeXmlException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

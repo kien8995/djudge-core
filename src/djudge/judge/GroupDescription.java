@@ -231,5 +231,10 @@ public class GroupDescription extends AbstractDescription
 		{
 			return problemDescription.getGlobalProblemInfo();
 		}
+	}
+
+	public InteractionDescription getInteractionDescription()
+	{
+		return problemDescription.getInteractionDescription();
 	}	
 }

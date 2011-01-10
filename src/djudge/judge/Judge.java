@@ -3,11 +3,13 @@
 package djudge.judge;
 
 import java.util.Date;
+import java.util.concurrent.Executor;
 import java.io.File;
 
 import org.apache.log4j.Logger;
 import utils.FileTools;
 
+import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.dcompiler.Compiler;
@@ -80,73 +82,81 @@ public class Judge
 	
 	public static TestResult judgeTest(TestDescription test, CheckParams params, ExecutorProgram program)
 	{
-		TestResult res = new TestResult(test);
-		String contestId = test.problemInfo.contestID;
-		String problemId = test.problemInfo.problemID;
-		String testsDir = JudgeDirs.getProblemsDir() + contestId + "/" + problemId + "/" + "tests/";
-		
-		File f = new File(testsDir + test.getInputMask());
-		if (!f.exists() || !f.isFile())
+		TestResult res = null;
+		int repCount = test.getInteractionDescription().getInteractionType() == InteractionType.NEERC_INTERACTOR ? 10 : 1;
+		for (int i = 1; i <= repCount; i++)
 		{
-			String msg = "No test's input file: " + test.getInputMask();
-			res.result = TestResultEnum.ProblemError;
-			res.resultDetails = "No test's input file: " + test.getInputMask();
-			log.error(msg);
-			return res;
-		}
-		
-		String inputTestFilename = test.getInputFilename();
-		if (test.isEmptyInputFilename())
-		{
-			inputTestFilename = "input.txt";
-		}
-		program.files.addFile(testsDir + test.getInputMask(), inputTestFilename);
-		
-		ExecutorFiles files = test.getExecutorFiles();
-		ExecutorLimits limits = test.getActualLimits();
-		ExecutorTask exTask = new ExecutorTask(program, limits, files);
-		exTask.returnDirectoryContent = false;
-		LocalExecutor ex = new LocalExecutor();
-		
-		ExecutionResult exRes = ex.execute(exTask);
-		res.setRuntimeInfo(exRes);
-		if (exRes.getResult() == ExecutionResultEnum.OK)
-		{
-			// Filling ValidatorTask structure
-			ValidatorTask task = new ValidatorTask();
-			task.contestId = contestId;
-			task.groupNumber = test.groupDecription.getGroupNumber();
-			task.testNumber = test.testNumber;
-			task.problemId = problemId;
-			String filename = test.getAnswerFilename();
-			if (filename == null || "".equals(filename) || "stdout".equals(filename))
-			{
-				filename = "output.txt";
-			}
-			else
-			{
-				res.getRuntimeInfo().outputGenerated = new File(FileTools.concatPaths(exRes.tempDir, filename)).length();
-			}
-			
-			RemoteFile rf = new RemoteFile();
-			rf.fIsPresent = false;
-			rf.filename = FileTools.concatPaths(exRes.tempDir, filename);
-			
-			task.programOutput.filename = RemoteFS.saveToRemoteStorage(rf);
-			task.programOutput.fIsPresent = false;
-			
-			task.testInput.filename = FileTools.concatPaths(testsDir, test.getInputMask());
-			task.testInput.fIsPresent = false;
-			
-			task.testOutput.filename = FileTools.concatPaths(testsDir, test.getOutputMask());
-			task.testOutput.fIsPresent = false;
-			// output checking
-			CheckerResult vres = LocalChecker.check(task);
-			res.setCheckInfo(vres);
-		}
-		else
-		{
-			res.setCheckInfo(new CheckerResult(""));
+    		res = new TestResult(test);
+    		String contestId = test.problemInfo.contestID;
+    		String problemId = test.problemInfo.problemID;
+    		String testsDir = JudgeDirs.getProblemsDir() + contestId + "/" + problemId + "/" + "tests/";
+    		
+    		File f = new File(testsDir + test.getInputMask());
+    		if (!f.exists() || !f.isFile())
+    		{
+    			String msg = "No test's input file: " + test.getInputMask();
+    			res.result = TestResultEnum.ProblemError;
+    			res.resultDetails = "No test's input file: " + test.getInputMask();
+    			log.error(msg);
+    			return res;
+    		}
+    		
+    		String inputTestFilename = test.getInputFilename();
+    		if (test.isEmptyInputFilename())
+    		{
+    			inputTestFilename = "input.txt";
+    		}
+    		program.files.addFile(testsDir + test.getInputMask(), inputTestFilename);
+    		
+    		ExecutorFiles files = test.getExecutorFiles();
+    		ExecutorLimits limits = test.getActualLimits();
+    		
+    		ExecutorTask exTask = new ExecutorTask(program, limits, files);
+    		exTask.returnDirectoryContent = false;
+    		LocalExecutor ex = new LocalExecutor();
+    		
+    		ExecutionResult exRes = ex.execute(exTask);
+    		res.setRuntimeInfo(exRes);
+    		if (exRes.getResult() == ExecutionResultEnum.OK)
+    		{
+    			if (exRes.outputGenerated == 0 && i != repCount)
+    				continue;
+    			// Filling ValidatorTask structure
+    			ValidatorTask task = new ValidatorTask();
+    			task.contestId = contestId;
+    			task.groupNumber = test.groupDecription.getGroupNumber();
+    			task.testNumber = test.testNumber;
+    			task.problemId = problemId;
+    			String filename = test.getAnswerFilename();
+    			if (filename == null || "".equals(filename) || "stdout".equals(filename))
+    			{
+    				filename = "output.txt";
+    			}
+    			else
+    			{
+    				res.getRuntimeInfo().outputGenerated = new File(FileTools.concatPaths(exRes.tempDir, filename)).length();
+    			}
+    			
+    			RemoteFile rf = new RemoteFile();
+    			rf.fIsPresent = false;
+    			rf.filename = FileTools.concatPaths(exRes.tempDir, filename);
+    			
+    			task.programOutput.filename = RemoteFS.saveToRemoteStorage(rf);
+    			task.programOutput.fIsPresent = false;
+    			
+    			task.testInput.filename = FileTools.concatPaths(testsDir, test.getInputMask());
+    			task.testInput.fIsPresent = false;
+    			
+    			task.testOutput.filename = FileTools.concatPaths(testsDir, test.getOutputMask());
+    			task.testOutput.fIsPresent = false;
+    			// output checking
+    			CheckerResult vres = LocalChecker.check(task);
+    			res.setCheckInfo(vres);
+    		}
+    		else
+    		{
+    			res.setCheckInfo(new CheckerResult(""));
+    		}
 		}
 		return res;
 	}
@@ -168,8 +178,30 @@ public class Judge
 		else
 		{
 			ExecutorProgram pr = new ExecutorProgram();
-			pr.command = ci.program.getRunCommand();
-			pr.files = ci.program.files;
+			InteractionDescription interact = problem.getInteractionDescription();
+			if (interact.getInteractionType() == InteractionType.NEERC_INTERACTOR)
+			{
+				pr.command = ci.program.getRunCommand();
+				pr.files = ci.program.files;
+				pr.files.addFile(JudgeDirs.getProblemDir(problem.getContestID(), problem.getProblemID()) + interact.getInteractorExe());
+				//pr.files.addFile(JudgeDirs.getToolsDir() + "interaction/run2.jar");
+				System.out.println("");
+				System.out.println("Before Interactor command");
+				System.out.println(pr.command);
+				
+				pr.command = "java -jar " +
+						JudgeDirs.getToolsDir() + "interaction/run2.jar " + 
+						"./" + interact.getInteractorExe() + " " + 
+						pr.command;
+				
+				System.out.println("After: ");
+				System.out.println(pr.command);
+			}
+			else
+			{
+				pr.command = ci.program.getRunCommand();
+				pr.files = ci.program.files;
+			}
 			ProblemResult pres = judgeProblem(problem, params, pr);
 			res.setProblemResult(pres);
 		}

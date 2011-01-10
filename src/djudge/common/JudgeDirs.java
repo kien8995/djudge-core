@@ -37,6 +37,11 @@ public class JudgeDirs
 		return rootDirectory + "problems/";
 	}
 
+	public static String getProblemDir(String contestId, String problemId)
+	{
+		return getProblemsDir() + contestId + "/" + problemId + "/";
+	}
+	
 	public static String getToolsDir()
 	{
 		return rootDirectory + "tools/";
