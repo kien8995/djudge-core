@@ -21,9 +21,17 @@ public class LocalChecker
 	
 	public static CheckerResult check(ValidatorTask task)
 	{
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date()) + "_val";
-        String workDir = JudgeDirs.getWorkDir() + id + "/";
+		return check(task, null);
+	}
+	
+	public static CheckerResult check(ValidatorTask task, String workDir)
+	{
+		if (workDir == null)
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+			String id = dateFormat.format(new Date()) + "_val";
+			workDir = JudgeDirs.getWorkDir() + id + "/";
+		}
         FileTools.saveToFile(task.programOutput, workDir + "answer.txt");
         try
         {

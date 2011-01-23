@@ -72,6 +72,12 @@ public class Compiler
 	
 	public static CompilerResult compile(CompilerTask task)
 	{
+		return compile(task, null);
+	}
+	
+	public static CompilerResult compile(CompilerTask task, String compilationDir)
+	{
+		log.trace("Compiling in: " + compilationDir);
 		String languageId = task.languageId;
 		CompilerResult res = new CompilerResult();
 		String file = task.files.map.keySet().toArray(new String[0])[0];
@@ -95,7 +101,7 @@ public class Compiler
 				if (lng.getLanguageInfo().getExtensions().contains(extension))
 				{
     				log.info("Trying to compile " + task.files.getFile() + " as " + lng.getID());
-    				res = lng.compile(task);
+    				res = lng.compile(task, compilationDir != null ? compilationDir + "" + lng.getID() + "/" : null);
    					native_output = res.getCompilerOutput();
 				}
 			}
@@ -113,17 +119,9 @@ public class Compiler
 			// OK
 			else
 			{
-				res = lang.compile(task);
+				res = lang.compile(task, compilationDir != null ? compilationDir : compilationDir);
 			}
 		}
-		
 		return res;
-	}
-	
-	public static void main(String[] args)
-	{
-		CompilerResult res = Compiler.compile("/home/alt/work/java/djudge/problems/ULM-2007/A/solutions/1.cpp", "%AUTO%");
-		for (String s : res.compilerOutput)
-			System.out.println(s);
 	}
 }

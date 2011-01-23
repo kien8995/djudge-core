@@ -2,14 +2,14 @@
 
 package djudge.judge;
 
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.concurrent.Executor;
 import java.io.File;
 
 import org.apache.log4j.Logger;
 import utils.FileTools;
 
-import djudge.common.Deployment;
 import djudge.common.JudgeDirs;
 import djudge.judge.checker.CheckerResult;
 import djudge.judge.dcompiler.Compiler;
@@ -34,6 +34,11 @@ public class Judge
 	
 	public static ProblemResult judgeProblem(ProblemDescription desc, CheckParams params, ExecutorProgram program)
 	{
+		return judgeProblem(desc, params, program, null);
+	}
+	
+	public static ProblemResult judgeProblem(ProblemDescription desc, CheckParams params, ExecutorProgram program, String rootDir)
+	{
 		ProblemResult res = new ProblemResult(desc);
 
 		if (params.fFirstTestOnly)
@@ -41,14 +46,14 @@ public class Judge
 			log.info("Testing on first test only");
 			res.groupCount = 1;
 			res.groupResults = new GroupResult[1];
-			res.groupResults[0] = judgeGroup(desc.groups[0], params, program);
+			res.groupResults[0] = judgeGroup(desc.groups[0], params, program, rootDir);
 		}
 		else
 		{
 			log.info("Testing on all tests");
     		for (int i = 0; i < desc.groupsCount; i++)
     		{
-    			res.groupResults[i] = judgeGroup(desc.groups[i], params, program);
+    			res.groupResults[i] = judgeGroup(desc.groups[i], params, program, rootDir);
     		}
 		}
 		res.updateResult();
@@ -57,13 +62,20 @@ public class Judge
 	
 	public static GroupResult judgeGroup(GroupDescription desc, CheckParams params, ExecutorProgram program)
 	{
+		return judgeGroup(desc, params, program, null);
+	}
+	
+	public static GroupResult judgeGroup(GroupDescription desc, CheckParams params, ExecutorProgram program, String rootDir)
+	{
 		GroupResult res = new GroupResult(desc);
 		
 		for (int i = 0; i < desc.getTestCount(); i++)
 		{
+			String groupDir = rootDir != null ? rootDir + "" + (i + 1) + "/" : null;
+			
 			for (int rep = 0; rep < 3; rep++)
 			{
-				TestResult tr = res.testResults[i] = judgeTest(desc.tests.get(i), params,  program);
+				TestResult tr = res.testResults[i] = judgeTest(desc.tests.get(i), params, program, groupDir);
 				
 				// FIXME START: temp patch for issue #16
 				if (tr.getResult() != TestResultEnum.WA)
@@ -82,7 +94,13 @@ public class Judge
 	
 	public static TestResult judgeTest(TestDescription test, CheckParams params, ExecutorProgram program)
 	{
+		return judgeTest(test, params, program, null);
+	}
+	
+	public static TestResult judgeTest(TestDescription test, CheckParams params, ExecutorProgram program, String groupDir)
+	{
 		TestResult res = null;
+		String testDir = groupDir != null ? groupDir + "" + (test.testNumber + 1) + "/" : null;
 		int repCount = test.getInteractionDescription().getInteractionType() == InteractionType.NEERC_INTERACTOR ? 10 : 1;
 		for (int i = 1; i <= repCount; i++)
 		{
@@ -115,7 +133,7 @@ public class Judge
     		exTask.returnDirectoryContent = false;
     		LocalExecutor ex = new LocalExecutor();
     		
-    		ExecutionResult exRes = ex.execute(exTask);
+    		ExecutionResult exRes = ex.execute(exTask, testDir != null ? testDir + "ex/" : null);
     		res.setRuntimeInfo(exRes);
     		if (exRes.getResult() == ExecutionResultEnum.OK)
     		{
@@ -150,7 +168,7 @@ public class Judge
     			task.testOutput.filename = FileTools.concatPaths(testsDir, test.getOutputMask());
     			task.testOutput.fIsPresent = false;
     			// output checking
-    			CheckerResult vres = LocalChecker.check(task);
+    			CheckerResult vres = LocalChecker.check(task, testDir != null ? testDir + "val/" : null);
     			res.setCheckInfo(vres);
     		}
     		else
@@ -163,13 +181,17 @@ public class Judge
 		
 	public static SubmissionResult judgeSourceFile(String file, String lang, ProblemDescription problem, CheckParams params)
 	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+		String id = dateFormat.format(new Date());
+		String rootDir = JudgeDirs.getWorkDir() + id + "/";
+		
 		log.info("Judging file " + file + " started");
 		RemoteFS.startSession();
 		SubmissionResult res = new SubmissionResult(problem);
 		res.setJudgingStarted(new Date());
 		res.comment = file;
 		CompilerTask ctask = new CompilerTask(file, lang);
-		CompilerResult ci = Compiler.compile(ctask);
+		CompilerResult ci = Compiler.compile(ctask, rootDir + "compilation/");
 		res.setCompilationInfo(ci);
 		if (!ci.isSuccessfull())
 		{
@@ -185,24 +207,24 @@ public class Judge
 				pr.files = ci.program.files;
 				pr.files.addFile(JudgeDirs.getProblemDir(problem.getContestID(), problem.getProblemID()) + interact.getInteractorExe());
 				//pr.files.addFile(JudgeDirs.getToolsDir() + "interaction/run2.jar");
-				System.out.println("");
+				/*System.out.println("");
 				System.out.println("Before Interactor command");
-				System.out.println(pr.command);
+				System.out.println(pr.command);*/
 				
 				pr.command = "java -jar " +
 						JudgeDirs.getToolsDir() + "interaction/run2.jar " + 
 						"./" + interact.getInteractorExe() + " " + 
 						pr.command;
 				
-				System.out.println("After: ");
-				System.out.println(pr.command);
+				/*System.out.println("After: ");
+				System.out.println(pr.command);*/
 			}
 			else
 			{
 				pr.command = ci.program.getRunCommand();
 				pr.files = ci.program.files;
 			}
-			ProblemResult pres = judgeProblem(problem, params, pr);
+			ProblemResult pres = judgeProblem(problem, params, pr, rootDir);
 			res.setProblemResult(pres);
 		}
 		RemoteFS.clearSession();
@@ -303,7 +325,8 @@ public class Judge
 		TestResult res = new TestResult(test);
 		String contestId = test.problemInfo.contestID;
 		String problemId = test.problemInfo.problemID;
-		String testsDir = "./problems/" + contestId + "/" + problemId + "/" + "tests/";
+		
+		String testsDir = JudgeDirs.getProblemsDir() + contestId + "/" + problemId + "/" + "tests/";
 		
 		File f = new File(testsDir + test.getInputMask());
 		if (!f.exists())

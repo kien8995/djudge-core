@@ -24,8 +24,8 @@ import utils.FileTools;
 	
 	public static void clearSession()
 	{
-		for (int i = 0; i < files.size(); i++)
-			FileTools.deleteFile(files.get(i));
+		//for (int i = 0; i < files.size(); i++)
+		//	FileTools.deleteFile(files.get(i));
 		files.clear();
 	}
 	

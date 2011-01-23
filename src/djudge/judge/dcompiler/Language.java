@@ -2,10 +2,12 @@
 
 package djudge.judge.dcompiler;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import utils.FileTools;
@@ -23,6 +25,8 @@ import djudge.judge.executor.LocalExecutor;
  */
 public class Language
 {
+	private final static Logger log = Logger.getLogger(Language.class);
+	
 	LanguageInfo info;
 	
 	public LanguageInfo getLanguageInfo()
@@ -52,10 +56,26 @@ public class Language
 	
 	public CompilerResult compile(CompilerTask task)
 	{
+		return compile(task, null);
+	}
+	
+	public CompilerResult compile(CompilerTask task, String tempDir)
+	{
+		log.trace("Compiling in: " + tempDir);
 		CompilerResult res = new CompilerResult();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
-        String id = dateFormat.format(new Date());
-		String tempDir = JudgeDirs.getWorkDir() + id + "/";
+		if (tempDir == null)
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+			String id = dateFormat.format(new Date());
+			tempDir = JudgeDirs.getWorkDir() + id + "/";
+		}
+		else
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+			String id = dateFormat.format(new Date());
+			tempDir = tempDir.substring(0, tempDir.length() - 1) + id + "/";
+		}
+		(new File(tempDir)).mkdirs();
 		try
 		{
 			task.files.unpack(tempDir);
@@ -92,7 +112,7 @@ public class Language
 			exTask.program = program;
 			
 			LocalExecutor exec = new LocalExecutor();
-			res.compilerExecution = exec.execute(exTask);
+			res.compilerExecution = exec.execute(exTask, tempDir + "ex/");
 		
 			if (res.compilerExecution.getExitCode() == 0)
 			{
@@ -118,10 +138,9 @@ public class Language
 		}
 		catch (Exception exc)
 		{
-			System.out.println("Exception in DJLanguage: " + exc);
-			exc.printStackTrace();
+			log.error("Exception in Language: ", exc);
 		}
-		FileTools.deleteDirectory(tempDir);
+		//FileTools.deleteDirectory(tempDir);
 		return res;
 	}
 }

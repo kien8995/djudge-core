@@ -441,8 +441,12 @@ public class LocalExecutor implements ExecutorLinuxExitCodes
         		if (!workDir.endsWith("\\"))
         			workDir = workDir + "\\";
         	}
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+			String id = dateFormat.format(new Date());
+			workDir = workDir.substring(0, workDir.length() - 1) + id + "/";
         }
-        
+        log.trace("Executing " + task + " in `" + workDir + "'");
+        new File(workDir).mkdirs();
         res.tempDir = workDir;
         
         /* Unpacking files to execute (if any) to the working directory */

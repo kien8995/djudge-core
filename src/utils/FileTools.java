@@ -93,6 +93,7 @@ public class FileTools
 	 */
 	public static boolean createLink(String destFilename, String srcFilename)
 	{
+		log.trace("Creating link from from `" + srcFilename + "' to `" + destFilename + "'");
 		File fd = new File(destFilename);
 		fd.getParentFile().mkdirs();
 		// Trying to create link
@@ -109,12 +110,21 @@ public class FileTools
 				Process process = Runtime.getRuntime().exec(command);
 				process.waitFor();
 				if (process.exitValue() != 0)
+				{
+					BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					String s;
+					while ((s = out.readLine()) != null)
+						System.out.println(s);
 					throw new UnsupportedOperationException();
+				}
+				File f2 = new File(destFilename);
+				log.trace("OK: " + f2.length() + " bytes");
 				return true;
 			}
 			catch (Exception ex)
 			{
-				log.warn("Link creation failed (from " + srcFilename + " to " + destFilename + ")");
+				log.warn("Link creation failed (from " + srcFilename + " to " + destFilename + ")", ex);
+				//while (true);
 			}
 		}
 		if (Deployment.isOSWinNT() && Deployment.useLinks())
@@ -247,6 +257,7 @@ public class FileTools
 
 	public static boolean saveToFile(String content, String filename)
 	{
+		log.trace("Saving memory content to file `" + filename + "'");
 		try
 		{
 			File f = new File(filename);
