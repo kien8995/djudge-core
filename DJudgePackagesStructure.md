@@ -1,0 +1,22 @@
+Frozen packages are ~~stroked~~
+
+# ~~djudge.acmcontester~~ #
+
+PC^2-like standalone GUI application for holding contests
+Currently frozen
+
+# ~~djudge.dservice~~ #
+
+Service, which allows foreign programs to submit solutions for judging
+
+# djudge.common #
+
+Common classes which are used by all components
+
+# djudge.judge #
+
+Judge
+
+# ~~djudge.remotefs~~ #
+Remote file system support layer
+Implemented as a stub
